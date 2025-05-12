@@ -31,6 +31,7 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private float maxGlideSpeed = 10f;
     [SerializeField] private float initialGlideSpeed = 5f;
+    private float glideSpeedMultiplier = 1f;
     
     [SerializeField] private float jumpForce = 5.0f;
 
@@ -91,7 +92,7 @@ public class PlayerMove : MonoBehaviour
 
         if(currentState == PlayerState.Fall)
         {
-            rb.gravityScale = 1.2f;
+            rb.gravityScale = 1.4f;
         } else if(currentState == PlayerState.Grounded)
         {
             rb.gravityScale = 1;
@@ -152,6 +153,8 @@ public class PlayerMove : MonoBehaviour
         // Store the downward speed when starting to glide
         initialGlideSpeed = Mathf.Abs(rb.linearVelocity.y);
 
+        glideSpeedMultiplier = 1f;
+
         currentState = PlayerState.Glide;
     }
 
@@ -164,11 +167,12 @@ public class PlayerMove : MonoBehaviour
             float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));
 
             // Clamp to maxGlideSpeed if desired
-            glideX = Mathf.Min(glideX, maxGlideSpeed);
+            //glideX = Mathf.Min(glideX, maxGlideSpeed);
+            glideSpeedMultiplier += Time.deltaTime;
 
             // Preserve direction the player is facing
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2(glideX * direction, rb.linearVelocity.y * 0.7f);
+            rb.linearVelocity = new Vector2((glideX * glideSpeedMultiplier) * direction, rb.linearVelocity.y * 0.9f);
         }
         else
         {
