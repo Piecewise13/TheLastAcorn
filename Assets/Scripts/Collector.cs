@@ -1,35 +1,42 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
-// Ensures this GameObject has a trigger collider
-[RequireComponent(typeof(Collider2D))]
 public class Collector : MonoBehaviour
 {
-    [Tooltip("Reference to the ScoreManager... if empty, reference in runtime")]
+    [Tooltip("Reference to the ScoreManager. If left empty it’s resolved at runtime.")]
     [SerializeField] private ScoreManager scoreManager;
+
+    [Tooltip("Trigger collider that detects collectibles (can be on a child GameObject).")]
+    [SerializeField] private Collider2D triggerCollider;
+
+    [SerializeField] private AudioPlayer sfxPlayer;
 
     private void Awake()
     {
-        // Fallback - find the ScoreManager in the scene
         if (scoreManager == null)
         {
             scoreManager = FindObjectOfType<ScoreManager>();
-            if (scoreManager == null) Debug.LogError("ScoreManager not found in scene. Please add one or assign in Inspector.");
+            if (scoreManager == null) 
+                Debug.LogError("ScoreManager not found in scene. Please add one or assign it in the Inspector.");
         }
-
-        // collider set as trigger
-        var col = GetComponent<Collider2D>();
-        col.isTrigger = true;
+        
+        if (triggerCollider == null)
+        {
+            triggerCollider = GetComponentInChildren<Collider2D>();
+            if (triggerCollider == null)
+                Debug.LogError("Collector: no Collider2D found on this GameObject or its children.");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Look for ICollectible on collided object
+        // Look for an ICollectible on the collided object
         var collectible = other.GetComponent<ICollectible>();
-        if (collectible != null)
-        {
-            scoreManager.AddScore(collectible.Value); // add value (figure out if we want to have different ones)
-            // pickup SFX goes here :)
-            Destroy(other.gameObject); // may wanna have a grow shrink script instead
-        }
+        if (collectible == null) return;
+
+        scoreManager.AddScore(collectible.Value);  
+        sfxPlayer?.Play();
+
+        Destroy(other.gameObject);      // Replace with an animation
     }
 }
