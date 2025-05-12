@@ -444,6 +444,7 @@ GameObject:
   - component: {fileID: 502844899}
   - component: {fileID: 502844902}
   - component: {fileID: 502844903}
+  - component: {fileID: 502844904}
   m_Layer: 0
   m_Name: Acorn
   m_TagString: Untagged
@@ -597,6 +598,23 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &502844904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502844898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90185789d1ae2b449ab4659322dec5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grownScale: {x: 1, y: 1, z: 1}
+  shrunkScale: {x: 0.01, y: 0.01, z: 0.01}
+  duration: 0.1
+  easeType: 2
+  growOnEnable: 1
 --- !u!1 &504833265
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,8 +2137,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6372657390737245558}
   - {fileID: 622223012357317493}
+  - {fileID: 6372657390737245558}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &622223012357317493
