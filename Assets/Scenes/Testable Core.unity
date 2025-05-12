@@ -2781,11 +2781,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   climbCheckOrigin: {fileID: 4911456573328743124}
-  climbSpeed: 7
-  maxGlideSpeed: 10
-  initialGlideSpeed: 5
-  jumpForce: 8
-  moveSpeed: 5
+  climbSpeed: 10
+  maxGlideSpeed: 15
+  initialGlideSpeed: 10
+  jumpForce: 7
+  moveSpeed: 10
   currentState: 0
 --- !u!4 &6372657390737245558
 Transform:
