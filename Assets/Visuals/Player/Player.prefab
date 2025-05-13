@@ -82,6 +82,8 @@ GameObject:
   - component: {fileID: 1413400348418949058}
   - component: {fileID: 151922112089434294}
   - component: {fileID: 6681820592772038295}
+  - component: {fileID: 950779574515905425}
+  - component: {fileID: 7065884537941970894}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -147,7 +149,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
-  moveSpeed: 5
+  moveSpeed: 12
   climbCheckReach: 1.5
   climbableLayer:
     serializedVersion: 2
@@ -157,7 +159,10 @@ MonoBehaviour:
   maxClimbTime: 1.5
   maxShakeIntensity: 0.2
   maxGlideSpeed: 10
-  initialGlideSpeed: 5
+  initialGlideSpeed: 10
+  glideTreeHitXVelo: 5
+  glideTreeHitYVelo: 8
+  glideHitVelocityThreshold: 20
   jumpForce: 8
   currentState: 0
 --- !u!50 &6681820592772038295
@@ -187,6 +192,40 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &950779574515905425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839978602859707386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: c832b46127f945d48be20c0675b1a7f9, type: 3}
+  volume: 1
+  pitch: 1
+  fadeIn: 0
+  fadeInDuration: 1
+  playWithDelay: 0
+  delayDuration: 0
+  playOnEnable: 0
+--- !u!114 &7065884537941970894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839978602859707386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b7c2e3bcd771427a86a756068e409b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerCollider: {fileID: 5663293700936031498}
+  sfxPlayer: {fileID: 950779574515905425}
 --- !u!1 &1249299971299511712
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +287,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.04, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6548402314755964825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -287,7 +326,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.95
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -380,7 +419,7 @@ Transform:
   m_GameObject: {fileID: 3128516057894648711}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.052946806, z: 0}
+  m_LocalPosition: {x: 0, y: -0.179, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -413,7 +452,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.202, y: 0.552, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3.5, y: 3.5, z: 3.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5393551929100515016}
