@@ -16,7 +16,10 @@ public class PlayerMove : MonoBehaviour
     [Header("Components")]
     [SerializeField] private GameObject graphic;
     [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private GameObject stunnedEffect;
 
+    [Space(20)]
+    [Header("Ground Check")]
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -331,9 +334,15 @@ public class PlayerMove : MonoBehaviour
 
         if (isGrounded && currentState != PlayerState.Grounded)
         {
+
+                        if(currentState == PlayerState.STUNNED){
+                stunnedEffect.SetActive(false);
+            }
+
             currentState = PlayerState.Grounded;
             animator.SetBool("isFalling", false);
             animator.SetBool("isGliding", false);
+
         }
         else if (!isGrounded && currentState == PlayerState.Grounded)
         {
@@ -362,6 +371,8 @@ public class PlayerMove : MonoBehaviour
             animator.SetBool("isFalling", true);
 
             currentState = PlayerState.STUNNED;
+            stunnedEffect.SetActive(true);
+
         }
     }
 
