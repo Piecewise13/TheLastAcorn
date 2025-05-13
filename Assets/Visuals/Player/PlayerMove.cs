@@ -9,11 +9,12 @@ public class PlayerMove : MonoBehaviour
     private InputAction moveAction;
     private InputAction attachAction;
     private InputAction glideAction;
-
     private InputAction jumpAction;
 
     private Rigidbody2D rb;
+    private Animator animator;
 
+    [Header("Components")]
     [SerializeField] private GameObject graphic;
     [SerializeField] private Collider2D playerCollider;
 
@@ -22,6 +23,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
 
+    [Space(20)]
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 5.0f;
+
+    [Header("Climb")]
 
     [SerializeField] private float climbCheckReach = 0.2f;
     [SerializeField] private LayerMask climbableLayer;
@@ -33,13 +39,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float maxShakeIntensity = 0.2f; // You can tweak this value
     private Vector3 graphicOriginalLocalPos;
 
+    [Header("Glide")]
+
     [SerializeField] private float maxGlideSpeed = 10f;
     [SerializeField] private float initialGlideSpeed = 5f;
     private float glideSpeedMultiplier = 1f;
     
     [SerializeField] private float jumpForce = 5.0f;
 
-    [SerializeField] private float moveSpeed = 5.0f;
 
     [SerializeField]private PlayerState currentState = PlayerState.Grounded;
 
@@ -66,6 +73,7 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         if (graphic != null)
             graphicOriginalLocalPos = graphic.transform.localPosition;
@@ -112,6 +120,7 @@ public class PlayerMove : MonoBehaviour
         }
         
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        animator.SetBool("isRunning", false);
     }
 
     private void GroundMovement()
@@ -130,6 +139,7 @@ public class PlayerMove : MonoBehaviour
             Vector3 rotation = graphic.transform.eulerAngles;
             rotation.y = targetYRotation;
             graphic.transform.eulerAngles = rotation;
+            animator.SetBool("isRunning", true);
         }
     }
 
@@ -142,7 +152,11 @@ public class PlayerMove : MonoBehaviour
 
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 
+        animator.SetTrigger("Jump");
+
         currentState = PlayerState.Fall;
+
+        animator.SetBool("isFalling", true);
     }
 
     private void GlideInput(InputAction.CallbackContext context)
@@ -161,6 +175,9 @@ public class PlayerMove : MonoBehaviour
         glideSpeedMultiplier = 1f;
 
         currentState = PlayerState.Glide;
+        
+        animator.SetBool("isGliding", true);
+        
     }
 
     private void Glide()
@@ -183,6 +200,8 @@ public class PlayerMove : MonoBehaviour
         {
             // If not falling, exit glide state
             currentState = PlayerState.Fall;
+            animator.SetBool("isGliding", false);
+            animator.SetBool("isFalling", true);
         }
     }
 
@@ -276,6 +295,7 @@ public class PlayerMove : MonoBehaviour
 
     private void StopClimb()
     {
+        climbTime = 0;
         currentState = PlayerState.Fall;
 
         playerCollider.enabled = true;
@@ -294,6 +314,8 @@ public class PlayerMove : MonoBehaviour
         if (isGrounded && currentState != PlayerState.Grounded)
         {
             currentState = PlayerState.Grounded;
+            animator.SetBool("isFalling", false);
+            animator.SetBool("isGliding", false);
         }
         else if (!isGrounded && currentState == PlayerState.Grounded)
         {
