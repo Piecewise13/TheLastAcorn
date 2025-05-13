@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
@@ -44,6 +43,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float maxGlideSpeed = 10f;
     [SerializeField] private float initialGlideSpeed = 5f;
     private float glideSpeedMultiplier = 1f;
+
+    [SerializeField] private float glideTreeHitXVelo = 10f;
+    [SerializeField] private float glideTreeHitYVelo = 5f;
+    [SerializeField] private float glideHitVelocityThreshold = 5f;
     
     [SerializeField] private float jumpForce = 5.0f;
 
@@ -81,14 +84,19 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
-
-
+        if(currentState == PlayerState.STUNNED){
+            GroundCheck();
+        }
     }
 
 
 
     private void FixedUpdate()
     {
+
+        if(currentState == PlayerState.STUNNED){
+            return;
+        }
 
         if (currentState == PlayerState.Climb)
         {
@@ -106,7 +114,7 @@ public class PlayerMove : MonoBehaviour
 
         if(currentState == PlayerState.Fall)
         {
-            rb.gravityScale = 1.4f;
+            rb.gravityScale = 1.8f;
         } else if(currentState == PlayerState.Grounded)
         {
             rb.gravityScale = 1;
@@ -145,10 +153,11 @@ public class PlayerMove : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext context)
     {
-        if (currentState != PlayerState.Grounded)
+        if (currentState != PlayerState.Grounded || currentState == PlayerState.STUNNED)
         {
             return;
         }
+        
 
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 
@@ -167,6 +176,10 @@ public class PlayerMove : MonoBehaviour
         }
         
         if(currentState != PlayerState.Fall){
+            return;
+        }
+
+        if(currentState == PlayerState.STUNNED){
             return;
         }
 
@@ -260,6 +273,10 @@ public class PlayerMove : MonoBehaviour
     private void Attach(InputAction.CallbackContext context)
     {
 
+        if(currentState == PlayerState.STUNNED){
+            return;
+        }
+
         if(currentState == PlayerState.Climb)
         {
             StopClimb();
@@ -311,6 +328,7 @@ public class PlayerMove : MonoBehaviour
     private void GroundCheck()
     {
         bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
         if (isGrounded && currentState != PlayerState.Grounded)
         {
             currentState = PlayerState.Grounded;
@@ -320,6 +338,30 @@ public class PlayerMove : MonoBehaviour
         else if (!isGrounded && currentState == PlayerState.Grounded)
         {
             currentState = PlayerState.Fall;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (currentState == PlayerState.Glide && ((1 << collision.gameObject.layer) & climbableLayer) != 0)
+        {
+
+            if (Mathf.Abs(collision.relativeVelocity.x) < glideHitVelocityThreshold)
+            {
+                return;
+            }
+
+            var contactNormal = collision.GetContact(0).normal;
+
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(Vector2.up * glideTreeHitYVelo + Vector2.right * contactNormal * glideTreeHitXVelo, ForceMode2D.Impulse);
+
+            // Enter "fall" state and freeze horizontal movement until grounded
+            currentState = PlayerState.Fall;
+            animator.SetBool("isGliding", false);
+            animator.SetBool("isFalling", true);
+
+            currentState = PlayerState.STUNNED;
         }
     }
 
@@ -339,7 +381,8 @@ public class PlayerMove : MonoBehaviour
         Grounded,
         Climb,
         Glide,
-        Fall
+        Fall,
+        STUNNED
 
     }
 }

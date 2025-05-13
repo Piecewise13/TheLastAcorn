@@ -29,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0.101, y: -0.276, z: 0}
   m_LocalScale: {x: 0.39662448, y: 0.39662448, z: 0.39662448}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8478822095377455077}
   m_Father: {fileID: 7442338127621984480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &5663293700936031498
@@ -146,6 +147,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 1
+  moveSpeed: 5
   climbCheckReach: 1.5
   climbableLayer:
     serializedVersion: 2
@@ -157,7 +159,6 @@ MonoBehaviour:
   maxGlideSpeed: 10
   initialGlideSpeed: 5
   jumpForce: 8
-  moveSpeed: 5
   currentState: 0
 --- !u!50 &6681820592772038295
 Rigidbody2D:
@@ -379,11 +380,11 @@ Transform:
   m_GameObject: {fileID: 3128516057894648711}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.101, y: -0.255, z: 0}
-  m_LocalScale: {x: 0.39662448, y: 0.39662448, z: 0.39662448}
+  m_LocalPosition: {x: 0, y: 0.052946806, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7442338127621984480}
+  m_Father: {fileID: 5393551929100515016}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4195014037269511010
 GameObject:
@@ -417,7 +418,6 @@ Transform:
   m_Children:
   - {fileID: 5393551929100515016}
   - {fileID: 7051655410438313344}
-  - {fileID: 8478822095377455077}
   m_Father: {fileID: 6548402314755964825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &867419554417715573

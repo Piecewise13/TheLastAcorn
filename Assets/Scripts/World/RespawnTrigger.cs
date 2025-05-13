@@ -4,12 +4,13 @@ public class RespawnTrigger : MonoBehaviour
 {
     [SerializeField] private Transform respawnPoint;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && respawnPoint != null)
+        var player = other.transform.root;
+        if (player.CompareTag("Player") && respawnPoint != null)
         {
-            other.transform.position = respawnPoint.position;
-            other.transform.rotation = respawnPoint.rotation;
+            player.transform.root.position = respawnPoint.position;
+            player.transform.root.rotation = respawnPoint.rotation;
         }
     }
 }
