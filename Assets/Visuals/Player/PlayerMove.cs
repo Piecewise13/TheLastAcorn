@@ -174,6 +174,7 @@ public class PlayerMove : MonoBehaviour
     private void GlideInput(InputAction.CallbackContext context)
     {
         if(currentState == PlayerState.Glide){
+            animator.SetBool("isGliding", false);
             currentState = PlayerState.Fall;
             return;
         }
