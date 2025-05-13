@@ -27,7 +27,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private LayerMask climbableLayer;
     [SerializeField] private Transform climbCheckOrigin;
     [SerializeField] private float climbSpeed = 5.0f;
+    [SerializeField] private float maxClimbTime;
+    private float climbTime;
 
+    [SerializeField] private float maxShakeIntensity = 0.2f; // You can tweak this value
+    private Vector3 graphicOriginalLocalPos;
 
     [SerializeField] private float maxGlideSpeed = 10f;
     [SerializeField] private float initialGlideSpeed = 5f;
@@ -63,6 +67,8 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (graphic != null)
+            graphicOriginalLocalPos = graphic.transform.localPosition;
     }
 
     private void Update()
@@ -151,7 +157,6 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Store the downward speed when starting to glide
-        initialGlideSpeed = Mathf.Abs(rb.linearVelocity.y);
 
         glideSpeedMultiplier = 1f;
 
@@ -183,14 +188,20 @@ public class PlayerMove : MonoBehaviour
 
     private void Climb()
     {
+
+        if(climbTime > maxClimbTime){
+            print("Climb is out!");
+            StopClimb();
+            return;
+        }
+
+        climbTime += Time.deltaTime;
+
         rb.gravityScale = 0;
 
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-        //srb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
         var moveInput = moveAction.ReadValue<Vector2>();
-
-        //Physics2D.queriesStartInColliders = true;
 
         var treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
 
@@ -199,6 +210,20 @@ public class PlayerMove : MonoBehaviour
             StopClimb();
             return;
         }
+
+        // --- SHAKE EFFECT START ---
+        if (graphic != null)
+        {
+            float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
+            float shakeAmount = maxShakeIntensity * shakeRatio;
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount),
+                0f
+            );
+            graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
+        }
+        // --- SHAKE EFFECT END ---
 
         var closestPoint = treeCollider.ClosestPoint(transform.position);
 
@@ -245,6 +270,8 @@ public class PlayerMove : MonoBehaviour
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+
+        climbTime = 0;
     }
 
     private void StopClimb()
@@ -255,6 +282,10 @@ public class PlayerMove : MonoBehaviour
 
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        // Reset graphic position when climb ends
+        if (graphic != null)
+            graphic.transform.localPosition = graphicOriginalLocalPos;
     }
 
     private void GroundCheck()
