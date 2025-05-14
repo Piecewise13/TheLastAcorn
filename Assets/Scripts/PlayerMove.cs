@@ -218,6 +218,7 @@ public class PlayerMove : MonoBehaviour {
         {
             GroundCheck();
         }
+
     }
 
     /// <summary>
@@ -253,7 +254,7 @@ public class PlayerMove : MonoBehaviour {
         // Handle ground movement if move action is in progress
         if (moveAction.inProgress)
         {
-            GroundMovement();
+            SideMovement();
             return;
         }
 
@@ -281,7 +282,7 @@ public class PlayerMove : MonoBehaviour {
     /// <summary>
     /// Handles player movement while grounded.
     /// </summary>
-    private void GroundMovement()
+    private void SideMovement()
     {
         // Prevent movement if climbing
         if (currentState == PlayerState.Climb)
@@ -465,8 +466,15 @@ public class PlayerMove : MonoBehaviour {
         // Stop climbing if already climbing
         if (currentState == PlayerState.Climb)
         {
-            StopClimb();
+            if(climbTime > 0.4f){
+                StopClimb();
+            }
             return;
+        }
+
+        if(!canClimb)
+        {
+            return; 
         }
 
         // Raycast to check for climbable object to the right
@@ -478,7 +486,7 @@ public class PlayerMove : MonoBehaviour {
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            Debug.Log("Climbable");
+            Debug.Log("ATTACHED TO TREE");
             transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
             StartClimb();
         }
@@ -564,6 +572,8 @@ public class PlayerMove : MonoBehaviour {
         if (((1 << collision.gameObject.layer) & climbableLayer) != 0)
         {
 
+            print(collision.relativeVelocity);
+
             // Ignore if velocity is below threshold
             if (Mathf.Abs(collision.relativeVelocity.x) >= glideHitVelocityThreshold)
             {
@@ -584,11 +594,12 @@ public class PlayerMove : MonoBehaviour {
                 return;
             }
 
-            // Ignore if velocity exceeds auto-attach threshold
-            if (Mathf.Abs(rb.linearVelocity.x) > autoAttachMaxVelo)
-            {
-                return;
-            }
+            // // Ignore if velocity exceeds auto-attach threshold
+            // if (Mathf.Abs(collision.relativeVelocity.x) > autoAttachMaxVelo)
+            // {
+            //     return;
+            // }
+
 
             // Attach to the tree and start climbing
             transform.position = collision.GetContact(0).point;
@@ -619,6 +630,11 @@ public class PlayerMove : MonoBehaviour {
     private void DisableMove()
     {
         moveAction.Disable();
+    }
+
+    private void OnDisable()
+    {
+        playerMovementMap.Disable();
     }
 
 }
