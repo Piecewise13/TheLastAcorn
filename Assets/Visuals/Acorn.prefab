@@ -181,6 +181,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grownScale: {x: 1, y: 1, z: 1}
   shrunkScale: {x: 0.01, y: 0.01, z: 0.01}
-  duration: 0.1
+  duration: 0.5
   easeType: 5
   growOnEnable: 1

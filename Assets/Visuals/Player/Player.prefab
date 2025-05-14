@@ -85,7 +85,8 @@ GameObject:
   - component: {fileID: 950779574515905425}
   - component: {fileID: 7065884537941970894}
   - component: {fileID: 196750522843379575}
-  - component: {fileID: 4827358966792449604}
+  - component: {fileID: 896481923271748056}
+  - component: {fileID: 8151093954828565727}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -153,19 +154,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   moveSpeed: 12
-  climbCheckReach: 1.5
+  climbCheckReach: 1.7
   climbableLayer:
     serializedVersion: 2
     m_Bits: 64
   climbCheckOrigin: {fileID: 7051655410438313344}
   climbSpeed: 7
-  maxClimbTime: 1.5
+  maxClimbTime: 1.7
   maxShakeIntensity: 0.2
   maxGlideSpeed: 10
   initialGlideSpeed: 10
   glideTreeHitXVelo: 5
   glideTreeHitYVelo: 8
-  glideHitVelocityThreshold: 20
+  glideHitVelocityThreshold: 15
   jumpForce: 8
   currentState: 0
 --- !u!50 &6681820592772038295
@@ -207,9 +208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: c832b46127f945d48be20c0675b1a7f9, type: 3}
+  audioClip: {fileID: 8300000, guid: 29902fc1947644e1a83477378b15da3f, type: 3}
   volume: 1
   pitch: 1
+  randomise: 1
+  volumeRange: {x: 0.6, y: 1}
+  pitchRange: {x: 0.6, y: 0.9}
   fadeIn: 0
   fadeInDuration: 1
   playWithDelay: 0
@@ -244,12 +248,112 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: c832b46127f945d48be20c0675b1a7f9, type: 3}
   volume: 1
   pitch: 1
+  randomise: 0
+  volumeRange: {x: 0.9, y: 1}
+  pitchRange: {x: 0.95, y: 1.05}
   fadeIn: 0
   fadeInDuration: 1
   playWithDelay: 0
   delayDuration: 0
   playOnEnable: 0
---- !u!114 &4827358966792449604
+--- !u!82 &896481923271748056
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839978602859707386}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &8151093954828565727
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,11 +362,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 839978602859707386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b7c2e3bcd771427a86a756068e409b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 1627427a662d5407fbb02902919b586d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerCollider: {fileID: 0}
-  sfxPlayer: {fileID: 0}
+  player: {fileID: 151922112089434294}
+  rb: {fileID: 6681820592772038295}
+  groundedClip: {fileID: 8300000, guid: c81481bb3286444e188b34bd4c7c38aa, type: 3}
+  climbClip: {fileID: 0}
+  glideClip: {fileID: 0}
+  fallClip: {fileID: 0}
+  stunnedClip: {fileID: 0}
+  groundedSpeedRange: {x: 0.1, y: 4}
+  groundedMaxVol: 0.5
+  glideSpeedRange: {x: 2, y: 12}
+  glideMaxVol: 1
+  fallSpeedRange: {x: 2, y: 15}
+  fallMaxVol: 1
+  enablePitchBend: 1
+  minPitch: 0.6
+  maxPitch: 0.8
 --- !u!1 &979618266919138849
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,7 +493,7 @@ Transform:
   m_GameObject: {fileID: 1249299971299511712}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.101, y: -0.09751889, z: 0}
+  m_LocalPosition: {x: 0.122, y: -0.09751889, z: 0}
   m_LocalScale: {x: 0.39662448, y: 0.39662448, z: 0.39662448}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -393,6 +511,7 @@ GameObject:
   - component: {fileID: 8493575095091244138}
   - component: {fileID: 7499961224868306793}
   - component: {fileID: 5856361867766098857}
+  - component: {fileID: 3843412699993291160}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -518,6 +637,23 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &3843412699993291160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938490901126156716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf5a7f80c3d4953a41e159584db5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 6548402314755964825}
+  offset: {x: 0.5, y: 0.5}
+  smoothTime: 0.1
+  lookAheadDist: 1
+  lookAheadReturnSpeed: 0.1
 --- !u!1 &3128516057894648711
 GameObject:
   m_ObjectHideFlags: 0

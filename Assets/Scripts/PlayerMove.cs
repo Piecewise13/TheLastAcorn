@@ -1,7 +1,168 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerMove : MonoBehaviour
+
+public class PlayerMove : MonoBehaviour {
+/// <summary>
+/// Reference to the PlayerControls input action map.
+/// </summary>
+private PlayerControls playerMovementMap;
+
+/// <summary>
+/// Input action for player movement.
+/// </summary>
+private InputAction moveAction;
+
+/// <summary>
+/// Input action for attaching (climbing).
+/// </summary>
+private InputAction attachAction;
+
+/// <summary>
+/// Input action for gliding.
+/// </summary>
+private InputAction glideAction;
+
+/// <summary>
+/// Input action for jumping.
+/// </summary>
+private InputAction jumpAction;
+
+/// <summary>
+/// Reference to the Rigidbody2D component.
+/// </summary>
+private Rigidbody2D rb;
+
+/// <summary>
+/// Reference to the Animator component.
+/// </summary>
+private Animator animator;
+
+[Header("Components")]
+/// <summary>
+/// Reference to the player's graphic GameObject.
+/// </summary>
+[SerializeField] private GameObject graphic;
+
+/// <summary>
+/// Reference to the player's Collider2D.
+/// </summary>
+[SerializeField] private Collider2D playerCollider;
+
+/// <summary>
+/// Reference to the stunned effect GameObject.
+/// </summary>
+[SerializeField] private GameObject stunnedEffect;
+
+[Space(20)]
+[Header("Ground Check")]
+/// <summary>
+/// Radius for ground check overlap circle.
+/// </summary>
+[SerializeField] private float groundCheckRadius = 0.2f;
+
+/// <summary>
+/// Transform used as the origin for ground checking.
+/// </summary>
+[SerializeField] private Transform groundCheck;
+
+/// <summary>
+/// LayerMask for identifying ground.
+/// </summary>
+[SerializeField] private LayerMask groundLayer;
+
+[Space(20)]
+[Header("Movement")]
+/// <summary>
+/// Speed at which the player moves.
+/// </summary>
+[SerializeField] private float moveSpeed = 5.0f;
+
+[Header("Climb")]
+/// <summary>
+/// Distance to check for climbable objects.
+/// </summary>
+[SerializeField] private float climbCheckReach = 0.2f;
+
+/// <summary>
+/// LayerMask for identifying climbable objects.
+/// </summary>
+[SerializeField] private LayerMask climbableLayer;
+
+/// <summary>
+/// Transform used as the origin for climb checking.
+/// </summary>
+[SerializeField] private Transform climbCheckOrigin;
+
+/// <summary>
+/// Speed at which the player climbs.
+/// </summary>
+[SerializeField] private float climbSpeed = 5.0f;
+
+/// <summary>
+/// Maximum time allowed for climbing.
+/// </summary>
+[SerializeField] private float maxClimbTime;
+
+/// <summary>
+/// Current elapsed climb time.
+/// </summary>
+private float climbTime;
+
+/// <summary>
+/// Maximum intensity of the shake effect while climbing.
+/// </summary>
+[SerializeField] private float maxShakeIntensity = 0.2f;
+
+/// <summary>
+/// Original local position of the graphic for shake effect reset.
+/// </summary>
+private Vector3 graphicOriginalLocalPos;
+
+[Header("Glide")]
+/// <summary>
+/// Maximum horizontal speed while gliding.
+/// </summary>
+[SerializeField] private float maxGlideSpeed = 10f;
+
+/// <summary>
+/// Initial horizontal speed when starting to glide.
+/// </summary>
+[SerializeField] private float initialGlideSpeed = 5f;
+
+/// <summary>
+/// Multiplier for glide speed, increases over time.
+/// </summary>
+private float glideSpeedMultiplier = 1f;
+
+/// <summary>
+/// Horizontal velocity applied when hitting a tree while gliding.
+/// </summary>
+[SerializeField] private float glideTreeHitXVelo = 10f;
+
+/// <summary>
+/// Vertical velocity applied when hitting a tree while gliding.
+/// </summary>
+[SerializeField] private float glideTreeHitYVelo = 5f;
+
+/// <summary>
+/// Minimum velocity threshold to trigger a glide hit.
+/// </summary>
+[SerializeField] private float glideHitVelocityThreshold = 5f;
+
+/// <summary>
+/// Force applied when jumping.
+/// </summary>
+[SerializeField] private float jumpForce = 5.0f;
+
+/// <summary>
+/// Current state of the player.
+/// </summary>
+[SerializeField] private PlayerState currentState = PlayerState.Grounded;
+
+/// <summary>
+/// Initializes input actions and sets up event handlers.
+/// </summary>
+void Awake()
 {
     /// <summary>
     /// Reference to the PlayerControls input action map.
