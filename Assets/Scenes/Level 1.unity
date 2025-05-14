@@ -127,18 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: maxClimbTime
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: climbCheckReach
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: glideHitVelocityThreshold
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 839978602859707386, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_Name
       value: Player
@@ -182,10 +170,6 @@ PrefabInstance:
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7051655410438313344, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.122
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

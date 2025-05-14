@@ -153,19 +153,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   moveSpeed: 12
-  climbCheckReach: 1.5
+  climbCheckReach: 1.7
   climbableLayer:
     serializedVersion: 2
     m_Bits: 64
   climbCheckOrigin: {fileID: 7051655410438313344}
   climbSpeed: 7
-  maxClimbTime: 1.5
+  maxClimbTime: 1.7
   maxShakeIntensity: 0.2
   maxGlideSpeed: 10
   initialGlideSpeed: 10
   glideTreeHitXVelo: 5
   glideTreeHitYVelo: 8
-  glideHitVelocityThreshold: 20
+  glideHitVelocityThreshold: 15
   jumpForce: 8
   currentState: 0
 --- !u!50 &6681820592772038295
@@ -375,7 +375,7 @@ Transform:
   m_GameObject: {fileID: 1249299971299511712}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.101, y: -0.09751889, z: 0}
+  m_LocalPosition: {x: 0.122, y: -0.09751889, z: 0}
   m_LocalScale: {x: 0.39662448, y: 0.39662448, z: 0.39662448}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,6 +1,6 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PlayerMove : MonoBehaviour {
 /// <summary>
 /// Reference to the PlayerControls input action map.
@@ -185,6 +185,8 @@ void Awake()
     jumpAction = playerMovementMap.Keyboard.Jump;
     jumpAction.performed += Jump;
     jumpAction.Enable();
+
+    ArrowControl();
 }
 
 /// <summary>
@@ -525,6 +527,14 @@ private void GroundCheck()
     {
         currentState = PlayerState.Fall;
     }
+}
+
+private void ArrowControl(){
+    moveAction.AddCompositeBinding("2DVector")
+          .With("Up",    "<Keyboard>/upArrow")
+          .With("Down",  "<Keyboard>/downArrow")
+          .With("Left",  "<Keyboard>/leftArrow")
+          .With("Right", "<Keyboard>/rightArrow");
 }
 
 /// <summary>
