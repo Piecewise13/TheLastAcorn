@@ -388,6 +388,48 @@ public class PlayerMove : MonoBehaviour {
             animator.SetBool("isFalling", true);
         }
     }
+    
+        /// <summary>
+    /// Handles attach input for starting or stopping climbing.
+    /// </summary>
+    /// <param name="context">Input action callback context.</param>
+    private void Attach(InputAction.CallbackContext context)
+    {
+        // Prevent attaching if stunned
+        if (currentState == PlayerState.STUNNED)
+        {
+            return;
+        }
+
+        // Stop climbing if already climbing
+        if (currentState == PlayerState.Climb)
+        {
+            if(climbTime > 0.4f){
+                StopClimb();
+            }
+            return;
+        }
+
+        if(!canClimb)
+        {
+            return; 
+        }
+
+        // Raycast to check for climbable object to the right
+        RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
+
+        Debug.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
+        //Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue);
+
+        // Start climbing if climbable object found
+        if (rightHit.collider != null)
+        {
+            //Debug.Log("ATTACHED TO TREE");
+            transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
+            StartClimb();
+        }
+    }
+
 
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
@@ -440,6 +482,17 @@ public class PlayerMove : MonoBehaviour {
         // Calculate intended move location
         Vector2 moveLocation = transform.position + Vector3.right * moveInput.x * Time.deltaTime * 2 * climbSpeed;
 
+        // Move player if within tree collider, otherwise snap to closest point
+        if (treeCollider.OverlapPoint(moveLocation))
+        {
+            transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
+        }
+        else
+        {
+            StopClimb();
+            //transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
+        }
+
         if (moveInput != Vector2.zero)
         {
             // Update climbing animation
@@ -449,60 +502,12 @@ public class PlayerMove : MonoBehaviour {
         {
             // Stop climbing animation if no input
             animator.SetBool("isClimbingMoving", false);
-            
+
         }
 
-        // Move player if within tree collider, otherwise snap to closest point
-        if (treeCollider.OverlapPoint(moveLocation))
-        {
-            transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
-        }
-        else
-        {
-            transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
-        }
+
     }
 
-    /// <summary>
-    /// Handles attach input for starting or stopping climbing.
-    /// </summary>
-    /// <param name="context">Input action callback context.</param>
-    private void Attach(InputAction.CallbackContext context)
-    {
-        // Prevent attaching if stunned
-        if (currentState == PlayerState.STUNNED)
-        {
-            return;
-        }
-
-        // Stop climbing if already climbing
-        if (currentState == PlayerState.Climb)
-        {
-            if(climbTime > 0.4f){
-                StopClimb();
-            }
-            return;
-        }
-
-        if(!canClimb)
-        {
-            return; 
-        }
-
-        // Raycast to check for climbable object to the right
-        RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
-
-        Debug.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
-        //Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue);
-
-        // Start climbing if climbable object found
-        if (rightHit.collider != null)
-        {
-            //Debug.Log("ATTACHED TO TREE");
-            transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
-            StartClimb();
-        }
-    }
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
