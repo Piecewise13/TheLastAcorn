@@ -498,7 +498,7 @@ public class PlayerMove : MonoBehaviour {
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            Debug.Log("ATTACHED TO TREE");
+            //Debug.Log("ATTACHED TO TREE");
             transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
             StartClimb();
         }

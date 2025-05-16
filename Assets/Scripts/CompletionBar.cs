@@ -4,38 +4,45 @@ using System.Collections;
 
 public class CompletionBar : MonoBehaviour
 {
-    [SerializeField] private Image  barImage;
-    [SerializeField] private Sprite[] stages = new Sprite[4];
-    [SerializeField] private int targetScore = 100;
+    [SerializeField] Image   barImage;
+    [SerializeField] Sprite[] stages = new Sprite[4];  // 0-empty, 1-⅓, 2-⅔, 3-full
+    [SerializeField] int targetScore = 100;
 
-    private int currentScore;
-    public bool IsComplete => currentScore >= targetScore;
+    int currentScore;
+    public bool  IsComplete   => currentScore >= targetScore;
+    public static bool AllCollected { get; private set; }
 
-    private void OnEnable()  => StartCoroutine(SubscribeWhenReady());
-    private void OnDisable()
+    void OnEnable()  => StartCoroutine(SubscribeWhenReady());
+    void OnDisable()
     {
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
     }
 
-    private IEnumerator SubscribeWhenReady()
+    IEnumerator SubscribeWhenReady()
     {
         while (ScoreManager.Instance == null) yield return null;
         ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
         HandleScoreChanged(ScoreManager.Instance.CurrentScore);
     }
 
-    private void HandleScoreChanged(int newScore)
+    void HandleScoreChanged(int newScore)
     {
         currentScore = newScore;
         UpdateSprite();
+        AllCollected = IsComplete;
     }
 
-    private void UpdateSprite()
+    void UpdateSprite()
     {
-        if (barImage == null || stages == null || stages.Length != 4) return;
+        if (barImage == null || stages.Length != 4) return;
+
         float ratio = Mathf.Clamp01((float)currentScore / targetScore);
-        int index = Mathf.Clamp(Mathf.CeilToInt(ratio * 3f), 0, 3);
+        int index = 0;
+        if      (ratio >= 1f)   index = 3;
+        else if (ratio >= .66f) index = 2;
+        else if (ratio >= .33f) index = 1;
+
         barImage.sprite = stages[index];
     }
 }
