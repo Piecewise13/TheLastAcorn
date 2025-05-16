@@ -1,33 +1,41 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CompletionBar : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private Image fillImage;
-    [Header("Goal")]
+    [SerializeField] private Image  barImage;
+    [SerializeField] private Sprite[] stages = new Sprite[4];
     [SerializeField] private int targetScore = 100;
 
+    private int currentScore;
     public bool IsComplete => currentScore >= targetScore;
 
-    int currentScore = 0;
-
-    /// <summary>
-    /// Call this every time the player gains points.
-    /// </summary>
-    public void Add(int amount)
+    private void OnEnable()  => StartCoroutine(SubscribeWhenReady());
+    private void OnDisable()
     {
-        currentScore += amount;
-        float t = Mathf.Clamp01((float)currentScore / targetScore);
-        if (fillImage != null) fillImage.fillAmount = t;
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
     }
 
-    /// <summary>
-    /// Resets bar to zero.
-    /// </summary>
-    public void ResetBar()
+    private IEnumerator SubscribeWhenReady()
     {
-        currentScore = 0;
-        if (fillImage != null) fillImage.fillAmount = 0f;
+        while (ScoreManager.Instance == null) yield return null;
+        ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
+        HandleScoreChanged(ScoreManager.Instance.CurrentScore);
+    }
+
+    private void HandleScoreChanged(int newScore)
+    {
+        currentScore = newScore;
+        UpdateSprite();
+    }
+
+    private void UpdateSprite()
+    {
+        if (barImage == null || stages == null || stages.Length != 4) return;
+        float ratio = Mathf.Clamp01((float)currentScore / targetScore);
+        int index = Mathf.Clamp(Mathf.CeilToInt(ratio * 3f), 0, 3);
+        barImage.sprite = stages[index];
     }
 }
