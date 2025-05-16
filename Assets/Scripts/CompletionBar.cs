@@ -1,33 +1,48 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class CompletionBar : MonoBehaviour
 {
-    [Header("UI")]
-    [SerializeField] private Image fillImage;
-    [Header("Goal")]
-    [SerializeField] private int targetScore = 100;
+    [SerializeField] Image   barImage;
+    [SerializeField] Sprite[] stages = new Sprite[4];  // 0-empty, 1-⅓, 2-⅔, 3-full
+    [SerializeField] int targetScore = 100;
 
-    public bool IsComplete => currentScore >= targetScore;
+    int currentScore;
+    public bool  IsComplete   => currentScore >= targetScore;
+    public static bool AllCollected { get; private set; }
 
-    int currentScore = 0;
-
-    /// <summary>
-    /// Call this every time the player gains points.
-    /// </summary>
-    public void Add(int amount)
+    void OnEnable()  => StartCoroutine(SubscribeWhenReady());
+    void OnDisable()
     {
-        currentScore += amount;
-        float t = Mathf.Clamp01((float)currentScore / targetScore);
-        if (fillImage != null) fillImage.fillAmount = t;
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
     }
 
-    /// <summary>
-    /// Resets bar to zero.
-    /// </summary>
-    public void ResetBar()
+    IEnumerator SubscribeWhenReady()
     {
-        currentScore = 0;
-        if (fillImage != null) fillImage.fillAmount = 0f;
+        while (ScoreManager.Instance == null) yield return null;
+        ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
+        HandleScoreChanged(ScoreManager.Instance.CurrentScore);
+    }
+
+    void HandleScoreChanged(int newScore)
+    {
+        currentScore = newScore;
+        UpdateSprite();
+        AllCollected = IsComplete;
+    }
+
+    void UpdateSprite()
+    {
+        if (barImage == null || stages.Length != 4) return;
+
+        float ratio = Mathf.Clamp01((float)currentScore / targetScore);
+        int index = 0;
+        if      (ratio >= 1f)   index = 3;
+        else if (ratio >= .66f) index = 2;
+        else if (ratio >= .33f) index = 1;
+
+        barImage.sprite = stages[index];
     }
 }
