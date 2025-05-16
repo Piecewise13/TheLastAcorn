@@ -159,6 +159,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1901743541553315578, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5752939745208297490, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_Color.b
       value: 0.8867924
