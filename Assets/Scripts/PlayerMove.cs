@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMove : MonoBehaviour {
+public class PlayerMove : MonoBehaviour
+{
 
     /// <summary>
     /// Reference to the PlayerControls input action map.
@@ -33,21 +34,14 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     private Rigidbody2D rb;
 
-    /// <summary>
-    /// Reference to the climb particle system.
-    ///     </summary>
-    
-    [SerializeField] private ParticleSystem climbParticle;
+
 
     /// <summary>
     /// Reference to the Animator component.
     /// </summary>
     private Animator animator;
 
-    /// <summary>
-    /// Maximum rate over time for the climb particle emission.
-    /// </summary>
-    [SerializeField] private float climbParticleRateOverTime = 20f;
+
 
     [Header("Components")]
     /// <summary>
@@ -111,10 +105,23 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     [SerializeField] private float climbSpeed = 5.0f;
 
-
+    /// <summary>
+    /// Height to reach on a climb jump.
+    /// </summary>
     [SerializeField] private float climbJumpHeight = 5.0f;
+
+    /// <summary>
+    /// Speed at which the player reaches climbJumpHeight on a climb jump.
+    /// </summary>
     [SerializeField] private float climbJumpSpeed = 5.0f;
-    [SerializeField] private int climbJumpCount = 0;
+
+    /// <summary>
+    /// Number of jumps allowed while climbing.
+    ///  
+    [SerializeField] private int maxClimbJumps = 2;
+
+    private int climbJumpCount = 0;
+
     private Vector2 climbJumpPoisition;
     private Vector2 climbJumpStartPosition;
     [SerializeField] private AnimationCurve climbJumpCurve;
@@ -144,6 +151,17 @@ public class PlayerMove : MonoBehaviour {
     /// Original local position of the graphic for shake effect reset.
     /// </summary>
     private Vector3 graphicOriginalLocalPos;
+
+    /// <summary>
+    /// Maximum rate over time for the climb particle emission.
+    /// </summary>
+    [SerializeField] private float climbParticleRateOverTime = 20f;
+
+    /// <summary>
+    /// Reference to the climb particle system.
+    /// </summary>
+
+    [SerializeField] private ParticleSystem climbParticle;
 
     [Header("Glide")]
     /// <summary>
@@ -201,6 +219,7 @@ public class PlayerMove : MonoBehaviour {
         // Assign attach action and subscribe to event
         attachAction = playerMovementMap.Keyboard.Attach;
         attachAction.performed += Attach;
+        attachAction.canceled += Attach;
         attachAction.Enable();
 
         // Assign glide action and subscribe to event
@@ -256,7 +275,7 @@ public class PlayerMove : MonoBehaviour {
         // Handle climbing logic
         if (currentState == PlayerState.Climb)
         {
-            if(Vector3.Distance(climbJumpStartPosition, climbJumpPoisition) > 0.1f)
+            if (Vector3.Distance(climbJumpStartPosition, climbJumpPoisition) > 0.1f)
             {
                 ClimbJump();
             }
@@ -295,7 +314,7 @@ public class PlayerMove : MonoBehaviour {
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = 1.3f;
         }
         else if (rb.linearVelocity.y < 0)
         {
@@ -365,6 +384,11 @@ public class PlayerMove : MonoBehaviour {
     /// <param name="context">Input action callback context.</param>
     private void GlideInput(InputAction.CallbackContext context)
     {
+        if (context.canceled)
+        {
+            print("Glide canceled");
+        }
+
         // If already gliding, stop gliding
         if (currentState == PlayerState.Glide && context.canceled)
         {
@@ -418,8 +442,8 @@ public class PlayerMove : MonoBehaviour {
             animator.SetBool("isFalling", true);
         }
     }
-    
-        /// <summary>
+
+    /// <summary>
     /// Handles attach input for starting or stopping climbing.
     /// </summary>
     /// <param name="context">Input action callback context.</param>
@@ -432,18 +456,16 @@ public class PlayerMove : MonoBehaviour {
         }
 
         // Stop climbing if already climbing
-        if (currentState == PlayerState.Climb)
+        if (currentState == PlayerState.Climb && context.canceled)
         {
-            // if(climbTime > 0.4f){
-            //     StopClimb();
-            // }
+            StopClimb();
             return;
         }
-        
 
-        if(!canClimb)
+
+        if (!canClimb)
         {
-            return; 
+            return;
         }
 
         // Raycast to check for climbable object to the right
@@ -455,7 +477,7 @@ public class PlayerMove : MonoBehaviour {
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x *0.5f), rightHit.point.y);
+            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x * 0.5f), rightHit.point.y);
             StartClimb();
         }
     }
@@ -469,7 +491,6 @@ public class PlayerMove : MonoBehaviour {
         }
 
 
-
         climbTime = 0f;
 
         climbJumpCount++;
@@ -479,8 +500,15 @@ public class PlayerMove : MonoBehaviour {
         {
             climbJumpPoisition = transform.position + Vector3.up * climbJumpHeight;
             climbJumpStartPosition = transform.position;
+
+            var emission = climbParticle.emission;
+            emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, (float)climbJumpCount / (float)maxClimbJumps);
+
+            // If you want to set the start size, use the following (example):
+            var main = climbParticle.main;
+            main.startSize = new ParticleSystem.MinMaxCurve(Mathf.Lerp(0.8f,1.5f, (float)climbJumpCount / (float)maxClimbJumps));
         }
-        
+
     }
 
     private void ClimbJump()
@@ -512,90 +540,90 @@ public class PlayerMove : MonoBehaviour {
     }
 
 
-/* OLD CLIMBING CODE
-                    /// <summary>
-                    /// Handles climbing movement and shake effect while climbing.
-                    /// </summary>
-                    private void Climb()
-                    {
-                        // Stop climbing if max climb time exceeded
-                        if (climbTime > maxClimbTime)
+    /* OLD CLIMBING CODE
+                        /// <summary>
+                        /// Handles climbing movement and shake effect while climbing.
+                        /// </summary>
+                        private void Climb()
                         {
-                            //print("Climb is out!");
-                            StopClimb();
-                            return;
+                            // Stop climbing if max climb time exceeded
+                            if (climbTime > maxClimbTime)
+                            {
+                                //print("Climb is out!");
+                                StopClimb();
+                                return;
+                            }
+
+                            // Increment climb time
+                            climbTime += Time.deltaTime;
+
+                            var emission = climbParticle.emission;
+                            emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
+
+                            // Disable gravity and freeze position
+                            rb.gravityScale = 0;
+                            rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+
+                            // Read movement input
+                            var moveInput = moveAction.ReadValue<Vector2>();
+
+                            // Check for climbable object nearby
+                            var treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
+
+                            if (treeCollider == null)
+                            {
+                                StopClimb();
+                                return;
+                            }
+
+                            // Apply shake effect to graphic based on climb time
+                            if (graphic != null)
+                            {
+                                float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
+                                float shakeAmount = maxShakeIntensity * shakeRatio;
+                                Vector3 shakeOffset = new Vector3(
+                                    Random.Range(-shakeAmount, shakeAmount),
+                                    Random.Range(-shakeAmount, shakeAmount),
+                                    0f
+                                );
+                                graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
+                            }
+
+                            // Find closest point on tree collider
+                            var closestPoint = treeCollider.ClosestPoint(transform.position);
+
+                            // Calculate intended move location
+                            Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
+
+                            Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
+
+                            // Move player if within tree collider, otherwise snap to closest point
+                            if (treeCollider.OverlapPoint(moveLocation))
+                            {
+                                transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
+                            }
+                            else
+                            {
+                                StopClimb();
+                                //transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
+                            }
+
+                            if (moveInput != Vector2.zero)
+                            {
+                                // Update climbing animation
+                                animator.SetBool("isClimbMoving", true);
+                            }
+                            else
+                            {
+                                // Stop climbing animation if no input
+                                animator.SetBool("isClimbingMoving", false);
+
+                            }
+
+
                         }
 
-                        // Increment climb time
-                        climbTime += Time.deltaTime;
-
-                        var emission = climbParticle.emission;
-                        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
-
-                        // Disable gravity and freeze position
-                        rb.gravityScale = 0;
-                        rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-
-                        // Read movement input
-                        var moveInput = moveAction.ReadValue<Vector2>();
-
-                        // Check for climbable object nearby
-                        var treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
-
-                        if (treeCollider == null)
-                        {
-                            StopClimb();
-                            return;
-                        }
-
-                        // Apply shake effect to graphic based on climb time
-                        if (graphic != null)
-                        {
-                            float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
-                            float shakeAmount = maxShakeIntensity * shakeRatio;
-                            Vector3 shakeOffset = new Vector3(
-                                Random.Range(-shakeAmount, shakeAmount),
-                                Random.Range(-shakeAmount, shakeAmount),
-                                0f
-                            );
-                            graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
-                        }
-
-                        // Find closest point on tree collider
-                        var closestPoint = treeCollider.ClosestPoint(transform.position);
-
-                        // Calculate intended move location
-                        Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
-
-                        Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
-
-                        // Move player if within tree collider, otherwise snap to closest point
-                        if (treeCollider.OverlapPoint(moveLocation))
-                        {
-                            transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
-                        }
-                        else
-                        {
-                            StopClimb();
-                            //transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
-                        }
-
-                        if (moveInput != Vector2.zero)
-                        {
-                            // Update climbing animation
-                            animator.SetBool("isClimbMoving", true);
-                        }
-                        else
-                        {
-                            // Stop climbing animation if no input
-                            animator.SetBool("isClimbingMoving", false);
-
-                        }
-
-
-                    }
-
-                */
+                    */
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
@@ -629,10 +657,16 @@ public class PlayerMove : MonoBehaviour {
         animator.SetBool("isClimbing", false);
 
         climbTime = 0;
-        canClimb = false;
+
+        if (climbJumpCount == maxClimbJumps)
+        {
+            canClimb = false;
+        }
+
+
         currentState = PlayerState.Fall;
 
-        //rb.AddForce(Vector3.up * 15f + Vector3.right * moveAction.ReadValue<Vector2>().x, ForceMode2D.Impulse);
+        rb.AddForce(Vector3.up * 7f + Vector3.right * moveAction.ReadValue<Vector2>().x * 3f, ForceMode2D.Impulse);
 
         playerCollider.enabled = true;
 

@@ -106,7 +106,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""id"": ""e12f27cf-5033-40e7-af87-d4a120e0d50d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Tap"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -124,7 +124,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""id"": ""9569aae1-27dd-4bdd-850d-aecb6d8927d5"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Tap"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -241,19 +241,8 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bd2e6775-a034-4191-80e0-fab6f241c9c4"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Attach"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""f97e28a3-ea4b-43a6-9a96-b90d4d0a6626"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
