@@ -188,6 +188,7 @@ public class PlayerMove : MonoBehaviour {
         // Assign glide action and subscribe to event
         glideAction = playerMovementMap.Keyboard.Glide;
         glideAction.performed += GlideInput;
+        glideAction.canceled += GlideInput;
         glideAction.Enable();
 
         // Assign jump action and subscribe to event
@@ -343,7 +344,7 @@ public class PlayerMove : MonoBehaviour {
     private void GlideInput(InputAction.CallbackContext context)
     {
         // If already gliding, stop gliding
-        if (currentState == PlayerState.Glide)
+        if (currentState == PlayerState.Glide && context.canceled)
         {
             animator.SetBool("isGliding", false);
             currentState = PlayerState.Fall;
@@ -426,12 +427,12 @@ public class PlayerMove : MonoBehaviour {
         RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
 
         //.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
-        //Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue);
+        Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue, 1f);
 
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
+            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x *0.5f), rightHit.point.y);
             StartClimb();
         }
     }
@@ -486,7 +487,9 @@ public class PlayerMove : MonoBehaviour {
         var closestPoint = treeCollider.ClosestPoint(transform.position);
 
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + Vector3.right * moveInput.x * Time.deltaTime * 2 * climbSpeed;
+        Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
+
+        Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
 
         // Move player if within tree collider, otherwise snap to closest point
         if (treeCollider.OverlapPoint(moveLocation))
