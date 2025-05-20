@@ -33,27 +33,20 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     private Rigidbody2D rb;
 
-    /// <summary>
-    /// Reference to the climb particle system.
-    ///     </summary>
-    
-    [SerializeField] private ParticleSystem climbParticle;
 
     /// <summary>
     /// Reference to the Animator component.
     /// </summary>
     private Animator animator;
 
-    /// <summary>
-    /// Maximum rate over time for the climb particle emission.
-    /// </summary>
-    [SerializeField] private float climbParticleRateOverTime = 20f;
 
     [Header("Components")]
     /// <summary>
     /// Reference to the player's graphic GameObject.
     /// </summary>
     [SerializeField] private GameObject graphic;
+
+    [SerializeField] private SpriteRenderer graphicSprite;
 
     /// <summary>
     /// Reference to the player's Collider2D.
@@ -132,6 +125,19 @@ public class PlayerMove : MonoBehaviour {
     /// Maximum intensity of the shake effect while climbing.
     /// </summary>
     [SerializeField] private float maxShakeIntensity = 0.2f;
+
+        /// <summary>
+    /// Reference to the climb particle system.
+    ///     </summary>
+    
+    [SerializeField] private ParticleSystem climbParticle;
+
+    /// <summary>
+    /// Maximum rate over time for the climb particle emission.
+    /// </summary>
+    [SerializeField] private float climbParticleRateOverTime = 20f;
+
+    [SerializeField] private Color climbFatigueColor;
 
     /// <summary>
     /// Original local position of the graphic for shake effect reset.
@@ -447,6 +453,7 @@ public class PlayerMove : MonoBehaviour {
             StartClimb();
         }
     }
+    
 
 
     /// <summary>
@@ -467,6 +474,10 @@ public class PlayerMove : MonoBehaviour {
 
         var emission = climbParticle.emission;
         emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
+
+        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
+
+
 
         // Disable gravity and freeze position
         rb.gravityScale = 0;
@@ -575,6 +586,18 @@ public class PlayerMove : MonoBehaviour {
             graphic.transform.localPosition = graphicOriginalLocalPos;
     }
 
+    private void ResetClimb()
+    {
+        canClimb = true;
+
+        // Reset climb time and particle emission
+        climbTime = 0;
+        var emission = climbParticle.emission;
+        emission.rateOverTime = 0;
+
+        graphicSprite.color = Color.white;
+    }
+
     /// <summary>
     /// Checks if the player is grounded and updates state accordingly.
     /// </summary>
@@ -591,12 +614,7 @@ public class PlayerMove : MonoBehaviour {
                 stunnedEffect.SetActive(false);
             }
 
-            canClimb = true;
-
-            // Reset climb time and particle emission
-            climbTime = 0;
-            var emission = climbParticle.emission;
-            emission.rateOverTime = 0;
+            ResetClimb();
 
             currentState = PlayerState.Grounded;
             animator.SetBool("isFalling", false);

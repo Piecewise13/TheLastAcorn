@@ -132,6 +132,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 529780030}
     - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: graphicSprite
+      value: 
+      objectReference: {fileID: 1593770592}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: climbFatigueColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: climbFatigueColor.b
+      value: 0.4575472
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: climbFatigueColor.g
+      value: 0.4575472
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: climbFatigueColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: climbParticleRateOverTime
       value: 7
       objectReference: {fileID: 0}
@@ -143,6 +163,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 4694761808220932258, guid: 0295f14e1c307af4681618da8d704ceb, type: 3}
+    - target: {fileID: 867419554417715573, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 867419554417715573, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 867419554417715573, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.9
@@ -1611,7 +1643,7 @@ ParticleSystemRenderer:
   m_SortingFudge: 0
   m_NormalDirection: 1
   m_ShadowBias: 0
-  m_RenderAlignment: 0
+  m_RenderAlignment: 4
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
   m_EnableGPUInstancing: 1
@@ -2045,7 +2077,7 @@ ParticleSystem:
     startRotationX:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1.5707963
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -2206,7 +2238,7 @@ ParticleSystem:
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 50, z: 0}
     size3D: 0
-    rotation3D: 0
+    rotation3D: 1
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
@@ -2263,7 +2295,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 2
     angle: 0
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -35581,6 +35613,11 @@ SpriteRenderer:
 --- !u!4 &1593770591 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7442338127621984480, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+  m_PrefabInstance: {fileID: 7399128}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &1593770592 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 867419554417715573, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
   m_PrefabInstance: {fileID: 7399128}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1663261471
