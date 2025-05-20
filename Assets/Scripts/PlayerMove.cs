@@ -310,19 +310,27 @@ public class PlayerMove : MonoBehaviour {
         }
 
         var moveSpeed = groundMoveSpeed;
-        if (currentState == PlayerState.Fall)
-        {
-            moveSpeed = airMoveSpeed;
-        }
 
         // Read movement input
         var moveInput = moveAction.ReadValue<Vector2>();
+
         // Apply horizontal velocity
-        rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
+        {
+            print(rb.linearVelocity.x);
+            moveSpeed = airMoveSpeed;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+        }
 
         // Flip graphic and update running animation if moving
         if (moveInput.x != 0)
         {
+            //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+
             float targetYRotation = moveInput.x > 0 ? 0f : 180f;
             Vector3 rotation = graphic.transform.eulerAngles;
             rotation.y = targetYRotation;

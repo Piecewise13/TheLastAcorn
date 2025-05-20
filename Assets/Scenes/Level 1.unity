@@ -128,6 +128,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: airMoveSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: climbParticle
       value: 
       objectReference: {fileID: 529780030}
@@ -154,6 +158,10 @@ PrefabInstance:
     - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: climbParticleRateOverTime
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: glideHitVelocityThreshold
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 839978602859707386, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_Name
@@ -36171,7 +36179,7 @@ Transform:
   m_GameObject: {fileID: 1953610866}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.96, y: 22.64, z: 0}
+  m_LocalPosition: {x: 18.4, y: 36.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
