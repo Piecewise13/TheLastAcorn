@@ -34,9 +34,20 @@ public class PlayerMove : MonoBehaviour {
     private Rigidbody2D rb;
 
     /// <summary>
+    /// Reference to the climb particle system.
+    ///     </summary>
+    
+    [SerializeField] private ParticleSystem climbParticle;
+
+    /// <summary>
     /// Reference to the Animator component.
     /// </summary>
     private Animator animator;
+
+    /// <summary>
+    /// Maximum rate over time for the climb particle emission.
+    /// </summary>
+    [SerializeField] private float climbParticleRateOverTime = 20f;
 
     [Header("Components")]
     /// <summary>
@@ -454,6 +465,9 @@ public class PlayerMove : MonoBehaviour {
         // Increment climb time
         climbTime += Time.deltaTime;
 
+        var emission = climbParticle.emission;
+        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
+
         // Disable gravity and freeze position
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -578,6 +592,11 @@ public class PlayerMove : MonoBehaviour {
             }
 
             canClimb = true;
+
+            // Reset climb time and particle emission
+            climbTime = 0;
+            var emission = climbParticle.emission;
+            emission.rateOverTime = 0;
 
             currentState = PlayerState.Grounded;
             animator.SetBool("isFalling", false);
