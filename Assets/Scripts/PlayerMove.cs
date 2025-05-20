@@ -149,17 +149,9 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float maxShakeIntensity = 0.2f;
 
-        /// <summary>
-    /// Reference to the climb particle system.
-    ///     </summary>
-    
-    [SerializeField] private ParticleSystem climbParticle;
-
     /// <summary>
-    /// Maximum rate over time for the climb particle emission.
+    /// The final color of the graphic when at the end of climbing
     /// </summary>
-    [SerializeField] private float climbParticleRateOverTime = 20f;
-
     [SerializeField] private Color climbFatigueColor;
 
     /// <summary>
@@ -175,7 +167,6 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Reference to the climb particle system.
     /// </summary>
-
     [SerializeField] private ParticleSystem climbParticle;
 
     [Header("Glide")]
@@ -356,7 +347,7 @@ public class PlayerMove : MonoBehaviour
         // Apply horizontal velocity
         if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
         {
-            print(rb.linearVelocity.x);
+            //print(rb.linearVelocity.x);
             moveSpeed = airMoveSpeed;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
         }
@@ -481,6 +472,7 @@ public class PlayerMove : MonoBehaviour
         // Stop climbing if already climbing
         if (currentState == PlayerState.Climb && context.canceled)
         {
+            print("Attach released");
             StopClimb();
             return;
         }
@@ -527,6 +519,8 @@ public class PlayerMove : MonoBehaviour
 
             var emission = climbParticle.emission;
             emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, (float)climbJumpCount / (float)maxClimbJumps);
+
+            graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, (float)climbJumpCount / (float)maxClimbJumps);
 
             // If you want to set the start size, use the following (example):
             var main = climbParticle.main;

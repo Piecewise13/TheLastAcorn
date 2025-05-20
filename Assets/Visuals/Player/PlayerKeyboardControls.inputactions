@@ -155,9 +155,31 @@
                 },
                 {
                     "name": "",
+                    "id": "b10867f5-5fc3-435b-b0f7-00f3602dbf4b",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f97e28a3-ea4b-43a6-9a96-b90d4d0a6626",
                     "path": "<Keyboard>/e",
                     "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attach",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9449b322-ec43-4c1e-8a30-8e554422a717",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "Press(pressPoint=0.7,behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "Attach",
@@ -177,8 +199,30 @@
                 },
                 {
                     "name": "",
+                    "id": "571a9237-8e38-4ab3-bb49-ecab61b30a51",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Glide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8fb06c41-fa83-4c23-acac-3c122c65e146",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5edc3cbc-8679-477d-8769-cfea3d1f1d64",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
