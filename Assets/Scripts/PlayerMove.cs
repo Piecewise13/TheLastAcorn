@@ -76,7 +76,8 @@ public class PlayerMove : MonoBehaviour {
     /// <summary>
     /// Speed at which the player moves.
     /// </summary>
-    [SerializeField] private float moveSpeed = 5.0f;
+    [SerializeField] private float groundMoveSpeed = 12.0f;
+    [SerializeField] private float airMoveSpeed = 9.0f;
 
     [Header("Climb")]
     /// <summary>
@@ -273,7 +274,7 @@ public class PlayerMove : MonoBehaviour {
         {
             rb.gravityScale = 1;
         }
-        else if (currentState == PlayerState.Fall)
+        else if (rb.linearVelocity.y < 0)
         {
             rb.gravityScale = 1.8f;
         }
@@ -288,6 +289,12 @@ public class PlayerMove : MonoBehaviour {
         if (currentState == PlayerState.Climb)
         {
             return;
+        }
+
+        var moveSpeed = groundMoveSpeed;
+        if (currentState == PlayerState.Fall)
+        {
+            moveSpeed = airMoveSpeed;
         }
 
         // Read movement input
@@ -424,7 +431,6 @@ public class PlayerMove : MonoBehaviour {
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            //Debug.Log("ATTACHED TO TREE");
             transform.position = new Vector2(rightHit.point.x + 0.5f, rightHit.point.y);
             StartClimb();
         }
@@ -614,16 +620,9 @@ public class PlayerMove : MonoBehaviour {
                 return;
             }
 
-            // // Ignore if velocity exceeds auto-attach threshold
-            // if (Mathf.Abs(collision.relativeVelocity.x) > autoAttachMaxVelo)
-            // {
-            //     return;
-            // }
-
-
             // Attach to the tree and start climbing
-            transform.position = collision.GetContact(0).point;
-            StartClimb();
+            // transform.position = collision.GetContact(0).point;
+            // StartClimb();
         }
     }
 

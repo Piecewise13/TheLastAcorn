@@ -253,7 +253,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""f97e28a3-ea4b-43a6-9a96-b90d4d0a6626"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
