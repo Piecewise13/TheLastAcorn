@@ -425,7 +425,7 @@ public class PlayerMove : MonoBehaviour {
         // Raycast to check for climbable object to the right
         RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
 
-        Debug.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
+        //.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
         //Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue);
 
         // Start climbing if climbable object found
@@ -445,7 +445,7 @@ public class PlayerMove : MonoBehaviour {
         // Stop climbing if max climb time exceeded
         if (climbTime > maxClimbTime)
         {
-            print("Climb is out!");
+            //print("Climb is out!");
             StopClimb();
             return;
         }
@@ -598,7 +598,7 @@ public class PlayerMove : MonoBehaviour {
         if (((1 << collision.gameObject.layer) & climbableLayer) != 0)
         {
 
-            print(collision.relativeVelocity);
+            //print(collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
             if (Mathf.Abs(collision.relativeVelocity.x) >= glideHitVelocityThreshold)

@@ -4,7 +4,6 @@ public class Collector : MonoBehaviour
 {
     [SerializeField] private Collider2D triggerCollider;
     [SerializeField] private AudioPlayer sfxPlayer;
-    [SerializeField] private CompletionBar completionBar;
 
     private void Awake()
     {
@@ -28,11 +27,5 @@ public class Collector : MonoBehaviour
 
         if (other.TryGetComponent(out GrowAndShrink gs))
             gs.ShrinkAndDisable();
-
-        if (completionBar != null && completionBar.IsComplete)
-        {
-            Debug.Log("All items collected!");
-            // GameManager.LevelComplete();
-        }
     }
 }
