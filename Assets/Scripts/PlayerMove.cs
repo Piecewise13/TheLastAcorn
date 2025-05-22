@@ -464,6 +464,12 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
+        if (climbableCollider != null)
+        {
+            return;
+        }
+
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
 
@@ -499,6 +505,8 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    #region Climb Region
+
     /// <summary>
     /// Handles attach input for starting or stopping climbing.
     /// </summary>
@@ -523,16 +531,12 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // Raycast to check for climbable object to the right
-        RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
 
-        //.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
-        Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue, 1f);
-
-        // Start climbing if climbable object found
-        if (rightHit.collider != null)
+        Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
+        if (climbableCollider != null)
         {
-            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x * 0.5f), rightHit.point.y);
+            // Attach to the climbable object
+            transform.position = new Vector2(climbableCollider.ClosestPoint(transform.position).x, transform.position.y);
             StartClimb();
         }
     }
@@ -544,33 +548,21 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void Climb()
     {
-        // Stop climbing if max climb time exceeded
         if (climbTime > maxClimbTime)
         {
-            //print("Climb is out!");
             StopClimb();
             return;
         }
 
-        // Increment climb time
         climbTime += Time.deltaTime;
+        UpdateClimbParticles();
+        UpdateClimbFatigueColor();
 
-        var emission = climbParticle.emission;
-        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
-
-        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
-
-
-
-        // Disable gravity and freeze position
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
 
-        // Read movement input
-        var moveInput = moveAction.ReadValue<Vector2>();
-
-        // Check for climbable object nearby
-        var treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        Collider2D treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
 
         if (treeCollider == null)
         {
@@ -578,28 +570,11 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // Apply shake effect to graphic based on climb time
-        if (graphic != null)
-        {
-            float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
-            float shakeAmount = maxShakeIntensity * shakeRatio;
-            Vector3 shakeOffset = new Vector3(
-                Random.Range(-shakeAmount, shakeAmount),
-                Random.Range(-shakeAmount, shakeAmount),
-                0f
-            );
-            graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
-        }
+        ApplyClimbShake();
 
-        // Find closest point on tree collider
-        var closestPoint = treeCollider.ClosestPoint(transform.position);
-
-        // Calculate intended move location
         Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
-
         Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
 
-        // Move player if within tree collider, otherwise snap to closest point
         if (treeCollider.OverlapPoint(moveLocation))
         {
             transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
@@ -607,24 +582,35 @@ public class PlayerMove : MonoBehaviour
         else
         {
             StopClimb();
-            //transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
         }
 
-        if (moveInput != Vector2.zero)
-        {
-            // Update climbing animation
-            animator.SetBool("isClimbMoving", true);
-        }
-        else
-        {
-            // Stop climbing animation if no input
-            animator.SetBool("isClimbingMoving", false);
-
-        }
-
-
+        animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
     }
 
+    private void UpdateClimbParticles()
+    {
+        var emission = climbParticle.emission;
+        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
+    }
+
+    private void UpdateClimbFatigueColor()
+    {
+        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
+    }
+
+    private void ApplyClimbShake()
+    {
+        if (graphic == null) return;
+
+        float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
+        float shakeAmount = maxShakeIntensity * shakeRatio;
+        Vector3 shakeOffset = new Vector3(
+            Random.Range(-shakeAmount, shakeAmount),
+            Random.Range(-shakeAmount, shakeAmount),
+            0f
+        );
+        graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
+    }
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
@@ -683,6 +669,8 @@ public class PlayerMove : MonoBehaviour
 
         graphicSprite.color = Color.white;
     }
+
+    #endregion
 
     /// <summary>
     /// Checks if the player is grounded and updates state accordingly.
