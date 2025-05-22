@@ -208,6 +208,7 @@ public class PlayerMove : MonoBehaviour
         // Assign attach action and subscribe to event
         attachAction = playerMovementMap.Keyboard.Attach;
         attachAction.performed += Attach;
+        attachAction.canceled += Attach;
         attachAction.Enable();
 
         // Assign glide action and subscribe to event
@@ -305,7 +306,7 @@ public class PlayerMove : MonoBehaviour
         }
         else if (rb.linearVelocity.y < 0)
         {
-            if (isJumpHeld)
+            if (isJumpHeld && glideButtonReleasedSinceClimb)
             {
                 GlideInput(new InputAction.CallbackContext());
             }
@@ -463,10 +464,6 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // Block gliding if button hasn't been released since last climb
-        if (!glideButtonReleasedSinceClimb)
-            return;
-
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
 
@@ -515,12 +512,9 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Stop climbing if already climbing
-        if (currentState == PlayerState.Climb)
+        if (currentState == PlayerState.Climb && context.canceled)
         {
-            if (climbTime > 0.4f)
-            {
-                StopClimb();
-            }
+            StopClimb();
             return;
         }
 
