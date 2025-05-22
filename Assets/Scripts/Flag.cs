@@ -1,11 +1,13 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Flag : MonoBehaviour
 {
+    public string nextSceneName;
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (CompletionBar.AllCollected)
-            SceneLoader.LoadNext();
+        SceneManager.LoadScene(nextSceneName);
     }
 }

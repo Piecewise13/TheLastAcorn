@@ -40,6 +40,13 @@ public class PatrollingEnemy : MonoBehaviour
             scale.x = Mathf.Sign(target.x - newPos.x) * Mathf.Abs(scale.x);
             transform.localScale = scale;
         }
+
+        if (rb.linearVelocity.x != 0)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = -Mathf.Sign(rb.linearVelocity.x) * Mathf.Abs(scale.x);
+            transform.localScale = scale;
+        }
     }
     
     private void OnTriggerEnter2D(Collider2D other)

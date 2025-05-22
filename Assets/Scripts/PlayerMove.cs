@@ -290,11 +290,11 @@ public class PlayerMove : MonoBehaviour {
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
-            rb.gravityScale = 1;
+            rb.gravityScale = 1.5f;
         }
         else if (rb.linearVelocity.y < 0)
         {
-            rb.gravityScale = 1.8f;
+            rb.gravityScale = 2.8f;
         }
     }
 
