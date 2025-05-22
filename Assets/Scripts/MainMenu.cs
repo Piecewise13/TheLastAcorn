@@ -1,9 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    void Update(){ if (Keyboard.current.spaceKey.wasPressedThisFrame) LoadGame();}
-
-    public void LoadGame(){ SceneLoader.LoadNext();}
+    public void LoadGame()
+    {
+        SceneLoader.LoadNext();
+    }
 }
