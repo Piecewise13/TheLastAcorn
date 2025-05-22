@@ -180,6 +180,11 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     [SerializeField] private float jumpForce = 5.0f;
 
+    private float jumpBufferTime = 0.1f; // Adjust as needed (0.1s = ~6 frames at 60fps)
+    private float jumpBufferTimer = 0f;
+
+    private bool isJumpHeld = false;
+
     /// <summary>
     /// Current state of the player.
     /// </summary>
@@ -211,6 +216,8 @@ public class PlayerMove : MonoBehaviour {
         // Assign jump action and subscribe to event
         jumpAction = playerMovementMap.Keyboard.Jump;
         jumpAction.performed += Jump;
+        jumpAction.performed += ctx => isJumpHeld = true;
+        jumpAction.canceled += ctx => isJumpHeld = false;
         jumpAction.Enable();
     }
 
@@ -294,6 +301,11 @@ public class PlayerMove : MonoBehaviour {
         }
         else if (rb.linearVelocity.y < 0)
         {
+            if (isJumpHeld)
+            {
+                GlideInput(new InputAction.CallbackContext());
+            }
+
             rb.gravityScale = 2.8f;
         }
     }
@@ -314,15 +326,22 @@ public class PlayerMove : MonoBehaviour {
         // Read movement input
         var moveInput = moveAction.ReadValue<Vector2>();
 
+        if (currentState == PlayerState.Fall)
+        {
+            animator.SetBool("isRunning", false);
+        }
+
         // Apply horizontal velocity
         if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
         {
             print(rb.linearVelocity.x);
             moveSpeed = airMoveSpeed;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+            
         }
         else
         {
+            
             rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         }
 
@@ -335,7 +354,7 @@ public class PlayerMove : MonoBehaviour {
             Vector3 rotation = graphic.transform.eulerAngles;
             rotation.y = targetYRotation;
             graphic.transform.eulerAngles = rotation;
-            animator.SetBool("isRunning", true);
+            
         }
     }
 
@@ -345,8 +364,20 @@ public class PlayerMove : MonoBehaviour {
     /// <param name="context">Input action callback context.</param>
     private void Jump(InputAction.CallbackContext context)
     {
+
+        if (currentState == PlayerState.STUNNED) {
+            return;
+        }
+
+        if(currentState == PlayerState.Fall && isJumpHeld)
+        {
+            print("jump held");
+            GlideInput(new InputAction.CallbackContext());
+            return;
+        }
+
         // Only allow jumping if grounded and not stunned
-        if (currentState != PlayerState.Grounded || currentState == PlayerState.STUNNED)
+        if (currentState != PlayerState.Grounded)
         {
             return;
         }
@@ -360,6 +391,8 @@ public class PlayerMove : MonoBehaviour {
         // Set state to falling and update animation
         currentState = PlayerState.Fall;
         animator.SetBool("isFalling", true);
+
+        jumpBufferTimer = jumpBufferTime;
     }
 
     /// <summary>
@@ -371,6 +404,7 @@ public class PlayerMove : MonoBehaviour {
         // If already gliding, stop gliding
         if (currentState == PlayerState.Glide && context.canceled)
         {
+            print("Already glidig");
             animator.SetBool("isGliding", false);
             currentState = PlayerState.Fall;
             return;
@@ -379,6 +413,7 @@ public class PlayerMove : MonoBehaviour {
         // Only allow gliding if falling and not stunned
         if (currentState != PlayerState.Fall)
         {
+            print("not fllaing");
             return;
         }
 
@@ -611,6 +646,13 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     private void GroundCheck()
     {
+        // Skip ground check if jump buffer is active
+        if (jumpBufferTimer > 0f)
+        {
+            jumpBufferTimer -= Time.deltaTime;
+            return;
+        }
+
         // Check for ground using overlap circle
         bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
@@ -625,6 +667,7 @@ public class PlayerMove : MonoBehaviour {
             ResetClimb();
 
             currentState = PlayerState.Grounded;
+            print("Grounded");
             animator.SetBool("isFalling", false);
             animator.SetBool("isGliding", false);
 
