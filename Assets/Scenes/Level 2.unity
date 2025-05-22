@@ -583,7 +583,7 @@ MonoBehaviour:
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
-  colourSpeed: 0.1
+  colourSpeed: 0.005
   colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}

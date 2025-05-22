@@ -151,6 +151,18 @@ PrefabInstance:
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3784583534190328103, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6194666
+      objectReference: {fileID: 0}
+    - target: {fileID: 3784583534190328103, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3784583534190328103, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -39
+      objectReference: {fileID: 0}
     - target: {fileID: 3843412699993291160, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: smoothX
       value: 0.05
@@ -655,7 +667,7 @@ MonoBehaviour:
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
-  colourSpeed: 0.01
+  colourSpeed: 0.005
   colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}
