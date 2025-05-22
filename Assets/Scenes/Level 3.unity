@@ -588,6 +588,14 @@ MonoBehaviour:
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
+  colourSpeed: 0.1
+  colours:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}
+  - {r: 0.31038624, g: 0.7075472, b: 0.703734, a: 1}
+  - {r: 0.2306871, g: 0.3011167, b: 0.6037736, a: 1}
+  - {r: 0.17079033, g: 0.20635457, b: 0.3584906, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &215351409
 GameObject:
   m_ObjectHideFlags: 0
