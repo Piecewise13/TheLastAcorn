@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMove : MonoBehaviour {
+public class PlayerMove : MonoBehaviour
+{
 
     /// <summary>
     /// Reference to the PlayerControls input action map.
@@ -126,10 +127,10 @@ public class PlayerMove : MonoBehaviour {
     /// </summary>
     [SerializeField] private float maxShakeIntensity = 0.2f;
 
-        /// <summary>
+    /// <summary>
     /// Reference to the climb particle system.
     ///     </summary>
-    
+
     [SerializeField] private ParticleSystem climbParticle;
 
     /// <summary>
@@ -309,55 +310,97 @@ public class PlayerMove : MonoBehaviour {
             rb.gravityScale = 2.8f;
         }
     }
-
-    /// <summary>
-    /// Handles player movement while grounded.
-    /// </summary>
     private void SideMovement()
     {
-        // Prevent movement if climbing
         if (currentState == PlayerState.Climb)
-        {
             return;
-        }
 
-        var moveSpeed = groundMoveSpeed;
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        float moveSpeed = (currentState == PlayerState.Fall) ? airMoveSpeed : groundMoveSpeed;
 
-        // Read movement input
-        var moveInput = moveAction.ReadValue<Vector2>();
-
-        if (currentState == PlayerState.Fall)
-        {
-            animator.SetBool("isRunning", false);
-        }
+        // Handle running animation
+        animator.SetBool("isRunning", moveInput.x != 0 && currentState == PlayerState.Grounded);
 
         // Apply horizontal velocity
-        if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
+        if (currentState == PlayerState.Fall && ShouldApplyAirControl(moveInput.x, rb.linearVelocity.x))
         {
-            print(rb.linearVelocity.x);
-            moveSpeed = airMoveSpeed;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
-            
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime,
+                rb.linearVelocity.y
+            );
         }
         else
         {
-            
             rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
         }
 
-        // Flip graphic and update running animation if moving
+        // Flip graphic if moving horizontally
         if (moveInput.x != 0)
-        {
-            //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-
-            float targetYRotation = moveInput.x > 0 ? 0f : 180f;
-            Vector3 rotation = graphic.transform.eulerAngles;
-            rotation.y = targetYRotation;
-            graphic.transform.eulerAngles = rotation;
-            
-        }
+            FlipGraphic(moveInput.x);
     }
 
+    private bool ShouldApplyAirControl(float inputX, float velocityX)
+    {
+        // Only apply air control if input direction is opposite to current velocity
+        return (inputX > 0) ^ (velocityX > 0);
+    }
+
+    private void FlipGraphic(float inputX)
+    {
+        float targetYRotation = inputX > 0 ? 0f : 180f;
+        Vector3 rotation = graphic.transform.eulerAngles;
+        rotation.y = targetYRotation;
+        graphic.transform.eulerAngles = rotation;
+    }
+    /*
+            /// <summary>
+            /// Handles player movement while grounded.
+            /// </summary>
+            private void SideMovement()
+            {
+                // Prevent movement if climbing
+                if (currentState == PlayerState.Climb)
+                {
+                    return;
+                }
+
+                var moveSpeed = groundMoveSpeed;
+
+                // Read movement input
+                var moveInput = moveAction.ReadValue<Vector2>();
+
+                if (currentState == PlayerState.Fall)
+                {
+                    animator.SetBool("isRunning", false);
+                }
+
+                // Apply horizontal velocity
+                if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
+                {
+                    print(rb.linearVelocity.x);
+                    moveSpeed = airMoveSpeed;
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+
+                }
+                else
+                {
+
+                    rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+                }
+
+                // Flip graphic and update running animation if moving
+                if (moveInput.x != 0)
+                {
+                    //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+
+                    float targetYRotation = moveInput.x > 0 ? 0f : 180f;
+                    Vector3 rotation = graphic.transform.eulerAngles;
+                    rotation.y = targetYRotation;
+                    graphic.transform.eulerAngles = rotation;
+
+                }
+            }
+        */
     /// <summary>
     /// Handles jump input and applies jump force.
     /// </summary>
@@ -365,11 +408,12 @@ public class PlayerMove : MonoBehaviour {
     private void Jump(InputAction.CallbackContext context)
     {
 
-        if (currentState == PlayerState.STUNNED) {
+        if (currentState == PlayerState.STUNNED)
+        {
             return;
         }
 
-        if(currentState == PlayerState.Fall && isJumpHeld)
+        if (currentState == PlayerState.Fall && isJumpHeld)
         {
             print("jump held");
             GlideInput(new InputAction.CallbackContext());
@@ -456,8 +500,8 @@ public class PlayerMove : MonoBehaviour {
             animator.SetBool("isFalling", true);
         }
     }
-    
-        /// <summary>
+
+    /// <summary>
     /// Handles attach input for starting or stopping climbing.
     /// </summary>
     /// <param name="context">Input action callback context.</param>
@@ -472,15 +516,16 @@ public class PlayerMove : MonoBehaviour {
         // Stop climbing if already climbing
         if (currentState == PlayerState.Climb)
         {
-            if(climbTime > 0.4f){
+            if (climbTime > 0.4f)
+            {
                 StopClimb();
             }
             return;
         }
 
-        if(!canClimb)
+        if (!canClimb)
         {
-            return; 
+            return;
         }
 
         // Raycast to check for climbable object to the right
@@ -492,11 +537,11 @@ public class PlayerMove : MonoBehaviour {
         // Start climbing if climbable object found
         if (rightHit.collider != null)
         {
-            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x *0.5f), rightHit.point.y);
+            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x * 0.5f), rightHit.point.y);
             StartClimb();
         }
     }
-    
+
 
 
     /// <summary>
