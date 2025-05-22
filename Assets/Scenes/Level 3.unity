@@ -588,7 +588,7 @@ MonoBehaviour:
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
-  colourSpeed: 0.1
+  colourSpeed: 0.005
   colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}
@@ -67082,6 +67082,10 @@ PrefabInstance:
     - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: nextSceneName
+      value: Main Menu
       objectReference: {fileID: 0}
     - target: {fileID: 7608516494688604138, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: m_Name
