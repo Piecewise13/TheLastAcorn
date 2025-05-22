@@ -84,7 +84,6 @@ GameObject:
   - component: {fileID: 6681820592772038295}
   - component: {fileID: 950779574515905425}
   - component: {fileID: 7065884537941970894}
-  - component: {fileID: 196750522843379575}
   - component: {fileID: 896481923271748056}
   - component: {fileID: 8151093954828565727}
   m_Layer: 7
@@ -240,29 +239,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerCollider: {fileID: 5663293700936031498}
   sfxPlayer: {fileID: 950779574515905425}
---- !u!114 &196750522843379575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839978602859707386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: c832b46127f945d48be20c0675b1a7f9, type: 3}
-  volume: 1
-  pitch: 1
-  randomise: 0
-  volumeRange: {x: 0.9, y: 1}
-  pitchRange: {x: 0.95, y: 1.05}
-  fadeIn: 0
-  fadeInDuration: 1
-  playWithDelay: 0
-  delayDuration: 0
-  playOnEnable: 0
 --- !u!82 &896481923271748056
 AudioSource:
   m_ObjectHideFlags: 0
@@ -379,7 +355,7 @@ MonoBehaviour:
   glideClip: {fileID: 0}
   fallClip: {fileID: 0}
   stunnedClip: {fileID: 0}
-  groundedSpeedRange: {x: 0.1, y: 4}
+  groundedSpeedRange: {x: 0.05, y: 3}
   groundedMaxVol: 0.5
   glideSpeedRange: {x: 2, y: 12}
   glideMaxVol: 1
@@ -387,7 +363,7 @@ MonoBehaviour:
   fallMaxVol: 1
   enablePitchBend: 1
   minPitch: 0.6
-  maxPitch: 0.8
+  maxPitch: 0.7
 --- !u!1 &881909498491194928
 GameObject:
   m_ObjectHideFlags: 0

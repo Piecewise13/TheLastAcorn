@@ -127,9 +127,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 787333113106485959, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: targetScore
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 839978602859707386, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2401446795892416030, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: ShapeModule.type
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2401446795892416030, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2401446795892416030, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2401446795892416030, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843412699993291160, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: smoothX
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843412699993291160, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: smoothY
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843412699993291160, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: offset.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843412699993291160, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: offset.y
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalPosition.x
@@ -579,6 +615,14 @@ MonoBehaviour:
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
+  colourSpeed: 0.1
+  colours:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}
+  - {r: 0.31038624, g: 0.7075472, b: 0.703734, a: 1}
+  - {r: 0.2306871, g: 0.3011167, b: 0.6037736, a: 1}
+  - {r: 0.17079033, g: 0.20635457, b: 0.3584906, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &215351409
 GameObject:
   m_ObjectHideFlags: 0
