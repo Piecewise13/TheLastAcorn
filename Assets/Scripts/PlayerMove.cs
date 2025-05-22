@@ -273,6 +273,8 @@ public class PlayerMove : MonoBehaviour
         // Check if player is grounded
         GroundCheck();
 
+        FallingLogic();
+
         // Handle gliding logic
         if (currentState == PlayerState.Glide)
         {
@@ -280,7 +282,6 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        GravityAdjustment();
 
         // Handle ground movement if move action is in progress
         if (moveAction.inProgress)
@@ -297,14 +298,30 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private void GravityAdjustment()
+    private void FallingLogic()
     {
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
             rb.gravityScale = 1.5f;
+            return;
         }
-        else if (rb.linearVelocity.y < 0)
+
+        if (climbTime > 0)
+        {
+
+            climbTime -= Time.deltaTime;
+            UpdateClimbFatigueColor();
+            UpdateClimbParticles();
+        }
+
+
+        if (currentState == PlayerState.Glide)
+        {
+            return;
+        }
+
+        if (rb.linearVelocity.y < 0)
         {
             if (isJumpHeld && glideButtonReleasedSinceClimb)
             {
@@ -356,55 +373,7 @@ public class PlayerMove : MonoBehaviour
         rotation.y = targetYRotation;
         graphic.transform.eulerAngles = rotation;
     }
-    /*
-            /// <summary>
-            /// Handles player movement while grounded.
-            /// </summary>
-            private void SideMovement()
-            {
-                // Prevent movement if climbing
-                if (currentState == PlayerState.Climb)
-                {
-                    return;
-                }
 
-                var moveSpeed = groundMoveSpeed;
-
-                // Read movement input
-                var moveInput = moveAction.ReadValue<Vector2>();
-
-                if (currentState == PlayerState.Fall)
-                {
-                    animator.SetBool("isRunning", false);
-                }
-
-                // Apply horizontal velocity
-                if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
-                {
-                    print(rb.linearVelocity.x);
-                    moveSpeed = airMoveSpeed;
-                    rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
-
-                }
-                else
-                {
-
-                    rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-                }
-
-                // Flip graphic and update running animation if moving
-                if (moveInput.x != 0)
-                {
-                    //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-
-                    float targetYRotation = moveInput.x > 0 ? 0f : 180f;
-                    Vector3 rotation = graphic.transform.eulerAngles;
-                    rotation.y = targetYRotation;
-                    graphic.transform.eulerAngles = rotation;
-
-                }
-            }
-        */
     /// <summary>
     /// Handles jump input and applies jump force.
     /// </summary>
@@ -449,12 +418,15 @@ public class PlayerMove : MonoBehaviour
     /// <param name="context">Input action callback context.</param>
     private void GlideInput(InputAction.CallbackContext context)
     {
-        // If already gliding, stop gliding
-        if (currentState == PlayerState.Glide && context.canceled)
+
+        if(context.canceled)
         {
-            print("Already glidig");
-            animator.SetBool("isGliding", false);
-            currentState = PlayerState.Fall;
+            if(currentState == PlayerState.Glide)
+            {
+                print("Already glidig");
+                animator.SetBool("isGliding", false);
+                currentState = PlayerState.Fall;
+            }
             return;
         }
 
@@ -463,6 +435,11 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
+
+        if (!glideButtonReleasedSinceClimb) {
+            return;
+        }
+
 
         Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
         if (climbableCollider != null)
@@ -526,7 +503,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (!canClimb)
+        if (climbTime > maxClimbTime)
         {
             return;
         }
@@ -617,19 +594,12 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void StartClimb()
     {
-        if (!canClimb)
-        {
-            return;
-        }
-
         currentState = PlayerState.Climb;
 
         playerCollider.enabled = false;
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-
-        climbTime = 0;
 
         animator.SetBool("isClimbing", true);
     }
@@ -641,8 +611,6 @@ public class PlayerMove : MonoBehaviour
     {
         animator.SetBool("isClimbing", false);
 
-        climbTime = 0;
-        canClimb = false;
         currentState = PlayerState.Fall;
 
         playerCollider.enabled = true;
@@ -660,7 +628,6 @@ public class PlayerMove : MonoBehaviour
 
     private void ResetClimb()
     {
-        canClimb = true;
 
         // Reset climb time and particle emission
         climbTime = 0;
