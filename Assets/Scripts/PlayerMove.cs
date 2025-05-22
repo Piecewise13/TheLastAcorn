@@ -176,6 +176,8 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float glideHitVelocityThreshold = 5f;
 
+    private bool glideButtonReleasedSinceClimb = true;
+
     /// <summary>
     /// Force applied when jumping.
     /// </summary>
@@ -211,6 +213,7 @@ public class PlayerMove : MonoBehaviour
         // Assign glide action and subscribe to event
         glideAction = playerMovementMap.Keyboard.Glide;
         glideAction.performed += GlideInput;
+        glideAction.canceled += ctx => glideButtonReleasedSinceClimb = true;
         glideAction.canceled += GlideInput;
         glideAction.Enable();
 
@@ -455,16 +458,14 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Only allow gliding if falling and not stunned
-        if (currentState != PlayerState.Fall)
+        if (currentState != PlayerState.Fall || currentState == PlayerState.STUNNED)
         {
-            print("not fllaing");
             return;
         }
 
-        if (currentState == PlayerState.STUNNED)
-        {
+        // Block gliding if button hasn't been released since last climb
+        if (!glideButtonReleasedSinceClimb)
             return;
-        }
 
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
@@ -672,6 +673,9 @@ public class PlayerMove : MonoBehaviour
         // Reset graphic position when climb ends
         if (graphic != null)
             graphic.transform.localPosition = graphicOriginalLocalPos;
+
+        // Require button release before next glide
+        glideButtonReleasedSinceClimb = false;
     }
 
     private void ResetClimb()
