@@ -1420,7 +1420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac78e69d5cea7405880d3c648efa705f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Level 2
+  nextSceneName: Level 3
 --- !u!4 &502844901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8256268569344475700, guid: fab64248415827d41ad63255e6a55fce, type: 3}
