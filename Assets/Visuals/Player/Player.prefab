@@ -832,16 +832,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1938490901126156716}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72cf5a7f80c3d4953a41e159584db5c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6548402314755964825}
   offset: {x: 0.5, y: 0.5}
-  smoothTime: 0.1
+  focusAreaSize: {x: 5, y: 3}
+  smoothX: 0.1
+  smoothY: 0.2
+  enableLookAhead: 0
   lookAheadDist: 1
-  lookAheadReturnSpeed: 0.1
+  lookAheadEaseTime: 0.25
+  lookAheadReturn: 0.4
 --- !u!1 &2766192209861809554
 GameObject:
   m_ObjectHideFlags: 0
