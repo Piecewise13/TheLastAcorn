@@ -203,7 +203,7 @@ public class PlayerMove : MonoBehaviour
 
         // Assign movement action and enable it
         moveAction = playerMovementMap.Keyboard.Move;
-        EnableMove();
+        moveAction.Enable();
 
         // Assign attach action and subscribe to event
         attachAction = playerMovementMap.Keyboard.Attach;
@@ -419,9 +419,9 @@ public class PlayerMove : MonoBehaviour
     private void GlideInput(InputAction.CallbackContext context)
     {
 
-        if(context.canceled)
+        if (context.canceled)
         {
-            if(currentState == PlayerState.Glide)
+            if (currentState == PlayerState.Glide)
             {
                 print("Already glidig");
                 animator.SetBool("isGliding", false);
@@ -436,7 +436,8 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (!glideButtonReleasedSinceClimb) {
+        if (!glideButtonReleasedSinceClimb)
+        {
             return;
         }
 
@@ -727,17 +728,23 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Enables the movement input action.
     /// </summary>
-    private void EnableMove()
+    public void EnableMove()
     {
         moveAction.Enable();
+        attachAction.Enable();
+        glideAction.Enable();
+        jumpAction.Enable();
     }
 
     /// <summary>
     /// Disables the movement input action.
     /// </summary>
-    private void DisableMove()
+    public void DisableMove()
     {
         moveAction.Disable();
+        attachAction.Disable();
+        glideAction.Disable();
+        jumpAction.Disable();
     }
 
     private void OnDisable()
@@ -745,6 +752,10 @@ public class PlayerMove : MonoBehaviour
         playerMovementMap.Disable();
     }
 
+    private void OnEnable()
+    {
+        playerMovementMap.Enable();
+    }
 }
 
 

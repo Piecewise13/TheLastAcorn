@@ -57,12 +57,12 @@ public class PlayerCamera : MonoBehaviour
     {
         if (context.performed)
         {
-            playerMove.enabled = false;
+            playerMove.DisableMove();
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
         }  else if (context.canceled)
         {
-            playerMove.enabled = true;
+            playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;
         }
