@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Play an AudioClip with optional delay, fade-in, and per-play randomisation
-/// of volume and pitch.
+/// Play an AudioClip with optional delay, fade-in, per-play randomisation,
+/// looping, and runtime fade-out.
 /// </summary>
 public class AudioPlayer : MonoBehaviour
 {
@@ -12,45 +12,33 @@ public class AudioPlayer : MonoBehaviour
     [Tooltip("Audio clip to be played.")]
     public AudioClip audioClip;
 
-    [Tooltip("Base playback volume (0 = silent, 1 = full volume).")]
     [Range(0f, 1f)] public float volume = 1f;
-
-    [Tooltip("Base playback pitch (0.5 = half speed, 1 = normal, 2 = double, …).")]
     [Range(0.5f, 3f)] public float pitch = 1f;
-
+    public bool loop = false;
 
     //  Randomisation
     [Header("Randomisation")]
-    [Tooltip("Enable to randomise volume & pitch each time Play() is called.")]
     public bool randomise = false;
-
-    [Tooltip("Volume range [min, max] when randomise is on.")]
-    public Vector2 volumeRange = new Vector2(0.9f, 1.0f);   // x = min, y = max
-
-    [Tooltip("Pitch range [min, max] when randomise is on.")]
-    public Vector2 pitchRange  = new Vector2(0.95f, 1.05f); // x = min, y = max
+    public Vector2 volumeRange = new Vector2(0.9f, 1.0f);
+    public Vector2 pitchRange  = new Vector2(0.95f, 1.05f);
 
     //  Fade-in
     [Header("Fade-in")]
-    [Tooltip("Fade in the audio from 0 → target volume.")]
     public bool fadeIn = false;
-
-    [Tooltip("Seconds for fade-in.")]
     public float fadeInDuration = 1f;
 
     //  Delay
     [Header("Delay")]
-    [Tooltip("Delay the start of playback.")]
     public bool playWithDelay = false;
-
-    [Tooltip("Seconds to delay playback.")]
     public float delayDuration = 0f;
 
     //  Misc
-    [Tooltip("Automatically play when the GameObject is enabled.")]
     public bool playOnEnable = false;
 
-    //  Public API
+    //  Internal
+    private AudioSource currentSource;
+
+    // Public Methods
     public void Play()
     {
         if (audioClip == null)
@@ -58,8 +46,13 @@ public class AudioPlayer : MonoBehaviour
             Debug.LogError("AudioPlayer: No audio clip assigned.");
             return;
         }
-
         StartCoroutine(PlayAudioCoroutine());
+    }
+
+    public void FadeOut(float duration = 1f)
+    {
+        if (currentSource != null)
+            StartCoroutine(FadeOutCoroutine(currentSource, duration));
     }
 
     private void OnEnable()
@@ -67,20 +60,17 @@ public class AudioPlayer : MonoBehaviour
         if (playOnEnable) Play();
     }
 
-    //  Internals
+    // Coroutines
     private IEnumerator PlayAudioCoroutine()
     {
-        // Optional delay
         if (playWithDelay && delayDuration > 0f)
             yield return new WaitForSeconds(delayDuration);
 
-        // Figure out per-play volume & pitch
         float chosenVolume = volume;
         float chosenPitch  = pitch;
 
         if (randomise)
         {
-            // Clamp to sane ranges in case inspector values inverted
             float volMin = Mathf.Min(volumeRange.x, volumeRange.y);
             float volMax = Mathf.Max(volumeRange.x, volumeRange.y);
             float pitMin = Mathf.Min(pitchRange.x,  pitchRange.y);
@@ -90,23 +80,22 @@ public class AudioPlayer : MonoBehaviour
             chosenPitch  = Random.Range(pitMin, pitMax);
         }
 
-        // Create & configure AudioSource
         AudioSource src = gameObject.AddComponent<AudioSource>();
-        src.clip         = audioClip;
-        src.playOnAwake  = false;
-        src.spatialBlend = 0f;          // 2D audio
-        src.pitch        = chosenPitch;
-        src.volume       = (fadeIn && fadeInDuration > 0f) ? 0f : chosenVolume;
+        src.clip = audioClip;
+        src.playOnAwake = false;
+        src.spatialBlend = 0f;
+        src.pitch = chosenPitch;
+        src.loop = loop;
+        src.volume = (fadeIn && fadeInDuration > 0f) ? 0f : chosenVolume;
+        currentSource = src;
 
-        // Play
         src.Play();
 
-        // Optional fade-in
         if (fadeIn && fadeInDuration > 0f)
             StartCoroutine(FadeIn(src, chosenVolume, fadeInDuration));
 
-        // Cleanup
-        StartCoroutine(RemoveAudioSourceAfterPlay(src, audioClip.length));
+        if (!loop)
+            StartCoroutine(RemoveAudioSourceAfterPlay(src, audioClip.length));
     }
 
     private static IEnumerator FadeIn(AudioSource src, float targetVol, float duration)
@@ -119,9 +108,24 @@ public class AudioPlayer : MonoBehaviour
         src.volume = targetVol;
     }
 
+    private static IEnumerator FadeOutCoroutine(AudioSource src, float duration)
+    {
+        float startVol = src.volume;
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            if (src == null) yield break;
+            src.volume = Mathf.Lerp(startVol, 0f, t / duration);
+            yield return null;
+        }
+        if (src == null) yield break;
+        src.volume = 0f;
+        src.Stop();
+        Object.Destroy(src);
+    }
+
     private static IEnumerator RemoveAudioSourceAfterPlay(AudioSource src, float clipLen)
     {
         yield return new WaitForSeconds(clipLen + 0.1f);
-        Destroy(src);
+        Object.Destroy(src);
     }
 }

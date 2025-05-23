@@ -4,8 +4,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private float waitTime = 0.5f;
-    
+    [SerializeField] private float waitTime = 2f;
+    [SerializeField] private AudioPlayer music;
+    [SerializeField] private AudioPlayer ambience;
+
     public void LoadGame()
     {
         StartCoroutine(WaitForTransition(waitTime));
@@ -13,7 +15,15 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator WaitForTransition(float time)
     {
+        FadeAudio();
+
         yield return new WaitForSeconds(time);
         SceneLoader.LoadNext();
+    }
+
+    private void FadeAudio()
+    {
+        music.FadeOut(1f);
+        ambience.FadeOut(1f);
     }
 }
