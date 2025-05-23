@@ -309,7 +309,6 @@ public class PlayerMove : MonoBehaviour
 
         if (climbTime > 0)
         {
-
             climbTime -= Time.deltaTime;
             UpdateClimbFatigueColor();
             UpdateClimbParticles();
@@ -320,6 +319,8 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
+
+        animator.SetBool("isFalling", true);
 
         if (rb.linearVelocity.y < 0)
         {
@@ -528,6 +529,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (climbTime > maxClimbTime)
         {
+            animator.SetTrigger("detachClimb");
             StopClimb();
             return;
         }
