@@ -42064,10 +42064,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: nextSceneName
-      value: Level 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7608516494688604138, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: m_Name
       value: End Level Statue
@@ -44433,11 +44429,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8256268569344475700, guid: fab64248415827d41ad63255e6a55fce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 61.44
+      value: 98.36
       objectReference: {fileID: 0}
     - target: {fileID: 8256268569344475700, guid: fab64248415827d41ad63255e6a55fce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 50.9
+      value: 40.66
       objectReference: {fileID: 0}
     - target: {fileID: 8256268569344475700, guid: fab64248415827d41ad63255e6a55fce, type: 3}
       propertyPath: m_LocalPosition.z
