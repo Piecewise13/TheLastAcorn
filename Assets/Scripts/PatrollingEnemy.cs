@@ -48,12 +48,11 @@ public class PatrollingEnemy : MonoBehaviour
             transform.localScale = scale;
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
         // other.GetComponent<PlayerHealth>()?.Die();
-
         PlayerLifeManager playerLifeManager = other.transform.root.GetComponent<PlayerLifeManager>();
         playerLifeManager.DamagePlayer();
     }

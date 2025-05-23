@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerLifeManager : MonoBehaviour
 {
@@ -22,8 +23,7 @@ public class PlayerLifeManager : MonoBehaviour
         lifeUI.sprite = lifeIcons[currentLives];
         if (currentLives <= 0)
         {
-            // Handle player death
-            Debug.Log("Player is dead");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
