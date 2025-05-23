@@ -217,6 +217,7 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: 5d8d3fd7b2185db489f44d7a084d4dd2, type: 3}
   volume: 1
   pitch: 1
+  loop: 0
   randomise: 1
   volumeRange: {x: 0.6, y: 1}
   pitchRange: {x: 0.88, y: 1.1}
@@ -699,6 +700,7 @@ GameObject:
   - component: {fileID: 7499961224868306793}
   - component: {fileID: 5856361867766098857}
   - component: {fileID: 3843412699993291160}
+  - component: {fileID: 3762996150651228872}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -846,6 +848,23 @@ MonoBehaviour:
   lookAheadDist: 1
   lookAheadEaseTime: 0.25
   lookAheadReturn: 0.4
+--- !u!114 &3762996150651228872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938490901126156716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88b624b3436445c8bf5f9c0c22e873b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMove: {fileID: 151922112089434294}
+  zoomOutAmount: 25
+  zoomInAmount: 15
+  zoomSpeed: 2
+  zoomTime: 2
 --- !u!1 &2766192209861809554
 GameObject:
   m_ObjectHideFlags: 0
