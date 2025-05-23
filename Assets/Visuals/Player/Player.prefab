@@ -214,12 +214,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 29902fc1947644e1a83477378b15da3f, type: 3}
+  audioClip: {fileID: 8300000, guid: 5d8d3fd7b2185db489f44d7a084d4dd2, type: 3}
   volume: 1
   pitch: 1
   randomise: 1
   volumeRange: {x: 0.6, y: 1}
-  pitchRange: {x: 0.6, y: 0.9}
+  pitchRange: {x: 0.88, y: 1.1}
   fadeIn: 0
   fadeInDuration: 1
   playWithDelay: 0
