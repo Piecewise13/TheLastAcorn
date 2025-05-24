@@ -473,7 +473,7 @@ public class PlayerMove : MonoBehaviour
 
             // Determine direction based on graphic rotation
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2((glideX * glideSpeedMultiplier) * direction, rb.linearVelocity.y * 0.9f);
+            rb.linearVelocity = new Vector2((glideX * glideSpeedMultiplier) * direction, rb.linearVelocity.y * 0.92f);
         }
         else
         {
