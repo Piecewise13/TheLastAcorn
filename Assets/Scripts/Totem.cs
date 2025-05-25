@@ -7,12 +7,15 @@ public class Totem : MonoBehaviour
     [Header("Scene")]
     [SerializeField] private string nextSceneName = "NextScene";
 
-    [Header("Feedback")]
+    [Header("Success Feedback")]
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private GrowAndShrink growAndShrink;
-    [SerializeField] private AudioPlayer sfxPlayer;
+    [SerializeField] private AudioPlayer sfxPlayer;   
 
-    [Header("Disable Sources")]
+    [Header("Not-Ready Feedback")]
+    [SerializeField] private AudioPlayer notReadySfx;   
+
+    [Header("Fade-Out Sources")]
     [SerializeField] private AudioPlayer ambiencePlayer;
     [SerializeField] private AudioPlayer musicPlayer;
 
@@ -22,21 +25,34 @@ public class Totem : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-
         GetComponent<Collider2D>().enabled = false;
-        StartCoroutine(TriggerFeedbackAndLoad());
+
+        if (CompletionBar.AllCollected)
+            StartCoroutine(ReadySequence());
+        else
+            StartCoroutine(NotReadySequence());
     }
 
-    IEnumerator TriggerFeedbackAndLoad()
+    IEnumerator ReadySequence()
     {
-        if (ambiencePlayer) ambiencePlayer.FadeOut(FADE_TIME);
-        if (musicPlayer)    musicPlayer.FadeOut(FADE_TIME);
+        ambiencePlayer?.FadeOut(FADE_TIME);
+        musicPlayer?.FadeOut(FADE_TIME);
 
-        if (confetti) confetti.Play();
-        if (growAndShrink) growAndShrink.Grow();
-        if (sfxPlayer) sfxPlayer.Play();
+        confetti?.Play();
+        growAndShrink?.Grow();
+        sfxPlayer?.Play();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
         SceneManager.LoadScene(nextSceneName);
+    }
+
+    IEnumerator NotReadySequence()
+    {
+        growAndShrink?.Grow();
+        notReadySfx?.Play();
+
+        yield return new WaitForSeconds(2f);
+        GetComponent<Collider2D>().enabled = true;
+        growAndShrink?.Shrink(new Vector3(5, 5, 5), 0.5f);
     }
 }
