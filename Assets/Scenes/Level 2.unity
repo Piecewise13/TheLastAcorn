@@ -59571,90 +59571,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &1283333923
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 134.19
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 21.49
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: sfxPlayer
-      value: 
-      objectReference: {fileID: 1283333924}
-    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: musicPlayer
-      value: 
-      objectReference: {fileID: 73781484}
-    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: nextSceneName
-      value: Level 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: ambiencePlayer
-      value: 
-      objectReference: {fileID: 73781485}
-    - target: {fileID: 7608516494688604138, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-      propertyPath: m_Name
-      value: End Level Statue
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: acd288e89cb448541acbc025958c5e89, type: 3}
---- !u!114 &1283333924 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 989335299345023859, guid: acd288e89cb448541acbc025958c5e89, type: 3}
-  m_PrefabInstance: {fileID: 1283333923}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1353454362
 GameObject:
   m_ObjectHideFlags: 0
@@ -61219,6 +61135,75 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &1964056263
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 134.22433
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.563875
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 380669368763467710, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: musicPlayer
+      value: 
+      objectReference: {fileID: 73781484}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: nextSceneName
+      value: Level 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: ambiencePlayer
+      value: 
+      objectReference: {fileID: 73781485}
+    - target: {fileID: 7608516494688604138, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_Name
+      value: End Level Statue
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: acd288e89cb448541acbc025958c5e89, type: 3}
 --- !u!1 &1965028059
 GameObject:
   m_ObjectHideFlags: 0
@@ -61859,6 +61844,6 @@ SceneRoots:
   - {fileID: 909568098}
   - {fileID: 2091667659}
   - {fileID: 7399128}
-  - {fileID: 1283333923}
   - {fileID: 190408721}
   - {fileID: 2073037774}
+  - {fileID: 1964056263}
