@@ -45623,6 +45623,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background
       objectReference: {fileID: 0}
+    - target: {fileID: 4608783946192582146, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5941742175687942266, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -45662,6 +45666,18 @@ PrefabInstance:
     - target: {fileID: 5941742175687942266, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7851133536406827183, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: speed
+      value: 0.006
+      objectReference: {fileID: 0}
+    - target: {fileID: 7851133536406827183, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: colourSpeed
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8364847335336373473, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -419,11 +419,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851778ae5e4854b5facd91ff7fccfb1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.01
+  speed: 0.006
   distanceUp: 10
   distanceDown: -100
   usePingPong: 1
-  colourSpeed: 0.005
+  colourSpeed: 0.02
   colours:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.7609469, g: 0.94006264, b: 0.9433962, a: 1}
