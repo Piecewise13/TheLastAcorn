@@ -109246,13 +109246,13 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 16.7
       objectReference: {fileID: 0}
-    - target: {fileID: 7423580556357074557, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -24.6
+    - target: {fileID: 7851133536406827183, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: speed
+      value: 0.006
       objectReference: {fileID: 0}
-    - target: {fileID: 7423580556357074557, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.6
+    - target: {fileID: 7851133536406827183, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: colourSpeed
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 8263852597810551419, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
       propertyPath: m_LocalScale.x
