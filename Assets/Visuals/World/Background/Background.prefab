@@ -640,6 +640,7 @@ Transform:
   - {fileID: 4099246849110478784}
   - {fileID: 356915666803528166}
   - {fileID: 7423580556357074557}
+  - {fileID: 7627065220706826529}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &231845957659397627
@@ -655,8 +656,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  backgrounds: []
-  parallaxFactors: []
+  backgrounds:
+  - {fileID: 4099246849110478784}
+  - {fileID: 356915666803528166}
+  - {fileID: 7423580556357074557}
+  parallaxFactors:
+  - 0.1
+  - 0.2
+  - 0.3
+--- !u!1 &7760133926194352191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7627065220706826529}
+  m_Layer: 0
+  m_Name: layer 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7627065220706826529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7760133926194352191}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5941742175687942266}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8364847335336373473
 GameObject:
   m_ObjectHideFlags: 0

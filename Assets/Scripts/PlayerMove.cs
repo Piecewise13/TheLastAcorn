@@ -115,12 +115,6 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private float climbTime;
 
-    [SerializeField] private bool canClimb = true;
-
-    /// <summary>
-    /// Maximum velocity for auto-attach to climbable objects.
-    /// </summary>
-    [SerializeField] private float autoAttachMaxVelo = 10f;
 
     /// <summary>
     /// Maximum intensity of the shake effect while climbing.
@@ -146,10 +140,6 @@ public class PlayerMove : MonoBehaviour
     private Vector3 graphicOriginalLocalPos;
 
     [Header("Glide")]
-    /// <summary>
-    /// Maximum horizontal speed while gliding.
-    /// </summary>
-    [SerializeField] private float maxGlideSpeed = 10f;
 
     /// <summary>
     /// Initial horizontal speed when starting to glide.
@@ -520,8 +510,6 @@ public class PlayerMove : MonoBehaviour
             StartClimb();
         }
     }
-
-
 
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
