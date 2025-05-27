@@ -900,6 +900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caee5237ecfba42e682b08b836237161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelMaxScore: 5
 --- !u!4 &502844901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8256268569344475700, guid: fab64248415827d41ad63255e6a55fce, type: 3}

@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 9923fd15a85d841c6b20c11a5be9ce82
+guid: 425b90180a82d4deaa490362442259c2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1645090749350699275
-    second: ChatGPT Image May 26, 2025, 03_52_57 PM_0
-  - first:
-      213: -5823948389010752183
-    second: ChatGPT Image May 26, 2025, 03_52_57 PM_1
+      213: 3763770770452983129
+    second: ProgressBar_Acorn_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -103,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ChatGPT Image May 26, 2025, 03_52_57 PM_0
+      name: ProgressBar_Acorn_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
-        width: 1024
-        height: 1503
+        y: 6
+        width: 60
+        height: 73
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,30 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5fe9ba5fda67b29e0800000000000000
-      internalID: -1645090749350699275
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ChatGPT Image May 26, 2025, 03_52_57 PM_1
-      rect:
-        serializedVersion: 2
-        x: 81
-        y: 223
-        width: 24
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 94d3ecafbcd2d2fa0800000000000000
-      internalID: -5823948389010752183
+      spriteID: 95d29dc03999b3430800000000000000
+      internalID: 3763770770452983129
       vertices: []
       indices: 
       edges: []
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ChatGPT Image May 26, 2025, 03_52_57 PM_0: -1645090749350699275
-      ChatGPT Image May 26, 2025, 03_52_57 PM_1: -5823948389010752183
+      ProgressBar_Acorn_0: 3763770770452983129
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

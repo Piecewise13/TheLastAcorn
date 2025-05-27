@@ -4,6 +4,8 @@ using System;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
+
+    [SerializeField] private int levelMaxScore = 3;
     private int score;
     public int CurrentScore => score;
     public event Action<int> OnScoreChanged;
@@ -18,5 +20,10 @@ public class ScoreManager : MonoBehaviour
     {
         score += amount;
         OnScoreChanged?.Invoke(score);
+    }
+
+    public int GetMaxScore()
+    {
+        return levelMaxScore;
     }
 }
