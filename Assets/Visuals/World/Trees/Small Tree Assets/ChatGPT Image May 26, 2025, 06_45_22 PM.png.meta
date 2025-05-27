@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 449db829510f24f29a81405595bca222
+guid: 4b11eba0084eb4075b72a58b2cbc6a10
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8040701738793088580
-    second: parallax-mountain-montain-far_0
+      213: -4933203239475580373
+    second: ChatGPT Image May 26, 2025, 06_45_22 PM_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: parallax-mountain-montain-far_0
+      name: ChatGPT Image May 26, 2025, 06_45_22 PM_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 272
-        height: 84
+        width: 1024
+        height: 1536
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cb94f5abe50b96090800000000000000
-      internalID: -8040701738793088580
+      spriteID: b22704a7acdb98bb0800000000000000
+      internalID: -4933203239475580373
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      parallax-mountain-montain-far_0: -8040701738793088580
+      ChatGPT Image May 26, 2025, 06_45_22 PM_0: -4933203239475580373
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -284,7 +284,14 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Fox_Attack_0: -3879310775667304057
+      Fox_Attack_1: -2655462341948882791
+      Fox_Attack_2: 643652375419779198
+      Fox_Attack_3: -5291046073278453696
+      Fox_Attack_4: -7706280153885371357
+      Fox_Attack_5: 7300220037995082089
+      Fox_Attack_6: -3565720505570928779
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

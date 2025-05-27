@@ -299,7 +299,7 @@ public class PlayerMove : MonoBehaviour
 
         if (climbTime > 0)
         {
-            climbTime -= Time.deltaTime;
+            climbTime -= Time.deltaTime / 2f;
             UpdateClimbFatigueColor();
             UpdateClimbParticles();
         }
@@ -489,7 +489,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // Stop climbing if already climbing
+        // Stop climbing if already climbing and button released
         if (currentState == PlayerState.Climb && context.canceled)
         {
             StopClimb();
@@ -501,12 +501,29 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        // Find all climbable colliders in reach
+        Collider2D[] climbableColliders = Physics2D.OverlapCircleAll(climbCheckOrigin.position, climbCheckReach, climbableLayer);
 
-        Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
-        if (climbableCollider != null)
+        if (climbableColliders.Length > 0)
         {
-            // Attach to the climbable object
-            transform.position = new Vector2(climbableCollider.ClosestPoint(transform.position).x, transform.position.y);
+            // Find the closest climbable collider to the player
+            Collider2D closest = climbableColliders[0];
+            float minDist = Vector2.Distance(transform.position, closest.ClosestPoint(transform.position));
+            for (int i = 1; i < climbableColliders.Length; i++)
+            {
+                float dist = Vector2.Distance(transform.position, climbableColliders[i].ClosestPoint(transform.position));
+                if (dist < minDist)
+                {
+                    closest = climbableColliders[i];
+                    minDist = dist;
+                }
+            }
+
+            // Smoothly move towards the closest climbable collider's edge
+            Vector2 targetPos = new Vector2(closest.ClosestPoint(transform.position).x, transform.position.y);
+            // Use Lerp for smooth transition
+            transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+
             StartClimb();
         }
     }
@@ -531,9 +548,10 @@ public class PlayerMove : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
 
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
-        Collider2D treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
+        // Find all climbable colliders currently overlapping
+        Collider2D[] overlappingColliders = Physics2D.OverlapCircleAll(transform.position, 0.5f, climbableLayer);
 
-        if (treeCollider == null)
+        if (overlappingColliders.Length == 0)
         {
             StopClimb();
             return;
@@ -541,16 +559,51 @@ public class PlayerMove : MonoBehaviour
 
         ApplyClimbShake();
 
-        Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
-        Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
+        // Calculate intended move location
+        Vector2 moveLocation = transform.position + (Vector3)(moveInput * Time.deltaTime * climbSpeed);
+        Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
-        if (treeCollider.OverlapPoint(moveLocation))
+        // Check if moveLocation is still inside any climbable collider
+        bool insideAny = false;
+        foreach (var col in overlappingColliders)
         {
-            transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
+            if (col.OverlapPoint(moveLocation))
+            {
+            insideAny = true;
+            break;
+            }
+        }
+
+        if (insideAny)
+        {
+            transform.position = moveLocation;
         }
         else
         {
+            // Try to find the closest climbable collider to transition to
+            Collider2D closest = null;
+            float minDist = float.MaxValue;
+            foreach (var col in overlappingColliders)
+            {
+            Vector2 closestPoint = col.ClosestPoint(moveLocation);
+            float dist = Vector2.Distance(moveLocation, closestPoint);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = col;
+            }
+            }
+
+            if (closest != null && minDist < 0.5f)
+            {
+            // Smoothly move towards the edge of the next collider
+            Vector2 targetPos = closest.ClosestPoint(moveLocation);
+            transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+            }
+            else
+            {
             StopClimb();
+            }
         }
 
         animator.SetBool("isClimbMoving", moveInput != Vector2.zero);

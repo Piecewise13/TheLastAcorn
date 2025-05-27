@@ -409,7 +409,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      parallax-mountain-foreground-trees_0: -6118651428474003669
+      parallax-mountain-foreground-trees_1: 7488258821761953615
+      parallax-mountain-foreground-trees_10: -2145848502179742102
+      parallax-mountain-foreground-trees_11: -8107807114050879368
+      parallax-mountain-foreground-trees_2: -3409397247001597184
+      parallax-mountain-foreground-trees_3: -6011348463179554274
+      parallax-mountain-foreground-trees_4: -2045294952178397917
+      parallax-mountain-foreground-trees_5: 496559849530316909
+      parallax-mountain-foreground-trees_6: -612714950674142351
+      parallax-mountain-foreground-trees_7: -5646863906962394270
+      parallax-mountain-foreground-trees_8: -5884119412253342052
+      parallax-mountain-foreground-trees_9: 5836420045946759901
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
