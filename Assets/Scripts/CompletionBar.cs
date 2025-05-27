@@ -40,7 +40,7 @@ public class CompletionBar : MonoBehaviour
         }
 
         // Calculate the number of indicators to spawn (one less than targetScore)
-        int indicatorCount = Mathf.Max(0, targetScore - 1);
+        int indicatorCount = Mathf.Max(0, targetScore);
         if (indicatorCount > 0 && acornLine != null && progressSlider.fillRect != null && lineHolder != null)
         {
             RectTransform fillRect = progressSlider.fillRect;
@@ -56,6 +56,8 @@ public class CompletionBar : MonoBehaviour
                 GameObject indicator = Instantiate(acornLine, lineHolder.transform);
                 indicator.SetActive(true);
 
+                /*
+
                 RectTransform rt = indicator.GetComponent<RectTransform>();
                 rt.anchorMin = new Vector2(0, 0.5f);
                 rt.anchorMax = new Vector2(0, 0.5f);
@@ -63,6 +65,7 @@ public class CompletionBar : MonoBehaviour
 
                 // Position relative to the fillRect's width
                 rt.anchoredPosition = new Vector2(xPos, 0);
+                */
 
             // Optionally set size if needed
             // rt.sizeDelta = new Vector2(acornLine.GetComponent<RectTransform>().rect.width, acornLine.GetComponent<RectTransform>().rect.height);
