@@ -288,12 +288,15 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private float jumpHeldDuration = 0f;
+
     private void FallingLogic()
     {
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
             rb.gravityScale = 1.5f;
+            jumpHeldDuration = 0f;
             return;
         }
 
@@ -304,23 +307,35 @@ public class PlayerMove : MonoBehaviour
             UpdateClimbParticles();
         }
 
-
         if (currentState == PlayerState.Glide)
         {
+            jumpHeldDuration = 0f;
             return;
         }
 
         animator.SetBool("isFalling", true);
 
-
         if (rb.linearVelocity.y < 0)
         {
-            if (isJumpHeld && glideButtonReleasedSinceClimb)
+            if (isJumpHeld)
             {
-                GlideInput(new InputAction.CallbackContext());
+                jumpHeldDuration += Time.deltaTime;
+                if (jumpHeldDuration > 0.3f && glideButtonReleasedSinceClimb)
+                {
+                    GlideInput(new InputAction.CallbackContext());
+                    jumpHeldDuration = 0f;
+                }
+            }
+            else
+            {
+                jumpHeldDuration = 0f;
             }
 
             rb.gravityScale = 2.8f;
+        }
+        else
+        {
+            jumpHeldDuration = 0f;
         }
     }
     private void SideMovement()
@@ -443,6 +458,8 @@ public class PlayerMove : MonoBehaviour
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
 
+        print("here");
+
         // Enter glide state and update animation
         currentState = PlayerState.Glide;
         animator.SetBool("isGliding", true);
@@ -493,6 +510,11 @@ public class PlayerMove : MonoBehaviour
         if (currentState == PlayerState.Climb && context.canceled)
         {
             StopClimb();
+            return;
+        }
+
+        if (context.canceled)
+        {
             return;
         }
 
@@ -647,6 +669,7 @@ public class PlayerMove : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
 
         animator.SetBool("isClimbing", true);
+        animator.SetBool("isGliding", false);
     }
 
     /// <summary>
