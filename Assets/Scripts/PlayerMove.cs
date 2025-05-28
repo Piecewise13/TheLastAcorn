@@ -582,7 +582,7 @@ public class PlayerMove : MonoBehaviour
         ApplyClimbShake();
 
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(moveInput * Time.deltaTime * climbSpeed);
+        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
