@@ -13,13 +13,11 @@ public class Totem : MonoBehaviour
     [SerializeField] private AudioPlayer sfxPlayer;   
 
     [Header("Not-Ready Feedback")]
-    [SerializeField] private AudioPlayer notReadySfx;   
+    [SerializeField] private AudioPlayer notReadySfx;
 
-    [Header("Fade-Out Sources")]
-    [SerializeField] private AudioPlayer ambiencePlayer;
-    [SerializeField] private AudioPlayer musicPlayer;
-
-    const float FADE_TIME = 1.5f;
+    [Header("Fade-Out Sources")] 
+    [SerializeField] private AudioSceneManager audioManager;
+    
     const float DELAY_BEFORE_LOAD = 3f;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -35,12 +33,10 @@ public class Totem : MonoBehaviour
 
     IEnumerator ReadySequence()
     {
-        ambiencePlayer?.FadeOut(FADE_TIME);
-        musicPlayer?.FadeOut(FADE_TIME);
-
         confetti?.Play();
         growAndShrink?.Grow();
         sfxPlayer?.Play();
+        audioManager?.FadeOutAudio();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
         SceneManager.LoadScene(nextSceneName);
