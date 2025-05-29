@@ -440,20 +440,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 151922112089434294}
   rb: {fileID: 6681820592772038295}
-  groundedClip: {fileID: 8300000, guid: c81481bb3286444e188b34bd4c7c38aa, type: 3}
-  climbClip: {fileID: 0}
-  glideClip: {fileID: 0}
-  fallClip: {fileID: 0}
-  stunnedClip: {fileID: 0}
-  groundedSpeedRange: {x: 0.05, y: 3}
-  groundedMaxVol: 0.5
-  glideSpeedRange: {x: 2, y: 12}
-  glideMaxVol: 1
-  fallSpeedRange: {x: 2, y: 15}
-  fallMaxVol: 1
+  grounded:
+    clip: {fileID: 8300000, guid: c81481bb3286444e188b34bd4c7c38aa, type: 3}
+    speedRange: {x: 0.2, y: 6}
+    volumeRange: {x: 0, y: 0.8}
+    pitchRange: {x: 0.95, y: 1.15}
+  climb:
+    clip: {fileID: 8300000, guid: c42c0582e09b8684984612981f147278, type: 3}
+    speedRange: {x: 0, y: 0}
+    volumeRange: {x: 0.7, y: 0.7}
+    pitchRange: {x: 1, y: 1}
+  glide:
+    clip: {fileID: 0}
+    speedRange: {x: 2, y: 12}
+    volumeRange: {x: 0, y: 1}
+    pitchRange: {x: 0.95, y: 1.15}
+  fall:
+    clip: {fileID: 0}
+    speedRange: {x: 2, y: 15}
+    volumeRange: {x: 0, y: 1}
+    pitchRange: {x: 0.95, y: 1.15}
+  stunned:
+    clip: {fileID: 0}
+    speedRange: {x: 0, y: 0}
+    volumeRange: {x: 1, y: 1}
+    pitchRange: {x: 1, y: 1}
   enablePitchBend: 1
-  minPitch: 0.6
-  maxPitch: 0.7
 --- !u!212 &5635702732380616336
 SpriteRenderer:
   m_ObjectHideFlags: 0

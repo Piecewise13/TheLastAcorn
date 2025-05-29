@@ -2028,6 +2028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caee5237ecfba42e682b08b836237161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelMaxScore: 3
 --- !u!1 &486130346
 GameObject:
   m_ObjectHideFlags: 0
@@ -96794,11 +96795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4e8d9954e9264ec3be704c0ea8ac6e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  climbText: {fileID: 1333770683}
-  climbMovementText: {fileID: 1043007160}
-  climbMeterText: {fileID: 739790196}
-  climbMeterTextTime: 4
-  climbMeterTextTimerShowTime: 4
+  controllerConnectedObject: {fileID: 0}
+  controllerDisconnectedObject: {fileID: 0}
 --- !u!1 &1461137034
 GameObject:
   m_ObjectHideFlags: 0
@@ -98178,6 +98176,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 1826238375}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: ambiencePlayer
       value: 
       objectReference: {fileID: 1754565567}
@@ -98969,6 +98971,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1906359926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1826238375 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4927014833082325008, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+  m_PrefabInstance: {fileID: 1094216795845296645}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae83deec946ae774db11d3441518737a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1827481260
 GameObject:
   m_ObjectHideFlags: 0
