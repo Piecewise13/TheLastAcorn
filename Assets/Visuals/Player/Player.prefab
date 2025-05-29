@@ -119,6 +119,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 1
 --- !u!1 &639409285689406640
 GameObject:
@@ -794,6 +795,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &1938490901126156716
 GameObject:
@@ -1181,6 +1183,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 1
 --- !u!1 &2766192209861809554
 GameObject:
@@ -6078,6 +6081,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &2888424016036944491
 GameObject:
@@ -6421,6 +6425,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &3991925518800583311
 GameObject:
@@ -6986,10 +6991,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0e8fe4efb715a014aa0d838266ed0957, type: 3}
   fadeIn: 0
   fadeInSeconds: 1
-  playWithDelay: 0
-  delaySeconds: 0
+  playWithDelay: 1
+  delaySeconds: 0.1
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &8746688638655304384
 GameObject:

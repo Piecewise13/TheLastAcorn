@@ -27,6 +27,9 @@ public class AudioPlayer : MonoBehaviour
     public FadeCurve fadeInCurve = FadeCurve.Smooth;
     public FadeCurve fadeOutCurve = FadeCurve.Smooth;
 
+    [Header("3D Settings")]
+    public bool spatialBlend = false;
+
     public bool playOnEnable = false;
 
     AudioSource currentSource;
@@ -59,10 +62,9 @@ public class AudioPlayer : MonoBehaviour
             yield break;
         }
 
-        if (playWithDelay && delaySeconds > 0f)
-            yield return new WaitForSeconds(delaySeconds);
+        if (playWithDelay && delaySeconds > 0f) yield return new WaitForSeconds(delaySeconds);
 
-        float chosenVol   = randomise ? Random.Range(volumeRange.x, volumeRange.y) : volume;
+        float chosenVol = randomise ? Random.Range(volumeRange.x, volumeRange.y) : volume;
         float chosenPitch = randomise ? Random.Range(pitchRange.x, pitchRange.y) : pitch;
 
         AudioClip clip = (randomise && randomClips != null && randomClips.Length > 0)
@@ -71,20 +73,18 @@ public class AudioPlayer : MonoBehaviour
 
         if (currentSource == null) currentSource = gameObject.AddComponent<AudioSource>();
 
-        currentSource.clip         = clip;
-        currentSource.playOnAwake  = false;
-        currentSource.spatialBlend = 0f;
-        currentSource.loop         = loop;
-        currentSource.pitch        = chosenPitch;
-        currentSource.volume       = (fadeIn && fadeInSeconds > 0f) ? 0f : chosenVol;
+        currentSource.clip = clip;
+        currentSource.playOnAwake = false;
+        currentSource.spatialBlend = spatialBlend ? 1f : 0f;
+        currentSource.loop = loop;
+        currentSource.pitch = chosenPitch;
+        currentSource.volume = (fadeIn && fadeInSeconds > 0f) ? 0f : chosenVol;
 
         currentSource.Play();
 
-        if (fadeIn && fadeInSeconds > 0f)
-            yield return FadeRoutine(currentSource, 0f, chosenVol, fadeInSeconds, fadeInCurve);
+        if (fadeIn && fadeInSeconds > 0f) yield return FadeRoutine(currentSource, 0f, chosenVol, fadeInSeconds, fadeInCurve);
 
-        if (!loop && clip != null)
-            StartCoroutine(StopAfterPlay(clip.length));
+        if (!loop && clip != null) StartCoroutine(StopAfterPlay(clip.length));
     }
 
     IEnumerator FadeRoutine(AudioSource src, float from, float to, float seconds, FadeCurve curve, System.Action onDone = null)
@@ -110,12 +110,12 @@ public class AudioPlayer : MonoBehaviour
     {
         switch (curve)
         {
-            case FadeCurve.Linear:      return x;
-            case FadeCurve.Smooth:      return x * x * (3f - 2f * x);
-            case FadeCurve.Smoother:    return x * x * x * (x * (x * 6f - 15f) + 10f);
+            case FadeCurve.Linear: return x;
+            case FadeCurve.Smooth: return x * x * (3f - 2f * x);
+            case FadeCurve.Smoother: return x * x * x * (x * (x * 6f - 15f) + 10f);
             case FadeCurve.Exponential: return 1f - Mathf.Pow(2f, -10f * x);
             case FadeCurve.Logarithmic: return Mathf.Pow(10f, (x - 1f) * 3f);
-            default:                    return x;
+            default: return x;
         }
     }
 }
