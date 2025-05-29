@@ -6297,9 +6297,9 @@ MonoBehaviour:
     volumeRange: {x: 0.5, y: 0.4}
     pitchRange: {x: 1, y: 1}
   glide:
-    clip: {fileID: 0}
-    speedRange: {x: 2, y: 12}
-    volumeRange: {x: 0, y: 1}
+    clip: {fileID: 8300000, guid: 48c10a3947e12644aaca458ad717973f, type: 3}
+    speedRange: {x: 0.2, y: 10}
+    volumeRange: {x: 0, y: 0.23}
     pitchRange: {x: 0.95, y: 1.15}
   fall:
     clip: {fileID: 0}
