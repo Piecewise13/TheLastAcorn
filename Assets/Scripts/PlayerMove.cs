@@ -182,6 +182,9 @@ public class PlayerMove : MonoBehaviour
     /// Current state of the player.
     /// </summary>
     [SerializeField] private PlayerState currentState = PlayerState.Grounded;
+    
+    public static event System.Action Jumped;
+
 
     /// <summary>
     /// Initializes input actions and sets up event handlers.
@@ -402,6 +405,7 @@ public class PlayerMove : MonoBehaviour
 
         // Apply upward force for jump
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        Jumped?.Invoke(); 
 
         // Trigger jump animation
         animator.SetTrigger("Jump");
