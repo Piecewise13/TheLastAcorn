@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1522767373823823449}
   - component: {fileID: 2222321440128918484}
+  - component: {fileID: 8334964004706571277}
   m_Layer: 7
   m_Name: Climb Detach Right
   m_TagString: Untagged
@@ -87,6 +88,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8334964004706571277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584281586983583136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 0}
+  volume: 1
+  pitch: 1
+  loop: 0
+  randomise: 1
+  volumeRange: {x: 0.4, y: 0.5}
+  pitchRange: {x: 1.5, y: 2}
+  randomClips:
+  - {fileID: 8300000, guid: 9488f1d744ce83a469f7c94fcea3a07c, type: 3}
+  - {fileID: 8300000, guid: 5ae2eb1b15d5fe346972e25735f0b417, type: 3}
+  - {fileID: 8300000, guid: 962ad02ee12c78049a01ce84a2167e91, type: 3}
+  - {fileID: 8300000, guid: e36cd8c26a47aa64081fd28eb35bcd8d, type: 3}
+  - {fileID: 8300000, guid: d3bd24bc8a55a5f478dc97a88c21d827, type: 3}
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  playOnEnable: 1
 --- !u!1 &639409285689406640
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +376,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1037,6 +1070,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6024640652187575113}
   - component: {fileID: 4667347188351440560}
+  - component: {fileID: 8539615640477686631}
   m_Layer: 7
   m_Name: Climb Detach Left
   m_TagString: Untagged
@@ -1114,6 +1148,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8539615640477686631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2234166609533987464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 0}
+  volume: 1
+  pitch: 1
+  loop: 0
+  randomise: 1
+  volumeRange: {x: 0.4, y: 0.5}
+  pitchRange: {x: 1.5, y: 2}
+  randomClips:
+  - {fileID: 8300000, guid: 9488f1d744ce83a469f7c94fcea3a07c, type: 3}
+  - {fileID: 8300000, guid: 5ae2eb1b15d5fe346972e25735f0b417, type: 3}
+  - {fileID: 8300000, guid: 962ad02ee12c78049a01ce84a2167e91, type: 3}
+  - {fileID: 8300000, guid: e36cd8c26a47aa64081fd28eb35bcd8d, type: 3}
+  - {fileID: 8300000, guid: d3bd24bc8a55a5f478dc97a88c21d827, type: 3}
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  playOnEnable: 1
 --- !u!1 &2766192209861809554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1192,7 @@ GameObject:
   - component: {fileID: 2401446795892416030}
   - component: {fileID: 1023903355064326418}
   m_Layer: 7
-  m_Name: Particle System
+  m_Name: Drop - Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
