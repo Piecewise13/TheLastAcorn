@@ -197,6 +197,17 @@
                 },
                 {
                     "name": "",
+                    "id": "45165f16-25ad-43e2-9fd3-c1a9636a1475",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attach",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "b2e13153-f53c-460c-90d9-bb98f41ab94a",
                     "path": "<Keyboard>/space",
                     "interactions": "",
