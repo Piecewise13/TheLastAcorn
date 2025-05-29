@@ -6228,8 +6228,8 @@ MonoBehaviour:
   climb:
     clip: {fileID: 8300000, guid: c42c0582e09b8684984612981f147278, type: 3}
     speedRange: {x: 0, y: 0}
-    volumeRange: {x: 0.7, y: 0.45}
-    pitchRange: {x: 1.5, y: 1.5}
+    volumeRange: {x: 0.5, y: 0.4}
+    pitchRange: {x: 1, y: 1}
   glide:
     clip: {fileID: 0}
     speedRange: {x: 2, y: 12}
