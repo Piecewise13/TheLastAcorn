@@ -149,7 +149,7 @@ MonoBehaviour:
   pitchRange: {x: 0.95, y: 1.05}
   randomClips: []
   fadeIn: 1
-  fadeInSeconds: 3
+  fadeInSeconds: 1.5
   playWithDelay: 0
   delaySeconds: 0
   fadeInCurve: 1
@@ -322,7 +322,7 @@ MonoBehaviour:
   pitchRange: {x: 0.8, y: 0.9}
   randomClips: []
   fadeIn: 1
-  fadeInSeconds: 3
+  fadeInSeconds: 1.5
   playWithDelay: 0
   delaySeconds: 0
   fadeInCurve: 1

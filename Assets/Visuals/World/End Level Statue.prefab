@@ -4911,17 +4911,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 6e45c1187daf54a4994935fea6349f7b, type: 3}
+  audioClip: {fileID: 0}
   volume: 1
   pitch: 1
   loop: 0
-  randomise: 0
+  randomise: 1
   volumeRange: {x: 0.9, y: 1}
-  pitchRange: {x: 0.95, y: 1.05}
-  fadeIn: 0
-  fadeInDuration: 1
+  pitchRange: {x: 1, y: 1}
+  randomClips:
+  - {fileID: 8300000, guid: 90dd1d3044d26a34db16fd49e3a6c078, type: 3}
+  - {fileID: 8300000, guid: d82021d7f8c2e884389380f985d8463b, type: 3}
+  - {fileID: 8300000, guid: 8a683be7239e19345b676c1596d17a6d, type: 3}
+  fadeIn: 1
+  fadeInSeconds: 0.2
   playWithDelay: 0
-  delayDuration: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
   playOnEnable: 0
 --- !u!1 &7607890863086951034
 GameObject:
@@ -4974,10 +4980,13 @@ MonoBehaviour:
   randomise: 0
   volumeRange: {x: 0.9, y: 1}
   pitchRange: {x: 0.95, y: 1.05}
+  randomClips: []
   fadeIn: 0
-  fadeInDuration: 1
+  fadeInSeconds: 1
   playWithDelay: 0
-  delayDuration: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
   playOnEnable: 0
 --- !u!1 &7608516494688604138
 GameObject:
@@ -4991,7 +5000,6 @@ GameObject:
   - component: {fileID: 2339314710774621444}
   - component: {fileID: 8702994551553052034}
   - component: {fileID: 7003836238168563036}
-  - component: {fileID: 989335299345023859}
   - component: {fileID: 3065746914292932985}
   m_Layer: 0
   m_Name: End Level Statue
@@ -5033,8 +5041,7 @@ MonoBehaviour:
   growAndShrink: {fileID: 3065746914292932985}
   sfxPlayer: {fileID: 1281018963799592972}
   notReadySfx: {fileID: 5941115939460938310}
-  ambiencePlayer: {fileID: 0}
-  musicPlayer: {fileID: 0}
+  audioManager: {fileID: 0}
 --- !u!212 &8702994551553052034
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5126,30 +5133,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
---- !u!114 &989335299345023859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7608516494688604138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 6e45c1187daf54a4994935fea6349f7b, type: 3}
-  volume: 1
-  pitch: 1
-  loop: 0
-  randomise: 0
-  volumeRange: {x: 0.9, y: 1}
-  pitchRange: {x: 0.95, y: 1.05}
-  fadeIn: 0
-  fadeInDuration: 1
-  playWithDelay: 0
-  delayDuration: 0
-  playOnEnable: 0
 --- !u!114 &3065746914292932985
 MonoBehaviour:
   m_ObjectHideFlags: 0
