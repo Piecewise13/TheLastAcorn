@@ -559,7 +559,25 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ps5 controller dark sheet_0: -5306276669871710373
+      ps5 controller dark sheet_1: 1097268533844444224
+      ps5 controller dark sheet_10: 3538349717570132389
+      ps5 controller dark sheet_11: -4672316729725415132
+      ps5 controller dark sheet_12: -8334837368028153166
+      ps5 controller dark sheet_13: 2417553912547319997
+      ps5 controller dark sheet_14: -582204749048610797
+      ps5 controller dark sheet_15: -752829998682184947
+      ps5 controller dark sheet_16: 8056558591496003400
+      ps5 controller dark sheet_17: -4629586182572334201
+      ps5 controller dark sheet_2: 6296104207600722999
+      ps5 controller dark sheet_3: 4851466555856580244
+      ps5 controller dark sheet_4: -2767375812550638913
+      ps5 controller dark sheet_5: 8794800371695014711
+      ps5 controller dark sheet_6: -6258030804771067830
+      ps5 controller dark sheet_7: -5328026614960166229
+      ps5 controller dark sheet_8: -2586834772023686645
+      ps5 controller dark sheet_9: -7470179991355913333
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

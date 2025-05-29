@@ -319,12 +319,7 @@ public class PlayerMove : MonoBehaviour
         {
             if (isJumpHeld)
             {
-                print("calling glide input");
                 GlideInput(new InputAction.CallbackContext());
-            }
-            else
-            {
-                print("jump not held");
             }
 
             rb.gravityScale = 2.8f;

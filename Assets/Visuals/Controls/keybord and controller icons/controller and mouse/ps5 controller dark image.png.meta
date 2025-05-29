@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ps5 controller dark image_0: -1806521851519249280
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
