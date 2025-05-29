@@ -408,6 +408,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 32ca38b303aa54996acffa10ae774a13, type: 3}
   lifeUI: {fileID: 1571115738853236102}
   hurtSfx: {fileID: 8398673676831126659}
+  uiSfx: {fileID: 8399313083679624871}
 --- !u!1 &881909498491194928
 GameObject:
   m_ObjectHideFlags: 0
@@ -6326,6 +6327,7 @@ GameObject:
   - component: {fileID: 6000168590373319317}
   - component: {fileID: 7704590840067345525}
   - component: {fileID: 1571115738853236102}
+  - component: {fileID: 8399313083679624871}
   m_Layer: 5
   m_Name: Life Meter
   m_TagString: Untagged
@@ -6390,6 +6392,36 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8399313083679624871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3640800435931728727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 0}
+  volume: 0.56
+  pitch: 1
+  loop: 0
+  randomise: 1
+  volumeRange: {x: 0.9, y: 1}
+  pitchRange: {x: 0.95, y: 1.05}
+  randomClips:
+  - {fileID: 8300000, guid: c832b46127f945d48be20c0675b1a7f9, type: 3}
+  - {fileID: 8300000, guid: b83f5250a2159ff4eb2a49b4ed31fdc9, type: 3}
+  - {fileID: 8300000, guid: e4d697af483cf004587cbc91d907a3ce, type: 3}
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  playOnEnable: 0
 --- !u!1 &3991925518800583311
 GameObject:
   m_ObjectHideFlags: 0
@@ -6944,7 +6976,7 @@ MonoBehaviour:
   pitch: 1
   loop: 0
   randomise: 1
-  volumeRange: {x: 0.2, y: 0.3}
+  volumeRange: {x: 0.5, y: 0.7}
   pitchRange: {x: 0.9, y: 1.1}
   randomClips:
   - {fileID: 8300000, guid: ed2c066837d71ce46b922cf75dd05239, type: 3}

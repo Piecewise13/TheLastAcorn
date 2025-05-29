@@ -1,20 +1,19 @@
+using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerLifeManager : MonoBehaviour
 {
-
     [SerializeField] private int maxLives = 3;
-
     [SerializeField] private Sprite[] lifeIcons;
-
     [SerializeField] private Image lifeUI;
 
-    [Header("Feedback")] 
+    [Header("Feedback")]
     [SerializeField] private AudioPlayer hurtSfx;
-    
-    private int currentLives;
+    [SerializeField] private AudioPlayer uiSfx;
+
+    int currentLives;
 
     void Start() { currentLives = maxLives; }
 
@@ -23,9 +22,15 @@ public class PlayerLifeManager : MonoBehaviour
         currentLives--;
         lifeUI.sprite = lifeIcons[currentLives];
         hurtSfx?.Play();
+        uiSfx?.Play();
+
         if (currentLives <= 0)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+            StartCoroutine(ReloadSceneAfterDelay());
+    }
+
+    IEnumerator ReloadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(0.75f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
