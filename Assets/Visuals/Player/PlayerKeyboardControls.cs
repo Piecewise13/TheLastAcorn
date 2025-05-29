@@ -262,7 +262,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""f97e28a3-ea4b-43a6-9a96-b90d4d0a6626"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -329,6 +329,17 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""name"": """",
                     ""id"": ""60543d48-e136-4a45-a0f2-bd3697b524f0"",
                     ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""779677f7-d763-4109-a88d-781c232b2c81"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

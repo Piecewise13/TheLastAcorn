@@ -319,23 +319,19 @@ public class PlayerMove : MonoBehaviour
         {
             if (isJumpHeld)
             {
-                jumpHeldDuration += Time.deltaTime;
-                if (jumpHeldDuration > 0.3f && glideButtonReleasedSinceClimb)
-                {
-                    GlideInput(new InputAction.CallbackContext());
-                    jumpHeldDuration = 0f;
-                }
+                print("calling glide input");
+                GlideInput(new InputAction.CallbackContext());
             }
             else
             {
-                jumpHeldDuration = 0f;
+                print("jump not held");
             }
 
             rb.gravityScale = 2.8f;
         }
         else
         {
-            jumpHeldDuration = 0f;
+            rb.gravityScale = 1.8f;
         }
     }
     private void SideMovement()
@@ -393,12 +389,15 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        /*
+
         if (currentState == PlayerState.Fall && isJumpHeld)
         {
             print("jump held");
             GlideInput(new InputAction.CallbackContext());
             return;
         }
+        */
 
         // Only allow jumping if grounded and not stunned
         if (currentState != PlayerState.Grounded)
@@ -442,12 +441,6 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
-
-        if (!glideButtonReleasedSinceClimb)
-        {
-            return;
-        }
-
 
         Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
         if (climbableCollider != null)
@@ -580,6 +573,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         ApplyClimbShake();
+        ControllerRumble();
 
         // Calculate intended move location
         Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
@@ -656,6 +650,25 @@ public class PlayerMove : MonoBehaviour
         graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
     }
 
+    private void ControllerRumble()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            float intensity = Mathf.Clamp01(climbTime / maxClimbTime);
+            gamepad.SetMotorSpeeds(intensity, intensity);
+        }
+    }
+
+    private void StopControllerRumble()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            gamepad.SetMotorSpeeds(0, 0);
+        }
+    }
+
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
     /// </summary>
@@ -685,6 +698,8 @@ public class PlayerMove : MonoBehaviour
 
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        StopControllerRumble();
 
         // Reset graphic position when climb ends
         if (graphic != null)

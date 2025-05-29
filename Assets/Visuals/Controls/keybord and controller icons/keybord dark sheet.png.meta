@@ -1,0 +1,2592 @@
+fileFormatVersion: 2
+guid: ac7375c0e5ab24685971150c554a79a4
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8389274282279188859
+    second: keybord dark sheet_0
+  - first:
+      213: -2502084708253939473
+    second: keybord dark sheet_1
+  - first:
+      213: -7587707590797694244
+    second: keybord dark sheet_2
+  - first:
+      213: -1192530659140161457
+    second: keybord dark sheet_3
+  - first:
+      213: 7156741820594294442
+    second: keybord dark sheet_4
+  - first:
+      213: 8582657379510523793
+    second: keybord dark sheet_5
+  - first:
+      213: -6028911193131851302
+    second: keybord dark sheet_6
+  - first:
+      213: -8726907503931410836
+    second: keybord dark sheet_7
+  - first:
+      213: -5831519724674018981
+    second: keybord dark sheet_8
+  - first:
+      213: 3474182593943510791
+    second: keybord dark sheet_9
+  - first:
+      213: -4583383268950734173
+    second: keybord dark sheet_10
+  - first:
+      213: -5829423794507952817
+    second: keybord dark sheet_11
+  - first:
+      213: 8216144391011536771
+    second: keybord dark sheet_12
+  - first:
+      213: 4667790702861466774
+    second: keybord dark sheet_13
+  - first:
+      213: 1751249525616162659
+    second: keybord dark sheet_14
+  - first:
+      213: -1573845496309026041
+    second: keybord dark sheet_15
+  - first:
+      213: 5164955763508851938
+    second: keybord dark sheet_16
+  - first:
+      213: -1263940154482845612
+    second: keybord dark sheet_17
+  - first:
+      213: -8948686301175438537
+    second: keybord dark sheet_18
+  - first:
+      213: -1473338874814465159
+    second: keybord dark sheet_19
+  - first:
+      213: 2267431369612181602
+    second: keybord dark sheet_20
+  - first:
+      213: -5197487391934161838
+    second: keybord dark sheet_21
+  - first:
+      213: 7468363358018413757
+    second: keybord dark sheet_22
+  - first:
+      213: 1751315655881256178
+    second: keybord dark sheet_23
+  - first:
+      213: 4391279184938164842
+    second: keybord dark sheet_24
+  - first:
+      213: 6806340079260676324
+    second: keybord dark sheet_25
+  - first:
+      213: 346749307497700101
+    second: keybord dark sheet_26
+  - first:
+      213: 1624766558261484424
+    second: keybord dark sheet_27
+  - first:
+      213: -5740765004590788674
+    second: keybord dark sheet_28
+  - first:
+      213: -4597232723386647430
+    second: keybord dark sheet_29
+  - first:
+      213: -3023111983310156069
+    second: keybord dark sheet_30
+  - first:
+      213: -136894708778185912
+    second: keybord dark sheet_31
+  - first:
+      213: 914316684654187697
+    second: keybord dark sheet_32
+  - first:
+      213: 8365409430417364121
+    second: keybord dark sheet_33
+  - first:
+      213: -3631201711056611362
+    second: keybord dark sheet_34
+  - first:
+      213: -5545061477069878960
+    second: keybord dark sheet_35
+  - first:
+      213: 9061659364223414619
+    second: keybord dark sheet_36
+  - first:
+      213: -676790365378218972
+    second: keybord dark sheet_37
+  - first:
+      213: 565205860821727854
+    second: keybord dark sheet_38
+  - first:
+      213: 4950402078568153811
+    second: keybord dark sheet_39
+  - first:
+      213: -8008402105608014032
+    second: keybord dark sheet_40
+  - first:
+      213: -4707730363644210235
+    second: keybord dark sheet_41
+  - first:
+      213: 6722647467112338200
+    second: keybord dark sheet_42
+  - first:
+      213: -6999097164898608919
+    second: keybord dark sheet_43
+  - first:
+      213: -8739385476159406146
+    second: keybord dark sheet_44
+  - first:
+      213: -4944907374304586856
+    second: keybord dark sheet_45
+  - first:
+      213: 3463614009286249682
+    second: keybord dark sheet_46
+  - first:
+      213: -3050482963698408009
+    second: keybord dark sheet_47
+  - first:
+      213: -4355028547521093331
+    second: keybord dark sheet_48
+  - first:
+      213: 7980234532594561781
+    second: keybord dark sheet_49
+  - first:
+      213: 8786187412746518978
+    second: keybord dark sheet_50
+  - first:
+      213: -711294355056542862
+    second: keybord dark sheet_51
+  - first:
+      213: -4884934627629632068
+    second: keybord dark sheet_52
+  - first:
+      213: -8830521086798596322
+    second: keybord dark sheet_53
+  - first:
+      213: 3340299102879820017
+    second: keybord dark sheet_54
+  - first:
+      213: -8101343889091341253
+    second: keybord dark sheet_55
+  - first:
+      213: 1406524634857114987
+    second: keybord dark sheet_56
+  - first:
+      213: 7887979456779630924
+    second: keybord dark sheet_57
+  - first:
+      213: 7146908157161110777
+    second: keybord dark sheet_58
+  - first:
+      213: 298927931973039451
+    second: keybord dark sheet_59
+  - first:
+      213: -117155052782572117
+    second: keybord dark sheet_60
+  - first:
+      213: 2493827146563569707
+    second: keybord dark sheet_61
+  - first:
+      213: -4289928736381692060
+    second: keybord dark sheet_62
+  - first:
+      213: -98327264872519577
+    second: keybord dark sheet_63
+  - first:
+      213: 8451481043464748167
+    second: keybord dark sheet_64
+  - first:
+      213: -9057773815102532004
+    second: keybord dark sheet_65
+  - first:
+      213: 2949046640568863718
+    second: keybord dark sheet_66
+  - first:
+      213: 4497345820515371116
+    second: keybord dark sheet_67
+  - first:
+      213: -8475732245154810778
+    second: keybord dark sheet_68
+  - first:
+      213: 3820340971558854057
+    second: keybord dark sheet_69
+  - first:
+      213: -1664787599372006589
+    second: keybord dark sheet_70
+  - first:
+      213: -2446770216046613874
+    second: keybord dark sheet_71
+  - first:
+      213: 1677050199318217977
+    second: keybord dark sheet_72
+  - first:
+      213: 3090763460116452588
+    second: keybord dark sheet_73
+  - first:
+      213: -1807012261472650632
+    second: keybord dark sheet_74
+  - first:
+      213: -7052362546322150261
+    second: keybord dark sheet_75
+  - first:
+      213: 4807716916375456002
+    second: keybord dark sheet_76
+  - first:
+      213: -296924391953841876
+    second: keybord dark sheet_77
+  - first:
+      213: 8566806478781931962
+    second: keybord dark sheet_78
+  - first:
+      213: 3062857676168165568
+    second: keybord dark sheet_79
+  - first:
+      213: 2274007543263510889
+    second: keybord dark sheet_80
+  - first:
+      213: -8745854673741578845
+    second: keybord dark sheet_81
+  - first:
+      213: -5699358778266678228
+    second: keybord dark sheet_82
+  - first:
+      213: 8040069158182972657
+    second: keybord dark sheet_83
+  - first:
+      213: 6704410838278440234
+    second: keybord dark sheet_84
+  - first:
+      213: 6841360793711971035
+    second: keybord dark sheet_85
+  - first:
+      213: 440951392817610906
+    second: keybord dark sheet_86
+  - first:
+      213: -6610971768688592451
+    second: keybord dark sheet_87
+  - first:
+      213: -1768209930086249920
+    second: keybord dark sheet_88
+  - first:
+      213: 1584423986464594575
+    second: keybord dark sheet_89
+  - first:
+      213: 4748373292514024808
+    second: keybord dark sheet_90
+  - first:
+      213: 5064641011141368926
+    second: keybord dark sheet_91
+  - first:
+      213: 3545670089644404897
+    second: keybord dark sheet_92
+  - first:
+      213: 686647529413717715
+    second: keybord dark sheet_93
+  - first:
+      213: 7825223252694928628
+    second: keybord dark sheet_94
+  - first:
+      213: -1718398771947762683
+    second: keybord dark sheet_95
+  - first:
+      213: 4248436029989409907
+    second: keybord dark sheet_96
+  - first:
+      213: 635362978637186793
+    second: keybord dark sheet_97
+  - first:
+      213: 8434282833545322798
+    second: keybord dark sheet_98
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: keybord dark sheet_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 586cd611d7f439b80800000000000000
+      internalID: -8389274282279188859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_1
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe84696e63fc64dd0800000000000000
+      internalID: -2502084708253939473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cdae7f6c52c03b690800000000000000
+      internalID: -7587707590797694244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_3
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f40303e0fa7437fe0800000000000000
+      internalID: -1192530659140161457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_4
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aae84bd84cad15360800000000000000
+      internalID: 7156741820594294442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_5
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1971c9ee969bb1770800000000000000
+      internalID: 8582657379510523793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_6
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad1effe5631055ca0800000000000000
+      internalID: -6028911193131851302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_7
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c663a70ccdbc3e680800000000000000
+      internalID: -8726907503931410836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_8
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b511f1605b7421fa0800000000000000
+      internalID: -5831519724674018981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_9
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70f19d489a6c63030800000000000000
+      internalID: 3474182593943510791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_10
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3aa09b0633d8460c0800000000000000
+      internalID: -4583383268950734173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_11
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4dc42bc1f9b91fa0800000000000000
+      internalID: -5829423794507952817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_12
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38f8f89eacb950270800000000000000
+      internalID: 8216144391011536771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_13
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69cbde9c9e257c040800000000000000
+      internalID: 4667790702861466774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_14
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3673c6f3a20bd4810800000000000000
+      internalID: 1751249525616162659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_15
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 703f6251cd3982ae0800000000000000
+      internalID: -1573845496309026041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_16
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e43d8cd6eb9da740800000000000000
+      internalID: 5164955763508851938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_17
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45892ba4025957ee0800000000000000
+      internalID: -1263940154482845612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_18
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 733a804a831efc380800000000000000
+      internalID: -8948686301175438537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_19
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97bf8e47916ad8be0800000000000000
+      internalID: -1473338874814465159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_20
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 260cf4a31d8877f10800000000000000
+      internalID: 2267431369612181602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_21
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25c513721c0ded7b0800000000000000
+      internalID: -5197487391934161838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_22
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db42b30b7e4f4a760800000000000000
+      internalID: 7468363358018413757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_23
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fce1666f4ced4810800000000000000
+      internalID: 1751315655881256178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_24
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a626ec71725f0fc30800000000000000
+      internalID: 4391279184938164842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_25
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e036d49d3af47e50800000000000000
+      internalID: 6806340079260676324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_26
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50b538378a6efc400800000000000000
+      internalID: 346749307497700101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_27
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88b1c1c83945c8610800000000000000
+      internalID: 1624766558261484424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_28
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 288
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebf4f5ae4a4b450b0800000000000000
+      internalID: -5740765004590788674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_29
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 240
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7cbcbcf1395330c0800000000000000
+      internalID: -4597232723386647430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_30
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bde42961bafbb06d0800000000000000
+      internalID: -3023111983310156069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_31
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84b45a7dcf6a91ef0800000000000000
+      internalID: -136894708778185912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_32
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b496013e2e40bc00800000000000000
+      internalID: 914316684654187697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_33
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 994dabc1e87e71470800000000000000
+      internalID: 8365409430417364121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_34
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed71ea068416b9dc0800000000000000
+      internalID: -3631201711056611362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_35
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0590c8137fbfb03b0800000000000000
+      internalID: -5545061477069878960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_36
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b51f0285e2b71cd70800000000000000
+      internalID: 9061659364223414619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_37
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 424793c9fbe8b96f0800000000000000
+      internalID: -676790365378218972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_38
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6a7f3f5cb308d700800000000000000
+      internalID: 565205860821727854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_39
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d2096c467c53b440800000000000000
+      internalID: 4950402078568153811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_40
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0377ebc17b07cd090800000000000000
+      internalID: -8008402105608014032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_41
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c39aa84d28caaeb0800000000000000
+      internalID: -4707730363644210235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_42
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8131963d044ab4d50800000000000000
+      internalID: 6722647467112338200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_43
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e856c916363ede90800000000000000
+      internalID: -6999097164898608919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_44
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebf7f42763777b680800000000000000
+      internalID: -8739385476159406146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_45
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8939d5b31f8206bb0800000000000000
+      internalID: -4944907374304586856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_46
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dcc296279a311030800000000000000
+      internalID: 3463614009286249682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_47
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b5206b18e18aa5d0800000000000000
+      internalID: -3050482963698408009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_48
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d21e1562c94df83c0800000000000000
+      internalID: -4355028547521093331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_49
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f2ba9bb60d7fbe60800000000000000
+      internalID: 7980234532594561781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_50
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c1c3c296eecee970800000000000000
+      internalID: 8786187412746518978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_51
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27b3d1c7d89f026f0800000000000000
+      internalID: -711294355056542862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_52
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb5712176d9353cb0800000000000000
+      internalID: -4884934627629632068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_53
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17f5cf8bdfa37580800000000000000
+      internalID: -8830521086798596322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_54
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f825be16502b5e20800000000000000
+      internalID: 3340299102879820017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_55
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b34dd67d7ae329f80800000000000000
+      internalID: -8101343889091341253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_56
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6d8e7c04baf48310800000000000000
+      internalID: 1406524634857114987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_57
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c49bdec068bb77d60800000000000000
+      internalID: 7887979456779630924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_58
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 192
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fcfded5a1bee2360800000000000000
+      internalID: 7146908157161110777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_59
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 144
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b55f1bece51062400800000000000000
+      internalID: 298927931973039451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_60
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bada047a918cf5ef0800000000000000
+      internalID: -117155052782572117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_61
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b28c522b39adb9220800000000000000
+      internalID: 2493827146563569707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_62
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4679a341b8c1774c0800000000000000
+      internalID: -4289928736381692060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_63
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768a981afdba2aef0800000000000000
+      internalID: -98327264872519577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_64
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78cf9ad2b31b94570800000000000000
+      internalID: 8451481043464748167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_65
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c569afe84b25c4280800000000000000
+      internalID: -9057773815102532004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_66
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6eb8a2d7b4e1de820800000000000000
+      internalID: 2949046640568863718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_67
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6808ef1238c96e30800000000000000
+      internalID: 4497345820515371116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_68
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 664393ced66206a80800000000000000
+      internalID: -8475732245154810778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_69
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9add2a26fd3940530800000000000000
+      internalID: 3820340971558854057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_70
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34bc4f0bf7c75e8e0800000000000000
+      internalID: -1664787599372006589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_71
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8a2989b3735b0ed0800000000000000
+      internalID: -2446770216046613874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_72
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f44cd85544164710800000000000000
+      internalID: 1677050199318217977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_73
+      rect:
+        serializedVersion: 2
+        x: 600
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce49ffccdf894ea20800000000000000
+      internalID: 3090763460116452588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_74
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87ab5221ce33ce6e0800000000000000
+      internalID: -1807012261472650632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_75
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8ce23f01a9f02e90800000000000000
+      internalID: -7052362546322150261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_76
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2090235201178b240800000000000000
+      internalID: 4807716916375456002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_77
+      rect:
+        serializedVersion: 2
+        x: 792
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c214174b6dc11ebf0800000000000000
+      internalID: -296924391953841876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_78
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab1ef438a1963e670800000000000000
+      internalID: 8566806478781931962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_79
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c8f49924d4718a20800000000000000
+      internalID: 3062857676168165568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_80
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 961c7c8ffc5ee8f10800000000000000
+      internalID: 2274007543263510889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_81
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ad7172038b70a680800000000000000
+      internalID: -8745854673741578845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_82
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2c09ed336fc7e0b0800000000000000
+      internalID: -5699358778266678228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_83
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fce11f1d40149f60800000000000000
+      internalID: 8040069158182972657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_84
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a258ddbc22ada0d50800000000000000
+      internalID: 6704410838278440234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_85
+      rect:
+        serializedVersion: 2
+        x: 1176
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bda8c71156561fe50800000000000000
+      internalID: 6841360793711971035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_86
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a908b1c94f29e1600800000000000000
+      internalID: 440951392817610906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_87
+      rect:
+        serializedVersion: 2
+        x: 1272
+        y: 48
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db93e2be33c1144a0800000000000000
+      internalID: -6610971768688592451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_88
+      rect:
+        serializedVersion: 2
+        x: 1345
+        y: 48
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04a04ecdf6e0677e0800000000000000
+      internalID: -1768209930086249920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_89
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 96
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8a94d698310df510800000000000000
+      internalID: 1584423986464594575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_90
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86d10410a5c95e140800000000000000
+      internalID: 4748373292514024808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_91
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5cd4ff7a28394640800000000000000
+      internalID: 5064641011141368926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_92
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a07bf72920c43130800000000000000
+      internalID: 3545670089644404897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_93
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3deaa9c3a46778900800000000000000
+      internalID: 686647529413717715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_94
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fc0209a617c89c60800000000000000
+      internalID: 7825223252694928628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_95
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50c069fdb650728e0800000000000000
+      internalID: -1718398771947762683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_96
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3745d726f0a75fa30800000000000000
+      internalID: 4248436029989409907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_97
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e68a15434341d800800000000000000
+      internalID: 635362978637186793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: keybord dark sheet_98
+      rect:
+        serializedVersion: 2
+        x: 769
+        y: 0
+        width: 94
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e21e4a4ec879c0570800000000000000
+      internalID: 8434282833545322798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

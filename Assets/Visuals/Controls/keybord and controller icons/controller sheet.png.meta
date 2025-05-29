@@ -1,0 +1,4017 @@
+fileFormatVersion: 2
+guid: ea48987f23c4b432d85ece664e82950f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7515958790348300993
+    second: controller sheet_0
+  - first:
+      213: 5475200151970287813
+    second: controller sheet_1
+  - first:
+      213: 418059663072103661
+    second: controller sheet_2
+  - first:
+      213: 7639791901068773714
+    second: controller sheet_3
+  - first:
+      213: -3451385361844272588
+    second: controller sheet_4
+  - first:
+      213: 5518858473588764667
+    second: controller sheet_5
+  - first:
+      213: -8055302414102728238
+    second: controller sheet_6
+  - first:
+      213: 6860980077100069120
+    second: controller sheet_7
+  - first:
+      213: -4054514773978603855
+    second: controller sheet_8
+  - first:
+      213: 959695646320660592
+    second: controller sheet_9
+  - first:
+      213: -2957160588379846922
+    second: controller sheet_10
+  - first:
+      213: 8590899360052189225
+    second: controller sheet_11
+  - first:
+      213: -5020630969952274421
+    second: controller sheet_12
+  - first:
+      213: -3795738146921881475
+    second: controller sheet_13
+  - first:
+      213: -276538263025611135
+    second: controller sheet_14
+  - first:
+      213: 2718936861501238729
+    second: controller sheet_15
+  - first:
+      213: -6308230759679252823
+    second: controller sheet_16
+  - first:
+      213: 7687374288901942131
+    second: controller sheet_17
+  - first:
+      213: -6782405372231525533
+    second: controller sheet_18
+  - first:
+      213: -1559738920426455925
+    second: controller sheet_19
+  - first:
+      213: -8863848814089961475
+    second: controller sheet_20
+  - first:
+      213: 7546533421932503064
+    second: controller sheet_21
+  - first:
+      213: 4610987764438258586
+    second: controller sheet_22
+  - first:
+      213: -2615138145482286498
+    second: controller sheet_23
+  - first:
+      213: -4178520313750650409
+    second: controller sheet_24
+  - first:
+      213: 8827482451716263723
+    second: controller sheet_25
+  - first:
+      213: 8020812398112147244
+    second: controller sheet_26
+  - first:
+      213: 8897750041665168627
+    second: controller sheet_27
+  - first:
+      213: 338373302189964148
+    second: controller sheet_28
+  - first:
+      213: -535935925369959976
+    second: controller sheet_29
+  - first:
+      213: -1126288392823659678
+    second: controller sheet_30
+  - first:
+      213: 2666602391550613659
+    second: controller sheet_31
+  - first:
+      213: 3304655077686955175
+    second: controller sheet_32
+  - first:
+      213: 4446992028056181413
+    second: controller sheet_33
+  - first:
+      213: 5325244935790601629
+    second: controller sheet_34
+  - first:
+      213: 4150168226535029465
+    second: controller sheet_35
+  - first:
+      213: -6833631425925030498
+    second: controller sheet_36
+  - first:
+      213: -8171516325484146854
+    second: controller sheet_37
+  - first:
+      213: 6506243095271736020
+    second: controller sheet_38
+  - first:
+      213: -2370247782206147261
+    second: controller sheet_39
+  - first:
+      213: 2149367648120320142
+    second: controller sheet_40
+  - first:
+      213: -7187727015615654575
+    second: controller sheet_41
+  - first:
+      213: -3989199943924302092
+    second: controller sheet_42
+  - first:
+      213: 1815089208900881237
+    second: controller sheet_43
+  - first:
+      213: 3364695245618720384
+    second: controller sheet_44
+  - first:
+      213: 1667933381123858788
+    second: controller sheet_45
+  - first:
+      213: -825198803748590052
+    second: controller sheet_46
+  - first:
+      213: 9019423261272360998
+    second: controller sheet_47
+  - first:
+      213: -5629777223142180553
+    second: controller sheet_48
+  - first:
+      213: 1299258358099725582
+    second: controller sheet_49
+  - first:
+      213: 5807475944895479679
+    second: controller sheet_50
+  - first:
+      213: 499280336722141308
+    second: controller sheet_51
+  - first:
+      213: 6927006654197401734
+    second: controller sheet_52
+  - first:
+      213: 3629716929006777838
+    second: controller sheet_53
+  - first:
+      213: 4401353859137886741
+    second: controller sheet_54
+  - first:
+      213: 8484383408906551096
+    second: controller sheet_55
+  - first:
+      213: 3248881344363091281
+    second: controller sheet_56
+  - first:
+      213: 2583769712163443709
+    second: controller sheet_57
+  - first:
+      213: 4209580986273781812
+    second: controller sheet_58
+  - first:
+      213: 3825942666876674816
+    second: controller sheet_59
+  - first:
+      213: -4075828829126020443
+    second: controller sheet_60
+  - first:
+      213: -9115123525737041731
+    second: controller sheet_61
+  - first:
+      213: 7723968692159126083
+    second: controller sheet_62
+  - first:
+      213: -3953692822365652379
+    second: controller sheet_63
+  - first:
+      213: 1684393151775725350
+    second: controller sheet_64
+  - first:
+      213: -3515331414880047713
+    second: controller sheet_65
+  - first:
+      213: -7208629592097433764
+    second: controller sheet_66
+  - first:
+      213: -5848614575316287882
+    second: controller sheet_67
+  - first:
+      213: 7761646378207131224
+    second: controller sheet_68
+  - first:
+      213: -8882101315773537465
+    second: controller sheet_69
+  - first:
+      213: 4825378362950327906
+    second: controller sheet_70
+  - first:
+      213: 550916929073504092
+    second: controller sheet_71
+  - first:
+      213: -7655821135427878142
+    second: controller sheet_72
+  - first:
+      213: -2453511268047412123
+    second: controller sheet_73
+  - first:
+      213: 2245089187331620638
+    second: controller sheet_74
+  - first:
+      213: 9162636975338636032
+    second: controller sheet_75
+  - first:
+      213: -3892396606635478027
+    second: controller sheet_76
+  - first:
+      213: -6952348728375867437
+    second: controller sheet_77
+  - first:
+      213: 5933144349514845937
+    second: controller sheet_78
+  - first:
+      213: -7605862954877264059
+    second: controller sheet_79
+  - first:
+      213: -649117701420869607
+    second: controller sheet_80
+  - first:
+      213: 3160103133014819202
+    second: controller sheet_81
+  - first:
+      213: 4992549443930776699
+    second: controller sheet_82
+  - first:
+      213: 1683003671829204305
+    second: controller sheet_83
+  - first:
+      213: 1059233007241110694
+    second: controller sheet_84
+  - first:
+      213: -8785812799587531372
+    second: controller sheet_85
+  - first:
+      213: -8443932787885752880
+    second: controller sheet_86
+  - first:
+      213: 8743982406092753525
+    second: controller sheet_87
+  - first:
+      213: 2016158553923383071
+    second: controller sheet_88
+  - first:
+      213: 1955774099031431496
+    second: controller sheet_89
+  - first:
+      213: -7223532072636968335
+    second: controller sheet_90
+  - first:
+      213: 6750852811804402928
+    second: controller sheet_91
+  - first:
+      213: 1917760926070563449
+    second: controller sheet_92
+  - first:
+      213: 2317866035313332382
+    second: controller sheet_93
+  - first:
+      213: -8853295026982566383
+    second: controller sheet_94
+  - first:
+      213: 6168551442160897707
+    second: controller sheet_95
+  - first:
+      213: -8839586454064972458
+    second: controller sheet_96
+  - first:
+      213: -10581648693062049
+    second: controller sheet_97
+  - first:
+      213: 8423010041521503257
+    second: controller sheet_98
+  - first:
+      213: 7076667458018599106
+    second: controller sheet_99
+  - first:
+      213: -3310823961463820785
+    second: controller sheet_100
+  - first:
+      213: -8749848076610171815
+    second: controller sheet_101
+  - first:
+      213: 3630230959782190561
+    second: controller sheet_102
+  - first:
+      213: -5075622792712611255
+    second: controller sheet_103
+  - first:
+      213: 1046910267520783489
+    second: controller sheet_104
+  - first:
+      213: 4177647116741758022
+    second: controller sheet_105
+  - first:
+      213: -5281475300437906756
+    second: controller sheet_106
+  - first:
+      213: 9125128830856252403
+    second: controller sheet_107
+  - first:
+      213: -2870013742688338175
+    second: controller sheet_108
+  - first:
+      213: 4148990357438894371
+    second: controller sheet_109
+  - first:
+      213: 2793120784570733853
+    second: controller sheet_110
+  - first:
+      213: 767849885311644132
+    second: controller sheet_111
+  - first:
+      213: 6018756403093654673
+    second: controller sheet_112
+  - first:
+      213: 4514866568935899944
+    second: controller sheet_113
+  - first:
+      213: 5424196880697642002
+    second: controller sheet_114
+  - first:
+      213: -6562979048432637131
+    second: controller sheet_115
+  - first:
+      213: -1629879910659447931
+    second: controller sheet_116
+  - first:
+      213: 7628017420104985526
+    second: controller sheet_117
+  - first:
+      213: -49263580354467930
+    second: controller sheet_118
+  - first:
+      213: 4655544282828708033
+    second: controller sheet_119
+  - first:
+      213: -8707967515856624596
+    second: controller sheet_120
+  - first:
+      213: 168732227776366201
+    second: controller sheet_121
+  - first:
+      213: -135634634474291517
+    second: controller sheet_122
+  - first:
+      213: 52590544823559033
+    second: controller sheet_123
+  - first:
+      213: 6289979492786988493
+    second: controller sheet_124
+  - first:
+      213: -6875954785036840781
+    second: controller sheet_125
+  - first:
+      213: 8277992513754599597
+    second: controller sheet_126
+  - first:
+      213: -7893769582796174854
+    second: controller sheet_127
+  - first:
+      213: 6114774818257408322
+    second: controller sheet_128
+  - first:
+      213: 8627997281911501444
+    second: controller sheet_129
+  - first:
+      213: -3535463189633209713
+    second: controller sheet_130
+  - first:
+      213: 9168262962411527624
+    second: controller sheet_131
+  - first:
+      213: -1708550827602012253
+    second: controller sheet_132
+  - first:
+      213: 7845240873201128131
+    second: controller sheet_133
+  - first:
+      213: 8724354162025099924
+    second: controller sheet_134
+  - first:
+      213: 2732354470777963495
+    second: controller sheet_135
+  - first:
+      213: -1856683808621487341
+    second: controller sheet_136
+  - first:
+      213: -2159378793576851825
+    second: controller sheet_137
+  - first:
+      213: -7865365082602869605
+    second: controller sheet_138
+  - first:
+      213: 3162093313401702502
+    second: controller sheet_139
+  - first:
+      213: -161695774847688147
+    second: controller sheet_140
+  - first:
+      213: -5732176771505623923
+    second: controller sheet_141
+  - first:
+      213: 8767398685679719598
+    second: controller sheet_142
+  - first:
+      213: -8691909295984126956
+    second: controller sheet_143
+  - first:
+      213: 941205717193459589
+    second: controller sheet_144
+  - first:
+      213: -22970680970466178
+    second: controller sheet_145
+  - first:
+      213: 8980908169755546488
+    second: controller sheet_146
+  - first:
+      213: -73406479601646926
+    second: controller sheet_147
+  - first:
+      213: 4341127694755713854
+    second: controller sheet_148
+  - first:
+      213: 1417238043198187240
+    second: controller sheet_149
+  - first:
+      213: -4258930030630197428
+    second: controller sheet_150
+  - first:
+      213: 2859904959961356036
+    second: controller sheet_151
+  - first:
+      213: -2285425428198095931
+    second: controller sheet_152
+  - first:
+      213: -3707662605615179218
+    second: controller sheet_153
+  - first:
+      213: 2851595556360718997
+    second: controller sheet_154
+  - first:
+      213: 1585477447258014335
+    second: controller sheet_155
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: controller sheet_0
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c26f25d2bc0e4860800000000000000
+      internalID: 7515958790348300993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_1
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c09a548781dbfb40800000000000000
+      internalID: 5475200151970287813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_2
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dec05507c0f3dc500800000000000000
+      internalID: 418059663072103661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_3
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2594c15b14ef50a60800000000000000
+      internalID: 7639791901068773714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_4
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4320a44bc473a10d0800000000000000
+      internalID: -3451385361844272588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_5
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bffa9e3aa8ce69c40800000000000000
+      internalID: 5518858473588764667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_6
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d17f091221d53090800000000000000
+      internalID: -8055302414102728238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_7
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 287
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 001f4927709173f50800000000000000
+      internalID: 6860980077100069120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_8
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 294
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be9e687b487bb7c0800000000000000
+      internalID: -4054514773978603855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_9
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 294
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0709e6b0b16815d00800000000000000
+      internalID: 959695646320660592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_10
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 294
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f685d1dc1e06f6d0800000000000000
+      internalID: -2957160588379846922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_11
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 294
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9289a019371093770800000000000000
+      internalID: 8590899360052189225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_12
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 293
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b087ba7bbb2235ab0800000000000000
+      internalID: -5020630969952274421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_13
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 293
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d70625c1444d25bc0800000000000000
+      internalID: -3795738146921881475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_14
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 290
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18e0e893ae9892cf0800000000000000
+      internalID: -276538263025611135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_15
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 242
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cd2f748baa9bb520800000000000000
+      internalID: 2718936861501238729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_16
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 242
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a62028eb89a478a0800000000000000
+      internalID: -6308230759679252823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_17
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 242
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37ba871bf2a0faa60800000000000000
+      internalID: 7687374288901942131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_18
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 242
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36b5079af3e00e1a0800000000000000
+      internalID: -6782405372231525533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_19
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 282
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8c31a937b1ba5ae0800000000000000
+      internalID: -1559738920426455925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_20
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 277
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dff766d57784df480800000000000000
+      internalID: -8863848814089961475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_21
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 270
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81066ebf92caab860800000000000000
+      internalID: 7546533421932503064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_22
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 273
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a93d30311f48dff30800000000000000
+      internalID: 4610987764438258586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_23
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 270
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5a54f756b925bbd0800000000000000
+      internalID: -2615138145482286498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_24
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 270
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d18324d9e9e206c0800000000000000
+      internalID: -4178520313750650409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_25
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 270
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2fca831584818a70800000000000000
+      internalID: 8827482451716263723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_26
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 270
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2706874166af4f60800000000000000
+      internalID: 8020812398112147244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_27
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 270
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f46ba545882b7b70800000000000000
+      internalID: 8897750041665168627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_28
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 270
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47b328eb9b422b400800000000000000
+      internalID: 338373302189964148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_29
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 270
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d904f98d19ff88f0800000000000000
+      internalID: -535935925369959976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_30
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 270
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 263a91f8cae9e50f0800000000000000
+      internalID: -1126288392823659678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_31
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 270
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b98d4913fbca10520800000000000000
+      internalID: 2666602391550613659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_32
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 270
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7acc8bac84e7cdd20800000000000000
+      internalID: 3304655077686955175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_33
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aa584730b3e6bd30800000000000000
+      internalID: 4446992028056181413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_34
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d952fb30e0217e940800000000000000
+      internalID: 5325244935790601629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_35
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dabbb4730c589930800000000000000
+      internalID: 4150168226535029465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_36
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9ddacb9c601a21a0800000000000000
+      internalID: -6833631425925030498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_37
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5f463f4231f89e80800000000000000
+      internalID: -8171516325484146854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_38
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d28204af91da4a50800000000000000
+      internalID: 6506243095271736020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_39
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 239
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 345f1ff33303b1fd0800000000000000
+      internalID: -2370247782206147261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_40
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 272
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e80bde5fc7614dd10800000000000000
+      internalID: 2149367648120320142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_41
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 191
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15510cb8c50104c90800000000000000
+      internalID: -7187727015615654575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_42
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 239
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fe326469c383a8c0800000000000000
+      internalID: -3989199943924302092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_43
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 239
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55b8e2cc40e703910800000000000000
+      internalID: 1815089208900881237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_44
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 239
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08eac8cbf7cc1be20800000000000000
+      internalID: 3364695245618720384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_45
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 239
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46167e2b290b52710800000000000000
+      internalID: 1667933381123858788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_46
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 198
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1eec716f0e4c84f0800000000000000
+      internalID: -825198803748590052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_47
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 198
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 628c80f4bad6b2d70800000000000000
+      internalID: 9019423261272360998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_48
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 198
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 739760281730fd1b0800000000000000
+      internalID: -5629777223142180553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_49
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 198
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0dcdf9c794e70210800000000000000
+      internalID: 1299258358099725582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_50
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 197
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7ffe114a9c489050800000000000000
+      internalID: 5807475944895479679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_51
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 197
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7029a922dccde600800000000000000
+      internalID: 499280336722141308
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_52
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 194
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6880434e9dba12060800000000000000
+      internalID: 6927006654197401734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_53
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 194
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee5bbacd0585f5230800000000000000
+      internalID: 3629716929006777838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_54
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 194
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51a55b8f300c41d30800000000000000
+      internalID: 4401353859137886741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_55
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 194
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83fb71a12c59eb570800000000000000
+      internalID: 8484383408906551096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_56
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 194
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 155d7209e58561d20800000000000000
+      internalID: 3248881344363091281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_57
+      rect:
+        serializedVersion: 2
+        x: 1186
+        y: 195
+        width: 28
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df35ae22dd46bd320800000000000000
+      internalID: 2583769712163443709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_58
+      rect:
+        serializedVersion: 2
+        x: 1282
+        y: 194
+        width: 28
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 438561c8a9f6b6a30800000000000000
+      internalID: 4209580986273781812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_59
+      rect:
+        serializedVersion: 2
+        x: 1371
+        y: 202
+        width: 43
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 003e136b59a781530800000000000000
+      internalID: 3825942666876674816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_60
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 186
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a2b5aa464fbf67c0800000000000000
+      internalID: -4075828829126020443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_61
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 181
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db033a48273908180800000000000000
+      internalID: -9115123525737041731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_62
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 174
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34a12682a9c013b60800000000000000
+      internalID: 7723968692159126083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_63
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 177
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56a32eb5359a129c0800000000000000
+      internalID: -3953692822365652379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_64
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 174
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62751b1b5aa206710800000000000000
+      internalID: 1684393151775725350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_65
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 174
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9dad4404b8073fc0800000000000000
+      internalID: -3515331414880047713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_66
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 174
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57d9a5349dc5fb90800000000000000
+      internalID: -7208629592097433764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_67
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 174
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67eb912f70c85dea0800000000000000
+      internalID: -5848614575316287882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_68
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 174
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 856bb3d0248e6bb60800000000000000
+      internalID: 7761646378207131224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_69
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 174
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 743e946a9ef6cb480800000000000000
+      internalID: -8882101315773537465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_70
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 174
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26e928e1e0037f240800000000000000
+      internalID: 4825378362950327906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_71
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 174
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5fdc22370045a700800000000000000
+      internalID: 550916929073504092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_72
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 174
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 203c4e65d3f01c590800000000000000
+      internalID: -7655821135427878142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_73
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 174
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 564ad9f308063fdd0800000000000000
+      internalID: -2453511268047412123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_74
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1fb8fb88b8282f10800000000000000
+      internalID: 2245089187331620638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_75
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0034be888c9382f70800000000000000
+      internalID: 9162636975338636032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_76
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f37e88b8ed6bf9c0800000000000000
+      internalID: -3892396606635478027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_77
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d7848aaaab448f90800000000000000
+      internalID: -6952348728375867437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_78
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fec2f9c953c65250800000000000000
+      internalID: 5933144349514845937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_79
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54fdc3ca0fb827690800000000000000
+      internalID: -7605862954877264059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_80
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9181465c3eeddf6f0800000000000000
+      internalID: -649117701420869607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_81
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 143
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28182f87e01fadb20800000000000000
+      internalID: 3160103133014819202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_82
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 150
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7461118449194540800000000000000
+      internalID: 4992549443930776699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_83
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 150
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15dce0f2cea3b5710800000000000000
+      internalID: 1683003671829204305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_84
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 154
+        width: 43
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a4a9fadec623be00800000000000000
+      internalID: 1059233007241110694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_85
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 176
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4954189dec5821680800000000000000
+      internalID: -8785812799587531372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_86
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 143
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ddbbc60edf11da80800000000000000
+      internalID: -8443932787885752880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_87
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 143
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57a8c65bbadd85970800000000000000
+      internalID: 8743982406092753525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_88
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 143
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1fe771d585dafb10800000000000000
+      internalID: 2016158553923383071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_89
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 143
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8499da15e2e442b10800000000000000
+      internalID: 1955774099031431496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_90
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 138
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17215d21adbd0cb90800000000000000
+      internalID: -7223532072636968335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_91
+      rect:
+        serializedVersion: 2
+        x: 1004
+        y: 129
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f46c826dd8dfad50800000000000000
+      internalID: 6750852811804402928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_92
+      rect:
+        serializedVersion: 2
+        x: 1075
+        y: 126
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9726f8ac6614d9a10800000000000000
+      internalID: 1917760926070563449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_93
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 126
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e905bc7e0e6ba2020800000000000000
+      internalID: 2317866035313332382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_94
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 126
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 116c8f86417c22580800000000000000
+      internalID: -8853295026982566383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_95
+      rect:
+        serializedVersion: 2
+        x: 1112
+        y: 126
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bae49b0bad81b9550800000000000000
+      internalID: 6168551442160897707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_96
+      rect:
+        serializedVersion: 2
+        x: 1121
+        y: 126
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65d3a1444fa735580800000000000000
+      internalID: -8839586454064972458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_97
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 126
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f56138ceb086adff0800000000000000
+      internalID: -10581648693062049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_98
+      rect:
+        serializedVersion: 2
+        x: 1181
+        y: 126
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91cff68710b84e470800000000000000
+      internalID: 8423010041521503257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_99
+      rect:
+        serializedVersion: 2
+        x: 1194
+        y: 126
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c0e3cc2f8f553260800000000000000
+      internalID: 7076667458018599106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_100
+      rect:
+        serializedVersion: 2
+        x: 1209
+        y: 126
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0ee81706279d02d0800000000000000
+      internalID: -3310823961463820785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_101
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 95
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95c0403788b429680800000000000000
+      internalID: -8749848076610171815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_102
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 95
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ed517af2db216230800000000000000
+      internalID: 3630230959782190561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_103
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 102
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94a1d7a36f3cf89b0800000000000000
+      internalID: -5075622792712611255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_104
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 102
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 184194f675f578e00800000000000000
+      internalID: 1046910267520783489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_105
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 101
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64cc3562bebf9f930800000000000000
+      internalID: 4177647116741758022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_106
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 101
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cba266b523e64b6b0800000000000000
+      internalID: -5281475300437906756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_107
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 98
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fbccdc1358f2ae70800000000000000
+      internalID: 9125128830856252403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_108
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 98
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10f729ef4b9ab28d0800000000000000
+      internalID: -2870013742688338175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_109
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 98
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3219aaf6fbc249930800000000000000
+      internalID: 4148990357438894371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_110
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 98
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1559131e8823c620800000000000000
+      internalID: 2793120784570733853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_111
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 98
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e133d60763f7aa00800000000000000
+      internalID: 767849885311644132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_112
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 133
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19c41045f0be68350800000000000000
+      internalID: 6018756403093654673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_113
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 128
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82306b1493708ae30800000000000000
+      internalID: 4514866568935899944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_114
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 126
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21cc3c9035e964b40800000000000000
+      internalID: 5424196880697642002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_115
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 126
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53b67ddd35d9be4a0800000000000000
+      internalID: -6562979048432637131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_116
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58329925bd08169e0800000000000000
+      internalID: -1629879910659447931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_117
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb69d9bd692cd960800000000000000
+      internalID: 7628017420104985526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_118
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a7ab90e80bf05ff0800000000000000
+      internalID: -49263580354467930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_119
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c81b1eebd0db9040800000000000000
+      internalID: 4655544282828708033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_120
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c24a9bd5ea5172780800000000000000
+      internalID: -8707967515856624596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_121
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 47
+        width: 44
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97645c23115775200800000000000000
+      internalID: 168732227776366201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_122
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 95
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ce7be0c4012e1ef0800000000000000
+      internalID: -135634634474291517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_123
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 95
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 973a0c662d6dab000800000000000000
+      internalID: 52590544823559033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_124
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 95
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc56f00e50f7a4750800000000000000
+      internalID: 6289979492786988493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_125
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 95
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b05b3aad83b390a0800000000000000
+      internalID: -6875954785036840781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_126
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 54
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da09fa3255651e270800000000000000
+      internalID: 8277992513754599597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_127
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 54
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af986ae2362b37290800000000000000
+      internalID: -7893769582796174854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_128
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 54
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2419cbbbc4b0cd450800000000000000
+      internalID: 6114774818257408322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_129
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 54
+        width: 44
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 482fe5790ddccb770800000000000000
+      internalID: 8627997281911501444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_130
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 53
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8a6171f5f28feec0800000000000000
+      internalID: -3535463189633209713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_131
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 53
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cdd8e9b6963c3f70800000000000000
+      internalID: 9168262962411527624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_132
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 50
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a7151813120a48e0800000000000000
+      internalID: -1708550827602012253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_133
+      rect:
+        serializedVersion: 2
+        x: 1274
+        y: 50
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c257802205efdc60800000000000000
+      internalID: 7845240873201128131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_134
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 50
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 492f43203e1231970800000000000000
+      internalID: 8724354162025099924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_135
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 2
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e3cb2f1ae54be520800000000000000
+      internalID: 2732354470777963495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_136
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 2
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31b95e6c9ebbb36e0800000000000000
+      internalID: -1856683808621487341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_137
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 42
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8617599d685802e0800000000000000
+      internalID: -2159378793576851825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_138
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 37
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9ce1be312c98d290800000000000000
+      internalID: -7865365082602869605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_139
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 30
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66842f37d1302eb20800000000000000
+      internalID: 3162093313401702502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_140
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 33
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d22a58aac8a81cdf0800000000000000
+      internalID: -161695774847688147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_141
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 30
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8c69a0c8973370b0800000000000000
+      internalID: -5732176771505623923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_142
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 30
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea49a2827ae0ca970800000000000000
+      internalID: 8767398685679719598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_143
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 30
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41453f80c82206780800000000000000
+      internalID: -8691909295984126956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_144
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 30
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58702e1fc95df0d00800000000000000
+      internalID: 941205717193459589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_145
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 30
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7ca18099446eaff0800000000000000
+      internalID: -22970680970466178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_146
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 30
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 873dea2c56892ac70800000000000000
+      internalID: 8980908169755546488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_147
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 30
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b2c12b12353bfef0800000000000000
+      internalID: -73406479601646926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_148
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 30
+        width: 14
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e33568a53a8ce3c30800000000000000
+      internalID: 4341127694755713854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_149
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 30
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e66ffecd7a0ba310800000000000000
+      internalID: 1417238043198187240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_150
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 30
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c472b01b3bd35e4c0800000000000000
+      internalID: -4258930030630197428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_151
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 32
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 407dfdd986c60b720800000000000000
+      internalID: 2859904959961356036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_152
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 0
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c38b978ea98840e0800000000000000
+      internalID: -2285425428198095931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_153
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 0
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2ade45118cbb8cc0800000000000000
+      internalID: -3707662605615179218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_154
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 0
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59a86f3dc07e29720800000000000000
+      internalID: 2851595556360718997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: controller sheet_155
+      rect:
+        serializedVersion: 2
+        x: 517
+        y: 0
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f72053b865fb00610800000000000000
+      internalID: 1585477447258014335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

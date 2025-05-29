@@ -1,0 +1,567 @@
+fileFormatVersion: 2
+guid: 3f859923476a049109254cd46ef2e3d8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5306276669871710373
+    second: ps5 controller dark sheet_0
+  - first:
+      213: 1097268533844444224
+    second: ps5 controller dark sheet_1
+  - first:
+      213: 6296104207600722999
+    second: ps5 controller dark sheet_2
+  - first:
+      213: 4851466555856580244
+    second: ps5 controller dark sheet_3
+  - first:
+      213: -2767375812550638913
+    second: ps5 controller dark sheet_4
+  - first:
+      213: 8794800371695014711
+    second: ps5 controller dark sheet_5
+  - first:
+      213: -6258030804771067830
+    second: ps5 controller dark sheet_6
+  - first:
+      213: -5328026614960166229
+    second: ps5 controller dark sheet_7
+  - first:
+      213: -2586834772023686645
+    second: ps5 controller dark sheet_8
+  - first:
+      213: -7470179991355913333
+    second: ps5 controller dark sheet_9
+  - first:
+      213: 3538349717570132389
+    second: ps5 controller dark sheet_10
+  - first:
+      213: -4672316729725415132
+    second: ps5 controller dark sheet_11
+  - first:
+      213: -8334837368028153166
+    second: ps5 controller dark sheet_12
+  - first:
+      213: 2417553912547319997
+    second: ps5 controller dark sheet_13
+  - first:
+      213: -582204749048610797
+    second: ps5 controller dark sheet_14
+  - first:
+      213: -752829998682184947
+    second: ps5 controller dark sheet_15
+  - first:
+      213: 8056558591496003400
+    second: ps5 controller dark sheet_16
+  - first:
+      213: -4629586182572334201
+    second: ps5 controller dark sheet_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 712
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5f9a5c8b715c56b0800000000000000
+      internalID: -5306276669871710373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_1
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 712
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 044030ffae74a3f00800000000000000
+      internalID: 1097268533844444224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_2
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 712
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73422ea2b61406750800000000000000
+      internalID: 6296104207600722999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_3
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 712
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49ee48dd02fd35340800000000000000
+      internalID: 4851466555856580244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_4
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 712
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb249e45c5e4899d0800000000000000
+      internalID: -2767375812550638913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_5
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 487
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 733da5957586d0a70800000000000000
+      internalID: 8794800371695014711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_6
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 487
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a482b28b3220729a0800000000000000
+      internalID: -6258030804771067830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_7
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 487
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: baae875d50c0f06b0800000000000000
+      internalID: -5328026614960166229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_8
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 487
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0a46e00b77b91cd0800000000000000
+      internalID: -2586834772023686645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_9
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 487
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8b000760e6945890800000000000000
+      internalID: -7470179991355913333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_10
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 262
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a91fd6325eba1130800000000000000
+      internalID: 3538349717570132389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_11
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 262
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4211a9670b8982fb0800000000000000
+      internalID: -4672316729725415132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_12
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 262
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bab70ad295b45c80800000000000000
+      internalID: -8334837368028153166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_13
+      rect:
+        serializedVersion: 2
+        x: 680
+        y: 262
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db02db68970ec8120800000000000000
+      internalID: 2417553912547319997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_14
+      rect:
+        serializedVersion: 2
+        x: 905
+        y: 262
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 310896a8dd79be7f0800000000000000
+      internalID: -582204749048610797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_15
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 37
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d036a48da196d85f0800000000000000
+      internalID: -752829998682184947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_16
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 37
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84f9d3e7a55aecf60800000000000000
+      internalID: 8056558591496003400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ps5 controller dark sheet_17
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 37
+        width: 215
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78328b245e760cfb0800000000000000
+      internalID: -4629586182572334201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
