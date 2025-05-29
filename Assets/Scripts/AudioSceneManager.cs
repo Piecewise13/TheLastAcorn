@@ -1,0 +1,72 @@
+using UnityEngine;
+using System.Collections;
+
+/// <summary>
+/// Controls background-music layers as acorns are collected.
+/// </summary>
+public class AudioSceneManager : MonoBehaviour
+{
+    //  Audio players
+    [Header("Layers")]
+    public AudioPlayer ambiencePlayer;
+    public AudioPlayer dronePlayer;
+    [Tooltip("acornLayers[0] plays at 1st acorn, acornLayers[1] at 2nd, etc. Up to 5.")]
+    public AudioPlayer[] acornLayers = new AudioPlayer[5];
+
+    [Header("Fades")] 
+    [Range(0, 5)] [SerializeField] private float fadeTime = 2.5f;
+
+    //  Progress tracking
+    int targetScore;
+    bool [] layerPlayed;
+
+    void Awake()
+    {
+        targetScore = FindFirstObjectByType<ScoreManager>()?.GetMaxScore() ?? 0;
+
+        int layerCount = Mathf.Clamp(acornLayers.Length, 0, 5);
+        layerPlayed = new bool[layerCount];
+
+        if (ambiencePlayer != null) ambiencePlayer.Play();
+        if (dronePlayer != null) dronePlayer.Play();
+    }
+
+    void OnEnable()
+    {
+        StartCoroutine(SubscribeWhenReady());
+    }
+
+    void OnDisable()
+    {
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
+    }
+
+    IEnumerator SubscribeWhenReady()
+    {
+        while (ScoreManager.Instance == null) yield return null;
+        ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
+        HandleScoreChanged(ScoreManager.Instance.CurrentScore);
+    }
+
+    void HandleScoreChanged(int newScore)
+    {
+        for (int i = 0; i < layerPlayed.Length; i++)
+        {
+            int trigger = i + 1;     
+            if (!layerPlayed[i] && newScore >= trigger)
+            {
+                if (acornLayers[i] != null) acornLayers[i].Play();
+                layerPlayed[i] = true;
+            }
+        }
+    }
+
+    public void FadeOutAudio()
+    {
+        if (ambiencePlayer != null) ambiencePlayer.FadeOut(fadeTime);
+        if (dronePlayer    != null) dronePlayer.FadeOut(fadeTime);
+        foreach (var p in acornLayers)
+            if (p != null) p.FadeOut(fadeTime);
+    }
+}

@@ -1,131 +1,121 @@
 using UnityEngine;
 using System.Collections;
 
-/// <summary>
-/// Play an AudioClip with optional delay, fade-in, per-play randomisation,
-/// looping, and runtime fade-out.
-/// </summary>
 public class AudioPlayer : MonoBehaviour
 {
-    //  Audio clip & base values
     [Header("Audio Settings")]
-    [Tooltip("Audio clip to be played.")]
     public AudioClip audioClip;
-
     [Range(0f, 1f)] public float volume = 1f;
     [Range(-3f, 3f)] public float pitch = 1f;
     public bool loop = false;
 
-    //  Randomisation
     [Header("Randomisation")]
     public bool randomise = false;
-    public Vector2 volumeRange = new Vector2(0.9f, 1.0f);
-    public Vector2 pitchRange  = new Vector2(0.95f, 1.05f);
+    public Vector2 volumeRange = new Vector2(0.9f, 1f);
+    public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+    public AudioClip[] randomClips;
 
-    //  Fade-in
     [Header("Fade-in")]
     public bool fadeIn = false;
-    public float fadeInDuration = 1f;
+    public float fadeInSeconds = 1f;
 
-    //  Delay
     [Header("Delay")]
     public bool playWithDelay = false;
-    public float delayDuration = 0f;
+    public float delaySeconds = 0f;
 
-    //  Misc
+    [Header("Fade Curves")]
+    public FadeCurve fadeInCurve = FadeCurve.Smooth;
+    public FadeCurve fadeOutCurve = FadeCurve.Smooth;
+
     public bool playOnEnable = false;
 
-    //  Internal
-    private AudioSource currentSource;
+    AudioSource currentSource;
 
-    // Public Methods
-    public void Play()
+    public enum FadeCurve { Linear, Smooth, Smoother, Exponential, Logarithmic }
+
+    public void Play() => StartCoroutine(PlayAudio());
+
+    public void FadeOut(float seconds = 1f)
     {
-        if (audioClip == null)
+        if (currentSource == null) return;
+        StopAllCoroutines();
+        StartCoroutine(FadeRoutine(currentSource, currentSource.volume, 0f, seconds, fadeOutCurve, () =>
         {
-            Debug.LogError("AudioPlayer: No audio clip assigned.");
-            return;
-        }
-        StartCoroutine(PlayAudioCoroutine());
+            currentSource.Stop();
+            currentSource.volume = 0f;
+        }));
     }
 
-    public void FadeOut(float duration = 1f)
-    {
-        if (currentSource != null)
-            StartCoroutine(FadeOutCoroutine(currentSource, duration));
-    }
-
-    private void OnEnable()
+    void OnEnable()
     {
         if (playOnEnable) Play();
     }
 
-    // Coroutines
-    private IEnumerator PlayAudioCoroutine()
+    IEnumerator PlayAudio()
     {
-        if (playWithDelay && delayDuration > 0f)
-            yield return new WaitForSeconds(delayDuration);
-
-        float chosenVolume = volume;
-        float chosenPitch  = pitch;
-
-        if (randomise)
+        if (audioClip == null && (randomClips == null || randomClips.Length == 0))
         {
-            float volMin = Mathf.Min(volumeRange.x, volumeRange.y);
-            float volMax = Mathf.Max(volumeRange.x, volumeRange.y);
-            float pitMin = Mathf.Min(pitchRange.x,  pitchRange.y);
-            float pitMax = Mathf.Max(pitchRange.x,  pitchRange.y);
-
-            chosenVolume = Random.Range(volMin, volMax);
-            chosenPitch  = Random.Range(pitMin, pitMax);
+            Debug.LogError("AudioPlayer: No audio clip assigned.");
+            yield break;
         }
 
-        AudioSource src = gameObject.AddComponent<AudioSource>();
-        src.clip = audioClip;
-        src.playOnAwake = false;
-        src.spatialBlend = 0f;
-        src.pitch = chosenPitch;
-        src.loop = loop;
-        src.volume = (fadeIn && fadeInDuration > 0f) ? 0f : chosenVolume;
-        currentSource = src;
+        if (playWithDelay && delaySeconds > 0f)
+            yield return new WaitForSeconds(delaySeconds);
 
-        src.Play();
+        float chosenVol   = randomise ? Random.Range(volumeRange.x, volumeRange.y) : volume;
+        float chosenPitch = randomise ? Random.Range(pitchRange.x, pitchRange.y) : pitch;
 
-        if (fadeIn && fadeInDuration > 0f)
-            StartCoroutine(FadeIn(src, chosenVolume, fadeInDuration));
+        AudioClip clip = (randomise && randomClips != null && randomClips.Length > 0)
+            ? randomClips[Random.Range(0, randomClips.Length)]
+            : audioClip;
 
-        if (!loop)
-            StartCoroutine(RemoveAudioSourceAfterPlay(src, audioClip.length));
+        if (currentSource == null) currentSource = gameObject.AddComponent<AudioSource>();
+
+        currentSource.clip         = clip;
+        currentSource.playOnAwake  = false;
+        currentSource.spatialBlend = 0f;
+        currentSource.loop         = loop;
+        currentSource.pitch        = chosenPitch;
+        currentSource.volume       = (fadeIn && fadeInSeconds > 0f) ? 0f : chosenVol;
+
+        currentSource.Play();
+
+        if (fadeIn && fadeInSeconds > 0f)
+            yield return FadeRoutine(currentSource, 0f, chosenVol, fadeInSeconds, fadeInCurve);
+
+        if (!loop && clip != null)
+            StartCoroutine(StopAfterPlay(clip.length));
     }
 
-    private static IEnumerator FadeIn(AudioSource src, float targetVol, float duration)
+    IEnumerator FadeRoutine(AudioSource src, float from, float to, float seconds, FadeCurve curve, System.Action onDone = null)
     {
-        for (float t = 0f; t < duration; t += Time.deltaTime)
-        {
-            src.volume = Mathf.Lerp(0f, targetVol, t / duration);
-            yield return null;
-        }
-        src.volume = targetVol;
-    }
-
-    private static IEnumerator FadeOutCoroutine(AudioSource src, float duration)
-    {
-        float startVol = src.volume;
-        for (float t = 0f; t < duration; t += Time.deltaTime)
+        for (float t = 0f; t < seconds; t += Time.deltaTime)
         {
             if (src == null) yield break;
-            src.volume = Mathf.Lerp(startVol, 0f, t / duration);
+            float x = t / seconds;
+            src.volume = Mathf.Lerp(from, to, ApplyCurve(x, curve));
             yield return null;
         }
-        if (src == null) yield break;
-        src.volume = 0f;
-        src.Stop();
-        Object.Destroy(src);
+        if (src != null) src.volume = to;
+        onDone?.Invoke();
     }
 
-    private static IEnumerator RemoveAudioSourceAfterPlay(AudioSource src, float clipLen)
+    IEnumerator StopAfterPlay(float clipLen)
     {
         yield return new WaitForSeconds(clipLen + 0.1f);
-        Object.Destroy(src);
+        if (currentSource != null) currentSource.Stop();
+    }
+
+    static float ApplyCurve(float x, FadeCurve curve)
+    {
+        switch (curve)
+        {
+            case FadeCurve.Linear:      return x;
+            case FadeCurve.Smooth:      return x * x * (3f - 2f * x);
+            case FadeCurve.Smoother:    return x * x * x * (x * (x * 6f - 15f) + 10f);
+            case FadeCurve.Exponential: return 1f - Mathf.Pow(2f, -10f * x);
+            case FadeCurve.Logarithmic: return Mathf.Pow(10f, (x - 1f) * 3f);
+            default:                    return x;
+        }
     }
 }

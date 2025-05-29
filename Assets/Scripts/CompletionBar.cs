@@ -4,8 +4,6 @@ using System.Collections;
 
 public class CompletionBar : MonoBehaviour
 {
-
-
     [Header("UI")]
     [SerializeField] Slider progressSlider;
 
