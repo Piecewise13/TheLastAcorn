@@ -98895,6 +98895,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 504833266}
     m_Modifications:
+    - target: {fileID: 2989375507855318996, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 9.45
+      objectReference: {fileID: 0}
     - target: {fileID: 4608783946192582146, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
       propertyPath: m_Name
       value: Background
@@ -98937,6 +98941,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5941742175687942266, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7851133536406827183, guid: ff4eb67d4f41e7a4da1de6c4d40f1da8, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Squirrel-Fall_0: 7713130616775471807
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
