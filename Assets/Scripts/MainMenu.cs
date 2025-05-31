@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private float waitTime = 2f;
-    [SerializeField] private AudioPlayer music;
     [SerializeField] private AudioPlayer ambience;
 
     public void LoadGame()
@@ -21,9 +20,5 @@ public class MainMenu : MonoBehaviour
         SceneLoader.LoadNext();
     }
 
-    private void FadeAudio()
-    {
-        music.FadeOut(1f);
-        ambience.FadeOut(1f);
-    }
+    private void FadeAudio() { ambience.FadeOut(1f); }
 }

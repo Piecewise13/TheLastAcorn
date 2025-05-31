@@ -360,10 +360,14 @@ MonoBehaviour:
   randomise: 0
   volumeRange: {x: 0.9, y: 1}
   pitchRange: {x: 0.95, y: 1.05}
+  randomClips: []
   fadeIn: 0
-  fadeInDuration: 1
+  fadeInSeconds: 1
   playWithDelay: 0
-  delayDuration: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &449517163
 GameObject:
@@ -416,10 +420,14 @@ MonoBehaviour:
   randomise: 1
   volumeRange: {x: 1, y: 1}
   pitchRange: {x: 0.88, y: 1.1}
+  randomClips: []
   fadeIn: 0
-  fadeInDuration: 1
+  fadeInSeconds: 1
   playWithDelay: 0
-  delayDuration: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &565185759
 GameObject:
@@ -472,10 +480,14 @@ MonoBehaviour:
   randomise: 0
   volumeRange: {x: 0.9, y: 1}
   pitchRange: {x: 0.95, y: 1.05}
+  randomClips: []
   fadeIn: 1
-  fadeInDuration: 2
+  fadeInSeconds: 1
   playWithDelay: 0
-  delayDuration: 0
+  delaySeconds: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 1
 --- !u!1 &600891220
 GameObject:
@@ -666,7 +678,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 565185760}
-  - {fileID: 1462823799}
   - {fileID: 449517164}
   - {fileID: 448641344}
   m_Father: {fileID: 0}
@@ -864,7 +875,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitTime: 0.5
-  music: {fileID: 1462823800}
   ambience: {fileID: 565185762}
 --- !u!114 &1237309980
 MonoBehaviour:
@@ -952,62 +962,6 @@ MonoBehaviour:
   duration: 0.2
   easeType: 3
   growOnEnable: 1
---- !u!1 &1462823798
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1462823799}
-  - component: {fileID: 1462823800}
-  m_Layer: 0
-  m_Name: Music
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1462823799
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462823798}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1140968756}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1462823800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462823798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 3bdba5df7cc644e81a9b696095f366c8, type: 3}
-  volume: 0.55
-  pitch: 0.5
-  loop: 1
-  randomise: 0
-  volumeRange: {x: 0.9, y: 1}
-  pitchRange: {x: 0.95, y: 1.05}
-  fadeIn: 1
-  fadeInDuration: 1
-  playWithDelay: 0
-  delayDuration: 0
-  playOnEnable: 1
 --- !u!1 &1512890342
 GameObject:
   m_ObjectHideFlags: 0
