@@ -43,10 +43,11 @@ public class PlayerLifeManager : MonoBehaviour
         rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding;
         rb.AddForce(Vector2.up * damageLaunchForce, ForceMode2D.Impulse); // Adjust 10f for desired launch force
 
-        playerMove.DisableMove();
+        playerMove.StunPlayer();
+
         isHurt = true;
 
-        animator.SetBool("isHurt", true);
+
 
         if (currentLives <= 0)
             StartCoroutine(ReloadSceneAfterDelay());
@@ -58,8 +59,7 @@ public class PlayerLifeManager : MonoBehaviour
         {
             if (rb.linearVelocity.y < 5f)
             {
-                playerMove.EnableMove();
-                animator.SetBool("isHurt", false);
+                playerMove.StopStun();
                 isHurt = false;
             }
         }

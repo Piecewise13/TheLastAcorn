@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8511436682950045668}
   m_Layer: 0
   m_Name: Golden Acorn
-  m_TagString: Untagged
+  m_TagString: Acorn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -6,6 +6,8 @@ public class AcornArrow : MonoBehaviour
     [SerializeField] private GameObject[] acorns;
     [SerializeField] private GameObject arrow;
 
+    [SerializeField] private GameObject goldArrow;
+
     private GameObject[] spawnedArrows;
 
     private Camera playerCamera;

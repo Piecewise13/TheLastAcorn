@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -298,6 +299,11 @@ public class PlayerMove : MonoBehaviour
 
     private void FallingLogic()
     {
+        if(currentState == PlayerState.STUNNED)
+        {
+            return;
+        }
+
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
@@ -350,13 +356,22 @@ public class PlayerMove : MonoBehaviour
         if (currentState == PlayerState.Fall && ShouldApplyAirControl(moveInput.x, rb.linearVelocity.x))
         {
             rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime,
+                rb.linearVelocity.x + moveInput.x * airMoveSpeed * Time.deltaTime,
                 rb.linearVelocity.y
             );
         }
+        else if (currentState == PlayerState.Fall) {
+            if (Mathf.Abs(moveInput.x * airMoveSpeed) > Mathf.Abs(rb.linearVelocity.x)) {
+                            rb.linearVelocity = new Vector2(
+                moveInput.x * airMoveSpeed,
+                rb.linearVelocity.y
+            );
+            }
+
+        }
         else
         {
-            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(moveInput.x * groundMoveSpeed, rb.linearVelocity.y);
         }
 
         // Flip graphic if moving horizontally
@@ -810,6 +825,45 @@ public class PlayerMove : MonoBehaviour
     public PlayerState GetPlayerState()
     {
         return currentState;
+    }
+
+    public void StunPlayer()
+    {
+        if (currentState == PlayerState.STUNNED)
+        {
+            return;
+        }
+
+        DisableMove();
+
+        currentState = PlayerState.STUNNED;
+        stunnedEffect.SetActive(true);
+        animator.SetBool("isStunned", true);
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isGliding", false);
+        animator.SetBool("isClimbing", false);
+        animator.SetBool("isClimbMoving", false);
+    }
+
+    public void StopStun()
+    {
+        if (currentState != PlayerState.STUNNED)
+        {
+            return;
+        }
+
+        EnableMove();
+
+        currentState = PlayerState.Fall;
+
+        stunnedEffect.SetActive(false);
+        animator.SetBool("isStunned", false);
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isGliding", false);
+        animator.SetBool("isClimbing", false);
+        animator.SetBool("isClimbMoving", false);
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     /// <summary>
