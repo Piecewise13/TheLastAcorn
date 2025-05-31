@@ -8,6 +8,8 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     private PlayerKeyboardControls playerMovementMap;
 
+    [SerializeField] private GameObject acornArrow;
+
     private InputAction zoomAction;
 
     private Camera cam;
@@ -57,11 +59,13 @@ public class PlayerCamera : MonoBehaviour
     {
         if (context.performed)
         {
+            acornArrow.SetActive(true);
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
         }  else if (context.canceled)
         {
+            acornArrow.SetActive(false);
             playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;

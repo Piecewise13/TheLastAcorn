@@ -406,6 +406,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        rb.linearVelocity = Vector2.zero;
         // Apply upward force for jump
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         Jumped?.Invoke(); 
