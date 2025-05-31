@@ -144,7 +144,10 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Initial horizontal speed when starting to glide.
     /// </summary>
-    [SerializeField] private float initialGlideSpeed = 5f;
+    [SerializeField] private float defaultGlideSpeed = 10f;
+    private float initialGlideSpeed;
+
+    [SerializeField] private float maxGlideSpeed = 35f;
 
     /// <summary>
     /// Multiplier for glide speed, increases over time.
@@ -450,6 +453,8 @@ public class PlayerMove : MonoBehaviour
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
 
+        initialGlideSpeed = Mathf.Max(defaultGlideSpeed, Mathf.Abs(rb.linearVelocity.x));
+
         print("here");
 
         // Enter glide state and update animation
@@ -473,7 +478,7 @@ public class PlayerMove : MonoBehaviour
 
             // Determine direction based on graphic rotation
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2((glideX * glideSpeedMultiplier) * direction, rb.linearVelocity.y * 0.90f);
+            rb.linearVelocity = new Vector2(Mathf.Clamp((glideX * glideSpeedMultiplier), 0f, maxGlideSpeed) * direction, rb.linearVelocity.y * 0.90f);
         }
         else
         {
