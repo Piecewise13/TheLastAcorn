@@ -6076,8 +6076,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acorns: []
-  arrow: {fileID: 2171646205611909578, guid: 818e1da6adb23a049bb495dbc3a44365, type: 3}
-  goldArrow: {fileID: 0}
+  goldAcorns: []
+  arrow: {fileID: 2171646205611909578, guid: 66fbabf445c4348bfbf4e7f5fa7287b4, type: 3}
+  goldArrow: {fileID: 2171646205611909578, guid: 818e1da6adb23a049bb495dbc3a44365, type: 3}
 --- !u!1 &2888424016036944491
 GameObject:
   m_ObjectHideFlags: 0
