@@ -53,6 +53,24 @@ public class PlayerLifeManager : MonoBehaviour
             StartCoroutine(ReloadSceneAfterDelay());
     }
 
+    public void DamagePlayer(Vector3 launchDir)
+    {
+        currentLives--;
+        lifeUI.sprite = lifeIcons[currentLives];
+        hurtSfx?.Play();
+        uiSfx?.Play();
+
+        rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding;
+        rb.AddForce(launchDir * damageLaunchForce, ForceMode2D.Impulse); // Adjust 10f for desired launch force
+
+        playerMove.StunPlayer();
+
+        isHurt = true;
+
+        if (currentLives <= 0)
+            StartCoroutine(ReloadSceneAfterDelay());
+    }
+
     void Update()
     {
         if (isHurt)

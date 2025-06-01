@@ -24,7 +24,7 @@ public class Spike : MonoBehaviour
             var root = other.transform.root;
 
             PlayerLifeManager lifeManager = root.GetComponent<PlayerLifeManager>();
-                            lifeManager.DamagePlayer();
+            lifeManager.DamagePlayer(transform.up);
 
         }
     }
