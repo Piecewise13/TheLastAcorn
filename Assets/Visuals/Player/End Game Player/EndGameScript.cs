@@ -11,6 +11,8 @@ public class EndGameScript : MonoBehaviour
     public Animator playerAnim;
     public Animator cameraAnim;
 
+    public GameObject playerCanvas;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,6 +34,8 @@ public class EndGameScript : MonoBehaviour
         playerAnim.Play("Idle", 0, 0f); // Replace "EntryStateName" with your actual entry animation state name
         playerAnim.playbackTime = 0f; // Reset playback time
         playerAnim.Update(0f); // Force an update at time 0
+
+        playerCanvas.SetActive(false);
 
         playerAnim.enabled = false;
         cameraAnim.enabled = true;
