@@ -690,8 +690,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: maxShakeIntensity
-      value: 0.15
+      propertyPath: collideDamageLayer.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 839978602859707386, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_Name

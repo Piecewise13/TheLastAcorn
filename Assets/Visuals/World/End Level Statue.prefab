@@ -4928,6 +4928,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &7607890863086951034
 GameObject:
@@ -4987,6 +4988,7 @@ MonoBehaviour:
   delaySeconds: 0
   fadeInCurve: 1
   fadeOutCurve: 1
+  spatialBlend: 0
   playOnEnable: 0
 --- !u!1 &7608516494688604138
 GameObject:
@@ -5003,7 +5005,7 @@ GameObject:
   - component: {fileID: 3065746914292932985}
   m_Layer: 0
   m_Name: End Level Statue
-  m_TagString: Untagged
+  m_TagString: Statue
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

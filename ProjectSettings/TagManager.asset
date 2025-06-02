@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Acorn
   - GoldAcorn
+  - Statue
   layers:
   - Default
   - TransparentFX

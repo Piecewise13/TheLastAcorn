@@ -23,6 +23,8 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float zoomTime;
+
+
     private float zoomTimer;
 
     void Awake()

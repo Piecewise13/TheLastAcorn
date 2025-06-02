@@ -8039,6 +8039,8 @@ MonoBehaviour:
   goldAcorns: []
   arrow: {fileID: 2171646205611909578, guid: 66fbabf445c4348bfbf4e7f5fa7287b4, type: 3}
   goldArrow: {fileID: 2171646205611909578, guid: 818e1da6adb23a049bb495dbc3a44365, type: 3}
+  arrowDistance: 200
+  statueArrowPrefab: {fileID: 2171646205611909578, guid: ab4a9f49ee2ab436794c10193c5cc8f9, type: 3}
 --- !u!1 &5822916115413610612
 GameObject:
   m_ObjectHideFlags: 0
