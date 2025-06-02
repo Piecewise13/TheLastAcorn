@@ -868,6 +868,7 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     public void EnableMove()
     {
+        playerMovementMap.Enable();
         moveAction.Enable();
         attachAction.Enable();
         glideAction.Enable();
@@ -879,6 +880,7 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     public void DisableMove()
     {
+        playerMovementMap.Disable();
         moveAction.Disable();
         attachAction.Disable();
         glideAction.Disable();
