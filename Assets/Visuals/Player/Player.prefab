@@ -268,11 +268,17 @@ MonoBehaviour:
   graphicSprite: {fileID: 867419554417715573}
   playerCollider: {fileID: 5663293700936031498}
   stunnedEffect: {fileID: 979618266919138849}
+  collideDamageLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  minDamageSpeed: 20
+  damageHitXVelo: 7
+  damageHitYVelo: 10
   groundCheckRadius: 0.4
   groundCheck: {fileID: 8478822095377455077}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 513
   groundMoveSpeed: 12
   airMoveSpeed: 12
   climbCheckReach: 1.7
@@ -288,8 +294,6 @@ MonoBehaviour:
   climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
   defaultGlideSpeed: 10
   maxGlideSpeed: 30
-  glideTreeHitXVelo: 5
-  glideTreeHitYVelo: 8
   glideHitVelocityThreshold: 25
   jumpForce: 8
   currentState: 0
@@ -346,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a282d69801449a59150d96d3d7ad0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageTime: 0.55
   damageLaunchForce: 25
   maxLives: 3
   lifeIcons:

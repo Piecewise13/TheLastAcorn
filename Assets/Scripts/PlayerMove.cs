@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class PlayerMove : MonoBehaviour
 {
 
+    private PlayerLifeManager lifeManager;
+
     /// <summary>
     /// Reference to the PlayerControls input action map.
     /// </summary>
@@ -59,6 +61,24 @@ public class PlayerMove : MonoBehaviour
     /// Reference to the stunned effect GameObject.
     /// </summary>
     [SerializeField] private GameObject stunnedEffect;
+
+    [Header("Collision")]
+    /// <summary>
+    /// LayerMask for identifying layers that cause damage on collision (e.g., trees).
+    /// </summary>
+    [SerializeField] private LayerMask collideDamageLayer;
+
+    [SerializeField] private float minDamageSpeed;
+
+    /// <summary>
+    /// Horizontal velocity applied when hitting a tree while gliding.
+    /// </summary>
+    [SerializeField] private float damageHitXVelo = 10f;
+
+    /// <summary>
+    /// Vertical velocity applied when hitting a tree while gliding.
+    /// </summary>
+    [SerializeField] private float damageHitYVelo = 5f;
 
     [Space(20)]
     [Header("Ground Check")]
@@ -156,16 +176,6 @@ public class PlayerMove : MonoBehaviour
     private float glideSpeedMultiplier = 1f;
 
     /// <summary>
-    /// Horizontal velocity applied when hitting a tree while gliding.
-    /// </summary>
-    [SerializeField] private float glideTreeHitXVelo = 10f;
-
-    /// <summary>
-    /// Vertical velocity applied when hitting a tree while gliding.
-    /// </summary>
-    [SerializeField] private float glideTreeHitYVelo = 5f;
-
-    /// <summary>
     /// Minimum velocity threshold to trigger a glide hit.
     /// </summary>
     [SerializeField] private float glideHitVelocityThreshold = 5f;
@@ -197,6 +207,8 @@ public class PlayerMove : MonoBehaviour
     {
         // Initialize input action map
         playerMovementMap = new PlayerKeyboardControls();
+
+        lifeManager = GetComponent<PlayerLifeManager>();
 
         // Assign movement action and enable it
         moveAction = playerMovementMap.Keyboard.Move;
@@ -234,19 +246,6 @@ public class PlayerMove : MonoBehaviour
         // Store original graphic position for shake effect
         if (graphic != null)
             graphicOriginalLocalPos = graphic.transform.localPosition;
-    }
-
-    /// <summary>
-    /// Handles per-frame logic, such as ground checking when stunned.
-    /// </summary>
-    private void Update()
-    {
-        // Only perform ground check if stunned
-        if (currentState == PlayerState.STUNNED)
-        {
-            GroundCheck();
-        }
-
     }
 
     /// <summary>
@@ -787,28 +786,26 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // If gliding and hit a climbable object
-        if (((1 << collision.gameObject.layer) & climbableLayer) != 0)
+        if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
             //print(collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
-            if (Mathf.Abs(collision.relativeVelocity.x) >= glideHitVelocityThreshold)
+            if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)
             {
                 // Get contact normal for force direction
                 var contactNormal = collision.GetContact(0).normal;
 
-                // Stop current velocity and apply bounce force
-                rb.linearVelocity = Vector3.zero;
-                rb.AddForce(Vector2.up * glideTreeHitYVelo + Vector2.right * contactNormal * glideTreeHitXVelo, ForceMode2D.Impulse);
+                if (Vector2.Angle(contactNormal, Vector2.up) < 45f)
+                {
+                    return;
+                }
 
-                // Enter fall and stunned states, update animations and effects
-                currentState = PlayerState.Fall;
-                animator.SetBool("isGliding", false);
-                animator.SetBool("isFalling", true);
+                var launchDir = Vector2.up * damageHitYVelo + Vector2.right * contactNormal * damageHitXVelo;
 
-                currentState = PlayerState.STUNNED;
-                stunnedEffect.SetActive(true);
+                lifeManager.DamagePlayer(launchDir.normalized);
+
                 return;
             }
 

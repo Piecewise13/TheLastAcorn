@@ -11,6 +11,9 @@ public class PlayerLifeManager : MonoBehaviour
 
     private Animator animator;
 
+    [SerializeField] private float damageTime;
+    private float damageTimer;
+
     [SerializeField] private float damageLaunchForce = 40f;
 
     [SerializeField] private int maxLives = 3;
@@ -35,25 +38,11 @@ public class PlayerLifeManager : MonoBehaviour
     }
     public void DamagePlayer()
     {
-        currentLives--;
-        lifeUI.sprite = lifeIcons[currentLives];
-        hurtSfx?.Play();
-        uiSfx?.Play();
 
-        rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding;
-        rb.AddForce(Vector2.up * damageLaunchForce, ForceMode2D.Impulse); // Adjust 10f for desired launch force
-
-        playerMove.StunPlayer();
-
-        isHurt = true;
-
-
-
-        if (currentLives <= 0)
-            StartCoroutine(ReloadSceneAfterDelay());
+        DamagePlayer(Vector2.up);
     }
 
-    public void DamagePlayer(Vector3 launchDir)
+    public void DamagePlayer(Vector2 launchDir)
     {
         currentLives--;
         lifeUI.sprite = lifeIcons[currentLives];
@@ -64,8 +53,9 @@ public class PlayerLifeManager : MonoBehaviour
         rb.AddForce(launchDir * damageLaunchForce, ForceMode2D.Impulse); // Adjust 10f for desired launch force
 
         playerMove.StunPlayer();
-
         isHurt = true;
+
+        damageTimer = 0;
 
         if (currentLives <= 0)
             StartCoroutine(ReloadSceneAfterDelay());
@@ -75,11 +65,12 @@ public class PlayerLifeManager : MonoBehaviour
     {
         if (isHurt)
         {
-            if (rb.linearVelocity.y < 5f)
+            if (damageTimer > damageTime)
             {
                 playerMove.StopStun();
                 isHurt = false;
             }
+            damageTimer += Time.deltaTime;
         }
     }
 
