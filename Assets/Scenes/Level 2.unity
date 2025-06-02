@@ -313,10 +313,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8730335357989549714, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      propertyPath: statueArrowPrefab
-      value: 
-      objectReference: {fileID: 2171646205611909578, guid: ab4a9f49ee2ab436794c10193c5cc8f9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
