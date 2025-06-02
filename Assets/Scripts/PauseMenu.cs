@@ -1,17 +1,48 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+        /// <summary>
+    /// Reference to the PlayerControls input action map.
+    /// </summary>
+    private PlayerKeyboardControls playerMovementMap;
+
+    private InputAction pauseInput;
+
     public GameObject pauseMenuUI; // Assign in Inspector
     private bool isPaused = false;
 
-    void Update()
+    void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Initialize input action map
+        playerMovementMap = new PlayerKeyboardControls();
+        pauseInput = playerMovementMap.Keyboard.Pause;
+        pauseInput.performed += TogglePause; 
+    }
+
+    void OnEnable()
+    {
+        pauseInput.Enable();
+    }
+
+    void OnDisable()
+    {
+        pauseInput.Disable();
+    }
+
+
+    private void TogglePause(InputAction.CallbackContext context)
+    {
+        isPaused = !isPaused;
+        if (isPaused)
         {
-            if (isPaused) Resume();
-            else Pause();
+            Pause();
+        }
+        else
+        {
+            Resume();
         }
     }
 

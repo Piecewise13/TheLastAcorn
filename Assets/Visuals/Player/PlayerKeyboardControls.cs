@@ -135,6 +135,15 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=2)"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""24cccb2c-435e-4751-964a-c14144db8143"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -357,6 +366,17 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""action"": ""Camera Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a54bee47-6c64-454b-81ce-212cf85360ae"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -370,6 +390,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         m_Keyboard_Glide = m_Keyboard.FindAction("Glide", throwIfNotFound: true);
         m_Keyboard_Jump = m_Keyboard.FindAction("Jump", throwIfNotFound: true);
         m_Keyboard_CameraZoom = m_Keyboard.FindAction("Camera Zoom", throwIfNotFound: true);
+        m_Keyboard_Pause = m_Keyboard.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@PlayerKeyboardControls()
@@ -455,6 +476,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
     private readonly InputAction m_Keyboard_Glide;
     private readonly InputAction m_Keyboard_Jump;
     private readonly InputAction m_Keyboard_CameraZoom;
+    private readonly InputAction m_Keyboard_Pause;
     /// <summary>
     /// Provides access to input actions defined in input action map "Keyboard".
     /// </summary>
@@ -486,6 +508,10 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         /// Provides access to the underlying input action "Keyboard/CameraZoom".
         /// </summary>
         public InputAction @CameraZoom => m_Wrapper.m_Keyboard_CameraZoom;
+        /// <summary>
+        /// Provides access to the underlying input action "Keyboard/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Keyboard_Pause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -527,6 +553,9 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
             @CameraZoom.started += instance.OnCameraZoom;
             @CameraZoom.performed += instance.OnCameraZoom;
             @CameraZoom.canceled += instance.OnCameraZoom;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         /// <summary>
@@ -553,6 +582,9 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
             @CameraZoom.started -= instance.OnCameraZoom;
             @CameraZoom.performed -= instance.OnCameraZoom;
             @CameraZoom.canceled -= instance.OnCameraZoom;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         /// <summary>
@@ -628,5 +660,12 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }
