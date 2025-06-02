@@ -30,6 +30,10 @@ public class GrowAndShrink : MonoBehaviour
     [Tooltip("If true, this GameObject will automatically grow to 'grownScale' on OnEnable.")]
     public bool growOnEnable = false;
 
+    [Header("Time Settings")]
+    [Tooltip("If true, this animation ignores Time.timeScale.")]
+    public bool ignoreTimeScale = false;
+
     private Coroutine currentAnim;
 
     private void OnEnable()
@@ -60,6 +64,12 @@ public class GrowAndShrink : MonoBehaviour
         currentAnim = StartCoroutine(AnimateScaleAndDisable(shrunkScale, duration));
     }
 
+    public void ResetScale()
+    {
+        if (currentAnim != null) StopCoroutine(currentAnim);
+        transform.localScale = shrunkScale;
+    }
+
     private IEnumerator AnimateScale(Vector3 targetScale, float time)
     {
         Vector3 startScale = transform.localScale;
@@ -67,7 +77,7 @@ public class GrowAndShrink : MonoBehaviour
 
         while (elapsedTime < time)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / time);
             float easedT = EvaluateEase(t, easeType);
             transform.localScale = Vector3.Lerp(startScale, targetScale, easedT);
@@ -84,7 +94,7 @@ public class GrowAndShrink : MonoBehaviour
 
         while (elapsedTime < time)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / time);
             float easedT = EvaluateEase(t, easeType);
             transform.localScale = Vector3.Lerp(startScale, targetScale, easedT);

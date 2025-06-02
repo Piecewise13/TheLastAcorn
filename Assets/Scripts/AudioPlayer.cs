@@ -23,6 +23,14 @@ public class AudioPlayer : MonoBehaviour
     public bool playWithDelay = false;
     public float delaySeconds = 0f;
 
+    [Header("Cooldown")]
+    public bool cooldown = true;
+    public float cooldownSeconds = 0.25f;
+
+    [Header("Ignore Time Scale")]
+    [Tooltip("If true, audio playback and fades use unscaled time.")]
+    public bool ignoreTimeScale = false;
+
     [Header("Fade Curves")]
     public FadeCurve fadeInCurve = FadeCurve.Smooth;
     public FadeCurve fadeOutCurve = FadeCurve.Smooth;
@@ -33,10 +41,17 @@ public class AudioPlayer : MonoBehaviour
     public bool playOnEnable = false;
 
     AudioSource currentSource;
+    float nextPlayableTime = 0f;
 
     public enum FadeCurve { Linear, Smooth, Smoother, Exponential, Logarithmic }
 
-    public void Play() => StartCoroutine(PlayAudio());
+    public void Play()
+    {
+        float now = ignoreTimeScale ? Time.unscaledTime : Time.time;
+        if (cooldown && now < nextPlayableTime) return;
+        nextPlayableTime = now + cooldownSeconds;
+        StartCoroutine(PlayAudio());
+    }
 
     public void FadeOut(float seconds = 1f)
     {
@@ -62,7 +77,11 @@ public class AudioPlayer : MonoBehaviour
             yield break;
         }
 
-        if (playWithDelay && delaySeconds > 0f) yield return new WaitForSeconds(delaySeconds);
+        if (playWithDelay && delaySeconds > 0f)
+        {
+            if (ignoreTimeScale) yield return new WaitForSecondsRealtime(delaySeconds);
+            else yield return new WaitForSeconds(delaySeconds);
+        }
 
         float chosenVol = randomise ? Random.Range(volumeRange.x, volumeRange.y) : volume;
         float chosenPitch = randomise ? Random.Range(pitchRange.x, pitchRange.y) : pitch;
@@ -89,20 +108,24 @@ public class AudioPlayer : MonoBehaviour
 
     IEnumerator FadeRoutine(AudioSource src, float from, float to, float seconds, FadeCurve curve, System.Action onDone = null)
     {
-        for (float t = 0f; t < seconds; t += Time.deltaTime)
+        float elapsed = 0f;
+        while (elapsed < seconds)
         {
-            if (src == null) yield break;
-            float x = t / seconds;
-            src.volume = Mathf.Lerp(from, to, ApplyCurve(x, curve));
+            elapsed += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / seconds);
+            src.volume = Mathf.Lerp(from, to, ApplyCurve(t, curve));
             yield return null;
         }
+
         if (src != null) src.volume = to;
         onDone?.Invoke();
     }
 
     IEnumerator StopAfterPlay(float clipLen)
     {
-        yield return new WaitForSeconds(clipLen + 0.1f);
+        if (ignoreTimeScale) yield return new WaitForSecondsRealtime(clipLen + 0.1f);
+        else yield return new WaitForSeconds(clipLen + 0.1f);
+
         if (currentSource != null) currentSource.Stop();
     }
 

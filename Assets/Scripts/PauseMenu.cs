@@ -3,15 +3,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
-{
-        /// <summary>
-    /// Reference to the PlayerControls input action map.
-    /// </summary>
-    private PlayerKeyboardControls playerMovementMap;
-
+{ 
+    [SerializeField] private GameObject pauseMenuUI;
+    private PlayerKeyboardControls playerMovementMap; 
     private InputAction pauseInput;
-
-    public GameObject pauseMenuUI; // Assign in Inspector
     private bool isPaused = false;
 
     void Awake()
