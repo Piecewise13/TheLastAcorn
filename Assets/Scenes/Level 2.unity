@@ -471,6 +471,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4671622631172829757, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
   m_PrefabInstance: {fileID: 73781482}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &73781484 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4927014833082325008, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+  m_PrefabInstance: {fileID: 73781482}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae83deec946ae774db11d3441518737a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &73781485 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7472531100896569758, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
@@ -99405,6 +99416,10 @@ PrefabInstance:
       propertyPath: musicPlayer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: audioManager
+      value: 
+      objectReference: {fileID: 73781484}
     - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: nextSceneName
       value: Level 3
