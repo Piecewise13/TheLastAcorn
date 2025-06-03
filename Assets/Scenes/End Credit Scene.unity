@@ -1144,7 +1144,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -8
+  m_SortingOrder: -7
   m_Sprite: {fileID: 21300000, guid: ea2d76557360e40baa4e3c5009e97d68, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -141462,7 +141462,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: loop
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+      propertyPath: pitch
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: volume
@@ -141475,7 +141479,19 @@ PrefabInstance:
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 0aa0e44e78262ec48af47d5abc205bb4, type: 3}
+      objectReference: {fileID: 8300000, guid: 6f007754c12835f4684eb3a45e994a22, type: 3}
+    - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+      propertyPath: randomise
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+      propertyPath: pitchRange.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+      propertyPath: pitchRange.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: fadeInSeconds
       value: 1
@@ -142081,7 +142097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -70}
+  m_AnchoredPosition: {x: 0, y: -75.4}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &987171368
@@ -142104,7 +142120,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Made by Team 22
+  m_text: "\n\nMade by\n\n\nLuke McFall\t   Mateo Larrera\n\n\nKarina Li\tFaith Zhang      
+    \n\n\nKarina Chen"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b13531d28fec2aa49813f78a90bdfadc, type: 2}
   m_sharedMaterial: {fileID: -4441602453382376107, guid: b13531d28fec2aa49813f78a90bdfadc, type: 2}
@@ -142131,8 +142148,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 6
-  m_fontSizeBase: 6
+  m_fontSize: 4
+  m_fontSizeBase: 4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -142169,7 +142186,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -0.42243576, w: 0}
+  m_margin: {x: 0, y: 9.268154, z: -0.42243576, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -144061,7 +144078,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -12
+  m_SortingOrder: -7
   m_Sprite: {fileID: 21300000, guid: 8dec470ede263457da104e98976085f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -145242,11 +145259,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1702942440347688126, guid: 6d6f8fe78abce4633ae8b68040856f49, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -89.4
+      value: -74.1
       objectReference: {fileID: 0}
     - target: {fileID: 1702942440347688126, guid: 6d6f8fe78abce4633ae8b68040856f49, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -27.5
+      value: -27.8
       objectReference: {fileID: 0}
     - target: {fileID: 1702942440347688126, guid: 6d6f8fe78abce4633ae8b68040856f49, type: 3}
       propertyPath: m_LocalPosition.z

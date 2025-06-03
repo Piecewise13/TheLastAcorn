@@ -804,7 +804,7 @@ public class PlayerMove : MonoBehaviour
 
                 var launchDir = Vector2.up * damageHitYVelo + Vector2.right * contactNormal * damageHitXVelo;
 
-                lifeManager.DamagePlayer(launchDir.normalized);
+                lifeManager.DamagePlayer(launchDir);
 
                 return;
             }

@@ -50,7 +50,7 @@ public class PlayerLifeManager : MonoBehaviour
         uiSfx?.Play();
 
         rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding;
-        rb.AddForce(launchDir * damageLaunchForce, ForceMode2D.Impulse); // Adjust 10f for desired launch force
+        rb.AddForce(launchDir, ForceMode2D.Impulse); // Adjust 10f for desired launch force
 
         playerMove.StunPlayer();
         isHurt = true;

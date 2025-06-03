@@ -341,14 +341,14 @@ MonoBehaviour:
   collideDamageLayer:
     serializedVersion: 2
     m_Bits: 512
-  minDamageSpeed: 0
+  minDamageSpeed: 20
   damageHitXVelo: 10
-  damageHitYVelo: 5
+  damageHitYVelo: 7
   groundCheckRadius: 0.2
   groundCheck: {fileID: 8478822095377455077}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 513
   groundMoveSpeed: 12
   airMoveSpeed: 12
   climbCheckReach: 1.7
@@ -420,8 +420,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a282d69801449a59150d96d3d7ad0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageTime: 0
-  damageLaunchForce: 40
+  damageTime: 0.75
+  damageLaunchForce: 30
   maxLives: 3
   lifeIcons:
   - {fileID: 21300000, guid: 7b22eb0ed1a0c44419a8c482eb92f7cd, type: 3}
