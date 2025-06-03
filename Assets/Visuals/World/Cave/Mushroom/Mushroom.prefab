@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 8092970959766970208}
   - component: {fileID: 2787085148816362882}
   - component: {fileID: 7874163122261158452}
+  - component: {fileID: 2826760396631737516}
+  - component: {fileID: 1398582793346801224}
   m_Layer: 0
   m_Name: Mushroom
   m_TagString: Untagged
@@ -218,3 +220,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 30
+  mushroomSFX: {fileID: 1398582793346801224}
+  growAndShrink: {fileID: 2826760396631737516}
+--- !u!114 &2826760396631737516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346986512750345373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90185789d1ae2b449ab4659322dec5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grownScale: {x: 1.1, y: 0.9, z: 1.1}
+  shrunkScale: {x: 1, y: 0.8, z: 1}
+  duration: 0.3
+  easeType: 5
+  growOnEnable: 0
+  ignoreTimeScale: 0
+--- !u!114 &1398582793346801224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346986512750345373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 0}
+  volume: 1
+  pitch: 1
+  loop: 0
+  randomise: 1
+  volumeRange: {x: 0.6, y: 0.7}
+  pitchRange: {x: 0.8, y: 1.2}
+  randomClips:
+  - {fileID: 8300000, guid: eac14cf3403644e0986dd0534303c1a2, type: 3}
+  - {fileID: 8300000, guid: f6c84d8608c844beca9a084cf063e482, type: 3}
+  - {fileID: 8300000, guid: c73c680356e3c40aba2aabf95cd5f7aa, type: 3}
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  cooldown: 0
+  cooldownSeconds: 0.25
+  ignoreTimeScale: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
+  playOnEnable: 0
