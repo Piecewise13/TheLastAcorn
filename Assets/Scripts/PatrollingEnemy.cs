@@ -13,6 +13,8 @@ public class PatrollingEnemy : MonoBehaviour
     [Header("Feedback")] 
     [SerializeField] private AudioPlayer snakeAttack;
 
+    [SerializeField] private float damageLaunchForce = 20f;
+
     private Rigidbody2D rb;
     private Vector2 target;
 
@@ -56,6 +58,6 @@ public class PatrollingEnemy : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         snakeAttack?.Play();
         PlayerLifeManager playerLifeManager = other.transform.root.GetComponent<PlayerLifeManager>();
-        playerLifeManager.DamagePlayer();
+        playerLifeManager.DamagePlayer(Vector2.up * damageLaunchForce);
     }
 }

@@ -39,7 +39,7 @@ public class PlayerLifeManager : MonoBehaviour
     public void DamagePlayer()
     {
 
-        DamagePlayer(Vector2.up);
+        DamagePlayer(Vector2.up * damageLaunchForce);
     }
 
     public void DamagePlayer(Vector2 launchDir)
