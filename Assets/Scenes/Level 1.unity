@@ -104771,6 +104771,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1826238375}
     - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: nextSceneName
+      value: Level 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339314710774621444, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: ambiencePlayer
       value: 
       objectReference: {fileID: 1754565567}

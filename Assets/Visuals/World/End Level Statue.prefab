@@ -5022,7 +5022,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2327618240491470856
 Transform:
   m_ObjectHideFlags: 0
@@ -5356,7 +5356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac78e69d5cea7405880d3c648efa705f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Level 5
+  nextSceneName: Level 4
   confetti: {fileID: 3373447524499798024}
   growAndShrink: {fileID: 3065746914292932985}
   sfxPlayer: {fileID: 1281018963799592972}
