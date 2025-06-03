@@ -107408,6 +107408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level Audio
       objectReference: {fileID: 0}
+    - target: {fileID: 4403139181276080253, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
+      propertyPath: fadeInSeconds
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4671622631172829757, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.81104
