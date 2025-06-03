@@ -13,6 +13,8 @@ public class EndGameScript : MonoBehaviour
 
     public GameObject playerCanvas;
 
+    [SerializeField] private AudioPlayer ambience;
+    [SerializeField] private AudioPlayer music;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,7 +30,7 @@ public class EndGameScript : MonoBehaviour
             return;
         }
         playerMove.DisableMove();
-
+        FadeAudio();
         playerCamera.enabled = false;
         playerAnim.keepAnimatorStateOnDisable = false;
         playerAnim.Play("Idle", 0, 0f); // Replace "EntryStateName" with your actual entry animation state name
@@ -40,5 +42,11 @@ public class EndGameScript : MonoBehaviour
         playerAnim.enabled = false;
         cameraAnim.enabled = true;
         endCredits.SetActive(true);
+    }
+
+    private void FadeAudio()
+    {
+        ambience?.FadeOut(1f);
+        music?.FadeOut(1f);
     }
 }
