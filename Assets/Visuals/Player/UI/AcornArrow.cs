@@ -115,6 +115,7 @@ public class AcornArrow : MonoBehaviour
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
             spawnedArrows[i].transform.position = arrowWorldPos;
 
+
             // Point arrow towards acorn (only rotate on Z axis)
             Vector3 dir = (acornWorldPos - arrowWorldPos).normalized;
             Vector3 dirOnScreen = new Vector3(dir.x, dir.y, 0f);
@@ -160,7 +161,15 @@ public class AcornArrow : MonoBehaviour
             clampedViewportPos.x = Mathf.Clamp(clampedViewportPos.x, 0.05f, 0.95f);
             clampedViewportPos.y = Mathf.Clamp(clampedViewportPos.y, 0.05f, 0.95f);
 
-            Vector3 arrowWorldPos = playerCamera.ViewportToWorldPoint(new Vector3(clampedViewportPos.x, clampedViewportPos.y, playerCamera.nearClipPlane + 0.5f));
+            Vector3 screenEdgePos = playerCamera.ViewportToScreenPoint(new Vector3(clampedViewportPos.x, clampedViewportPos.y, playerCamera.nearClipPlane + 0.5f));
+
+            // Move arrowDistance pixels towards the center of the screen
+            Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
+            Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowDistance;
+
+            // Convert back to world position
+            Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
             spawnedGoldArrows[i].transform.position = arrowWorldPos;
 
             // Point arrow towards acorn (only rotate on Z axis)
