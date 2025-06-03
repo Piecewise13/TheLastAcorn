@@ -5289,8 +5289,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: afd481cfbbc87432b9fc7e5496caa428, type: 3}
-  volume: 1
-  pitch: 1
+  volume: 0.8
+  pitch: 1.2
   loop: 0
   randomise: 0
   volumeRange: {x: 0.9, y: 1}
