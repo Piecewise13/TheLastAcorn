@@ -24,6 +24,10 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float zoomTime;
 
+    [Header("Feedback")] 
+    [SerializeField] private AudioPlayer zoomInSFX;
+    [SerializeField] private AudioPlayer zoomOutSFX;
+
 
     private float zoomTimer;
 
@@ -65,12 +69,14 @@ public class PlayerCamera : MonoBehaviour
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
+            zoomOutSFX?.Play();
         }  else if (context.canceled)
         {
             acornArrow.SetActive(false);
             playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;
+            zoomInSFX?.Play();
         }
     }
 }

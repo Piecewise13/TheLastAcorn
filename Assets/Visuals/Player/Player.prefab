@@ -1016,6 +1016,8 @@ MonoBehaviour:
   zoomInAmount: 20
   zoomSpeed: 2
   zoomTime: 2
+  zoomInSFX: {fileID: 1316628860150957882}
+  zoomOutSFX: {fileID: 3005658991925814336}
 --- !u!1 &2034340051777852268
 GameObject:
   m_ObjectHideFlags: 0
@@ -6467,6 +6469,8 @@ Transform:
   - {fileID: 7080832570517189378}
   - {fileID: 7507093997296996423}
   - {fileID: 2069363292489161550}
+  - {fileID: 6347413871938117156}
+  - {fileID: 4050722498154353768}
   m_Father: {fileID: 6548402314755964825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3048763299037736989
@@ -8341,6 +8345,69 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2.22
+--- !u!1 &7433634335548380104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4050722498154353768}
+  - component: {fileID: 3005658991925814336}
+  m_Layer: 7
+  m_Name: Zoom Out
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4050722498154353768
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7433634335548380104}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6667561287362198245}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3005658991925814336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7433634335548380104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 8f649e9d7d38448389af31392628cfab, type: 3}
+  volume: 0.5
+  pitch: 1.5
+  loop: 0
+  randomise: 0
+  volumeRange: {x: 0.9, y: 1}
+  pitchRange: {x: 0.95, y: 1.05}
+  randomClips: []
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  cooldown: 0
+  cooldownSeconds: 0.5
+  ignoreTimeScale: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
+  playOnEnable: 0
 --- !u!1 &7459867309561403356
 GameObject:
   m_ObjectHideFlags: 0
@@ -8585,6 +8652,69 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &7864706584039855527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6347413871938117156}
+  - component: {fileID: 1316628860150957882}
+  m_Layer: 7
+  m_Name: Zoom In
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6347413871938117156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7864706584039855527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6667561287362198245}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1316628860150957882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7864706584039855527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4161182ab8b1b49e29c20c7ec4f7d483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 863cb49fd22fd4a86891a676480efe53, type: 3}
+  volume: 0.5
+  pitch: 1.5
+  loop: 0
+  randomise: 0
+  volumeRange: {x: 0.9, y: 1}
+  pitchRange: {x: 0.95, y: 1.05}
+  randomClips: []
+  fadeIn: 0
+  fadeInSeconds: 1
+  playWithDelay: 0
+  delaySeconds: 0
+  cooldown: 0
+  cooldownSeconds: 0.5
+  ignoreTimeScale: 0
+  fadeInCurve: 1
+  fadeOutCurve: 1
+  spatialBlend: 0
+  playOnEnable: 0
 --- !u!1 &8008333155069075363
 GameObject:
   m_ObjectHideFlags: 0
