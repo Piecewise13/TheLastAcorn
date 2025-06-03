@@ -26,4 +26,9 @@ public class ScoreManager : MonoBehaviour
     {
         return levelMaxScore;
     }
+
+    public int GetScore()
+    {
+        return score;
+    }
 }

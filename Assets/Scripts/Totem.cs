@@ -1,9 +1,12 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Totem : MonoBehaviour
 {
+
+
     [Header("Scene")]
     [SerializeField] private string nextSceneName = "NextScene";
 
@@ -14,6 +17,9 @@ public class Totem : MonoBehaviour
 
     [Header("Not-Ready Feedback")]
     [SerializeField] private AudioPlayer notReadySfx;
+    [SerializeField] private GameObject notReadyMessage;
+
+    [SerializeField] private TMP_Text count;
 
     [Header("Fade-Out Sources")] 
     [SerializeField] private AudioSceneManager audioManager;
@@ -44,11 +50,14 @@ public class Totem : MonoBehaviour
 
     IEnumerator NotReadySequence()
     {
+        count.text = (ScoreManager.Instance.GetMaxScore() - ScoreManager.Instance.GetScore()) + "";
+        notReadyMessage?.SetActive(true);
         growAndShrink?.Grow();
         notReadySfx?.Play();
 
         yield return new WaitForSeconds(2f);
         GetComponent<Collider2D>().enabled = true;
+        notReadyMessage?.SetActive(false);
         growAndShrink?.Shrink(new Vector3(5, 5, 5), 0.5f);
     }
 }
