@@ -341,7 +341,7 @@ MonoBehaviour:
   collideDamageLayer:
     serializedVersion: 2
     m_Bits: 512
-  minDamageSpeed: 20
+  minDamageSpeed: 25
   damageHitXVelo: 10
   damageHitYVelo: 7
   groundCheckRadius: 0.2
@@ -363,7 +363,7 @@ MonoBehaviour:
   climbParticleRateOverTime: 7
   climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
   defaultGlideSpeed: 10
-  maxGlideSpeed: 35
+  maxGlideSpeed: 30
   glideHitVelocityThreshold: 25
   jumpForce: 8
   currentState: 0
