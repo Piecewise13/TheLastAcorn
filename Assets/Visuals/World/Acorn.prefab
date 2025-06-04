@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1152741978464402341}
   - component: {fileID: 4821768494031910091}
   - component: {fileID: 8511436682950045668}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Acorn
   m_TagString: Acorn
   m_Icon: {fileID: 0}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 4480211073090873958}
   - component: {fileID: 6964843130275061326}
   - component: {fileID: 2443515394844609359}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
