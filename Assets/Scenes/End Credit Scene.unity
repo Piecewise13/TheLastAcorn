@@ -141563,15 +141563,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: loop
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: pitch
-      value: 0.9
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: volume
-      value: 1
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: cooldown
@@ -141580,7 +141580,7 @@ PrefabInstance:
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 6f007754c12835f4684eb3a45e994a22, type: 3}
+      objectReference: {fileID: 8300000, guid: 246a07bd828816148aae1c98dd8f2854, type: 3}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: randomise
       value: 0
@@ -141595,7 +141595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8788856596089267218, guid: 122f2f4b221fe40e7bcbe990a75b722d, type: 3}
       propertyPath: fadeInSeconds
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

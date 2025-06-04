@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EndGameScript : MonoBehaviour
@@ -42,11 +43,18 @@ public class EndGameScript : MonoBehaviour
         playerAnim.enabled = false;
         cameraAnim.enabled = true;
         endCredits.SetActive(true);
+        StartCoroutine(ReturnToMainMenu(90f));
     }
 
     private void FadeAudio()
     {
         ambience?.FadeOut(1f);
         music?.FadeOut(1f);
+    }
+
+    private IEnumerator ReturnToMainMenu(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        SceneLoader.LoadNext();
     }
 }

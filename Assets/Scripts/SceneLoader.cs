@@ -33,4 +33,14 @@ public static class SceneLoader
         if (previous >= 0)
             SceneManager.LoadScene(previous);
     }
+
+    public static void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+    
+    public static void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

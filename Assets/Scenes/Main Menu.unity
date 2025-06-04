@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 198782063}
   - component: {fileID: 198782064}
   m_Layer: 0
-  m_Name: Background Gradient
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -365,6 +365,9 @@ MonoBehaviour:
   fadeInSeconds: 1
   playWithDelay: 0
   delaySeconds: 0
+  cooldown: 1
+  cooldownSeconds: 0.25
+  ignoreTimeScale: 0
   fadeInCurve: 1
   fadeOutCurve: 1
   spatialBlend: 0
@@ -425,6 +428,9 @@ MonoBehaviour:
   fadeInSeconds: 1
   playWithDelay: 0
   delaySeconds: 0
+  cooldown: 1
+  cooldownSeconds: 0.25
+  ignoreTimeScale: 0
   fadeInCurve: 1
   fadeOutCurve: 1
   spatialBlend: 0
@@ -485,6 +491,9 @@ MonoBehaviour:
   fadeInSeconds: 1
   playWithDelay: 0
   delaySeconds: 0
+  cooldown: 1
+  cooldownSeconds: 0.25
+  ignoreTimeScale: 0
   fadeInCurve: 1
   fadeOutCurve: 1
   spatialBlend: 0
@@ -962,6 +971,7 @@ MonoBehaviour:
   duration: 0.2
   easeType: 3
   growOnEnable: 1
+  ignoreTimeScale: 0
 --- !u!1 &1512890342
 GameObject:
   m_ObjectHideFlags: 0

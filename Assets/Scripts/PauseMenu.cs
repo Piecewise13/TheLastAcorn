@@ -11,44 +11,24 @@ public class PauseMenu : MonoBehaviour
 
     void Awake()
     {
-        // Initialize input action map
         playerMovementMap = new PlayerKeyboardControls();
         pauseInput = playerMovementMap.Keyboard.Pause;
         pauseInput.performed += TogglePause; 
     }
 
-    void OnEnable()
-    {
-        pauseInput.Enable();
-    }
+    void OnEnable() { pauseInput.Enable(); }
 
-    void OnDisable()
-    {
-        pauseInput.Disable();
-    }
-
+    void OnDisable() { pauseInput.Disable(); }
 
     private void TogglePause(InputAction.CallbackContext context)
     {
         isPaused = !isPaused;
-        if (isPaused)
-        {
-            Pause();
-        }
-        else
-        {
-            Resume();
-        }
+        if (isPaused) Pause();
+        else Resume();
     }
 
     
-    public void TogglePauseFromUIButton()
-    {
-        if (!isPaused)
-        {
-            Pause();
-        }
-    }
+    public void TogglePauseFromUIButton() { if (!isPaused) Pause(); }
 
     public void Resume()
     {
@@ -67,13 +47,13 @@ public class PauseMenu : MonoBehaviour
     public void RestartLevel()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneLoader.RestartLevel();
     }
 
     public void LoadMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Main Menu");
+        SceneLoader.LoadMainMenu();
     }
 
     public void QuitGame()
