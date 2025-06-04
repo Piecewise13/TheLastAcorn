@@ -26,10 +26,8 @@ public class EndGameScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.transform.root.CompareTag("Player"))
-        {
-            return;
-        }
+        if (!collision.transform.root.CompareTag("Player")) return;
+        
         playerMove.DisableMove();
         FadeAudio();
         playerCamera.enabled = false;
@@ -43,7 +41,6 @@ public class EndGameScript : MonoBehaviour
         playerAnim.enabled = false;
         cameraAnim.enabled = true;
         endCredits.SetActive(true);
-        StartCoroutine(ReturnToMainMenu(90f));
     }
 
     private void FadeAudio()
@@ -51,10 +48,5 @@ public class EndGameScript : MonoBehaviour
         ambience?.FadeOut(1f);
         music?.FadeOut(1f);
     }
-
-    private IEnumerator ReturnToMainMenu(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-        SceneLoader.LoadNext();
-    }
+    
 }
