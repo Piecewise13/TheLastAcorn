@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 
@@ -8,22 +9,43 @@ public class TutorialTextManager : MonoBehaviour
     public GameObject controllerConnectedObject;
     public GameObject controllerDisconnectedObject;
 
+    private PlayerKeyboardControls playerMovementMap;
+    private InputAction testInputDevice;
+
+    void Awake()
+    {
+        playerMovementMap = new PlayerKeyboardControls();
+
+        testInputDevice = playerMovementMap.Keyboard.TestKeyboardControllerInput;
+        testInputDevice.performed += SwitchControls;
+        testInputDevice.Enable();
+
+    }
+
     void Start()
     {
-        bool controllerConnected = false;
-        foreach (string name in Input.GetJoystickNames())
+
+
+    }
+    void Update()
+    {
+
+    }
+
+    private void SwitchControls(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            if (!string.IsNullOrEmpty(name))
+            if (context.control.device is Keyboard)
             {
-                controllerConnected = true;
-                break;
+                controllerConnectedObject.SetActive(false);
+                controllerDisconnectedObject.SetActive(true);
+            }
+            else if (context.control.device is Gamepad)
+            {
+                controllerConnectedObject.SetActive(true);
+                controllerDisconnectedObject.SetActive(false);
             }
         }
-
-        if (controllerConnectedObject != null)
-            controllerConnectedObject.SetActive(controllerConnected);
-
-        if (controllerDisconnectedObject != null)
-            controllerDisconnectedObject.SetActive(!controllerConnected);
     }
 }
