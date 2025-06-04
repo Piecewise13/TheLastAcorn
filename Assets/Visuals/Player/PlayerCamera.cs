@@ -24,7 +24,9 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float zoomTime;
 
-    [Header("Feedback")] 
+    private bool canZoom = true;
+
+    [Header("Feedback")]
     [SerializeField] private AudioPlayer zoomInSFX;
     [SerializeField] private AudioPlayer zoomOutSFX;
 
@@ -60,9 +62,15 @@ public class PlayerCamera : MonoBehaviour
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, zoomTimer / zoomTime);
         zoomTimer += Time.deltaTime;
     }
-    
+
     private void Zoom(InputAction.CallbackContext context)
     {
+
+        if (!canZoom)
+        {
+            return;
+        }
+
         if (context.performed)
         {
             acornArrow.SetActive(true);
@@ -70,7 +78,8 @@ public class PlayerCamera : MonoBehaviour
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
             zoomOutSFX?.Play();
-        }  else if (context.canceled)
+        }
+        else if (context.canceled)
         {
             acornArrow.SetActive(false);
             playerMove.EnableMove();
@@ -79,4 +88,19 @@ public class PlayerCamera : MonoBehaviour
             zoomInSFX?.Play();
         }
     }
+
+    public void StartForceZoom(float newZoom)
+    {
+        canZoom = false;
+        this.targetZoom = newZoom;
+        zoomTimer = 0;
+    }
+    
+    public void EndForceZoom()
+    {
+        canZoom = true;
+        targetZoom = zoomInAmount;
+        zoomTimer = 0;
+    }
+    
 }
