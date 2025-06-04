@@ -30,6 +30,7 @@ public class EndGameScript : MonoBehaviour
         
         playerMove.DisableMove();
         FadeAudio();
+        playerCamera.DisableZoom();
         playerCamera.enabled = false;
         playerAnim.keepAnimatorStateOnDisable = false;
         playerAnim.Play("Idle", 0, 0f); // Replace "EntryStateName" with your actual entry animation state name

@@ -95,12 +95,24 @@ public class PlayerCamera : MonoBehaviour
         this.targetZoom = newZoom;
         zoomTimer = 0;
     }
-    
+
     public void EndForceZoom()
     {
         canZoom = true;
         targetZoom = zoomInAmount;
         zoomTimer = 0;
+    }
+
+    public void DisableZoom()
+    {
+        canZoom = false;
+        zoomAction.Disable();
+    }
+
+    public void EnableZoom()
+    {
+        canZoom = true;
+        zoomAction.Enable();
     }
     
 }

@@ -160,6 +160,12 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private Vector3 graphicOriginalLocalPos;
 
+    /// <summary>
+    /// Maximum number of times player can spam climb to reach a branch.
+    /// </summary>
+    [SerializeField] private int spamCheeseMax = 5;
+    private int spamCheeseCount = 0;
+
     [Header("Glide")]
 
     /// <summary>
@@ -567,6 +573,7 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void Climb()
     {
+
         if (climbTime > maxClimbTime)
         {
             animator.SetTrigger("detachClimb");
