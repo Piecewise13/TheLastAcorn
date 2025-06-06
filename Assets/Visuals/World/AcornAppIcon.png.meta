@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      AcornAppIcon_0: 4605015741592912402
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
