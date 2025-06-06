@@ -22,6 +22,8 @@ public class EndGameScript : MonoBehaviour
     {
         playerMove = FindFirstObjectByType<PlayerMove>();
         playerCamera = FindFirstObjectByType<PlayerCamera>();
+
+        endCredits.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
