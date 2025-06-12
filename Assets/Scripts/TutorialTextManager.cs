@@ -1,65 +1,51 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 
 
 public class TutorialTextManager : MonoBehaviour
 {
 
-    private PlayerMove playerMove;
+    public GameObject controllerConnectedObject;
+    public GameObject controllerDisconnectedObject;
 
-    public GameObject climbText;
-    public GameObject climbMovementText;
-    public GameObject climbMeterText;
+    private PlayerKeyboardControls playerMovementMap;
+    private InputAction testInputDevice;
 
-    [SerializeField] private float climbMeterTextTime;
-    private float climbMeterTextTimer = 0f;
-
-
-    [SerializeField] private float climbMeterTextTimerShowTime = 4f;
-
-    private int currentStep = 0;
-
-    private void Start()
+    void Awake()
     {
-        playerMove = FindFirstObjectByType<PlayerMove>();
-        climbText.SetActive(true);
-        climbMovementText.SetActive(false);
-        climbMeterText.SetActive(false);
+        playerMovementMap = new PlayerKeyboardControls();
+
+        testInputDevice = playerMovementMap.Keyboard.TestKeyboardControllerInput;
+        testInputDevice.performed += SwitchControls;
+        testInputDevice.Enable();
+
     }
 
-    public void Update()
+    void Start()
     {
-        if(currentStep == 0)
-        {
-            if (playerMove.GetPlayerState() == PlayerState.Climb)
-            {
-                climbText.SetActive(false);
-                climbMovementText.SetActive(true);
-                currentStep++;
-            }
-        } else if(currentStep == 1){
-            if(climbMeterTextTimer >= climbMeterTextTime)
-            {
-                climbMovementText.SetActive(false);
-                climbMeterText.SetActive(true);
-                currentStep++;
-                climbMeterTextTimer = 0f;
-            } else
-            {
-                climbMeterTextTimer += Time.deltaTime;
 
-            }
-        } else if(currentStep == 2)
+
+    }
+    void Update()
+    {
+
+    }
+
+    private void SwitchControls(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            if (climbMeterTextTimer >= climbMeterTextTimerShowTime)
+            if (context.control.device is Keyboard)
             {
-                climbMeterText.SetActive(false);
-                currentStep++;
-            } else 
+                controllerConnectedObject.SetActive(false);
+                controllerDisconnectedObject.SetActive(true);
+            }
+            else if (context.control.device is Gamepad)
             {
-                climbMeterTextTimer += Time.deltaTime;
+                controllerConnectedObject.SetActive(true);
+                controllerDisconnectedObject.SetActive(false);
             }
         }
     }
-
 }

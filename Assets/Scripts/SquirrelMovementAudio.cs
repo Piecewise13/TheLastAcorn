@@ -4,105 +4,127 @@ using UnityEngine;
 public class SquirrelMovementAudio : MonoBehaviour
 {
     [Header("Links")]
-    [SerializeField] private PlayerMove   player;      // auto-found if empty
-    [SerializeField] private Rigidbody2D rb;           // auto-found if empty
+    [SerializeField] private PlayerMove  player;
+    [SerializeField] private Rigidbody2D rb;
 
-    [Header("State → Loop clips")]
-    public AudioClip groundedClip;
-    public AudioClip climbClip;
-    public AudioClip glideClip;
-    public AudioClip fallClip;
-    public AudioClip stunnedClip;
-
-    [Header("Volume curves")]
-    [Tooltip("Grounded: |vx|  (min → max)")]
-    [SerializeField] private Vector2 groundedSpeedRange = new(0.2f, 6f);
-    [SerializeField] private float   groundedMaxVol = 0.8f;
-
-    [Tooltip("Glide: |vx|  (min → max)")]
-    [SerializeField] private Vector2 glideSpeedRange = new(2f, 12f);
-    [SerializeField] private float   glideMaxVol = 1f;
-
-    [Tooltip("Fall: |vy|  (min → max)")]
-    [SerializeField] private Vector2 fallSpeedRange = new(2f, 15f);
-    [SerializeField] private float   fallMaxVol = 1f;
-
-    [Header("Pitch-bend (optional)")]
-    [SerializeField] private bool    enablePitchBend = true;
-    [SerializeField] private float   minPitch = 0.95f;
-    [SerializeField] private float   maxPitch = 1.15f;
-
-
-    private AudioSource _src;
-    private PlayerState _lastState = (PlayerState)(-1);
-
-    private void Awake()
+    [System.Serializable]
+    public struct StateAudio
     {
-        _src = GetComponent<AudioSource>();
-        _src.loop = true;
-        _src.playOnAwake = false;
-
-        if (!player) player = GetComponentInParent<PlayerMove>();
-        if (!rb) rb = player.GetComponent<Rigidbody2D>();
+        public AudioClip clip;
+        public Vector2 speedRange;
+        public Vector2 volumeRange;
+        public Vector2 pitchRange;
     }
 
-    private void Update()
+    [Header("Grounded")]
+    [SerializeField] private StateAudio grounded = new()
+    {
+        speedRange  = new(0.2f, 6f),
+        volumeRange = new(0f, 0.8f),
+        pitchRange  = new(0.95f, 1.15f)
+    };
+
+    [Header("Climb (constant)")]
+    [SerializeField] private StateAudio climb = new()
+    {
+        volumeRange = new(0.7f, 0.7f),
+        pitchRange  = new(1f,    1f)
+    };
+
+    [Header("Glide")]
+    [SerializeField] private StateAudio glide = new()
+    {
+        speedRange  = new(2f, 12f),
+        volumeRange = new(0f, 1f),
+        pitchRange  = new(0.95f, 1.15f)
+    };
+
+    [Header("Fall")]
+    [SerializeField] private StateAudio fall = new()
+    {
+        speedRange  = new(2f, 15f),
+        volumeRange = new(0f, 1f),
+        pitchRange  = new(0.95f, 1.15f)
+    };
+
+    [Header("Stunned (constant)")]
+    [SerializeField] private StateAudio stunned = new()
+    {
+        volumeRange = new(1f, 1f),
+        pitchRange  = new(1f, 1f)
+    };
+
+    [Header("Jump (one-shot)")]
+    [SerializeField] private AudioPlayer jumpPlayer;
+
+    [SerializeField] private bool enablePitchBend = true;
+
+    private AudioSource src;
+    private PlayerState lastState = (PlayerState)(-1);
+
+    void Awake()
+    {
+        src = GetComponent<AudioSource>();
+        src.loop = true;
+        src.playOnAwake = false;
+
+        if (!player) player = GetComponentInParent<PlayerMove>();
+        if (!rb)     rb     = player.GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()  => PlayerMove.Jumped += OnJump;
+    void OnDisable() => PlayerMove.Jumped -= OnJump;
+
+    void Update()
     {
         var state = player.GetPlayerState();
 
-        // 1) Switch clip when the state changes 
-        if (state != _lastState)
+        if (state != lastState)
         {
-            _lastState = state;
-            _src.clip  = GetClipFor(state);
-
-            if (_src.clip) _src.Play();
-            else _src.Stop();
+            lastState = state;
+            src.clip  = GetSettings(state).clip;
+            if (src.clip) src.Play(); else src.Stop();
         }
 
-        // 2) Re-map velocity → volume (and pitch) every frame
-        if (!_src.isPlaying) return;
+        if (!src.isPlaying) return;
 
-        float vol = state switch
+        if (state == PlayerState.Climb || state == PlayerState.STUNNED)
         {
-            PlayerState.Grounded => Map(Mathf.Abs(rb.linearVelocity.x),
-                                        groundedSpeedRange, groundedMaxVol),
+            var s = GetSettings(state);
+            src.volume = s.volumeRange.y;
+            src.pitch  = s.pitchRange.y;
+            return;
+        }
 
-            PlayerState.Glide => Map(Mathf.Abs(rb.linearVelocity.x),
-                                        glideSpeedRange,    glideMaxVol),
+        var set   = GetSettings(state);
+        float vel = state == PlayerState.Fall ? Mathf.Abs(rb.linearVelocity.y)
+                                              : Mathf.Abs(rb.linearVelocity.x);
 
-            PlayerState.Fall => Map(Mathf.Abs(rb.linearVelocity.y),
-                                        fallSpeedRange,     fallMaxVol),
-
-            PlayerState.Climb => 0.7f,     // steady scratch
-            PlayerState.STUNNED => 1f,       // always loud
-            _                     => 0f
-        };
-
-        _src.volume = vol;
+        float vol = Remap(vel, set.speedRange, set.volumeRange);
+        src.volume = vol;
 
         if (enablePitchBend)
-        {
-            // simple: same 0-1 factor drives pitch
-            float t = Mathf.InverseLerp(0f, 1f, vol / Mathf.Max(0.01f, groundedMaxVol));
-            _src.pitch = Mathf.Lerp(minPitch, maxPitch, t);
-        }
+            src.pitch = Remap(vol, set.volumeRange, set.pitchRange);
     }
 
-
-    private AudioClip GetClipFor(PlayerState s) => s switch
+    void OnJump()
     {
-        PlayerState.Grounded => groundedClip,
-        PlayerState.Climb    => climbClip,
-        PlayerState.Glide    => glideClip,
-        PlayerState.Fall     => fallClip,
-        PlayerState.STUNNED  => stunnedClip,
-        _                    => null
+        if (jumpPlayer) jumpPlayer.Play();
+    }
+
+    StateAudio GetSettings(PlayerState s) => s switch
+    {
+        PlayerState.Grounded => grounded,
+        PlayerState.Climb    => climb,
+        PlayerState.Glide    => glide,
+        PlayerState.Fall     => fall,
+        PlayerState.STUNNED  => stunned,
+        _                    => default
     };
 
-    private static float Map(float v, Vector2 inRange, float outMax)
+    static float Remap(float v, Vector2 inR, Vector2 outR)
     {
-        float t = Mathf.InverseLerp(inRange.x, inRange.y, v);
-        return t * outMax;
+        float t = Mathf.InverseLerp(inR.x, inR.y, v);
+        return Mathf.Lerp(outR.x, outR.y, t);
     }
 }

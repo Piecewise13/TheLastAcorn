@@ -1,8 +1,11 @@
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
+
+    private PlayerLifeManager lifeManager;
 
     /// <summary>
     /// Reference to the PlayerControls input action map.
@@ -35,12 +38,10 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody2D rb;
 
 
-
     /// <summary>
     /// Reference to the Animator component.
     /// </summary>
     private Animator animator;
-
 
 
     [Header("Components")]
@@ -60,6 +61,24 @@ public class PlayerMove : MonoBehaviour
     /// Reference to the stunned effect GameObject.
     /// </summary>
     [SerializeField] private GameObject stunnedEffect;
+
+    [Header("Collision")]
+    /// <summary>
+    /// LayerMask for identifying layers that cause damage on collision (e.g., trees).
+    /// </summary>
+    [SerializeField] private LayerMask collideDamageLayer;
+
+    [SerializeField] private float minDamageSpeed;
+
+    /// <summary>
+    /// Horizontal velocity applied when hitting a tree while gliding.
+    /// </summary>
+    [SerializeField] private float damageHitXVelo = 10f;
+
+    /// <summary>
+    /// Vertical velocity applied when hitting a tree while gliding.
+    /// </summary>
+    [SerializeField] private float damageHitYVelo = 5f;
 
     [Space(20)]
     [Header("Ground Check")]
@@ -108,26 +127,6 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float climbSpeed = 5.0f;
 
     /// <summary>
-    /// Height to reach on a climb jump.
-    /// </summary>
-    [SerializeField] private float climbJumpHeight = 5.0f;
-
-    /// <summary>
-    /// Speed at which the player reaches climbJumpHeight on a climb jump.
-    /// </summary>
-    [SerializeField] private float climbJumpSpeed = 5.0f;
-
-    /// <summary>
-    /// Number of jumps allowed while climbing.
-    ///  
-    [SerializeField] private int maxClimbJumps = 2;
-
-    private int climbJumpCount = 0;
-
-    private Vector2 climbJumpPoisition;
-    private Vector2 climbJumpStartPosition;
-    [SerializeField] private AnimationCurve climbJumpCurve;
-    /// <summary>
     /// Maximum time allowed for climbing.
     /// </summary>
     [SerializeField] private float maxClimbTime;
@@ -137,12 +136,6 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private float climbTime;
 
-    [SerializeField] private bool canClimb = true;
-
-    /// <summary>
-    /// Maximum velocity for auto-attach to climbable objects.
-    /// </summary>
-    [SerializeField] private float autoAttachMaxVelo = 10f;
 
     /// <summary>
     /// Maximum intensity of the shake effect while climbing.
@@ -150,8 +143,16 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float maxShakeIntensity = 0.2f;
 
     /// <summary>
-    /// The final color of the graphic when at the end of climbing
+    /// Reference to the climb particle system.
+    ///     </summary>
+
+    [SerializeField] private ParticleSystem climbParticle;
+
+    /// <summary>
+    /// Maximum rate over time for the climb particle emission.
     /// </summary>
+    [SerializeField] private float climbParticleRateOverTime = 20f;
+
     [SerializeField] private Color climbFatigueColor;
 
     /// <summary>
@@ -160,25 +161,20 @@ public class PlayerMove : MonoBehaviour
     private Vector3 graphicOriginalLocalPos;
 
     /// <summary>
-    /// Maximum rate over time for the climb particle emission.
+    /// Maximum number of times player can spam climb to reach a branch.
     /// </summary>
-    [SerializeField] private float climbParticleRateOverTime = 20f;
-
-    /// <summary>
-    /// Reference to the climb particle system.
-    /// </summary>
-    [SerializeField] private ParticleSystem climbParticle;
+    [SerializeField] private int spamCheeseMax = 5;
+    private int spamCheeseCount = 0;
 
     [Header("Glide")]
-    /// <summary>
-    /// Maximum horizontal speed while gliding.
-    /// </summary>
-    [SerializeField] private float maxGlideSpeed = 10f;
 
     /// <summary>
     /// Initial horizontal speed when starting to glide.
     /// </summary>
-    [SerializeField] private float initialGlideSpeed = 5f;
+    [SerializeField] private float defaultGlideSpeed = 10f;
+    private float initialGlideSpeed;
+
+    [SerializeField] private float maxGlideSpeed = 35f;
 
     /// <summary>
     /// Multiplier for glide speed, increases over time.
@@ -186,29 +182,29 @@ public class PlayerMove : MonoBehaviour
     private float glideSpeedMultiplier = 1f;
 
     /// <summary>
-    /// Horizontal velocity applied when hitting a tree while gliding.
-    /// </summary>
-    [SerializeField] private float glideTreeHitXVelo = 10f;
-
-    /// <summary>
-    /// Vertical velocity applied when hitting a tree while gliding.
-    /// </summary>
-    [SerializeField] private float glideTreeHitYVelo = 5f;
-
-    /// <summary>
     /// Minimum velocity threshold to trigger a glide hit.
     /// </summary>
     [SerializeField] private float glideHitVelocityThreshold = 5f;
+
+    private bool glideButtonReleasedSinceClimb = true;
 
     /// <summary>
     /// Force applied when jumping.
     /// </summary>
     [SerializeField] private float jumpForce = 5.0f;
 
+    private float jumpBufferTime = 0.1f; // Adjust as needed (0.1s = ~6 frames at 60fps)
+    private float jumpBufferTimer = 0f;
+
+    private bool isJumpHeld = false;
+
     /// <summary>
     /// Current state of the player.
     /// </summary>
     [SerializeField] private PlayerState currentState = PlayerState.Grounded;
+    
+    public static event System.Action Jumped;
+
 
     /// <summary>
     /// Initializes input actions and sets up event handlers.
@@ -218,9 +214,11 @@ public class PlayerMove : MonoBehaviour
         // Initialize input action map
         playerMovementMap = new PlayerKeyboardControls();
 
+        lifeManager = GetComponent<PlayerLifeManager>();
+
         // Assign movement action and enable it
         moveAction = playerMovementMap.Keyboard.Move;
-        EnableMove();
+        moveAction.Enable();
 
         // Assign attach action and subscribe to event
         attachAction = playerMovementMap.Keyboard.Attach;
@@ -231,13 +229,15 @@ public class PlayerMove : MonoBehaviour
         // Assign glide action and subscribe to event
         glideAction = playerMovementMap.Keyboard.Glide;
         glideAction.performed += GlideInput;
+        glideAction.canceled += ctx => glideButtonReleasedSinceClimb = true;
         glideAction.canceled += GlideInput;
         glideAction.Enable();
 
         // Assign jump action and subscribe to event
         jumpAction = playerMovementMap.Keyboard.Jump;
         jumpAction.performed += Jump;
-        jumpAction.performed += ClimbInput;
+        jumpAction.performed += ctx => isJumpHeld = true;
+        jumpAction.canceled += ctx => isJumpHeld = false;
         jumpAction.Enable();
     }
 
@@ -255,19 +255,6 @@ public class PlayerMove : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles per-frame logic, such as ground checking when stunned.
-    /// </summary>
-    private void Update()
-    {
-        // Only perform ground check if stunned
-        if (currentState == PlayerState.STUNNED)
-        {
-            GroundCheck();
-        }
-
-    }
-
-    /// <summary>
     /// Handles physics-based updates and state-specific movement logic.
     /// </summary>
     private void FixedUpdate()
@@ -281,15 +268,14 @@ public class PlayerMove : MonoBehaviour
         // Handle climbing logic
         if (currentState == PlayerState.Climb)
         {
-            if (Vector3.Distance(climbJumpStartPosition, climbJumpPoisition) > 0.1f)
-            {
-                ClimbJump();
-            }
+            Climb();
             return;
         }
 
         // Check if player is grounded
         GroundCheck();
+
+        FallingLogic();
 
         // Handle gliding logic
         if (currentState == PlayerState.Glide)
@@ -298,7 +284,6 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        GravityAdjustment();
 
         // Handle ground movement if move action is in progress
         if (moveAction.inProgress)
@@ -315,58 +300,102 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private void GravityAdjustment()
-    {
-        // Adjust gravity scale based on player state
-        if (currentState == PlayerState.Grounded)
-        {
-            rb.gravityScale = 1.3f;
-        }
-        else if (rb.linearVelocity.y < 0)
-        {
-            rb.gravityScale = 1.8f;
-        }
-    }
+    private float jumpHeldDuration = 0f;
 
-    /// <summary>
-    /// Handles player movement while grounded.
-    /// </summary>
-    private void SideMovement()
+    private void FallingLogic()
     {
-        // Prevent movement if climbing
-        if (currentState == PlayerState.Climb)
+        if(currentState == PlayerState.STUNNED)
         {
             return;
         }
 
-        var moveSpeed = groundMoveSpeed;
-
-        // Read movement input
-        var moveInput = moveAction.ReadValue<Vector2>();
-
-        // Apply horizontal velocity
-        if (currentState == PlayerState.Fall && (moveInput.x > 0 ^ rb.linearVelocity.x > 0))
+        // Adjust gravity scale based on player state
+        if (currentState == PlayerState.Grounded)
         {
-            //print(rb.linearVelocity.x);
-            moveSpeed = airMoveSpeed;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveInput.x * moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+            rb.gravityScale = 1.5f;
+            jumpHeldDuration = 0f;
+            return;
+        }
+
+        if (climbTime > 0)
+        {
+            climbTime -= Time.deltaTime / 2f;
+            UpdateClimbFatigueColor();
+            UpdateClimbParticles();
+        }
+
+        if (currentState == PlayerState.Glide)
+        {
+            jumpHeldDuration = 0f;
+            return;
+        }
+
+        animator.SetBool("isFalling", true);
+
+        if (rb.linearVelocity.y < 0)
+        {
+            if (isJumpHeld)
+            {
+                GlideInput(new InputAction.CallbackContext());
+            }
+
+            rb.gravityScale = 2.8f;
         }
         else
         {
-            rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
+            rb.gravityScale = 1.8f;
         }
+    }
+    private void SideMovement()
+    {
+        if (currentState == PlayerState.Climb)
+            return;
 
-        // Flip graphic and update running animation if moving
-        if (moveInput.x != 0)
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        float moveSpeed = (currentState == PlayerState.Fall) ? airMoveSpeed : groundMoveSpeed;
+
+        // Handle running animation
+        animator.SetBool("isRunning", moveInput.x != 0 && currentState == PlayerState.Grounded);
+
+        // Apply horizontal velocity
+        if (currentState == PlayerState.Fall && ShouldApplyAirControl(moveInput.x, rb.linearVelocity.x))
         {
-            //rb.linearVelocity = new Vector2(moveInput.x * moveSpeed, rb.linearVelocity.y);
-
-            float targetYRotation = moveInput.x > 0 ? 0f : 180f;
-            Vector3 rotation = graphic.transform.eulerAngles;
-            rotation.y = targetYRotation;
-            graphic.transform.eulerAngles = rotation;
-            animator.SetBool("isRunning", true);
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x + moveInput.x * airMoveSpeed * Time.deltaTime,
+                rb.linearVelocity.y
+            );
         }
+        else if (currentState == PlayerState.Fall) {
+            if (Mathf.Abs(moveInput.x * airMoveSpeed) > Mathf.Abs(rb.linearVelocity.x)) {
+                            rb.linearVelocity = new Vector2(
+                moveInput.x * airMoveSpeed,
+                rb.linearVelocity.y
+            );
+            }
+
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(moveInput.x * groundMoveSpeed, rb.linearVelocity.y);
+        }
+
+        // Flip graphic if moving horizontally
+        if (moveInput.x != 0)
+            FlipGraphic(moveInput.x);
+    }
+
+    private bool ShouldApplyAirControl(float inputX, float velocityX)
+    {
+        // Only apply air control if input direction is opposite to current velocity
+        return (inputX > 0) ^ (velocityX > 0);
+    }
+
+    private void FlipGraphic(float inputX)
+    {
+        float targetYRotation = inputX > 0 ? 0f : 180f;
+        Vector3 rotation = graphic.transform.eulerAngles;
+        rotation.y = targetYRotation;
+        graphic.transform.eulerAngles = rotation;
     }
 
     /// <summary>
@@ -375,14 +404,32 @@ public class PlayerMove : MonoBehaviour
     /// <param name="context">Input action callback context.</param>
     private void Jump(InputAction.CallbackContext context)
     {
-        // Only allow jumping if grounded and not stunned
-        if (currentState != PlayerState.Grounded || currentState == PlayerState.STUNNED)
+
+        if (currentState == PlayerState.STUNNED)
         {
             return;
         }
 
+        /*
+
+        if (currentState == PlayerState.Fall && isJumpHeld)
+        {
+            print("jump held");
+            GlideInput(new InputAction.CallbackContext());
+            return;
+        }
+        */
+
+        // Only allow jumping if grounded and not stunned
+        if (currentState != PlayerState.Grounded)
+        {
+            return;
+        }
+
+        rb.linearVelocity = Vector2.zero;
         // Apply upward force for jump
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        Jumped?.Invoke(); 
 
         // Trigger jump animation
         animator.SetTrigger("Jump");
@@ -390,6 +437,8 @@ public class PlayerMove : MonoBehaviour
         // Set state to falling and update animation
         currentState = PlayerState.Fall;
         animator.SetBool("isFalling", true);
+
+        jumpBufferTimer = jumpBufferTime;
     }
 
     /// <summary>
@@ -398,32 +447,36 @@ public class PlayerMove : MonoBehaviour
     /// <param name="context">Input action callback context.</param>
     private void GlideInput(InputAction.CallbackContext context)
     {
+
         if (context.canceled)
         {
-            print("Glide canceled");
-        }
-
-        // If already gliding, stop gliding
-        if (currentState == PlayerState.Glide && context.canceled)
-        {
-            animator.SetBool("isGliding", false);
-            currentState = PlayerState.Fall;
+            if (currentState == PlayerState.Glide)
+            {
+                print("Already glidig");
+                animator.SetBool("isGliding", false);
+                currentState = PlayerState.Fall;
+            }
             return;
         }
 
         // Only allow gliding if falling and not stunned
-        if (currentState != PlayerState.Fall)
+        if (currentState != PlayerState.Fall || currentState == PlayerState.STUNNED)
         {
             return;
         }
 
-        if (currentState == PlayerState.STUNNED)
+        Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
+        if (climbableCollider != null)
         {
             return;
         }
 
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
+
+        initialGlideSpeed = Mathf.Max(defaultGlideSpeed, Mathf.Abs(rb.linearVelocity.x));
+
+        print("here");
 
         // Enter glide state and update animation
         currentState = PlayerState.Glide;
@@ -446,7 +499,7 @@ public class PlayerMove : MonoBehaviour
 
             // Determine direction based on graphic rotation
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2((glideX * glideSpeedMultiplier) * direction, rb.linearVelocity.y * 0.9f);
+            rb.linearVelocity = new Vector2(Mathf.Clamp((glideX * glideSpeedMultiplier), 0f, maxGlideSpeed) * direction, rb.linearVelocity.y * 0.90f);
         }
         else
         {
@@ -456,6 +509,8 @@ public class PlayerMove : MonoBehaviour
             animator.SetBool("isFalling", true);
         }
     }
+
+    #region Climb Region
 
     /// <summary>
     /// Handles attach input for starting or stopping climbing.
@@ -469,196 +524,182 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        // Stop climbing if already climbing
+        // Stop climbing if already climbing and button released
         if (currentState == PlayerState.Climb && context.canceled)
         {
-            print("Attach released");
             StopClimb();
             return;
         }
 
-
-        if (!canClimb)
+        if (context.canceled)
         {
             return;
         }
 
-        // Raycast to check for climbable object to the right
-        RaycastHit2D rightHit = Physics2D.Raycast(climbCheckOrigin.position, graphic.transform.right, climbCheckReach, climbableLayer);
-
-        //.DrawRay(climbCheckOrigin.position, graphic.transform.right * climbCheckReach, Color.green);
-        Debug.DrawRay(climbCheckOrigin.position, Vector2.left * climbCheckReach, Color.blue, 1f);
-
-        // Start climbing if climbable object found
-        if (rightHit.collider != null)
+        if (climbTime > maxClimbTime)
         {
-            transform.position = new Vector2(rightHit.point.x + (graphic.transform.right.x * 0.5f), rightHit.point.y);
+            return;
+        }
+
+        // Find all climbable colliders in reach
+        Collider2D[] climbableColliders = Physics2D.OverlapCircleAll(climbCheckOrigin.position, climbCheckReach, climbableLayer);
+
+        if (climbableColliders.Length > 0)
+        {
+            // Find the closest climbable collider to the player
+            Collider2D closest = climbableColliders[0];
+            float minDist = Vector2.Distance(transform.position, closest.ClosestPoint(transform.position));
+            for (int i = 1; i < climbableColliders.Length; i++)
+            {
+                float dist = Vector2.Distance(transform.position, climbableColliders[i].ClosestPoint(transform.position));
+                if (dist < minDist)
+                {
+                    closest = climbableColliders[i];
+                    minDist = dist;
+                }
+            }
+
+            // Smoothly move towards the closest climbable collider's edge
+            Vector2 targetPos = new Vector2(closest.ClosestPoint(transform.position).x, transform.position.y);
+            // Use Lerp for smooth transition
+            transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+
             StartClimb();
         }
     }
-    
 
-    private void ClimbInput(InputAction.CallbackContext context)
+    /// <summary>
+    /// Handles climbing movement and shake effect while climbing.
+    /// </summary>
+    private void Climb()
     {
 
-        if (Vector3.Distance(transform.position, climbJumpPoisition) > 0.2f)
+        if (climbTime > maxClimbTime)
         {
-            return;
-        }
-
-
-        climbTime = 0f;
-
-        climbJumpCount++;
-
-        // Handle climbing input here if needed
-        if (currentState == PlayerState.Climb)
-        {
-            climbJumpPoisition = transform.position + Vector3.up * climbJumpHeight;
-            climbJumpStartPosition = transform.position;
-
-            var emission = climbParticle.emission;
-            emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, (float)climbJumpCount / (float)maxClimbJumps);
-
-            graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, (float)climbJumpCount / (float)maxClimbJumps);
-
-            // If you want to set the start size, use the following (example):
-            var main = climbParticle.main;
-            main.startSize = new ParticleSystem.MinMaxCurve(Mathf.Lerp(0.8f,1.5f, (float)climbJumpCount / (float)maxClimbJumps));
-        }
-
-    }
-
-    private void ClimbJump()
-    {
-        // Only allow climbing jump if climbing
-        if (currentState != PlayerState.Climb)
-        {
+            animator.SetTrigger("detachClimb");
+            StopClimb();
             return;
         }
 
         climbTime += Time.deltaTime;
+        UpdateClimbParticles();
+        UpdateClimbFatigueColor();
 
-        transform.position = Vector2.Lerp(climbJumpStartPosition, climbJumpPoisition, climbJumpCurve.Evaluate(climbTime * climbJumpSpeed));
+        rb.gravityScale = 0;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
 
-        // Check if still overlapping with a climbable object
-        var climbableCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
-        if (climbableCollider == null)
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        // Find all climbable colliders currently overlapping
+        Collider2D[] overlappingColliders = Physics2D.OverlapCircleAll(transform.position, 0.5f, climbableLayer);
+
+        if (overlappingColliders.Length == 0)
         {
             StopClimb();
             return;
         }
 
-        if (Vector3.Distance(transform.position, climbJumpPoisition) < 0.1f && climbJumpCount > 2)
-        {
-            StopClimb();
-            return;
+        ApplyClimbShake();
+        ControllerRumble();
 
+        // Calculate intended move location
+        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
+        Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
+
+        // Check if moveLocation is still inside any climbable collider
+        bool insideAny = false;
+        foreach (var col in overlappingColliders)
+        {
+            if (col.OverlapPoint(moveLocation))
+            {
+            insideAny = true;
+            break;
+            }
+        }
+
+        if (insideAny)
+        {
+            transform.position = moveLocation;
+        }
+        else
+        {
+            // Try to find the closest climbable collider to transition to
+            Collider2D closest = null;
+            float minDist = float.MaxValue;
+            foreach (var col in overlappingColliders)
+            {
+            Vector2 closestPoint = col.ClosestPoint(moveLocation);
+            float dist = Vector2.Distance(moveLocation, closestPoint);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                closest = col;
+            }
+            }
+
+            if (closest != null && minDist < 0.5f)
+            {
+            // Smoothly move towards the edge of the next collider
+            Vector2 targetPos = closest.ClosestPoint(moveLocation);
+            transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+            }
+            else
+            {
+            StopClimb();
+            }
+        }
+
+        animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
+    }
+
+    private void UpdateClimbParticles()
+    {
+        var emission = climbParticle.emission;
+        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
+    }
+
+    private void UpdateClimbFatigueColor()
+    {
+        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
+    }
+
+    private void ApplyClimbShake()
+    {
+        if (graphic == null) return;
+
+        float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
+        float shakeAmount = maxShakeIntensity * shakeRatio;
+        Vector3 shakeOffset = new Vector3(
+            Random.Range(-shakeAmount, shakeAmount),
+            Random.Range(-shakeAmount, shakeAmount),
+            0f
+        );
+        graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
+    }
+
+    private void ControllerRumble()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            float intensity = Mathf.Clamp01(climbTime / maxClimbTime);
+            gamepad.SetMotorSpeeds(intensity, intensity);
         }
     }
 
-
-    /* OLD CLIMBING CODE
-                        /// <summary>
-                        /// Handles climbing movement and shake effect while climbing.
-                        /// </summary>
-                        private void Climb()
-                        {
-                            // Stop climbing if max climb time exceeded
-                            if (climbTime > maxClimbTime)
-                            {
-                                //print("Climb is out!");
-                                StopClimb();
-                                return;
-                            }
-
-                            // Increment climb time
-                            climbTime += Time.deltaTime;
-
-                            var emission = climbParticle.emission;
-                            emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
-        var emission = climbParticle.emission;
-        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
-
-        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
-
-
-
-                            // Disable gravity and freeze position
-                            rb.gravityScale = 0;
-                            rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-
-                            // Read movement input
-                            var moveInput = moveAction.ReadValue<Vector2>();
-
-                            // Check for climbable object nearby
-                            var treeCollider = Physics2D.OverlapCircle(transform.position, 0.5f, climbableLayer);
-
-                            if (treeCollider == null)
-                            {
-                                StopClimb();
-                                return;
-                            }
-
-                            // Apply shake effect to graphic based on climb time
-                            if (graphic != null)
-                            {
-                                float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
-                                float shakeAmount = maxShakeIntensity * shakeRatio;
-                                Vector3 shakeOffset = new Vector3(
-                                    Random.Range(-shakeAmount, shakeAmount),
-                                    Random.Range(-shakeAmount, shakeAmount),
-                                    0f
-                                );
-                                graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
-                            }
-
-                            // Find closest point on tree collider
-                            var closestPoint = treeCollider.ClosestPoint(transform.position);
-
-                            // Calculate intended move location
-                            Vector2 moveLocation = transform.position + graphic.transform.right * Time.deltaTime * 3 * climbSpeed;
-
-                            Debug.DrawLine(transform.position, moveLocation, Color.red, float.MaxValue);
-
-                            // Move player if within tree collider, otherwise snap to closest point
-                            if (treeCollider.OverlapPoint(moveLocation))
-                            {
-                                transform.position += (Vector3)(moveInput * Time.deltaTime * climbSpeed);
-                            }
-                            else
-                            {
-                                StopClimb();
-                                //transform.position = closestPoint + Vector2.up * moveInput.y * Time.deltaTime * climbSpeed;
-                            }
-
-                            if (moveInput != Vector2.zero)
-                            {
-                                // Update climbing animation
-                                animator.SetBool("isClimbMoving", true);
-                            }
-                            else
-                            {
-                                // Stop climbing animation if no input
-                                animator.SetBool("isClimbingMoving", false);
-
-                            }
-
-
-                        }
-
-                    */
+    private void StopControllerRumble()
+    {
+        Gamepad gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            gamepad.SetMotorSpeeds(0, 0);
+        }
+    }
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
     /// </summary>
     private void StartClimb()
     {
-        if (!canClimb)
-        {
-            return;
-        }
-
         currentState = PlayerState.Climb;
 
         playerCollider.enabled = false;
@@ -666,11 +707,8 @@ public class PlayerMove : MonoBehaviour
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
 
-        climbTime = 0;
-
-        climbJumpStartPosition = transform.position;
-        climbJumpPoisition = transform.position;
         animator.SetBool("isClimbing", true);
+        animator.SetBool("isGliding", false);
     }
 
     /// <summary>
@@ -680,31 +718,25 @@ public class PlayerMove : MonoBehaviour
     {
         animator.SetBool("isClimbing", false);
 
-        climbTime = 0;
-
-        if (climbJumpCount == maxClimbJumps)
-        {
-            canClimb = false;
-        }
-
-
         currentState = PlayerState.Fall;
-
-        rb.AddForce(Vector3.up * 7f + Vector3.right * moveAction.ReadValue<Vector2>().x * 3f, ForceMode2D.Impulse);
 
         playerCollider.enabled = true;
 
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
+        StopControllerRumble();
+
         // Reset graphic position when climb ends
         if (graphic != null)
             graphic.transform.localPosition = graphicOriginalLocalPos;
+
+        // Require button release before next glide
+        glideButtonReleasedSinceClimb = false;
     }
 
     private void ResetClimb()
     {
-        canClimb = true;
 
         // Reset climb time and particle emission
         climbTime = 0;
@@ -714,11 +746,20 @@ public class PlayerMove : MonoBehaviour
         graphicSprite.color = Color.white;
     }
 
+    #endregion
+
     /// <summary>
     /// Checks if the player is grounded and updates state accordingly.
     /// </summary>
     private void GroundCheck()
     {
+        // Skip ground check if jump buffer is active
+        if (jumpBufferTimer > 0f)
+        {
+            jumpBufferTimer -= Time.deltaTime;
+            return;
+        }
+
         // Check for ground using overlap circle
         bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
@@ -731,16 +772,9 @@ public class PlayerMove : MonoBehaviour
             }
 
             ResetClimb();
-            canClimb = true;
-
-            climbJumpCount = 0;
-
-            // Reset climb time and particle emission
-            climbTime = 0;
-            var emission = climbParticle.emission;
-            emission.rateOverTime = 0;
 
             currentState = PlayerState.Grounded;
+            print("Grounded");
             animator.SetBool("isFalling", false);
             animator.SetBool("isGliding", false);
 
@@ -759,28 +793,26 @@ public class PlayerMove : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // If gliding and hit a climbable object
-        if (((1 << collision.gameObject.layer) & climbableLayer) != 0)
+        if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
             //print(collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
-            if (Mathf.Abs(collision.relativeVelocity.x) >= glideHitVelocityThreshold)
+            if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)
             {
                 // Get contact normal for force direction
                 var contactNormal = collision.GetContact(0).normal;
 
-                // Stop current velocity and apply bounce force
-                rb.linearVelocity = Vector3.zero;
-                rb.AddForce(Vector2.up * glideTreeHitYVelo + Vector2.right * contactNormal * glideTreeHitXVelo, ForceMode2D.Impulse);
+                if (Vector2.Angle(contactNormal, Vector2.up) < 45f)
+                {
+                    return;
+                }
 
-                // Enter fall and stunned states, update animations and effects
-                currentState = PlayerState.Fall;
-                animator.SetBool("isGliding", false);
-                animator.SetBool("isFalling", true);
+                var launchDir = Vector2.up * damageHitYVelo + Vector2.right * contactNormal * damageHitXVelo;
 
-                currentState = PlayerState.STUNNED;
-                stunnedEffect.SetActive(true);
+                lifeManager.DamagePlayer(launchDir);
+
                 return;
             }
 
@@ -799,20 +831,67 @@ public class PlayerMove : MonoBehaviour
         return currentState;
     }
 
+    public void StunPlayer()
+    {
+        if (currentState == PlayerState.STUNNED)
+        {
+            return;
+        }
+
+        DisableMove();
+
+        currentState = PlayerState.STUNNED;
+        stunnedEffect.SetActive(true);
+        animator.SetBool("isStunned", true);
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isGliding", false);
+        animator.SetBool("isClimbing", false);
+        animator.SetBool("isClimbMoving", false);
+    }
+
+    public void StopStun()
+    {
+        if (currentState != PlayerState.STUNNED)
+        {
+            return;
+        }
+
+        EnableMove();
+
+        currentState = PlayerState.Fall;
+
+        stunnedEffect.SetActive(false);
+        animator.SetBool("isStunned", false);
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isGliding", false);
+        animator.SetBool("isClimbing", false);
+        animator.SetBool("isClimbMoving", false);
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
+
     /// <summary>
     /// Enables the movement input action.
     /// </summary>
-    private void EnableMove()
+    public void EnableMove()
     {
+        playerMovementMap.Enable();
         moveAction.Enable();
+        attachAction.Enable();
+        glideAction.Enable();
+        jumpAction.Enable();
     }
 
     /// <summary>
     /// Disables the movement input action.
     /// </summary>
-    private void DisableMove()
+    public void DisableMove()
     {
+        playerMovementMap.Disable();
         moveAction.Disable();
+        attachAction.Disable();
+        glideAction.Disable();
+        jumpAction.Disable();
     }
 
     private void OnDisable()
@@ -820,6 +899,10 @@ public class PlayerMove : MonoBehaviour
         playerMovementMap.Disable();
     }
 
+    private void OnEnable()
+    {
+        playerMovementMap.Enable();
+    }
 }
 
 

@@ -115,7 +115,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""id"": ""779eee56-2b95-4a29-b33d-8336384be3e5"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press(behavior=2)"",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -124,7 +124,34 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""id"": ""9569aae1-27dd-4bdd-850d-aecb6d8927d5"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Tap"",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera Zoom"",
+                    ""type"": ""Button"",
+                    ""id"": ""7997adfd-a58f-4cf5-a0dc-d5ad581e3fa8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""24cccb2c-435e-4751-964a-c14144db8143"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Test Keyboard/Controller Input"",
+                    ""type"": ""Button"",
+                    ""id"": ""e99a1ee2-fd9e-4edc-aa73-a8994d8285f6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -253,7 +280,7 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                 {
                     ""name"": """",
                     ""id"": ""f97e28a3-ea4b-43a6-9a96-b90d4d0a6626"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -266,6 +293,17 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""id"": ""9449b322-ec43-4c1e-8a30-8e554422a717"",
                     ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": ""Press(pressPoint=0.7,behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attach"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45165f16-25ad-43e2-9fd3-c1a9636a1475"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attach"",
@@ -315,6 +353,160 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60543d48-e136-4a45-a0f2-bd3697b524f0"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""779677f7-d763-4109-a88d-781c232b2c81"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a54bee47-6c64-454b-81ce-212cf85360ae"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b85fdf69-b982-48c8-a440-2e195421b0b5"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""1ef6545a-fa34-4405-a701-7a79451f5ec2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""6face5ed-eca9-4b65-afa4-8cb3ca1b812b"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""79eadf0f-fb70-4375-99aa-142086541bf9"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0889a30-b375-4f76-80a0-c8c751cdb19c"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3dd38054-099f-48d5-9246-5c96267eca54"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""869ca98d-2932-4497-86cb-d89f385051cf"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5ae9c9da-d1f6-44de-8deb-1c3e25f5ef6b"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""7e1c767d-8f1e-4684-b2fd-e642ab1bd222"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d8f8e80-128b-4b9e-a90f-9dcde6097865"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c83135c0-4532-4775-bd5b-17e4cb6a6115"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Test Keyboard/Controller Input"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -327,6 +519,9 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         m_Keyboard_Attach = m_Keyboard.FindAction("Attach", throwIfNotFound: true);
         m_Keyboard_Glide = m_Keyboard.FindAction("Glide", throwIfNotFound: true);
         m_Keyboard_Jump = m_Keyboard.FindAction("Jump", throwIfNotFound: true);
+        m_Keyboard_CameraZoom = m_Keyboard.FindAction("Camera Zoom", throwIfNotFound: true);
+        m_Keyboard_Pause = m_Keyboard.FindAction("Pause", throwIfNotFound: true);
+        m_Keyboard_TestKeyboardControllerInput = m_Keyboard.FindAction("Test Keyboard/Controller Input", throwIfNotFound: true);
     }
 
     ~@PlayerKeyboardControls()
@@ -411,6 +606,9 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
     private readonly InputAction m_Keyboard_Attach;
     private readonly InputAction m_Keyboard_Glide;
     private readonly InputAction m_Keyboard_Jump;
+    private readonly InputAction m_Keyboard_CameraZoom;
+    private readonly InputAction m_Keyboard_Pause;
+    private readonly InputAction m_Keyboard_TestKeyboardControllerInput;
     /// <summary>
     /// Provides access to input actions defined in input action map "Keyboard".
     /// </summary>
@@ -438,6 +636,18 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         /// Provides access to the underlying input action "Keyboard/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Keyboard_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Keyboard/CameraZoom".
+        /// </summary>
+        public InputAction @CameraZoom => m_Wrapper.m_Keyboard_CameraZoom;
+        /// <summary>
+        /// Provides access to the underlying input action "Keyboard/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_Keyboard_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Keyboard/TestKeyboardControllerInput".
+        /// </summary>
+        public InputAction @TestKeyboardControllerInput => m_Wrapper.m_Keyboard_TestKeyboardControllerInput;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -476,6 +686,15 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @CameraZoom.started += instance.OnCameraZoom;
+            @CameraZoom.performed += instance.OnCameraZoom;
+            @CameraZoom.canceled += instance.OnCameraZoom;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @TestKeyboardControllerInput.started += instance.OnTestKeyboardControllerInput;
+            @TestKeyboardControllerInput.performed += instance.OnTestKeyboardControllerInput;
+            @TestKeyboardControllerInput.canceled += instance.OnTestKeyboardControllerInput;
         }
 
         /// <summary>
@@ -499,6 +718,15 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @CameraZoom.started -= instance.OnCameraZoom;
+            @CameraZoom.performed -= instance.OnCameraZoom;
+            @CameraZoom.canceled -= instance.OnCameraZoom;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @TestKeyboardControllerInput.started -= instance.OnTestKeyboardControllerInput;
+            @TestKeyboardControllerInput.performed -= instance.OnTestKeyboardControllerInput;
+            @TestKeyboardControllerInput.canceled -= instance.OnTestKeyboardControllerInput;
         }
 
         /// <summary>
@@ -567,5 +795,26 @@ public partial class @PlayerKeyboardControls: IInputActionCollection2, IDisposab
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Camera Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCameraZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Test Keyboard/Controller Input" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTestKeyboardControllerInput(InputAction.CallbackContext context);
     }
 }

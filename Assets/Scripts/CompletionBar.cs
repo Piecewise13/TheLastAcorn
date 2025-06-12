@@ -5,10 +5,14 @@ using System.Collections;
 public class CompletionBar : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] RectTransform fillRect;
+    [SerializeField] Slider progressSlider;
+
+    [SerializeField] GameObject acornLine;
+
+    [SerializeField] GameObject lineHolder;
 
     [Header("Progress")]
-    [SerializeField] int targetScore = 5;
+    private int targetScore = 5;
 
     [Header("Optional override")]
     [Tooltip("Leave at 0 to use fillRect's width. Set > 0 to force a pixel length.")]
@@ -22,18 +26,58 @@ public class CompletionBar : MonoBehaviour
 
     void Awake()
     {
-        if (!fillRect)
+        var scoreManager = FindFirstObjectByType<ScoreManager>();
+
+        targetScore = scoreManager.GetMaxScore();
+
+        if (!progressSlider)
         {
             Debug.LogError($"{name}: fillRect missing.");
             enabled = false;
             return;
         }
-        
-        maxWidth = fullWidth > 0 ? fullWidth : fillRect.rect.width;
-        SetWidth(0);
+
+        // Calculate the number of indicators to spawn (one less than targetScore)
+        int indicatorCount = Mathf.Max(0, targetScore);
+        if (indicatorCount > 0 && acornLine != null && progressSlider.fillRect != null && lineHolder != null)
+        {
+            RectTransform fillRect = progressSlider.fillRect;
+            float width = fullWidth > 0f ? fullWidth : fillRect.rect.width;
+
+            for (int i = 1; i <= indicatorCount; i++)
+            {
+                // Calculate normalized position along the slider (0=start, 1=end)
+                float t = (float)i / targetScore;
+                float xPos = Mathf.Lerp(0, width, t);
+
+                // Instantiate a new indicator as a child of lineHolder
+                GameObject indicator = Instantiate(acornLine, lineHolder.transform);
+                indicator.SetActive(true);
+
+                /*
+
+                RectTransform rt = indicator.GetComponent<RectTransform>();
+                rt.anchorMin = new Vector2(0, 0.5f);
+                rt.anchorMax = new Vector2(0, 0.5f);
+                rt.pivot = new Vector2(0.5f, 0.5f);
+
+                // Position relative to the fillRect's width
+                rt.anchoredPosition = new Vector2(xPos, 0);
+                */
+
+            // Optionally set size if needed
+            // rt.sizeDelta = new Vector2(acornLine.GetComponent<RectTransform>().rect.width, acornLine.GetComponent<RectTransform>().rect.height);
+            }
+        }
+
+        progressSlider.value = 0f;
     }
 
-    void OnEnable()  => StartCoroutine(SubscribeWhenReady());
+    void OnEnable()
+    {
+        StartCoroutine(SubscribeWhenReady());
+        
+    } 
     void OnDisable()
     {
         if (ScoreManager.Instance != null)
@@ -51,14 +95,9 @@ public class CompletionBar : MonoBehaviour
     {
         currentScore = newScore;
         float ratio  = Mathf.Clamp01((float)currentScore / targetScore);
-        SetWidth(maxWidth * ratio);
+        progressSlider.value = ratio;
         AllCollected = IsComplete;
     }
+
     
-    void SetWidth(float w)
-    {
-        var s= fillRect.sizeDelta;
-        s.x = w;
-        fillRect.sizeDelta = s;
-    }
 }

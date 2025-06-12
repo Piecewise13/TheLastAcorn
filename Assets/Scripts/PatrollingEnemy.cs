@@ -10,6 +10,11 @@ public class PatrollingEnemy : MonoBehaviour
     [Tooltip("Units / second")]
     [SerializeField] private float speed = 2f;
 
+    [Header("Feedback")] 
+    [SerializeField] private AudioPlayer snakeAttack;
+
+    [SerializeField] private float damageLaunchForce = 20f;
+
     private Rigidbody2D rb;
     private Vector2 target;
 
@@ -32,12 +37,18 @@ public class PatrollingEnemy : MonoBehaviour
         // Reached the target?  Flip to the other one.
         if (Vector2.Distance(newPos, target) < 0.05f)
             target = (target == (Vector2)pointA.position) ? pointB.position : pointA.position;
-
-        // Optional: flip sprite so it faces the direction it moves
+        
         if (transform.localScale.x != Mathf.Sign(target.x - newPos.x))
         {
             Vector3 scale = transform.localScale;
             scale.x = Mathf.Sign(target.x - newPos.x) * Mathf.Abs(scale.x);
+            transform.localScale = scale;
+        }
+
+        if (rb.linearVelocity.x != 0)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = -Mathf.Sign(rb.linearVelocity.x) * Mathf.Abs(scale.x);
             transform.localScale = scale;
         }
     }
@@ -45,7 +56,8 @@ public class PatrollingEnemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        // other.GetComponent<PlayerHealth>()?.Die();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        snakeAttack?.Play();
+        PlayerLifeManager playerLifeManager = other.transform.root.GetComponent<PlayerLifeManager>();
+        playerLifeManager.DamagePlayer(Vector2.up * damageLaunchForce);
     }
 }
