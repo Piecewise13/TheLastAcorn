@@ -28,6 +28,8 @@ public class PlayerLifeManager : MonoBehaviour
 
     int currentLives;
 
+    private Vector2 spawnPoint;
+
     void Start()
     {
         currentLives = maxLives;
@@ -35,6 +37,8 @@ public class PlayerLifeManager : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
+
+        spawnPoint = transform.position;
     }
     public void DamagePlayer()
     {
@@ -77,6 +81,16 @@ public class PlayerLifeManager : MonoBehaviour
     IEnumerator ReloadSceneAfterDelay()
     {
         yield return new WaitForSeconds(0.75f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        playerMove.transform.position = spawnPoint;
+        playerMove.StopStun();
+        
+        currentLives = maxLives;
+        lifeUI.sprite = lifeIcons[currentLives];
+
+    }
+
+    public void UpdateSpawnpoint(Vector2 spawnPoint)
+    {
+        this.spawnPoint = spawnPoint;
     }
 }

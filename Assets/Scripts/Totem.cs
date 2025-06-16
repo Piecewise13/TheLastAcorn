@@ -26,9 +26,18 @@ public class Totem : MonoBehaviour
     
     const float DELAY_BEFORE_LOAD = 3f;
 
+    private void Start()
+    {
+        SaveLoadManager.SaveLevel(nextSceneName);
+        SceneManager.LoadScene(nextSceneName, LoadSceneMode.Additive);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
+        PlayerLifeManager playerLifeManager = other.transform.root.GetComponent<PlayerLifeManager>();
+        playerLifeManager.UpdateSpawnpoint(transform.position);
+
         GetComponent<Collider2D>().enabled = false;
 
         if (CompletionBar.AllCollected)
@@ -45,8 +54,7 @@ public class Totem : MonoBehaviour
         audioManager?.FadeOutAudio();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
-        SaveLoadManager.SaveLevel(nextSceneName);
-        SceneManager.LoadScene(nextSceneName);
+
     }
 
     IEnumerator NotReadySequence()
