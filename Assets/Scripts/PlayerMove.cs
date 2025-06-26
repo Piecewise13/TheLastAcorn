@@ -465,12 +465,13 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+/*
         Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
         if (climbableCollider != null)
         {
             return;
         }
-
+*/
         // Reset glide speed multiplier
         glideSpeedMultiplier = 1f;
 
