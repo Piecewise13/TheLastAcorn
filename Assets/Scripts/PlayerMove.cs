@@ -304,7 +304,8 @@ public class PlayerMove : MonoBehaviour
 
     private void FallingLogic()
     {
-        if(currentState == PlayerState.STUNNED)
+        // Redundant check?? 
+        if (currentState == PlayerState.STUNNED)
         {
             return;
         }
