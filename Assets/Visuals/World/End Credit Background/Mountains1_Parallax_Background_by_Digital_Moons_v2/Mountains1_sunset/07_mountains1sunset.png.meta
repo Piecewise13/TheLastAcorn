@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      07_mountains1sunset_0: -4677608409216914921
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
