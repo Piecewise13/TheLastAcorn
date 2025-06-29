@@ -176,6 +176,8 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private float maxGlideSpeed = 35f;
 
+    [SerializeField] private float flightMultiper = 2f;
+
     /// <summary>
     /// Multiplier for glide speed, increases over time.
     /// </summary>
@@ -304,6 +306,7 @@ public class PlayerMove : MonoBehaviour
 
     private void FallingLogic()
     {
+
 
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
@@ -461,17 +464,17 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-/*
-        Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
-        if (climbableCollider != null)
-        {
-            return;
-        }
-*/
+        /*
+                Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
+                if (climbableCollider != null)
+                {
+                    return;
+                }
+        */
         // Reset glide speed multiplier
-        glideSpeedMultiplier = 1f;
+        //glideSpeedMultiplier = 1f;
 
-        initialGlideSpeed = Mathf.Max(defaultGlideSpeed, Mathf.Abs(rb.linearVelocity.x));
+        initialGlideSpeed = defaultGlideSpeed;
 
         print("here");
 
@@ -489,14 +492,14 @@ public class PlayerMove : MonoBehaviour
         if (rb.linearVelocity.y < 0)
         {
             // Calculate glide speed based on downward velocity
-            float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));
+            //float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));
 
             // Increase glide speed multiplier over time
-            glideSpeedMultiplier += Time.deltaTime;
+            //glideSpeedMultiplier += Time.deltaTime / flightMultiper;
 
             // Determine direction based on graphic rotation
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2(Mathf.Clamp((glideX * glideSpeedMultiplier), 0f, maxGlideSpeed) * direction, rb.linearVelocity.y * 0.90f);
+            rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), maxGlideSpeed, Time.deltaTime * flightMultiper), 0f, maxGlideSpeed) * direction, rb.linearVelocity.y * 0.90f);
         }
         else
         {
@@ -505,6 +508,11 @@ public class PlayerMove : MonoBehaviour
             animator.SetBool("isGliding", false);
             animator.SetBool("isFalling", true);
         }
+    }
+
+    void ResetGlide()
+    {
+        glideSpeedMultiplier = 1f;
     }
 
     #region Climb Region
@@ -770,6 +778,9 @@ public class PlayerMove : MonoBehaviour
 
             ResetClimb();
 
+            ResetGlide();
+
+
             currentState = PlayerState.Grounded;
             print("Grounded");
             animator.SetBool("isFalling", false);
@@ -852,6 +863,8 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
+
+        ResetGlide();
 
         EnableMove();
 
