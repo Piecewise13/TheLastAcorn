@@ -311,7 +311,6 @@ public class PlayerMove : MonoBehaviour
     private void FallingLogic()
     {
 
-
         // Adjust gravity scale based on player state
         if (currentState == PlayerState.Grounded)
         {
