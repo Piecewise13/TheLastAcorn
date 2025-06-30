@@ -88,7 +88,7 @@ public class Owl : MonoBehaviour, IProximityAlert
     void EndAttach()
     {
         playerMovement.DetachFromOwl();
-
+        currentState = OwlState.Idle;
     }
 
 

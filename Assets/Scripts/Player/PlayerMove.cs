@@ -935,6 +935,7 @@ public class PlayerMove : MonoBehaviour
         {
             transform.SetParent(null, true);
         }
+        
         playerCamera.EndForceZoom();
         currentState = PlayerState.Fall;
         rb.gravityScale = 1f;
