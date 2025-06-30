@@ -16,7 +16,7 @@ TagManager:
   - UI
   - Climbable
   - Player
-  - DamageTrigger
+  - PlayerTrigger
   - Terrain
   - Acorn
   - 
