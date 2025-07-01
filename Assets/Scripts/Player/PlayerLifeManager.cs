@@ -42,6 +42,15 @@ public class PlayerLifeManager : MonoBehaviour
         DamagePlayer(Vector2.up * damageLaunchForce);
     }
 
+    public void StunPlayer() // stuns player without damaging them
+    {
+        if (isHurt) return; // Prevent multiple stuns while already hurt
+        animator.SetTrigger("Hurt");
+        playerMove.StunPlayer();
+        isHurt = true;
+        damageTimer = 0;
+    }
+
     public void DamagePlayer(Vector2 launchDir)
     {
         currentLives--;

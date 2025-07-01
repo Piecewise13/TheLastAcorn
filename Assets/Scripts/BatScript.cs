@@ -6,9 +6,11 @@ public class BatScript : MonoBehaviour
 
     [Tooltip("Speed of the bat's movement")]
     [SerializeField] private float speed = 100f;
-    [Tooltip("The angle the bat will move towards, in degrees")]
-    [SerializeField] private float targetAngle;
 
+    [Tooltip("-90 goes left, 0 goes up, 90 goes right")]
+    [SerializeField, Range(-90f, 90f)] private float targetAngle;
+
+    private float angle;
     private bool isAttached = false; // Flag to check if the bat is attached to the environment
     private bool isMoving = false; // Flag to check if the bat is currently moving
 
@@ -23,12 +25,12 @@ public class BatScript : MonoBehaviour
         }
         circleCollider.isTrigger = true; // Set the collider as a trigger
                                          // Want the circle collider to act as a trigger, so it doesn't physically interact with the player
-        BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-        if (boxCollider == null)
+        CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
+        if (capsuleCollider == null)
         {
-            boxCollider = gameObject.AddComponent<BoxCollider2D>();
+            capsuleCollider = gameObject.AddComponent<CapsuleCollider2D>();
         }
-        boxCollider.isTrigger = false; // This collider will be used for physical collisions
+        capsuleCollider.isTrigger = false; // This collider will be used for physical collisions
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
@@ -59,12 +61,13 @@ public class BatScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             // Start moving the bat at the specified angle
-            Vector2 direction = Quaternion.Euler(0, 0, targetAngle) * Vector2.right;
+            Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.linearVelocity = direction * speed * Time.fixedDeltaTime;
                 isMoving = true;
+                isAttached = false; // Reset the attached flag when the bat starts moving
             }
         }
     }
@@ -76,8 +79,12 @@ public class BatScript : MonoBehaviour
         {
             // Stop the bat's movement when it collides with the environment
             isMoving = false; // Set the moving flag to false
+            isAttached = true; // Set the attached flag to true
             Vector2 collisionNormal = collision.contacts[0].normal; // Get the normal of the collision
             float facingAngle = Vector2.SignedAngle(Vector2.up, collisionNormal); // Calculate the angle based on the collision normal
+                                                                                  // change the target angle to be relative to the facing angle
+            angle = facingAngle + targetAngle + 90f; // Update the target angle to match the collision normal
+            Debug.Log("Collision normal: " + collisionNormal + ", Facing angle: " + facingAngle + ", Target angle: " + angle);
             transform.rotation = Quaternion.Euler(0, 0, facingAngle); // Rotate the bat to face the collision normal
 
             // Optionally, you can also stop the Rigidbody2D's velocity
@@ -94,7 +101,7 @@ public class BatScript : MonoBehaviour
             PlayerLifeManager playerLifeManager = collision.transform.root.GetComponent<PlayerLifeManager>();
             if (playerLifeManager != null)
             {
-                playerLifeManager.DamagePlayer(Vector2.up * 20f); // Apply damage or stun effect
+                playerLifeManager.StunPlayer(); // Apply damage or stun effect
             }
         }
     }
