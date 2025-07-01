@@ -1,5 +1,6 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Owl : MonoBehaviour, IProximityAlert
 {
@@ -17,8 +18,8 @@ public class Owl : MonoBehaviour, IProximityAlert
     private PlayerCamera playerCamera;
 
     [SerializeField] private Transform playerAttachPoint;
-
-    [SerializeField] private Transform flightDestination;
+    [SerializeField] private List<Transform> flightPathPoints;
+    private int currentFlightPointIndex = 0;
     private Vector2 flightOrigin;
 
     [SerializeField] private float flightSpeed = 5f;
@@ -51,13 +52,28 @@ public class Owl : MonoBehaviour, IProximityAlert
             return;
         }
 
+        if (currentFlightPointIndex >= flightPathPoints.Count)
+        {
+            EndAttach();
+            return;
+        }
+
+        Transform flightDestination = flightPathPoints[currentFlightPointIndex];
+
+        // Move the owl towards the current flight path point
+        if (Vector2.Distance(transform.position, flightDestination.position) < 0.1f)
+        {
+            currentFlightPointIndex++;
+            if (currentFlightPointIndex >= flightPathPoints.Count)
+            {
+                EndAttach();
+                return;
+            }
+            flightDestination = flightPathPoints[currentFlightPointIndex];
+        }
+
         // Move the owl towards the flight destination
         transform.position = Vector2.MoveTowards(transform.position, flightDestination.position, Time.deltaTime * flightSpeed);
-
-
-        if (Vector2.Distance(transform.position, flightDestination.position) < 0.1f){
-            EndAttach();
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
