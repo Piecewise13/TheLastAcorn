@@ -79,6 +79,7 @@ public class Owl : MonoBehaviour, IProximityAlert
         if (playerMovement != null)
         {
             playerMovement.transform.SetParent(playerAttachPoint);
+            playerMovement.transform.position = playerAttachPoint.position;
             playerMovement.AttachToOwl();
             currentState = OwlState.Flying;
             playerCamera.StartForceZoom(cameraZoomAmount);
