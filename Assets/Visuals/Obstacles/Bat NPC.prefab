@@ -190,7 +190,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 10
+  m_Radius: 15
 --- !u!114 &285578261117171835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,5 +203,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351061614b7ff432e9ec995c8f8f12c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
-  targetAngle: 180
+  speed: 500
+  targetAngle: -1
