@@ -338,6 +338,7 @@ MonoBehaviour:
   graphicSprite: {fileID: 867419554417715573}
   playerCollider: {fileID: 5663293700936031498}
   stunnedEffect: {fileID: 979618266919138849}
+  playerCamera: {fileID: 0}
   collideDamageLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -362,8 +363,10 @@ MonoBehaviour:
   climbParticle: {fileID: 2401446795892416030}
   climbParticleRateOverTime: 7
   climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
+  spamCheeseMax: 5
   defaultGlideSpeed: 10
-  maxGlideSpeed: 30
+  maxGlideSpeed: 35
+  flightMultiper: 1
   glideHitVelocityThreshold: 25
   jumpForce: 8
   currentState: 0
@@ -715,8 +718,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 101, y: -85}
-  m_SizeDelta: {x: 504.30005, y: 157.31677}
+  m_AnchoredPosition: {x: 55.309, y: -85}
+  m_SizeDelta: {x: 540.091, y: 157.317}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4600879801197204653
 CanvasRenderer:
@@ -1012,7 +1015,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   acornArrow: {fileID: 5771070996691650930}
   playerMove: {fileID: 151922112089434294}
-  zoomOutAmount: 35
+  zoomOutAmount: 45
   zoomInAmount: 20
   zoomSpeed: 2
   zoomTime: 2
@@ -1034,7 +1037,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &816050590072223136
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8008,7 +8011,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4411338765519071729
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8955,7 +8958,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 42.6, y: -0.000030517578}
   m_SizeDelta: {x: 100.9529, y: 173.8472}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8662555993361117587
@@ -9065,7 +9068,7 @@ RectTransform:
   m_Father: {fileID: 7872270040874516905}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
