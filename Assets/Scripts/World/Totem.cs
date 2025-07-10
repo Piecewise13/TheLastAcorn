@@ -10,6 +10,9 @@ public class Totem : MonoBehaviour
     [Header("Scene")]
     [SerializeField] private string nextSceneName = "NextScene";
 
+    [Header("Score")]
+    [SerializeField] private int targetScore = 5;
+
     [Header("Success Feedback")]
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private GrowAndShrink growAndShrink;
@@ -31,7 +34,7 @@ public class Totem : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         GetComponent<Collider2D>().enabled = false;
 
-        if (CompletionBar.AllCollected)
+        if (ScoreManager.Instance.CurrentScore >= targetScore)
             StartCoroutine(ReadySequence());
         else
             StartCoroutine(NotReadySequence());
@@ -45,7 +48,7 @@ public class Totem : MonoBehaviour
         audioManager?.FadeOutAudio();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
-        SaveLoadManager.SaveLevel(nextSceneName);
+        SaveLoadManager.SaveCurrentLevelName(nextSceneName);
         SceneManager.LoadScene(nextSceneName);
     }
 

@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Owl Attach",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "8f54ca52-1902-4e76-9254-6fa46ec6b4c9",
                     "expectedControlType": "",
@@ -438,7 +438,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Owl Attach",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -449,7 +449,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Owl Attach",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

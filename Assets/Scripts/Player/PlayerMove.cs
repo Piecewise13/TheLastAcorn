@@ -120,6 +120,11 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private LayerMask climbableLayer;
 
     /// <summary>
+    /// The layers that the player can climb without collision.
+    /// </summary>
+    [SerializeField] private LayerMask noCollisionClimbLayer;
+
+    /// <summary>
     /// Transform used as the origin for climb checking.
     /// </summary>
     [SerializeField] private Transform climbCheckOrigin;
@@ -712,7 +717,7 @@ public class PlayerMove : MonoBehaviour
     {
         currentState = PlayerState.Climb;
 
-        playerCollider.enabled = false;
+        playerCollider.excludeLayers = noCollisionClimbLayer;
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -730,7 +735,7 @@ public class PlayerMove : MonoBehaviour
 
         currentState = PlayerState.Fall;
 
-        playerCollider.enabled = true;
+        playerCollider.excludeLayers = 0;
 
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -934,7 +939,7 @@ public class PlayerMove : MonoBehaviour
         {
             transform.SetParent(null, true);
         }
-        
+
         playerCamera.EndForceZoom();
         currentState = PlayerState.Fall;
         rb.gravityScale = 1f;

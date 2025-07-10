@@ -6,7 +6,7 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance { get; private set; }
 
     [SerializeField] private int levelMaxScore = 3;
-    private int score;
+    private static int score;
     public int CurrentScore => score;
     public event Action<int> OnScoreChanged;
 

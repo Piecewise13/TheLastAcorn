@@ -128,7 +128,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Owl Attach"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""8f54ca52-1902-4e76-9254-6fa46ec6b4c9"",
                     ""expectedControlType"": """",
@@ -524,7 +524,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Owl Attach"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -535,7 +535,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Owl Attach"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -550,7 +550,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
         m_Gameplay_Attach = m_Gameplay.FindAction("Attach", throwIfNotFound: true);
         m_Gameplay_Glide = m_Gameplay.FindAction("Glide", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
-        m_Gameplay_OwlAttach = m_Gameplay.FindAction("Owl Attach", throwIfNotFound: true);
+        m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_CameraZoom = m_Gameplay.FindAction("Camera Zoom", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_TestKeyboardControllerInput = m_Gameplay.FindAction("Test Keyboard/Controller Input", throwIfNotFound: true);
@@ -638,7 +638,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Attach;
     private readonly InputAction m_Gameplay_Glide;
     private readonly InputAction m_Gameplay_Jump;
-    private readonly InputAction m_Gameplay_OwlAttach;
+    private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_CameraZoom;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_TestKeyboardControllerInput;
@@ -670,9 +670,9 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         /// <summary>
-        /// Provides access to the underlying input action "Gameplay/OwlAttach".
+        /// Provides access to the underlying input action "Gameplay/Interact".
         /// </summary>
-        public InputAction @OwlAttach => m_Wrapper.m_Gameplay_OwlAttach;
+        public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         /// <summary>
         /// Provides access to the underlying input action "Gameplay/CameraZoom".
         /// </summary>
@@ -723,9 +723,9 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @OwlAttach.started += instance.OnOwlAttach;
-            @OwlAttach.performed += instance.OnOwlAttach;
-            @OwlAttach.canceled += instance.OnOwlAttach;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
             @CameraZoom.started += instance.OnCameraZoom;
             @CameraZoom.performed += instance.OnCameraZoom;
             @CameraZoom.canceled += instance.OnCameraZoom;
@@ -758,9 +758,9 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @OwlAttach.started -= instance.OnOwlAttach;
-            @OwlAttach.performed -= instance.OnOwlAttach;
-            @OwlAttach.canceled -= instance.OnOwlAttach;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
             @CameraZoom.started -= instance.OnCameraZoom;
             @CameraZoom.performed -= instance.OnCameraZoom;
             @CameraZoom.canceled -= instance.OnCameraZoom;
@@ -839,12 +839,12 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Owl Attach" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnOwlAttach(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Camera Zoom" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

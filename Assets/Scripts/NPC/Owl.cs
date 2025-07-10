@@ -17,6 +17,8 @@ public class Owl : MonoBehaviour, IProximityAlert
 
     private PlayerCamera playerCamera;
 
+    private Animator anim;
+
     [SerializeField] private Transform playerAttachPoint;
     [SerializeField] private List<Transform> flightPathPoints;
     private int currentFlightPointIndex = 0;
@@ -33,7 +35,7 @@ public class Owl : MonoBehaviour, IProximityAlert
     private void Awake()
     {
         playerMovementMap = new PlayerGameControls();
-        owlAttachAction = playerMovementMap.Gameplay.OwlAttach;
+        owlAttachAction = playerMovementMap.Gameplay.Interact;
         owlAttachAction.performed += AttachPlayerInput;
         
     }
@@ -42,6 +44,7 @@ public class Owl : MonoBehaviour, IProximityAlert
     void Start()
     {
         flightOrigin = transform.position;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -78,7 +81,8 @@ public class Owl : MonoBehaviour, IProximityAlert
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        print("in trigger");
+
+        
         var root = other.transform.root;
         playerMovement = root.GetComponent<PlayerMove>();
         playerCamera = root.GetComponentInChildren<PlayerCamera>();
@@ -88,6 +92,7 @@ public class Owl : MonoBehaviour, IProximityAlert
     void OnTriggerExit2D(Collider2D other)
     {
         owlAttachAction.Disable();
+
     }
 
     void AttachPlayerInput(InputAction.CallbackContext context)
@@ -108,18 +113,15 @@ public class Owl : MonoBehaviour, IProximityAlert
         currentState = OwlState.Idle;
     }
 
-
-
-
-
     public void PlayerInProximity(GameObject player)
     {
-        throw new System.NotImplementedException();
+        currentState = OwlState.Alert;
+        anim.SetBool("isAlert", true);
     }
 
     public void PlayerOutOfProximity(GameObject player)
     {
-        throw new System.NotImplementedException();
+        anim.SetBool("isAlert", false);
     }
 
     enum OwlState {
