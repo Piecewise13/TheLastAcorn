@@ -28,7 +28,7 @@ public class Owl : MonoBehaviour, IProximityAlert
 
     [SerializeField] private float cameraZoomAmount = 5f;
 
-    private OwlState currentState = OwlState.Idle;
+    [SerializeField]private OwlState currentState = OwlState.Idle;
 
 
 
@@ -37,7 +37,7 @@ public class Owl : MonoBehaviour, IProximityAlert
         playerMovementMap = new PlayerGameControls();
         owlAttachAction = playerMovementMap.Gameplay.Interact;
         owlAttachAction.performed += AttachPlayerInput;
-        
+
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -82,10 +82,14 @@ public class Owl : MonoBehaviour, IProximityAlert
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        
+
         var root = other.transform.root;
-        playerMovement = root.GetComponent<PlayerMove>();
-        playerCamera = root.GetComponentInChildren<PlayerCamera>();
+
+        if (playerMovement == null || playerCamera == null)
+        {
+            playerMovement = root.GetComponent<PlayerMove>();
+            playerCamera = root.GetComponentInChildren<PlayerCamera>();
+        }
         owlAttachAction.Enable();
     }
 
@@ -101,8 +105,10 @@ public class Owl : MonoBehaviour, IProximityAlert
         {
             playerMovement.transform.SetParent(playerAttachPoint);
             playerMovement.transform.position = playerAttachPoint.position;
+
             playerMovement.AttachToOwl();
             currentState = OwlState.Flying;
+
             playerCamera.StartForceZoom(cameraZoomAmount);
         }
     }
@@ -124,7 +130,8 @@ public class Owl : MonoBehaviour, IProximityAlert
         anim.SetBool("isAlert", false);
     }
 
-    enum OwlState {
+    enum OwlState
+    {
         Idle,
         Alert,
         Flying,
