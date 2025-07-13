@@ -8,6 +8,10 @@ public class BackgroundParalax : MonoBehaviour
 
     private Vector3 previousPlayerPosition;
 
+    private bool hasPlayer = false;
+
+    [SerializeField] private bool isLocationDependent = false; // If true, the parallax effect will only work when the player is within a certain area
+
     void Awake()
     {
         if (backgrounds.Length != parallaxFactors.Length)
@@ -24,9 +28,14 @@ public class BackgroundParalax : MonoBehaviour
             previousPlayerPosition = player.position;
     }
 
-    void Update()
+    private void Update()
     {
         if (player == null) return;
+
+        if (isLocationDependent && !hasPlayer)
+        {
+            return;
+        }
 
         Vector3 deltaMovement = player.position - previousPlayerPosition;
 
@@ -39,5 +48,15 @@ public class BackgroundParalax : MonoBehaviour
         }
 
         previousPlayerPosition = player.position;
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        hasPlayer = true;
+    }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        hasPlayer = false;
     }
 }
