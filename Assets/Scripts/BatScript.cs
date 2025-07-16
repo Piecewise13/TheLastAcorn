@@ -84,7 +84,7 @@ public class BatScript : MonoBehaviour
             float facingAngle = Vector2.SignedAngle(Vector2.up, collisionNormal); // Calculate the angle based on the collision normal
                                                                                   // change the target angle to be relative to the facing angle
             angle = facingAngle + targetAngle + 90f; // Update the target angle to match the collision normal
-            Debug.Log("Collision normal: " + collisionNormal + ", Facing angle: " + facingAngle + ", Target angle: " + angle);
+            //Debug.Log("Collision normal: " + collisionNormal + ", Facing angle: " + facingAngle + ", Target angle: " + angle);
             transform.rotation = Quaternion.Euler(0, 0, facingAngle); // Rotate the bat to face the collision normal
 
             // Optionally, you can also stop the Rigidbody2D's velocity

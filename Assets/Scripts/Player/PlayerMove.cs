@@ -183,6 +183,9 @@ public class PlayerMove : MonoBehaviour
     private float initialGlideSpeed;
 
     [SerializeField] private float maxGlideSpeed = 35f;
+    [SerializeField] private float maxGlideSpeedInGust = 50f;
+
+    private bool inGust = false;
 
     [SerializeField] private float flightMultiper = 2f;
 
@@ -459,7 +462,7 @@ public class PlayerMove : MonoBehaviour
         {
             if (currentState == PlayerState.Glide)
             {
-                print("Already glidig");
+
                 animator.SetBool("isGliding", false);
                 currentState = PlayerState.Fall;
             }
@@ -484,8 +487,6 @@ public class PlayerMove : MonoBehaviour
 
         initialGlideSpeed = defaultGlideSpeed;
 
-        print("here");
-
         // Enter glide state and update animation
         currentState = PlayerState.Glide;
         animator.SetBool("isGliding", true);
@@ -507,7 +508,14 @@ public class PlayerMove : MonoBehaviour
 
             // Determine direction based on graphic rotation
             float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
-            rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), maxGlideSpeed, Time.deltaTime * flightMultiper), 0f, maxGlideSpeed) * direction, rb.linearVelocity.y * 0.90f);
+
+            float glideSpeedCap = inGust ? maxGlideSpeedInGust : maxGlideSpeed;
+
+            float yDecline = inGust ? 0.99f : 0.9f;
+
+            // rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper), 0f, glideSpeedCap) * direction, rb.linearVelocity.y * 0.90f);
+            rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
+            print(rb.linearVelocity.x);
         }
         else
         {
@@ -951,6 +959,16 @@ public class PlayerMove : MonoBehaviour
         moveAction.Enable();
         attachAction.Enable();
         glideAction.Enable();
+    }
+
+    public void EnterGust()
+    {
+        inGust = true;
+    }
+
+    public void ExitGust()
+    {
+        inGust = false;
     }
 
     /// <summary>
