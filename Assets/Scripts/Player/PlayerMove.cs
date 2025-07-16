@@ -337,6 +337,7 @@ public class PlayerMove : MonoBehaviour
         if (currentState == PlayerState.Glide)
         {
             jumpHeldDuration = 0f;
+            rb.gravityScale = inGust ? 0.0f : 2.8f;
             return;
         }
 
@@ -498,7 +499,7 @@ public class PlayerMove : MonoBehaviour
     private void Glide()
     {
         // Only apply glide if falling downwards
-        if (rb.linearVelocity.y < 0)
+        if (rb.linearVelocity.y < 0 || inGust)
         {
             // Calculate glide speed based on downward velocity
             //float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));

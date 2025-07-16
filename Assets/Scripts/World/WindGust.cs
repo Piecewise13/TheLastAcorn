@@ -3,7 +3,9 @@ using UnityEngine;
 public class WindGust : MonoBehaviour
 {
 
-    [SerializeField] private float gustForce = 100f;
+    [SerializeField] private float glideGustForce = 100f;
+
+    [SerializeField] private float idleGustForce = 50f;
 
     private bool hasPlayer = false;
     private Rigidbody2D playerRb;
@@ -25,7 +27,10 @@ public class WindGust : MonoBehaviour
             return;
         }
 
-        playerRb.AddForce(transform.right * gustForce, ForceMode2D.Force);
+        float gustForce = playerMove.GetPlayerState() == PlayerState.Glide ? glideGustForce : idleGustForce;
+
+        //playerRb.AddForce(transform.right * gustForce, ForceMode2D.Force);
+        playerRb.linearVelocity = playerRb.linearVelocity + (Vector2)transform.right * gustForce * Time.fixedDeltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -40,6 +45,7 @@ public class WindGust : MonoBehaviour
         var root = collision.transform.root;
 
         playerRb = root.GetComponent<Rigidbody2D>();
+        //playerRb.linearVelocity = Vector2.zero; // Reset velocity when entering gust
 
         playerMove.EnterGust();
     }
