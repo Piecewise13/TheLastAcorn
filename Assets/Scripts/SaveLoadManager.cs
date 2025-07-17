@@ -7,6 +7,10 @@ public static class SaveLoadManager
 {
     private const string LevelKey = "CurrentLevel";
     private const string TotalScoreKey = "TotalScore";
+    
+    // Check if persistence is disabled for debugging
+    private static bool IsDebugMode => DebugSettings.Instance != null && DebugSettings.Instance.DisablePersistence;
+    private static bool ShowDebugLogs => DebugSettings.Instance != null && DebugSettings.Instance.ShowDebugLogs;
 
     static Dictionary<string, LevelData> levelDataDictionary = new Dictionary<string, LevelData>();
     
@@ -17,6 +21,12 @@ public static class SaveLoadManager
     // Saves the current level number
     public static void SaveCurrentLevelName(string levelName)
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping save level name: {levelName}");
+            return;
+        }
+        
         PlayerPrefs.SetString(LevelKey, levelName);
         PlayerPrefs.Save();
     }
@@ -30,6 +40,12 @@ public static class SaveLoadManager
 
     public static string GetLoadedLevel()
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log("[SaveLoadManager] DEBUG MODE: Returning default level (Level1)");
+            return "Level1";
+        }
+        
         return PlayerPrefs.GetString(LevelKey, "Level1");
     }
 
@@ -52,24 +68,53 @@ public static class SaveLoadManager
 
     public static bool IsLevelSaved()
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log("[SaveLoadManager] DEBUG MODE: Returning false for IsLevelSaved");
+            return false;
+        }
+        
         return PlayerPrefs.HasKey(LevelKey);
     }
 
     // Save and load persistent total score
     public static void SaveTotalScore(int score)
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping save total score: {score}");
+            return;
+        }
+        
         PlayerPrefs.SetInt(TotalScoreKey, score);
         PlayerPrefs.Save();
     }
 
     public static int LoadTotalScore()
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log("[SaveLoadManager] DEBUG MODE: Returning 0 for total score");
+            return 0;
+        }
+        
         return PlayerPrefs.GetInt(TotalScoreKey, 0);
     }
 
     // Track collected acorns per level
     public static void MarkAcornCollected(string levelName, string acornId)
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping mark acorn collected: {levelName}/{acornId}");
+            // Still track in current scene session for scene restart functionality
+            if (currentSceneName == levelName)
+            {
+                currentSceneCollectedAcorns.Add(acornId);
+            }
+            return;
+        }
+        
         string key = $"Acorn_{levelName}_{acornId}";
         PlayerPrefs.SetInt(key, 1);
         PlayerPrefs.Save();
@@ -83,6 +128,12 @@ public static class SaveLoadManager
 
     public static bool IsAcornCollected(string levelName, string acornId)
     {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Returning false for acorn collected: {levelName}/{acornId}");
+            return false;
+        }
+        
         string key = $"Acorn_{levelName}_{acornId}";
         return PlayerPrefs.GetInt(key, 0) == 1;
     }
@@ -107,6 +158,14 @@ public static class SaveLoadManager
     public static void ResetCurrentSceneAcorns()
     {
         if (string.IsNullOrEmpty(currentSceneName)) return;
+        
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping reset current scene acorns for: {currentSceneName}");
+            // Still clear current session tracking for scene restart functionality
+            currentSceneCollectedAcorns.Clear();
+            return;
+        }
         
         // Remove current scene acorns from persistent storage
         foreach (string acornId in currentSceneCollectedAcorns)
