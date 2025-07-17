@@ -20,21 +20,17 @@ public class DebugSettings : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             
             if (showDebugLogs)
-            {
                 Debug.Log($"[DebugSettings] Initialized - Persistence: {(!disablePersistence ? "ENABLED" : "DISABLED")}");
-            }
+            
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        else Destroy(gameObject);
+        
     }
     
     private void OnValidate()
     {
         if (Application.isPlaying && showDebugLogs)
-        {
             Debug.Log($"[DebugSettings] Settings changed - Persistence: {(!disablePersistence ? "ENABLED" : "DISABLED")}");
-        }
+        
     }
 }
