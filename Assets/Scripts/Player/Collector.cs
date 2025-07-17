@@ -23,6 +23,9 @@ public class Collector : MonoBehaviour
         other.enabled = false;
         ScoreManager.Instance.AddScore(collectible.Value);
 
+        if (other.TryGetComponent<Acorn>(out var acorn))
+            acorn.OnCollected();
+
         sfxPlayer?.Play();
 
         if (other.TryGetComponent(out GrowAndShrink gs))

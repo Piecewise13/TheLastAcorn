@@ -12,23 +12,32 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null) 
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            
+            // Load persistent score on first initialization
+            score = SaveLoadManager.LoadTotalScore();
+        }
         else Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        OnScoreChanged?.Invoke(score);
     }
 
     public void AddScore(int amount)
     {
         score += amount;
         OnScoreChanged?.Invoke(score);
+        
+        // Save the new total score persistently
+        SaveLoadManager.SaveTotalScore(score);
     }
 
-    public int GetMaxScore()
-    {
-        return levelMaxScore;
-    }
+    public int GetMaxScore(){return levelMaxScore;}
 
-    public int GetScore()
-    {
-        return score;
-    }
+    public int GetScore(){return score;}
 }
