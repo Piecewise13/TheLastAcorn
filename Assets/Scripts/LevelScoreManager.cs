@@ -51,4 +51,10 @@ public class LevelScoreManager : MonoBehaviour
     {
         return levelScore;
     }
+    
+    public void ResetLevelScore()
+    {
+        levelScore = 0;
+        OnLevelScoreChanged?.Invoke(levelScore);
+    }
 }
