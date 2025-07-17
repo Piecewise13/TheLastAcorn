@@ -40,4 +40,25 @@ public class ScoreManager : MonoBehaviour
     public int GetMaxScore(){return levelMaxScore;}
 
     public int GetScore(){return score;}
+
+    // Reset score to 0 and update UI
+    public void ResetScore()
+    {
+        score = 0;
+        OnScoreChanged?.Invoke(score);
+        SaveLoadManager.SaveTotalScore(score);
+    }
+    
+    // Reset current scene acorns and adjust total score
+    public void ResetCurrentSceneScore()
+    {
+        int currentSceneAcornCount = SaveLoadManager.GetCurrentSceneAcornCount();
+        if (currentSceneAcornCount > 0)
+        {
+            score -= currentSceneAcornCount; // Subtract collected acorns from total
+            if (score < 0) score = 0; // Ensure score doesn't go negative
+            OnScoreChanged?.Invoke(score);
+            SaveLoadManager.SaveTotalScore(score);
+        }
+    }
 }

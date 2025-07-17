@@ -9,6 +9,10 @@ public static class SaveLoadManager
     private const string TotalScoreKey = "TotalScore";
 
     static Dictionary<string, LevelData> levelDataDictionary = new Dictionary<string, LevelData>();
+    
+    // Track acorns collected in current scene session (for scene restart)
+    private static HashSet<string> currentSceneCollectedAcorns = new HashSet<string>();
+    private static string currentSceneName = "";
 
     // Saves the current level number
     public static void SaveCurrentLevelName(string levelName)
@@ -69,6 +73,12 @@ public static class SaveLoadManager
         string key = $"Acorn_{levelName}_{acornId}";
         PlayerPrefs.SetInt(key, 1);
         PlayerPrefs.Save();
+        
+        // Also track in current scene session
+        if (currentSceneName == levelName)
+        {
+            currentSceneCollectedAcorns.Add(acornId);
+        }
     }
 
     public static bool IsAcornCollected(string levelName, string acornId)
@@ -85,6 +95,36 @@ public static class SaveLoadManager
     }
 
     public static void ClearLevelAcorns(string levelName){PlayerPrefs.Save();}
+    
+    // Initialize scene state tracking
+    public static void InitializeSceneState(string levelName)
+    {
+        currentSceneName = levelName;
+        currentSceneCollectedAcorns.Clear();
+    }
+    
+    // Reset only current scene acorns (for scene restart)
+    public static void ResetCurrentSceneAcorns()
+    {
+        if (string.IsNullOrEmpty(currentSceneName)) return;
+        
+        // Remove current scene acorns from persistent storage
+        foreach (string acornId in currentSceneCollectedAcorns)
+        {
+            string key = $"Acorn_{currentSceneName}_{acornId}";
+            PlayerPrefs.DeleteKey(key);
+        }
+        PlayerPrefs.Save();
+        
+        // Clear current session tracking
+        currentSceneCollectedAcorns.Clear();
+    }
+    
+    // Get count of acorns collected in current scene session
+    public static int GetCurrentSceneAcornCount()
+    {
+        return currentSceneCollectedAcorns.Count;
+    }
 
     // Debug method to check persistence status
     public static void LogSaveStatus()
