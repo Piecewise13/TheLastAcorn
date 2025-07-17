@@ -41,15 +41,15 @@ public class AudioSceneManager : MonoBehaviour
 
     void OnDisable()
     {
-        if (ScoreManager.Instance != null)
-            ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
+        if (LevelScoreManager.Instance != null)
+            LevelScoreManager.Instance.OnLevelScoreChanged -= HandleScoreChanged;
     }
 
     IEnumerator SubscribeWhenReady()
     {
-        while (ScoreManager.Instance == null) yield return null;
-        ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
-        HandleScoreChanged(ScoreManager.Instance.CurrentScore);
+        while (LevelScoreManager.Instance == null) yield return null;
+        LevelScoreManager.Instance.OnLevelScoreChanged += HandleScoreChanged;
+        HandleScoreChanged(LevelScoreManager.Instance.CurrentLevelScore);
     }
 
     void HandleScoreChanged(int newScore)

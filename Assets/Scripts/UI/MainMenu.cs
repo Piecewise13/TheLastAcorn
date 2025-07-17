@@ -37,6 +37,15 @@ public class MainMenu : MonoBehaviour
 
     public void StartNewGame()
     {
+        // Reset all game data for new game
+        SaveLoadManager.ClearAllSaveData();
+        
+        // Reset score in ScoreManager if it exists
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.ResetScore();
+        }
+        
         StartCoroutine(WaitForTransition(waitTime, "Cut Scenes"));
     }
 

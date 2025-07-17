@@ -41,6 +41,13 @@ public static class SceneLoader
     
     public static void RestartLevel()
     {
+        // Reset current scene acorns and adjust total score for manual restart
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.ResetCurrentSceneScore();
+        }
+        SaveLoadManager.ResetCurrentSceneAcorns();
+        
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

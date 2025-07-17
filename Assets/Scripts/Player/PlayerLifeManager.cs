@@ -86,6 +86,15 @@ public class PlayerLifeManager : MonoBehaviour
     IEnumerator ReloadSceneAfterDelay()
     {
         yield return new WaitForSeconds(0.75f);
+        
+        // Reset current scene acorns and adjust total score
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.ResetCurrentSceneScore();
+        }
+        SaveLoadManager.ResetCurrentSceneAcorns();
+        
+        // Reload the scene to respawn acorns
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
