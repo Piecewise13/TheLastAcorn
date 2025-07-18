@@ -54,7 +54,7 @@ public class Totem : MonoBehaviour
 
     IEnumerator NotReadySequence()
     {
-        count.text = (ScoreManager.Instance.GetMaxScore()) + "";
+        count.text = (targetScore) + "";
         notReadyMessage?.SetActive(true);
         growAndShrink?.Grow();
         notReadySfx?.Play();

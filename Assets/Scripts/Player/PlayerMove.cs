@@ -516,7 +516,7 @@ public class PlayerMove : MonoBehaviour
 
             // rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper), 0f, glideSpeedCap) * direction, rb.linearVelocity.y * 0.90f);
             rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
-            print(rb.linearVelocity.x);
+//            print(rb.linearVelocity.x);
         }
         else
         {
@@ -823,7 +823,7 @@ public class PlayerMove : MonoBehaviour
         if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
-            //print(collision.relativeVelocity);
+            print("collision velo: " + collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
             if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)

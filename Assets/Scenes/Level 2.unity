@@ -106879,6 +106879,10 @@ PrefabInstance:
       propertyPath: ambiencePlayer
       value: 
       objectReference: {fileID: 73781485}
+    - target: {fileID: 2834595760933598877, guid: acd288e89cb448541acbc025958c5e89, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7608516494688604138, guid: acd288e89cb448541acbc025958c5e89, type: 3}
       propertyPath: m_Name
       value: End Level Statue
