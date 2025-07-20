@@ -25,7 +25,7 @@ public class CaveCameraZoom : MonoBehaviour
             var playerCamera = otherRoot.GetComponentInChildren<PlayerCamera>();
             if (playerCamera != null)
             {
-                playerCamera.StartForceZoom(cameraZoomAmount);
+                playerCamera.StartForceZoom(cameraZoomAmount, PlayerCamera.CameraState.CaveZoomed);
             }
         }
     }
@@ -38,7 +38,7 @@ public class CaveCameraZoom : MonoBehaviour
             var playerCamera = otherRoot.GetComponentInChildren<PlayerCamera>();
             if (playerCamera != null)
             {
-                playerCamera.EndForceZoom();
+                playerCamera.EndForceZoom(PlayerCamera.CameraState.CaveZoomed);
             }
         }
     }

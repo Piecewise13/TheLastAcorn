@@ -185,6 +185,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float maxGlideSpeed = 35f;
     [SerializeField] private float maxGlideSpeedInGust = 50f;
 
+
     private bool inGust = false;
 
     [SerializeField] private float flightMultiper = 2f;
@@ -206,10 +207,17 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float jumpForce = 5.0f;
 
+    private float jumpHeldDuration = 0f;
+
     private float jumpBufferTime = 0.1f; // Adjust as needed (0.1s = ~6 frames at 60fps)
     private float jumpBufferTimer = 0f;
 
     private bool isJumpHeld = false;
+
+    [Header("Camera Zoom Settings")]
+    [SerializeField] private float maxSideMovementZoom = 40f;
+    [SerializeField] private float sideSpeedThreshold = 15f;
+    [SerializeField] private AnimationCurve sideMovementZoomCurve;
 
     /// <summary>
     /// Current state of the player.
@@ -279,6 +287,8 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        SideMovementCameraZoom();
+
         // Handle climbing logic
         if (currentState == PlayerState.Climb)
         {
@@ -290,6 +300,8 @@ public class PlayerMove : MonoBehaviour
         GroundCheck();
 
         FallingLogic();
+
+
 
         // Handle gliding logic
         if (currentState == PlayerState.Glide)
@@ -314,8 +326,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private float jumpHeldDuration = 0f;
-
     private void FallingLogic()
     {
 
@@ -324,6 +334,7 @@ public class PlayerMove : MonoBehaviour
         {
             rb.gravityScale = 1.5f;
             jumpHeldDuration = 0f;
+            playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
             return;
         }
 
@@ -395,6 +406,24 @@ public class PlayerMove : MonoBehaviour
         // Flip graphic if moving horizontally
         if (moveInput.x != 0)
             FlipGraphic(moveInput.x);
+    }
+
+        private void SideMovementCameraZoom()
+    {
+
+        if (currentState != PlayerState.Glide && currentState != PlayerState.Fall)
+        {
+            playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
+            return;
+        }
+
+        float sideMovementSpeed = Mathf.Abs(rb.linearVelocity.x);
+
+        if (sideMovementSpeed > sideSpeedThreshold)
+        {
+            playerCamera.StartForceZoom(Mathf.Lerp(playerCamera.GetDefaultZoom(), maxSideMovementZoom, sideMovementZoomCurve.Evaluate(sideMovementSpeed / maxGlideSpeed)), PlayerCamera.CameraState.GlideZoom);
+        }
+
     }
 
     private bool ShouldApplyAirControl(float inputX, float velocityX)
@@ -476,15 +505,6 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        /*
-                Collider2D climbableCollider = Physics2D.OverlapCircle(climbCheckOrigin.position, climbCheckReach, climbableLayer);
-                if (climbableCollider != null)
-                {
-                    return;
-                }
-        */
-        // Reset glide speed multiplier
-        //glideSpeedMultiplier = 1f;
 
         initialGlideSpeed = defaultGlideSpeed;
 
@@ -514,9 +534,10 @@ public class PlayerMove : MonoBehaviour
 
             float yDecline = inGust ? 0.99f : 0.9f;
 
+
             // rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper), 0f, glideSpeedCap) * direction, rb.linearVelocity.y * 0.90f);
             rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
-//            print(rb.linearVelocity.x);
+            //            print(rb.linearVelocity.x);
         }
         else
         {
@@ -526,6 +547,7 @@ public class PlayerMove : MonoBehaviour
             animator.SetBool("isFalling", true);
         }
     }
+
 
     void ResetGlide()
     {
@@ -724,6 +746,9 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void StartClimb()
     {
+
+
+
         currentState = PlayerState.Climb;
 
         playerCollider.excludeLayers = noCollisionClimbLayer;
@@ -801,7 +826,7 @@ public class PlayerMove : MonoBehaviour
 
 
             currentState = PlayerState.Grounded;
-            print("Grounded");
+            //print("Grounded");
             animator.SetBool("isFalling", false);
             animator.SetBool("isGliding", false);
 
@@ -823,7 +848,7 @@ public class PlayerMove : MonoBehaviour
         if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
-            print("collision velo: " + collision.relativeVelocity);
+            //            print("collision velo: " + collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
             if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)
@@ -949,7 +974,7 @@ public class PlayerMove : MonoBehaviour
             transform.SetParent(null, true);
         }
 
-        playerCamera.EndForceZoom();
+        playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
         currentState = PlayerState.Fall;
         rb.gravityScale = 1f;
         animator.SetBool("isFalling", true);

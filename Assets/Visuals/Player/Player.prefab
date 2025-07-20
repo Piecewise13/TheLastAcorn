@@ -368,10 +368,37 @@ MonoBehaviour:
   climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
   spamCheeseMax: 5
   defaultGlideSpeed: 10
-  maxGlideSpeed: 35
+  maxGlideSpeed: 40
+  maxGlideSpeedInGust: 60
   flightMultiper: 1
   glideHitVelocityThreshold: 25
   jumpForce: 8
+  maxSideMovementZoom: 40
+  sideSpeedThreshold: 15
+  sideMovementZoomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.211696
+      outSlope: 3.211696
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.03236562
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   currentState: 0
 --- !u!50 &6681820592772038295
 Rigidbody2D:
@@ -1087,6 +1114,7 @@ MonoBehaviour:
   zoomInAmount: 20
   zoomSpeed: 2
   zoomTime: 2
+  cameraState: 1
   zoomInSFX: {fileID: 1316628860150957882}
   zoomOutSFX: {fileID: 3005658991925814336}
 --- !u!1 &2034340051777852268

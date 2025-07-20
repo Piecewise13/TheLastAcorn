@@ -109,7 +109,7 @@ public class Owl : MonoBehaviour, IProximityAlert
             playerMovement.AttachToOwl();
             currentState = OwlState.Flying;
 
-            playerCamera.StartForceZoom(cameraZoomAmount);
+            playerCamera.StartForceZoom(cameraZoomAmount, PlayerCamera.CameraState.GlideZoom);
         }
     }
 

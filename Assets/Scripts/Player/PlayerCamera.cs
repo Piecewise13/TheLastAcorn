@@ -26,6 +26,8 @@ public class PlayerCamera : MonoBehaviour
 
     private bool canZoom = true;
 
+    [SerializeField] private CameraState cameraState = CameraState.Default;
+
     [Header("Feedback")]
     [SerializeField] private AudioPlayer zoomInSFX;
     [SerializeField] private AudioPlayer zoomOutSFX;
@@ -66,7 +68,7 @@ public class PlayerCamera : MonoBehaviour
     private void Zoom(InputAction.CallbackContext context)
     {
 
-        if (!canZoom)
+        if (cameraState == CameraState.Disabled)
         {
             return;
         }
@@ -89,30 +91,99 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    public void StartForceZoom(float newZoom)
+    public void StartForceZoom(float newZoom, CameraState state)
     {
-        canZoom = false;
+
+
+        if (cameraState == CameraState.Disabled)
+        {
+            return;
+        }
+
+        if (cameraState == state)
+        {
+            this.targetZoom = newZoom;
+            zoomTimer = 0;
+            return;
+        }
+
+        if (cameraState == CameraState.CaveZoomed)
+        {
+            return;
+        }
+
+
+        cameraState = state;
         this.targetZoom = newZoom;
         zoomTimer = 0;
+
+
+        // switch (cameraState)
+        // {
+        //     case CameraState.Default:
+        //         targetZoom = zoomInAmount;
+        //         cameraState = state;
+        //         zoomTimer = 0;
+        //         break;
+        //     case CameraState.PlayerZoomed:
+        //         targetZoom = zoomInAmount;
+        //         cameraState = state;
+        //         zoomTimer = 0;
+        //         break;
+        //     case CameraState.CaveZoomed:
+        //         return;
+        //     case CameraState.GlideZoom:
+        //         targetZoom = zoomInAmount;
+        //         cameraState = state;
+        //         zoomTimer = 0;
+        //         break;
+        //     default:
+        //         return; // Invalid state, do nothing
+        // }
+
+
+        // if(cameraState == CameraState.)
+        // cameraState = state;
+        // canZoom = false;
+        // this.targetZoom = newZoom;
+        // zoomTimer = 0;
     }
 
-    public void EndForceZoom()
+    public void EndForceZoom(CameraState state)
     {
-        canZoom = true;
+        if(cameraState != state){
+            return;
+        }
+
+        cameraState = CameraState.Default;
         targetZoom = zoomInAmount;
         zoomTimer = 0;
     }
 
     public void DisableZoom()
     {
-        canZoom = false;
+        cameraState = CameraState.Disabled;
         zoomAction.Disable();
     }
 
     public void EnableZoom()
     {
-        canZoom = true;
+        cameraState = CameraState.Default;
         zoomAction.Enable();
     }
-    
+
+    public float GetDefaultZoom()
+    {
+        return zoomInAmount;
+    }
+
+    public enum CameraState
+    {
+        Disabled,
+        Default,
+        PlayerZoomed,
+        CaveZoomed,
+        GlideZoom
+    }
+
 }
