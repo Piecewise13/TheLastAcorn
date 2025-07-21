@@ -86,9 +86,15 @@ public class FoxScript : MonoBehaviour
                 {
                     animator.SetBool("isRunning", false);
                     isRunning = false;
-                    walkTimer = 0f; // Reset walk timer when not chasing
-                    speedMultiplier = 1f; // Reset speed multiplier
                 }
+
+                if (animator.GetBool("isWalking"))
+                {
+                    animator.SetBool("isWalking", false);
+                }
+
+                walkTimer = 0f; // Reset walk timer when not chasing
+                speedMultiplier = 1f; // Reset speed multiplier
             }
         }
     }
