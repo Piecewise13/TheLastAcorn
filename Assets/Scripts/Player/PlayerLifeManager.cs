@@ -11,8 +11,16 @@ public class PlayerLifeManager : MonoBehaviour
 
     private Animator animator;
 
+    [SerializeField] private SpriteRenderer playerSprite;
+
     [SerializeField] private float damageTime;
     private float damageTimer;
+
+    [SerializeField] private float immuneTime;
+
+    private float immuneTimer;
+
+    private IEnumerator immuneCoroutine;
 
     [SerializeField] private float damageLaunchForce = 40f;
 
@@ -25,6 +33,8 @@ public class PlayerLifeManager : MonoBehaviour
     [SerializeField] private AudioPlayer uiSfx;
 
     private bool isHurt = false;
+
+    private bool isImmune = false;
 
     int currentLives;
 
@@ -44,7 +54,6 @@ public class PlayerLifeManager : MonoBehaviour
 
     public void StunPlayer() // stuns player without damaging them
     {
-        if (isHurt) return; // Prevent multiple stuns while already hurt
         animator.SetTrigger("Hurt");
         playerMove.StunPlayer();
         isHurt = true;
@@ -53,6 +62,10 @@ public class PlayerLifeManager : MonoBehaviour
 
     public void DamagePlayer(Vector2 launchDir)
     {
+        if (isImmune) {
+            return;
+        }
+
         currentLives--;
         lifeUI.sprite = lifeIcons[currentLives];
         hurtSfx?.Play();
@@ -63,8 +76,14 @@ public class PlayerLifeManager : MonoBehaviour
 
         playerMove.StunPlayer();
         isHurt = true;
-
         damageTimer = 0;
+
+        isImmune = true;
+        immuneCoroutine = MakeImmune(0.2f, 0.25f, 1f);
+        StartCoroutine(immuneCoroutine);
+        immuneTimer = 0f;
+
+
 
         if (currentLives <= 0)
             StartCoroutine(ReloadSceneAfterDelay());
@@ -80,6 +99,60 @@ public class PlayerLifeManager : MonoBehaviour
                 isHurt = false;
             }
             damageTimer += Time.deltaTime;
+        }
+
+        if (isImmune)
+        {
+            if (immuneTimer > immuneTime)
+            {
+                isImmune = false;
+                StopCoroutine(immuneCoroutine);
+                Color c = playerSprite.color;
+                c.a = 1f;
+                playerSprite.color = c;
+            }
+            immuneTimer += Time.deltaTime;
+        }   
+    }
+
+    IEnumerator MakeImmune(float alphaTime, float targetAlphaMin, float targetAlphaMax)
+    {
+        float originalAlpha = targetAlphaMax;
+        float elapsed = 0f;
+
+        while (true)
+        {
+            // Fade out
+            elapsed = 0f;
+            while (elapsed < alphaTime)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / alphaTime;
+                float currentAlpha = Mathf.Lerp(originalAlpha, targetAlphaMin, t);
+                if (playerSprite != null)
+                {
+                    Color c = playerSprite.color;
+                    c.a = currentAlpha;
+                    playerSprite.color = c;
+                }
+                yield return null;
+            }
+
+            // Fade in
+            elapsed = 0f;
+            while (elapsed < alphaTime)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / alphaTime;
+                float currentAlpha = Mathf.Lerp(originalAlpha, targetAlphaMax, t);
+                if (playerSprite != null)
+                {
+                    Color c = playerSprite.color;
+                    c.a = currentAlpha;
+                    playerSprite.color = c;
+                }
+                yield return null;
+            }
         }
     }
 

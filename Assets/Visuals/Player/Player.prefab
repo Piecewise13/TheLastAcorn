@@ -371,7 +371,7 @@ MonoBehaviour:
   maxGlideSpeed: 40
   maxGlideSpeedInGust: 60
   flightMultiper: 1
-  glideHitVelocityThreshold: 25
+  glideHitVelocityThreshold: 30
   jumpForce: 8
   maxSideMovementZoom: 40
   sideSpeedThreshold: 15
@@ -453,7 +453,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7a282d69801449a59150d96d3d7ad0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSprite: {fileID: 867419554417715573}
   damageTime: 0.75
+  immuneTime: 3
   damageLaunchForce: 30
   maxLives: 3
   lifeIcons:

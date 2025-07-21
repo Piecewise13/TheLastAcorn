@@ -5,9 +5,6 @@ using UnityEngine;
 public class ProximityTrigger : MonoBehaviour
 {
 
-    [Tooltip("Radius of the proximity trigger.")]
-    [SerializeField] private float radius = 5f;
-
 
     private IProximityAlert proximityAlert;
 
