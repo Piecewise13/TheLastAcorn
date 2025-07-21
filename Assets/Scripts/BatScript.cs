@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BatScript : MonoBehaviour
+public class BatScript : MonoBehaviour, IProximityAlert
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -54,23 +54,7 @@ public class BatScript : MonoBehaviour
             isMoving = true; // Set the moving flag to true
         }
     }
-    
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        // Only respond to the player entering the trigger (circle collider)
-        if (other.CompareTag("Player"))
-        {
-            // Start moving the bat at the specified angle
-            Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.linearVelocity = direction * speed * Time.fixedDeltaTime;
-                isMoving = true;
-                isAttached = false; // Reset the attached flag when the bat starts moving
-            }
-        }
-    }
+
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -104,5 +88,23 @@ public class BatScript : MonoBehaviour
                 playerLifeManager.StunPlayer(); // Apply damage or stun effect
             }
         }
+    }
+
+    public void PlayerInProximity(GameObject player)
+    {
+                    // Start moving the bat at the specified angle
+            Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.linearVelocity = direction * speed * Time.fixedDeltaTime;
+                isMoving = true;
+                isAttached = false; // Reset the attached flag when the bat starts moving
+            }
+    }
+
+    public void PlayerOutOfProximity(GameObject player)
+    {
+        
     }
 }
