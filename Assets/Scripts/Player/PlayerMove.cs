@@ -282,7 +282,9 @@ public class PlayerMove : MonoBehaviour
     private void FixedUpdate()
     {
         // Prevent movement if stunned
-        if (currentState == PlayerState.STUNNED || currentState == PlayerState.RidingOwl)
+        if (currentState == PlayerState.STUNNED
+        || currentState == PlayerState.RidingOwl
+        || currentState == PlayerState.VineSwinging)
         {
             return;
         }
@@ -951,6 +953,8 @@ public class PlayerMove : MonoBehaviour
         playerMovementMap.Enable();
     }
 
+    #region Owl Riding
+
     public void AttachToOwl()
     {
         currentState = PlayerState.RidingOwl;
@@ -987,6 +991,10 @@ public class PlayerMove : MonoBehaviour
         glideAction.Enable();
     }
 
+    #endregion
+
+    #region Wind Gust Region
+
     public void EnterGust()
     {
         inGust = true;
@@ -996,6 +1004,29 @@ public class PlayerMove : MonoBehaviour
     {
         inGust = false;
     }
+
+    #endregion
+
+    #region Vine Swing Region
+
+    public void StartVineSwing()
+    {
+        DisableMove();
+        rb.gravityScale = 0f;
+        currentState = PlayerState.VineSwinging;
+        //animator.SetBool("isVineSwinging", true);
+    }
+
+    public void EndVineSwing()
+    {
+        EnableMove();
+        rb.gravityScale = 1f;
+        currentState = PlayerState.Fall;
+        //animator.SetBool("isVineSwinging", false);
+    }
+
+
+    #endregion
 
     /// <summary>
     /// Gets the current player state.
@@ -1015,6 +1046,7 @@ public enum PlayerState
     Glide,
     Fall,
     RidingOwl,
+    VineSwinging,
     STUNNED
 
 }
