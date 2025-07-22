@@ -22,7 +22,16 @@ public class Vine : MonoBehaviour
 
     private bool playerAttached = false;
 
+    private static bool canAttach = true;
+
     private Vector2 vineAttachPoint;
+
+    private float vineDetachTime = 0.25f;
+
+    private float vineDetachTimer = 0f;
+
+    [SerializeField] private float defaultMass = 1f;
+    [SerializeField] private float attachedMass = 20f;
 
 
     void Awake()
@@ -32,7 +41,7 @@ public class Vine : MonoBehaviour
 
         attachAction = playerMovementMap.Gameplay.Attach;
         attachAction.performed += AttachInput;
-        attachAction.canceled += DetachInput;
+
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -44,48 +53,72 @@ public class Vine : MonoBehaviour
             // Keep the player's position aligned with the vine
             playerTransform.position = transform.TransformPoint(vineAttachPoint);
         }
+
+        if (!canAttach)
+        {
+            if(vineDetachTimer > vineDetachTime)
+            {
+                canAttach = true;
+                vineDetachTimer = 0f;
+            }
+            else
+            {
+                vineDetachTimer += Time.deltaTime;
+            }
+        }
     }
 
 
     //if the player is attached, make the linear dampening low
     // if the player is not attached, make the linear dampening high
-//maybe speed the vine up when the player is attached?
+    //maybe speed the vine up when the player is attached?
     void AttachInput(InputAction.CallbackContext context)
     {
-        if (!playerAttached)
+
+
+        if (playerAttached)
         {
+            DetachPlayer();
+        }
 
-            playerAttached = true;
-
-            playerMove.StartVineSwing(); // Start vine swinging state
-
-            vineAttachPoint = transform.InverseTransformPoint(playerTransform.position);
-            rb.linearVelocity = playerRb.linearVelocity; // Stop the vine's movement
-
-            print(playerRb.linearVelocity);
-
-            playerRb.linearVelocity = Vector2.zero; // Stop the player's movement
+        if (!canAttach)
+        {
             return;
         }
 
+        AttachPlayer();
+    }
+
+    void AttachPlayer()
+    {
+        playerAttached = true;
+
+        playerMove.StartVineSwing(); // Start vine swinging state
+
+        vineAttachPoint = transform.InverseTransformPoint(playerTransform.position);
+        rb.linearVelocity = playerRb.linearVelocity; // Stop the vine's movement
+
+        print(playerRb.linearVelocity);
+
+        playerRb.linearVelocity = Vector2.zero; // Stop the player's movement
+
+        rb.mass = attachedMass;
+    }
+
+    void DetachPlayer()
+    {
         playerAttached = false;
 
         playerRb.linearVelocity = rb.linearVelocity;
 
         playerMove.EndVineSwing();
 
+        canAttach = false;
+
+        rb.mass = defaultMass;
+
 
         print(rb.linearVelocity);
-        
-
-    }
-
-    void DetachInput(InputAction.CallbackContext context)
-    {
-
-
-        // Reset player's position to the vine's attach point
-        //playerTransform.position = transform.TransformPoint(vineAttachPoint);
     }
 
     void OnTriggerEnter2D(Collider2D other)

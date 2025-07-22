@@ -103,10 +103,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.07
+  m_Mass: 1
   m_LinearDamping: 0.03
-  m_AngularDamping: 0.14
-  m_GravityScale: 0.39
+  m_AngularDamping: 2.36
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -142,8 +142,8 @@ HingeJoint2D:
     m_MaximumMotorForce: 10000
   m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: -45
-    m_UpperAngle: 135
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6435174644536923569
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -202,6 +202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMass: 0.07
+  attachedMass: 10
 --- !u!1 &2527311659579909497
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,10 +307,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.07
+  m_Mass: 1
   m_LinearDamping: 0.09
-  m_AngularDamping: 0.14
-  m_GravityScale: 0.39
+  m_AngularDamping: 2.36
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -336,7 +338,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.51}
-  m_ConnectedAnchor: {x: 53, y: 55.0986}
+  m_ConnectedAnchor: {x: 114.7, y: 63.2986}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -344,8 +346,8 @@ HingeJoint2D:
     m_MaximumMotorForce: 10000
   m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: -80
-    m_UpperAngle: 100
+    m_LowerAngle: -90
+    m_UpperAngle: 110
 --- !u!61 &6992836997007896322
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -404,6 +406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMass: 0.07
+  attachedMass: 10
 --- !u!1 &3634134318423623369
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,10 +511,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.07
+  m_Mass: 1
   m_LinearDamping: 0.01
-  m_AngularDamping: 0.14
-  m_GravityScale: 0.39
+  m_AngularDamping: 2.36
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -546,8 +550,8 @@ HingeJoint2D:
     m_MaximumMotorForce: 10000
   m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: -60
-    m_UpperAngle: 135
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &3888618995617864784
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -606,6 +610,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMass: 0.07
+  attachedMass: 10
 --- !u!1 &5402731245103771588
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,7 +626,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &7058541021242271047
 Transform:
@@ -744,10 +750,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 20
+  m_Mass: 1
   m_LinearDamping: 0.01
-  m_AngularDamping: 0.14
-  m_GravityScale: 0.39
+  m_AngularDamping: 2.36
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -783,8 +789,8 @@ HingeJoint2D:
     m_MaximumMotorForce: 10000
   m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: -60
-    m_UpperAngle: 135
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &7096681574810082452
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -843,3 +849,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMass: 0.07
+  attachedMass: 10
