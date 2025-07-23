@@ -104,7 +104,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.03
+  m_LinearDamping: 0.5
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -203,7 +203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMass: 0.07
+  defaultGravityScale: 2
   attachedMass: 10
+  attachedGravityScale: 4
 --- !u!1 &2527311659579909497
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +310,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.09
+  m_LinearDamping: 0.1
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -407,7 +409,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMass: 0.07
+  defaultGravityScale: 2
   attachedMass: 10
+  attachedGravityScale: 4
 --- !u!1 &3634134318423623369
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +516,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.01
+  m_LinearDamping: 0.25
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -611,7 +615,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMass: 0.07
+  defaultGravityScale: 2
   attachedMass: 10
+  attachedGravityScale: 4
 --- !u!1 &5402731245103771588
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,4 +856,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMass: 0.07
+  defaultGravityScale: 2
   attachedMass: 10
+  attachedGravityScale: 4
