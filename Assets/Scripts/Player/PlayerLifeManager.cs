@@ -11,7 +11,12 @@ public class PlayerLifeManager : MonoBehaviour
 
     private Animator animator;
 
+    [Header("Player Components")]
+
     [SerializeField] private SpriteRenderer playerSprite;
+
+
+    [Header("Damage Settings")]
 
     [SerializeField] private float damageTime;
     private float damageTimer;
@@ -25,6 +30,8 @@ public class PlayerLifeManager : MonoBehaviour
     [SerializeField] private float damageLaunchForce = 40f;
 
     [SerializeField] private int maxLives = 3;
+
+    [Header("UI Settings")]
     [SerializeField] private Sprite[] lifeIcons;
     [SerializeField] private Image lifeUI;
 
@@ -37,6 +44,8 @@ public class PlayerLifeManager : MonoBehaviour
     private bool isImmune = false;
 
     int currentLives;
+
+    private Vector2 lastGroundLocation;
 
     void Start()
     {
@@ -89,8 +98,25 @@ public class PlayerLifeManager : MonoBehaviour
             StartCoroutine(ReloadSceneAfterDelay());
     }
 
+    public void RespawnPlayer()
+    {
+
+        currentLives--;
+        lifeUI.sprite = lifeIcons[currentLives];
+        hurtSfx?.Play();
+        uiSfx?.Play();
+
+        rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding
+        transform.position = lastGroundLocation; // Respawn at last ground location
+    }
+
     void Update()
     {
+
+        if (playerMove.GetPlayerState() == PlayerState.Grounded) {
+            lastGroundLocation = transform.position; // Update last ground location when grounded
+        }
+
         if (isHurt)
         {
             if (damageTimer > damageTime)
