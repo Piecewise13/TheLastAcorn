@@ -301,7 +301,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""9449b322-ec43-4c1e-8a30-8e554422a717"",
                     ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": ""Press(pressPoint=0.5,behavior=2)"",
+                    ""interactions"": ""Press(pressPoint=0.75,behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attach"",

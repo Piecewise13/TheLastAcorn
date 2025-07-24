@@ -41,6 +41,8 @@ public class VineSegment : MonoBehaviour
     [SerializeField] private float attachedMass = 20f;
     [SerializeField] private float attachedGravityScale = 2f;
 
+    [SerializeField] private static float linVeloMultiplier = 15f;
+
 
     void Awake()
     {
@@ -73,6 +75,14 @@ public class VineSegment : MonoBehaviour
             {
                 vineDetachTimer += Time.deltaTime;
             }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (playerAttached)
+        {
+            rb.linearVelocity += Vector2.one * linVeloMultiplier * Time.fixedDeltaTime; 
         }
     }
 
@@ -128,6 +138,8 @@ public class VineSegment : MonoBehaviour
         rb.mass = defaultMass;
         //rb.gravityScale = defaultGravityScale;
 
+        attachAction.Disable();
+
 
         print(rb.linearVelocity);
     }
@@ -152,6 +164,12 @@ public class VineSegment : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+        if (playerAttached)
+        {
+            return;
+        }
+
+        print("input disabled: " + gameObject.name);
         attachAction.Disable();
     }
 }
