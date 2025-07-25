@@ -1289,7 +1289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f5b3fcc4fec4fecb901d84d8f2e46c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disablePersistence: 0
+  disablePersistence: 1
   showDebugLogs: 0
 --- !u!4 &1015830121
 Transform:

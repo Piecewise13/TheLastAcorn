@@ -6,6 +6,8 @@ public class WaterKillTrigger : MonoBehaviour
 
     [SerializeField] private float killDelay = 0.5f;
 
+    [SerializeField] private Transform respawnPoint;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,7 +25,7 @@ public class WaterKillTrigger : MonoBehaviour
     {
         var root = collision.transform.root;
         var playerLifeManager = root.GetComponent<PlayerLifeManager>();
-        playerLifeManager.RespawnPlayer();
+        playerLifeManager.RespawnPlayer(respawnPoint.position);
     }
 
 

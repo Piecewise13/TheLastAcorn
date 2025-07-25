@@ -49,6 +49,7 @@ public class PlayerLifeManager : MonoBehaviour
 
     void Start()
     {
+        // DebugSettings.Instance.DisablePersistence is read-only and cannot be set here.
         currentLives = maxLives;
         playerMove = GetComponent<PlayerMove>();
         rb = GetComponent<Rigidbody2D>();
@@ -71,7 +72,8 @@ public class PlayerLifeManager : MonoBehaviour
 
     public void DamagePlayer(Vector2 launchDir)
     {
-        if (isImmune) {
+        if (isImmune)
+        {
             return;
         }
 
@@ -98,7 +100,7 @@ public class PlayerLifeManager : MonoBehaviour
             StartCoroutine(ReloadSceneAfterDelay());
     }
 
-    public void RespawnPlayer()
+    public void RespawnPlayer(Vector2 respawnPos)
     {
 
         currentLives--;
@@ -106,14 +108,25 @@ public class PlayerLifeManager : MonoBehaviour
         hurtSfx?.Play();
         uiSfx?.Play();
 
-        rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding
-        transform.position = lastGroundLocation; // Respawn at last ground location
+
+        if (currentLives <= 0)
+        {
+            StartCoroutine(ReloadSceneAfterDelay());
+        }
+        else
+        {
+
+            // Respawn at last ground location
+            rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding
+            transform.position = respawnPos;
+        }
     }
 
     void Update()
     {
 
-        if (playerMove.GetPlayerState() == PlayerState.Grounded) {
+        if (playerMove.GetPlayerState() == PlayerState.Grounded)
+        {
             lastGroundLocation = transform.position; // Update last ground location when grounded
         }
 
@@ -138,7 +151,7 @@ public class PlayerLifeManager : MonoBehaviour
                 playerSprite.color = c;
             }
             immuneTimer += Time.deltaTime;
-        }   
+        }
     }
 
     IEnumerator MakeImmune(float alphaTime, float targetAlphaMin, float targetAlphaMax)
@@ -185,14 +198,14 @@ public class PlayerLifeManager : MonoBehaviour
     IEnumerator ReloadSceneAfterDelay()
     {
         yield return new WaitForSeconds(0.75f);
-        
+
         // Reset current scene acorns and adjust total score
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ResetCurrentSceneScore();
         }
         SaveLoadManager.ResetCurrentSceneAcorns();
-        
+
         // Reload the scene to respawn acorns
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
