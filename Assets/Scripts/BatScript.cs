@@ -1,7 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class BatScript : MonoBehaviour, IProximityAlert
 {
+
+
+    private Rigidbody2D rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     [Tooltip("Speed of the bat's movement")]
@@ -10,33 +14,35 @@ public class BatScript : MonoBehaviour, IProximityAlert
     [Tooltip("-90 goes left, 0 goes up, 90 goes right")]
     [SerializeField, Range(-90f, 90f)] private float targetAngle;
 
+    [SerializeField] private float launchDelayMin, launchDelayMax;
+    private float launchDelay;
+
     private float angle;
     private bool isAttached = false; // Flag to check if the bat is attached to the environment
     private bool isMoving = false; // Flag to check if the bat is currently moving
+    private Coroutine moveCoroutine; // Reference to the currently running move coroutine
 
     private void Awake()
     {
-        // Initialize any components or variables here if needed
-        // Get the circle collider component
-        CircleCollider2D circleCollider = GetComponent<CircleCollider2D>();
-        if (circleCollider == null)
-        {
-            circleCollider = gameObject.AddComponent<CircleCollider2D>();
-        }
-        circleCollider.isTrigger = true; // Set the collider as a trigger
-                                         // Want the circle collider to act as a trigger, so it doesn't physically interact with the player
         CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
         if (capsuleCollider == null)
         {
             capsuleCollider = gameObject.AddComponent<CapsuleCollider2D>();
         }
         capsuleCollider.isTrigger = false; // This collider will be used for physical collisions
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.gravityScale = 0f;  // Disable gravity if needed
             rb.freezeRotation = true; // Prevent rotation
         }
+    }
+
+    private void Start()
+    {
+
+        launchDelay = Random.Range(launchDelayMin, launchDelayMax);
+        //Invoke(nameof(StartMoving), launchDelay); // Start moving after a random delay
     }
 
     private void FixedUpdate()
@@ -46,7 +52,6 @@ public class BatScript : MonoBehaviour, IProximityAlert
         if (isMoving) return; // If already moving, do not process further
         // move up until the box collider collides with the tilemap collider
         Vector2 direction = Vector2.up; // Calculate the direction based on the angle
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             Debug.Log("speed: " + speed);
@@ -70,9 +75,6 @@ public class BatScript : MonoBehaviour, IProximityAlert
             angle = facingAngle + targetAngle + 90f; // Update the target angle to match the collision normal
             //Debug.Log("Collision normal: " + collisionNormal + ", Facing angle: " + facingAngle + ", Target angle: " + angle);
             transform.rotation = Quaternion.Euler(0, 0, facingAngle); // Rotate the bat to face the collision normal
-
-            // Optionally, you can also stop the Rigidbody2D's velocity
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.linearVelocity = Vector2.zero;
@@ -89,22 +91,33 @@ public class BatScript : MonoBehaviour, IProximityAlert
             }
         }
     }
-
     public void PlayerInProximity(GameObject player)
     {
-                    // Start moving the bat at the specified angle
-            Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
-            Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.linearVelocity = direction * speed * Time.fixedDeltaTime;
-                isMoving = true;
-                isAttached = false; // Reset the attached flag when the bat starts moving
-            }
+        if(isMoving || !isAttached) return; // If already moving, do not start again
+        if (moveCoroutine != null)
+        {
+            return;
+        }
+        moveCoroutine = StartCoroutine(StartMoving(launchDelay)); // Start moving after a random delay
     }
+    
 
     public void PlayerOutOfProximity(GameObject player)
     {
-        
+
+    }
+
+    IEnumerator StartMoving(float delay)
+    {
+        yield return new WaitForSeconds(delay); // Wait for the random delay
+                // Start moving the bat at the specified angle
+        Vector2 direction = Quaternion.Euler(0, 0, angle) * Vector2.right;
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * speed * Time.fixedDeltaTime;
+            isMoving = true;
+            isAttached = false; // Reset the attached flag when the bat starts moving
+        }
+        moveCoroutine = null; // Reset the coroutine reference when done
     }
 }

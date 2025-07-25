@@ -68,7 +68,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 23.24
+  m_Radius: 19.8
 --- !u!114 &4686609035001782363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d42e18f0723224053a267c44d0093038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 5
 --- !u!1 &8272914067580460027
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,3 +250,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 500
   targetAngle: -1
+  launchDelayMin: 0
+  launchDelayMax: 1
