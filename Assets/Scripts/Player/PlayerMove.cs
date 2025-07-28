@@ -419,7 +419,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        float sideMovementSpeed = Mathf.Abs(rb.linearVelocity.x);
+        float sideMovementSpeed = rb.linearVelocity.magnitude;
 
         if (sideMovementSpeed > sideSpeedThreshold)
         {
