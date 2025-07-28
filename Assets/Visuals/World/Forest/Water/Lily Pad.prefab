@@ -104,8 +104,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bounceForce: 1
-  horizontalFriction: 0
-  lilyPadState: 0
+  sinkTime: 2
+  sinkDistance: 1
+  disabledTime: 4
 --- !u!61 &1650282992460918208
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,29 +1,35 @@
 using System;
+using System.Collections;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
-public class LilyPad : MonoBehaviour, IProximityAlert
+public class LilyPad : MonoBehaviour
 {
 
 
     private Rigidbody2D rb;
 
+    private SpriteRenderer spriteRenderer;
 
+    private Collider2D collider;
+
+    private Vector2 initialPosition;
 
     [SerializeField] private float bounceForce = 2f;
 
-    private float startingY;
 
+    [SerializeField] private float sinkTime = 2f; // Time it takes for the lily pad to sink
+    [SerializeField] private float sinkDistance = 0.5f; // Distance to sink down
 
-    [SerializeField] private float horizontalFriction;
-
-
-    [SerializeField] private LilyPadState lilyPadState = LilyPadState.Idle;
-
+    [SerializeField] private float disabledTime = 2f; // Time the lily pad remains disabled after sinking
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        collider = GetComponent<Collider2D>();
+        initialPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -43,31 +49,31 @@ public class LilyPad : MonoBehaviour, IProximityAlert
         if (colRb != null)
         {
             colRb.linearVelocity = new Vector2(colVelo.x, Math.Abs(colVelo.y * bounceForce));
+            StartCoroutine(SinkLilyPad(sinkTime, disabledTime));
         }
-        
     }
 
-    public void PlayerInProximity(GameObject player)
+
+    IEnumerator SinkLilyPad(float sinkTime, float disabledTime)
     {
 
-        if (lilyPadState != LilyPadState.Idle)
+        collider.enabled = false;
+        float elapsedTime = 0f;
+
+
+        while (elapsedTime < sinkTime)
         {
-            return;
+            float t = elapsedTime / sinkTime;
+            transform.position = Vector2.Lerp(initialPosition, initialPosition + Vector2.down * sinkDistance, t);
+            elapsedTime += Time.deltaTime;
+            spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1 - t); // Fade out
+            yield return null;
         }
 
-        lilyPadState = LilyPadState.Contact;
+        yield return new WaitForSeconds(disabledTime);
 
-    }
-
-    public void PlayerOutOfProximity(GameObject player)
-    {
-        lilyPadState = LilyPadState.Idle;
-    }
-
-    private enum LilyPadState
-    {
-        Idle,
-        Contact,
-        Sinking
+        spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f); // Ensure fully transparent
+        transform.position = initialPosition;
+        collider.enabled = true;
     }
 }

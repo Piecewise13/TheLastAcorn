@@ -249,6 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 500
-  targetAngle: -1
+  targetAngle: 0
+  minAngle: -40
+  maxAngle: 40
   launchDelayMin: 0
   launchDelayMax: 1
