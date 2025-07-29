@@ -16,6 +16,8 @@ public class PlayerCamera : MonoBehaviour
 
     public PlayerMove playerMove;
 
+    private Rigidbody2D rb;
+
     [SerializeField] private float zoomOutAmount;
     [SerializeField] private float zoomInAmount;
 
@@ -51,6 +53,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         targetZoom = zoomInAmount;
+        rb = GetComponentInParent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -116,37 +119,6 @@ public class PlayerCamera : MonoBehaviour
         cameraState = state;
         this.targetZoom = newZoom;
         zoomTimer = 0;
-
-
-        // switch (cameraState)
-        // {
-        //     case CameraState.Default:
-        //         targetZoom = zoomInAmount;
-        //         cameraState = state;
-        //         zoomTimer = 0;
-        //         break;
-        //     case CameraState.PlayerZoomed:
-        //         targetZoom = zoomInAmount;
-        //         cameraState = state;
-        //         zoomTimer = 0;
-        //         break;
-        //     case CameraState.CaveZoomed:
-        //         return;
-        //     case CameraState.GlideZoom:
-        //         targetZoom = zoomInAmount;
-        //         cameraState = state;
-        //         zoomTimer = 0;
-        //         break;
-        //     default:
-        //         return; // Invalid state, do nothing
-        // }
-
-
-        // if(cameraState == CameraState.)
-        // cameraState = state;
-        // canZoom = false;
-        // this.targetZoom = newZoom;
-        // zoomTimer = 0;
     }
 
     public void EndForceZoom(CameraState state)
