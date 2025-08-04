@@ -9,7 +9,9 @@ public class AcornArrow : MonoBehaviour
 
     [SerializeField] private GameObject goldArrow;
 
-    [SerializeField] private float arrowDistance;
+    [SerializeField] private float arrowScreenDistance;
+
+    [SerializeField] private float maxAcornDistance = 50f;
 
     private GameObject[] spawnedArrows;
 
@@ -80,14 +82,20 @@ public class AcornArrow : MonoBehaviour
 
             bool isBehind = screenPos.z < 0;
             bool isOnScreen = screenPos.x >= 0 && screenPos.x <= 1 && screenPos.y >= 0 && screenPos.y <= 1 && !isBehind;
+            
+            float acornDistance = Vector2.Distance(playerCamera.transform.position, acornWorldPos);
 
-            if (isOnScreen)
+
+
+            if (isOnScreen || acornDistance > maxAcornDistance)
+                // If the acorn is on screen or too far away, hide the arrow
             {
                 spawnedArrows[i].SetActive(false);
                 continue;
             }
             else
             {
+                spawnedArrows[i].transform.localScale = Vector3.one * Mathf.Lerp(0.2f, 1.2f, acornDistance/maxAcornDistance); // Reset scale in case it was changed
                 spawnedArrows[i].SetActive(true);
             }
 
@@ -109,7 +117,7 @@ public class AcornArrow : MonoBehaviour
             // Move arrowDistance pixels towards the center of the screen
             Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
             Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowDistance;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowScreenDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
@@ -166,7 +174,7 @@ public class AcornArrow : MonoBehaviour
             // Move arrowDistance pixels towards the center of the screen
             Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
             Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowDistance;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowScreenDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
@@ -177,6 +185,7 @@ public class AcornArrow : MonoBehaviour
             Vector3 dirOnScreen = new Vector3(dir.x, dir.y, 0f);
             float angle = Mathf.Atan2(dirOnScreen.y, dirOnScreen.x) * Mathf.Rad2Deg;
             spawnedGoldArrows[i].transform.rotation = Quaternion.Euler(0, 0, angle);
+            
         }
 
         if (numAcorns == 0)
@@ -246,7 +255,7 @@ public class AcornArrow : MonoBehaviour
             // Move arrowDistance pixels towards the center of the screen
             Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
             Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowDistance;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowScreenDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
