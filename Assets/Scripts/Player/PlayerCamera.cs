@@ -71,13 +71,14 @@ public class PlayerCamera : MonoBehaviour
     private void Zoom(InputAction.CallbackContext context)
     {
 
-        if (cameraState == CameraState.Disabled)
+        if (cameraState == CameraState.Disabled || cameraState == CameraState.CaveZoomed)
         {
             return;
         }
 
         if (context.performed)
         {
+            cameraState = CameraState.PlayerZoomed;
             acornArrow.SetActive(true);
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
@@ -86,6 +87,7 @@ public class PlayerCamera : MonoBehaviour
         }
         else if (context.canceled)
         {
+            cameraState = CameraState.Default;
             acornArrow.SetActive(false);
             playerMove.EnableMove();
             targetZoom = zoomInAmount;

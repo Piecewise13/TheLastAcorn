@@ -41,7 +41,9 @@ public class VineSegment : MonoBehaviour
     [SerializeField] private float attachedMass = 20f;
     [SerializeField] private float attachedGravityScale = 2f;
 
-    [SerializeField] private static float linVeloMultiplier = 15f;
+    [SerializeField] private static float linVeloMultiplier = 10f;
+
+    private float playerDirection = 1f; // 1 for right, -1 for left
 
 
     void Awake()
@@ -80,10 +82,15 @@ public class VineSegment : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (playerAttached)
+        if (!playerAttached)
         {
-            rb.linearVelocity += Vector2.one * linVeloMultiplier * Time.fixedDeltaTime; 
+            return;
         }
+
+
+        rb.linearVelocity += Vector2.up * linVeloMultiplier * Time.fixedDeltaTime
+        + Vector2.right * linVeloMultiplier * Time.fixedDeltaTime * playerDirection;
+
     }
 
 
@@ -119,6 +126,10 @@ public class VineSegment : MonoBehaviour
 
         print(playerRb.linearVelocity);
 
+        playerDirection = playerRb.linearVelocity.x > 0 ? 1f : -1f; // Determine player's direction
+
+        print("Player direction: " + playerDirection);
+
         playerRb.linearVelocity = Vector2.zero; // Stop the player's movement
 
         rb.mass = attachedMass;
@@ -141,7 +152,7 @@ public class VineSegment : MonoBehaviour
         attachAction.Disable();
 
 
-        print(rb.linearVelocity);
+        //print(rb.linearVelocity);
     }
 
     void OnTriggerEnter2D(Collider2D other)
