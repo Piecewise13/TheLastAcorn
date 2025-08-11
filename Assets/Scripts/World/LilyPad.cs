@@ -15,7 +15,7 @@ public class LilyPad : MonoBehaviour
 
     private Vector2 initialPosition;
 
-    [SerializeField] private float bounceForce = 2f;
+    [SerializeField] private float bounceForce;
 
 
     [SerializeField] private float sinkTime = 2f; // Time it takes for the lily pad to sink
