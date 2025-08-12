@@ -48,6 +48,7 @@ public class Totem : MonoBehaviour
         audioManager?.FadeOutAudio();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
+        SaveLoadManager.SaveLevelData(SceneManager.GetActiveScene().name);
         SaveLoadManager.SaveCurrentLevelName(nextSceneName);
         SceneManager.LoadScene(nextSceneName);
     }

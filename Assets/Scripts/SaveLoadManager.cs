@@ -7,7 +7,9 @@ public static class SaveLoadManager
 {
     private const string LevelKey = "CurrentLevel";
     private const string TotalScoreKey = "TotalScore";
-    
+
+    private const string VisitedLevelsPrefix = "VisitedLevels_";
+
     // Check if persistence is disabled for debugging
     private static bool IsDebugMode => DebugSettings.Instance != null && DebugSettings.Instance.DisablePersistence;
     private static bool ShowDebugLogs => DebugSettings.Instance != null && DebugSettings.Instance.ShowDebugLogs;
@@ -34,7 +36,8 @@ public static class SaveLoadManager
     // Loads the saved level number, returns 1 if not set
     public static void LoadLastLevel()
     {
-        string levelName = PlayerPrefs.GetString(LevelKey, "Level1");
+        string levelName = PlayerPrefs.GetString(LevelKey, "Level1");    
+
         SceneManager.LoadScene(levelName);
     }
 
@@ -49,31 +52,35 @@ public static class SaveLoadManager
         return PlayerPrefs.GetString(LevelKey, "Level1");
     }
 
-    public static void SaveLevelData(string levelName, Vector3[] acornPositions, Vector3[] goldenAcornPositions)
+    public static void SaveLevelData(string levelName)
     {
-        if (!levelDataDictionary.ContainsKey(levelName))
-        {
-            levelDataDictionary[levelName] = new LevelData();
-        }
 
-        LevelData levelData = levelDataDictionary[levelName];
-        levelData.acornPositions = new List<Vector3>(acornPositions);
-        levelData.goldenAcornPositions = new List<Vector3>(goldenAcornPositions);
+        PlayerPrefs.SetInt(VisitedLevelsPrefix + levelName, 1);
     }
 
     public static bool HasLevelBeenLoaded(string levelName)
     {
-        return levelDataDictionary.ContainsKey(levelName);
+        return PlayerPrefs.GetInt(VisitedLevelsPrefix + levelName, 0) == 1;
     }
 
-    public static bool IsLevelSaved()
+    public static bool IsLevelSaved(string levelName)
+    {
+        if (IsDebugMode)
+        {
+            if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Returning false for IsLevelSaved: {levelName}");
+            return false;
+        }
+        return PlayerPrefs.HasKey(levelName);
+    }
+
+    public static bool HasGameSave()
     {
         if (IsDebugMode)
         {
             if (ShowDebugLogs) Debug.Log("[SaveLoadManager] DEBUG MODE: Returning false for IsLevelSaved");
             return false;
         }
-        
+
         return PlayerPrefs.HasKey(LevelKey);
     }
 
@@ -202,7 +209,9 @@ public static class SaveLoadManager
     [Serializable]
     public struct LevelData
     {
-        public List<Vector3> acornPositions;
-        public List<Vector3> goldenAcornPositions;
+        public int numCollectedAcorns;
+        public int numCollectedGoldenAcorns;
+
+        public bool levelVisited;
     }
 }

@@ -10,6 +10,7 @@ public class CheckpointManager : MonoBehaviour
 
     [Tooltip("Starting position if no checkpoint has been reached yet.")]
     [SerializeField] private Transform initialSpawnPoint;
+    [SerializeField] private Transform levelRevisitSpawnPoint;
 
     private Transform currentCheckpoint;
 
@@ -59,8 +60,24 @@ public class CheckpointManager : MonoBehaviour
         // Optionally reset velocity if Rigidbody2D is present
         var rb = player.GetComponent<Rigidbody2D>();
         if (rb != null) rb.linearVelocity = Vector2.zero;
-        
+
 
         OnPlayerRespawn?.Invoke(currentCheckpoint.position);
+    }
+
+    public void SpawnAtInitalLocation(GameObject player)
+    {
+        if (initialSpawnPoint != null)
+        {
+            player.transform.position = initialSpawnPoint.position;
+        }
+    }
+
+    public void SpawnAtEndingLocation(GameObject player)
+    {
+        if (levelRevisitSpawnPoint != null)
+        {
+            player.transform.position = levelRevisitSpawnPoint.position;
+        }
     }
 }

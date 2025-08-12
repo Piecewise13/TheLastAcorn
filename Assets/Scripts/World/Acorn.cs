@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class Acorn : MonoBehaviour, ICollectible
 {
+    [SerializeField] private bool isGoldenAcorn = false; // Flag to indicate if this is a golden acorn
     [SerializeField] int value = 1; // define this with team
     [SerializeField] string acornId; // Unique identifier for this acorn
     public int Value => value;
@@ -18,7 +19,7 @@ public class Acorn : MonoBehaviour, ICollectible
         string currentLevel = SceneManager.GetActiveScene().name;
         if (SaveLoadManager.IsAcornCollected(currentLevel, acornId))
             gameObject.SetActive(false);
-        
+
     }
 
     private string GenerateAcornId()
@@ -33,6 +34,11 @@ public class Acorn : MonoBehaviour, ICollectible
         // Mark this acorn as collected in the save system
         string currentLevel = SceneManager.GetActiveScene().name;
         SaveLoadManager.MarkAcornCollected(currentLevel, acornId);
+    }
+    
+    public bool IsGoldenAcorn()
+    {
+        return isGoldenAcorn;
     }
 }
 

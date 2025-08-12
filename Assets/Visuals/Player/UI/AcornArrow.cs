@@ -95,7 +95,7 @@ public class AcornArrow : MonoBehaviour
             }
             else
             {
-                spawnedArrows[i].transform.localScale = Vector3.one * Mathf.Lerp(0.2f, 1.2f, acornDistance/maxAcornDistance); // Reset scale in case it was changed
+                spawnedArrows[i].transform.localScale = Vector3.one * Mathf.Lerp(1.5f, 0.3f, acornDistance/maxAcornDistance); // Reset scale in case it was changed
                 spawnedArrows[i].SetActive(true);
             }
 
@@ -117,7 +117,10 @@ public class AcornArrow : MonoBehaviour
             // Move arrowDistance pixels towards the center of the screen
             Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
             Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowScreenDistance;
+            // Standardize arrow distance based on screen size (use a fraction of the smaller screen dimension)
+            float distanceFraction = arrowScreenDistance / 1080f; // 1080 is a reference resolution
+            float standardizedDistance = Mathf.Min(Screen.width, Screen.height) * distanceFraction;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * standardizedDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
@@ -174,7 +177,10 @@ public class AcornArrow : MonoBehaviour
             // Move arrowDistance pixels towards the center of the screen
             Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
             Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * arrowScreenDistance;
+            // Standardize arrow distance based on screen size (use a fraction of the smaller screen dimension)
+            float distanceFraction = arrowScreenDistance / 1080f; // 1080 is a reference resolution
+            float standardizedDistance = Mathf.Min(Screen.width, Screen.height) * distanceFraction;
+            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * standardizedDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);

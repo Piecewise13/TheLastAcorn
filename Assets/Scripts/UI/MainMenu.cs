@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
-        if (!SaveLoadManager.IsLevelSaved())
+        if (!SaveLoadManager.HasGameSave())
         {
             loadGameButton.SetActive(false);
         }
@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
 
     public void LoadSavedGame()
     {
-        if (SaveLoadManager.IsLevelSaved())
+        if (SaveLoadManager.HasGameSave())
         {
             string lastLevel = SaveLoadManager.GetLoadedLevel();
             StartCoroutine(WaitForTransition(waitTime, lastLevel));
