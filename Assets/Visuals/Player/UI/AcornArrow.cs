@@ -111,20 +111,24 @@ public class AcornArrow : MonoBehaviour
 
             clampedViewportPos.x = Mathf.Clamp(clampedViewportPos.x, 0.05f, 0.95f);
             clampedViewportPos.y = Mathf.Clamp(clampedViewportPos.y, 0.05f, 0.95f);
+            // Calculate the screen position of this GameObject (the player or UI anchor)
+            Vector3 originScreenPos = playerCamera.WorldToScreenPoint(transform.position);
+
             // Calculate the screen position at the edge (in pixels)
             Vector3 screenEdgePos = playerCamera.ViewportToScreenPoint(new Vector3(clampedViewportPos.x, clampedViewportPos.y, playerCamera.nearClipPlane + 0.5f));
 
-            // Move arrowDistance pixels towards the center of the screen
-            Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, screenEdgePos.z);
-            Vector3 dirToCenter = (screenCenter - screenEdgePos).normalized;
+            // Move arrow to a fixed distance from this GameObject's screen position, along the direction to the edge
+            Vector3 dirToEdge = (screenEdgePos - originScreenPos).normalized;
+
             // Standardize arrow distance based on screen size (use a fraction of the smaller screen dimension)
             float distanceFraction = arrowScreenDistance / 1080f; // 1080 is a reference resolution
             float standardizedDistance = Mathf.Min(Screen.width, Screen.height) * distanceFraction;
-            Vector3 arrowScreenPos = screenEdgePos + dirToCenter * standardizedDistance;
+            Vector3 arrowScreenPos = originScreenPos + dirToEdge * standardizedDistance;
 
             // Convert back to world position
             Vector3 arrowWorldPos = playerCamera.ScreenToWorldPoint(arrowScreenPos);
             spawnedArrows[i].transform.position = arrowWorldPos;
+            spawnedArrows[i].transform.position += new Vector3(0, 0, 1); // Ensure it's in front of the camera
 
 
             // Point arrow towards acorn (only rotate on Z axis)
