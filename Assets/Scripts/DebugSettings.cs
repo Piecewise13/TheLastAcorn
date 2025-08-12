@@ -40,4 +40,20 @@ public class DebugSettings : MonoBehaviour
             Debug.Log($"[DebugSettings] Settings changed - Persistence: {(!disablePersistence ? "ENABLED" : "DISABLED")}");
 
     }
+
+    public void ResetPlayerPrefs()
+    {
+        if (showDebugLogs)
+        {
+            Debug.Log("[DebugSettings] Resetting PlayerPrefs...");
+        }
+
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
+
+        if (showDebugLogs)
+        {
+            Debug.Log("[DebugSettings] PlayerPrefs reset complete.");
+        }
+    }
 }

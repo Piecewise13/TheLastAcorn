@@ -48,6 +48,11 @@ public class Totem : MonoBehaviour
         audioManager?.FadeOutAudio();
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
+
+        //Since the player is interacting with the totem, we assume they are moving forward in the game.
+        SceneInitializer.SetLevelDirection(true);
+
+        //Scene management
         SaveLoadManager.SaveLevelData(SceneManager.GetActiveScene().name);
         SaveLoadManager.SaveCurrentLevelName(nextSceneName);
         SceneManager.LoadScene(nextSceneName);

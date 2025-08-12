@@ -44,11 +44,15 @@ public class ReturnSign : MonoBehaviour
 
     }
 
-        IEnumerator ReadySequence()
+    IEnumerator ReadySequence()
     {
-       //TODO: Mateo do your thing man
+        //TODO: Mateo do your thing man
 
         yield return new WaitForSeconds(DELAY_BEFORE_LOAD);
+        // Since the player is interacting with the return sign, we assume they are moving backward in the game.
+        SceneInitializer.SetLevelDirection(false);
+
+        // Scene management
         SaveLoadManager.SaveCurrentLevelName(nextSceneName);
         SceneManager.LoadScene(nextSceneName);
     }
