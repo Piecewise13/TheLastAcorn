@@ -156,6 +156,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Snake NPC
       objectReference: {fileID: 0}
+    - target: {fileID: 8227508333410297261, guid: 0b73e5abd80144fb6abb37f956b8a5b4, type: 3}
+      propertyPath: m_Size.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8227508333410297261, guid: 0b73e5abd80144fb6abb37f956b8a5b4, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
