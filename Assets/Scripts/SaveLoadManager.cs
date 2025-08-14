@@ -13,11 +13,12 @@ public static class SaveLoadManager
     // Check if persistence is disabled for debugging
     private static bool IsDebugMode => DebugSettings.Instance != null && DebugSettings.Instance.DisablePersistence;
     private static bool ShowDebugLogs => DebugSettings.Instance != null && DebugSettings.Instance.ShowDebugLogs;
-
-    static Dictionary<string, LevelData> levelDataDictionary = new Dictionary<string, LevelData>();
     
     // Track acorns collected in current scene session (for scene restart)
     private static HashSet<string> currentSceneCollectedAcorns = new HashSet<string>();
+
+    private static int currentCollectedAcornValue = 0;
+
     private static string currentSceneName = "";
 
     // Saves the current level number
@@ -92,7 +93,7 @@ public static class SaveLoadManager
             if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping save total score: {score}");
             return;
         }
-        
+
         PlayerPrefs.SetInt(TotalScoreKey, score);
         PlayerPrefs.Save();
     }
@@ -109,7 +110,7 @@ public static class SaveLoadManager
     }
 
     // Track collected acorns per level
-    public static void MarkAcornCollected(string levelName, string acornId)
+    public static void MarkAcornCollected(string levelName, string acornId, int acornValue)
     {
         if (IsDebugMode)
         {
@@ -118,6 +119,7 @@ public static class SaveLoadManager
             if (currentSceneName == levelName)
             {
                 currentSceneCollectedAcorns.Add(acornId);
+                currentCollectedAcornValue += acornValue;
             }
             return;
         }
@@ -125,11 +127,12 @@ public static class SaveLoadManager
         string key = $"Acorn_{levelName}_{acornId}";
         PlayerPrefs.SetInt(key, 1);
         PlayerPrefs.Save();
-        
+
         // Also track in current scene session
         if (currentSceneName == levelName)
         {
             currentSceneCollectedAcorns.Add(acornId);
+            currentCollectedAcornValue += acornValue;
         }
     }
 
@@ -204,14 +207,5 @@ public static class SaveLoadManager
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
-    }
-
-    [Serializable]
-    public struct LevelData
-    {
-        public int numCollectedAcorns;
-        public int numCollectedGoldenAcorns;
-
-        public bool levelVisited;
     }
 }
