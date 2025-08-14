@@ -160,12 +160,18 @@ public static class SaveLoadManager
         currentSceneName = levelName;
         currentSceneCollectedAcorns.Clear();
     }
+
+
+    public static void SaveCollectedAcorns()
+    {
+        currentSceneCollectedAcorns.Clear();
+    }
     
     // Reset only current scene acorns (for scene restart)
     public static void ResetCurrentSceneAcorns()
     {
         if (string.IsNullOrEmpty(currentSceneName)) return;
-        
+
         if (IsDebugMode)
         {
             if (ShowDebugLogs) Debug.Log($"[SaveLoadManager] DEBUG MODE: Skipping reset current scene acorns for: {currentSceneName}");
@@ -173,15 +179,16 @@ public static class SaveLoadManager
             currentSceneCollectedAcorns.Clear();
             return;
         }
-        
+
         // Remove current scene acorns from persistent storage
         foreach (string acornId in currentSceneCollectedAcorns)
         {
             string key = $"Acorn_{currentSceneName}_{acornId}";
             PlayerPrefs.DeleteKey(key);
         }
+
         PlayerPrefs.Save();
-        
+
         // Clear current session tracking
         currentSceneCollectedAcorns.Clear();
     }

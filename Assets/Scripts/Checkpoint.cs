@@ -13,6 +13,8 @@ public class Checkpoint : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             CheckpointManager.Instance.SetCheckpoint(transform);
+
+            SaveLoadManager.SaveCollectedAcorns();
         }
     }
 }
