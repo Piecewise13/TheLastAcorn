@@ -1,8 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
 public class Checkpoint : MonoBehaviour
 {
+
+    [Header("Success Feedback")]
+    [SerializeField] private ParticleSystem confetti;
+    [SerializeField] private GrowAndShrink growAndShrink;
+    [SerializeField] private AudioPlayer sfxPlayer;
+
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;
@@ -12,9 +19,20 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            CheckpointManager.Instance.SetCheckpoint(transform);
+            CheckpointManager.Instance.SetCheckpoint(this);
+
 
             SaveLoadManager.SaveCollectedAcorns();
+            confetti?.Play();
+            growAndShrink?.Grow();
+            sfxPlayer?.Play();
         }
+    }
+
+
+    public void CheckpointSwitched()
+    {
+        confetti?.Play();
+        growAndShrink?.Shrink();
     }
 }
