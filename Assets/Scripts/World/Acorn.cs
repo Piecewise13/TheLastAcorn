@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class Acorn : MonoBehaviour, ICollectible
 {
+
+    private CircleCollider2D acornCollider;
+
     [SerializeField] private bool isGoldenAcorn = false; // Flag to indicate if this is a golden acorn
     [SerializeField] int value = 1; // define this with team
     [SerializeField] string acornId; // Unique identifier for this acorn
@@ -11,15 +14,16 @@ public class Acorn : MonoBehaviour, ICollectible
 
     private void Start()
     {
+
+        acornCollider = GetComponent<CircleCollider2D>();
+
         // Generate unique ID if not set
         if (string.IsNullOrEmpty(acornId))
             acornId = GenerateAcornId();
 
-        // Check if this acorn was already collected
-        string currentLevel = SceneManager.GetActiveScene().name;
-        if (SaveLoadManager.IsAcornCollected(currentLevel, acornId))
-            gameObject.SetActive(false);
+        SpawnAcorn(Vector3.zero);
 
+        CheckpointManager.Instance.OnPlayerRespawn += SpawnAcorn;
     }
 
     private string GenerateAcornId()
@@ -27,6 +31,19 @@ public class Acorn : MonoBehaviour, ICollectible
         // Generate ID based on position to ensure consistency across level reloads
         Vector3 pos = transform.position;
         return $"{pos.x:F2}_{pos.y:F2}_{pos.z:F2}";
+    }
+
+    public void SpawnAcorn(Vector3 position)
+    {
+        // Check if this acorn was already collected
+        string currentLevel = SceneManager.GetActiveScene().name;
+        if (SaveLoadManager.IsAcornCollected(currentLevel, acornId))
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        gameObject.SetActive(true);
+            acornCollider.enabled = true;
     }
 
     public void OnCollected()

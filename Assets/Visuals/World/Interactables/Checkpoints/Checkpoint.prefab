@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4845722127166962019}
   - component: {fileID: 4829180533843861961}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Acorn_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1956904133847728876}
   - component: {fileID: 5569551587277350518}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Speech Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   - component: {fileID: 7323995827089890111}
   - component: {fileID: 3373447524499798024}
   - component: {fileID: 3720490709867170046}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5016,7 +5016,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2327618240491470856}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Acorn Error Message
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5051,7 +5051,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2017504175932679299}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5088,7 +5088,7 @@ GameObject:
   - component: {fileID: 8722061676236895150}
   - component: {fileID: 7031773423338754483}
   - component: {fileID: 99243404506349144}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5188,7 +5188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1500041376382509616}
   - component: {fileID: 1281018963799592972}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SFX Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5254,7 +5254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 541374782728837395}
   - component: {fileID: 5941115939460938310}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SFX Not Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5316,12 +5316,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 380669368763467710}
-  - component: {fileID: 2339314710774621444}
   - component: {fileID: 8702994551553052034}
   - component: {fileID: 7003836238168563036}
   - component: {fileID: 3065746914292932985}
   - component: {fileID: 7689489298028712112}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Checkpoint
   m_TagString: Statue
   m_Icon: {fileID: 0}
@@ -5345,27 +5344,6 @@ Transform:
   - {fileID: 2327618240491470856}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2339314710774621444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7608516494688604138}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac78e69d5cea7405880d3c648efa705f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextSceneName: Level 4
-  targetScore: 5
-  confetti: {fileID: 3373447524499798024}
-  growAndShrink: {fileID: 3065746914292932985}
-  sfxPlayer: {fileID: 1281018963799592972}
-  notReadySfx: {fileID: 5941115939460938310}
-  notReadyMessage: {fileID: 2834595760933598877}
-  count: {fileID: 34021464227896283}
-  audioManager: {fileID: 0}
 --- !u!212 &8702994551553052034
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5498,7 +5476,7 @@ GameObject:
   - component: {fileID: 5182111851205684638}
   - component: {fileID: 8769908432300665802}
   - component: {fileID: 34021464227896283}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Count
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5633,7 +5611,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9217878636687869758}
   - component: {fileID: 7781168198097917961}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ChatGPT Image Jun 2, 2025, 09_13_53 PM_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

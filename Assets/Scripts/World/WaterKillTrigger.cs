@@ -25,7 +25,7 @@ public class WaterKillTrigger : MonoBehaviour
     {
         var root = collision.transform.root;
         var playerLifeManager = root.GetComponent<PlayerLifeManager>();
-        playerLifeManager.RespawnPlayer(respawnPoint.position);
+        playerLifeManager.DamagePlayerAndRelocate(respawnPoint.position);
     }
 
 

@@ -97,10 +97,10 @@ public class PlayerLifeManager : MonoBehaviour
 
 
         if (currentLives <= 0)
-            StartCoroutine(ReloadSceneAfterDelay());
+            StartCoroutine(RespawnPlayerAfterDelay());
     }
 
-    public void RespawnPlayer(Vector2 respawnPos)
+    public void DamagePlayerAndRelocate(Vector2 respawnPos)
     {
 
         currentLives--;
@@ -111,7 +111,7 @@ public class PlayerLifeManager : MonoBehaviour
 
         if (currentLives <= 0)
         {
-            StartCoroutine(ReloadSceneAfterDelay());
+            StartCoroutine(RespawnPlayerAfterDelay());
         }
         else
         {
@@ -204,7 +204,12 @@ public class PlayerLifeManager : MonoBehaviour
         {
             ScoreManager.Instance.ResetCurrentSceneScore();
         }
+        
         SaveLoadManager.ResetCurrentSceneAcorns();
+
+        CheckpointManager.Instance.RespawnPlayer(gameObject);
+        currentLives = maxLives;
+        lifeUI.sprite = lifeIcons[currentLives];
     }
 
     IEnumerator ReloadSceneAfterDelay()

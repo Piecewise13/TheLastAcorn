@@ -51,8 +51,14 @@ public class SceneInitializer : MonoBehaviour
 
         checkpointManager = FindAnyObjectByType<CheckpointManager>();
 
-        owl = FindAnyObjectByType<Owl>().gameObject;
-        owl.SetActive(false); // Initially hide the owl
+        Owl owlScript = FindAnyObjectByType<Owl>();
+
+
+        if (owlScript != null)
+        {
+            owl = owlScript.gameObject;
+            owl.SetActive(false); // Initially hide the owl
+        }
 
         InitializeScene();
 
@@ -86,7 +92,6 @@ public class SceneInitializer : MonoBehaviour
         }
 
         checkpointManager.SpawnAtInitalLocation(player);
-        
     }
 
     static public void SetLevelDirection(bool direction)

@@ -69,6 +69,7 @@ public class CheckpointManager : MonoBehaviour
     {
         if (initialSpawnPoint != null)
         {
+            currentCheckpoint = initialSpawnPoint;
             player.transform.position = initialSpawnPoint.position;
         }
     }
@@ -77,6 +78,7 @@ public class CheckpointManager : MonoBehaviour
     {
         if (levelRevisitSpawnPoint != null)
         {
+            currentCheckpoint = levelRevisitSpawnPoint;
             player.transform.position = levelRevisitSpawnPoint.position;
         }
     }

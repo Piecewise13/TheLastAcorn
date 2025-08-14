@@ -167,6 +167,7 @@ public static class SaveLoadManager
 
     public static void SaveCollectedAcorns()
     {
+        currentCollectedAcornValue = 0;
         currentSceneCollectedAcorns.Clear();
     }
     
@@ -199,7 +200,7 @@ public static class SaveLoadManager
     // Get count of acorns collected in current scene session
     public static int GetCurrentSceneAcornCount()
     {
-        return currentSceneCollectedAcorns.Count;
+        return currentCollectedAcornValue;
     }
 
     // Debug method to check persistence status
