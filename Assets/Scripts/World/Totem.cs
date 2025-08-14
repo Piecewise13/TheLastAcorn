@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Totem : MonoBehaviour
 {
-
-
+    
     [Header("Scene")]
     [SerializeField] private string nextSceneName = "NextScene";
 
@@ -16,7 +15,7 @@ public class Totem : MonoBehaviour
     [Header("Success Feedback")]
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private GrowAndShrink growAndShrink;
-    [SerializeField] private AudioPlayer sfxPlayer;   
+    [SerializeField] private AudioPlayer sfxPlayer;
 
     [Header("Not-Ready Feedback")]
     [SerializeField] private AudioPlayer notReadySfx;
@@ -24,9 +23,9 @@ public class Totem : MonoBehaviour
 
     [SerializeField] private TMP_Text count;
 
-    [Header("Fade-Out Sources")] 
+    [Header("Fade-Out Sources")]
     [SerializeField] private AudioSceneManager audioManager;
-    
+
     const float DELAY_BEFORE_LOAD = 3f;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -70,4 +69,5 @@ public class Totem : MonoBehaviour
         notReadyMessage?.SetActive(false);
         growAndShrink?.Shrink(new Vector3(5, 5, 5), 0.5f);
     }
+
 }
