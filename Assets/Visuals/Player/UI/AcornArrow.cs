@@ -56,11 +56,12 @@ public class AcornArrow : MonoBehaviour
     void Update()
     {
 
-        if (allCollected)
-        {
-            UpdateStatueArrow();
-            return;
-        }
+        // if (allCollected)
+        // {
+        //     UpdateStatueArrow();
+        //     return;
+        // }
+        
         UpdateAcornArrows();
     }
 
@@ -69,7 +70,7 @@ public class AcornArrow : MonoBehaviour
         numAcorns = 0;
         for (int i = 0; i < acorns.Length; i++)
         {
-            if (acorns[i] == null)
+            if (acorns[i] == null || !spawnedArrows[i].activeInHierarchy)
             {
                 spawnedArrows[i].SetActive(false);
                 continue;

@@ -33,10 +33,12 @@ public class Totem : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         GetComponent<Collider2D>().enabled = false;
 
-        if (ScoreManager.Instance.CurrentScore >= targetScore)
-            StartCoroutine(ReadySequence());
-        else
-            StartCoroutine(NotReadySequence());
+        StartCoroutine(ReadySequence());
+
+        // if (ScoreManager.Instance.CurrentScore >= targetScore)
+        //     StartCoroutine(ReadySequence());
+        // else
+        //     StartCoroutine(NotReadySequence());
     }
 
     IEnumerator ReadySequence()

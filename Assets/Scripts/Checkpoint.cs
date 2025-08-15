@@ -5,13 +5,17 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
 
+    private Animator anim;
+
     [Header("Success Feedback")]
-    [SerializeField] private ParticleSystem confetti;
+    [SerializeField] private ParticleSystem frontFireFly;
+    [SerializeField] private ParticleSystem backFireFly;
     [SerializeField] private GrowAndShrink growAndShrink;
     [SerializeField] private AudioPlayer sfxPlayer;
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         GetComponent<Collider2D>().isTrigger = true;
     }
 
@@ -23,7 +27,10 @@ public class Checkpoint : MonoBehaviour
 
 
             SaveLoadManager.SaveCollectedAcorns();
-            confetti?.Play();
+
+            anim.SetBool("isActive", true);
+            backFireFly?.Play();
+            frontFireFly?.Play();
             growAndShrink?.Grow();
             sfxPlayer?.Play();
         }
@@ -32,7 +39,9 @@ public class Checkpoint : MonoBehaviour
 
     public void CheckpointSwitched()
     {
-        confetti?.Play();
+        anim.SetBool("isActive", false);
+        frontFireFly?.Stop();
+        backFireFly?.Stop();
         growAndShrink?.Shrink();
     }
 }
