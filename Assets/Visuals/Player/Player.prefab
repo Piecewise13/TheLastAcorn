@@ -457,7 +457,7 @@ MonoBehaviour:
   damageTime: 0.75
   immuneTime: 3
   damageLaunchForce: 30
-  maxLives: 3
+  maxLives: 1
   lifeIcons:
   - {fileID: 21300000, guid: 7b22eb0ed1a0c44419a8c482eb92f7cd, type: 3}
   - {fileID: 21300000, guid: 804d9b670b3ee47af9c3caed7f62412f, type: 3}
@@ -7343,7 +7343,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 32ca38b303aa54996acffa10ae774a13, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 804d9b670b3ee47af9c3caed7f62412f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
