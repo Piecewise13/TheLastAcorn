@@ -454,11 +454,13 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (currentState == PlayerState.RidingOwl)
-        {
-            DetachFromOwl();
-            return;
-        }
+        //If we want to detach from the owl when jumping, we can uncomment this section
+
+        // if (currentState == PlayerState.RidingOwl)
+        // {
+        //     DetachFromOwl();
+        //     return;
+        // }
 
         // Only allow jumping if grounded and not stunned
         if (currentState != PlayerState.Grounded)
@@ -967,6 +969,7 @@ public class PlayerMove : MonoBehaviour
         moveAction.Disable();
         attachAction.Disable();
         glideAction.Disable();
+        jumpAction.Disable();
     }
 
     public void DetachFromOwl()
@@ -989,6 +992,8 @@ public class PlayerMove : MonoBehaviour
         moveAction.Enable();
         attachAction.Enable();
         glideAction.Enable();
+
+        jumpAction.Enable();
     }
 
     #endregion

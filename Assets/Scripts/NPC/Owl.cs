@@ -21,10 +21,15 @@ public class Owl : MonoBehaviour, IProximityAlert
 
     [SerializeField] private Transform playerAttachPoint;
     [SerializeField] private List<Transform> flightPathPoints;
-    private int currentFlightPointIndex = 0;
+    private int currentFlightPointIndex = 1;
     private Vector2 flightOrigin;
 
     [SerializeField] private float flightSpeed = 5f;
+
+    private float initialDistanceToPoint;
+    private Vector3 initalFlightDirection;
+
+    private bool isReturningToStart = false;
 
     [SerializeField] private float cameraZoomAmount = 5f;
 
@@ -55,28 +60,55 @@ public class Owl : MonoBehaviour, IProximityAlert
             return;
         }
 
-        if (currentFlightPointIndex >= flightPathPoints.Count)
-        {
-            EndAttach();
-            return;
-        }
 
         Transform flightDestination = flightPathPoints[currentFlightPointIndex];
 
+        float distanceToNextPoint = Vector2.Distance(transform.position, flightDestination.position);
+
+
+
+        // Interpolate the owl's forward direction towards the next flight point
+        Vector2 directionToNextPoint = ((Vector2)flightDestination.position - (Vector2)transform.position).normalized;
+
+
+        Vector3 moveDirection = Vector3.Lerp(initalFlightDirection, directionToNextPoint, Mathf.Clamp((initialDistanceToPoint - distanceToNextPoint) / initialDistanceToPoint, 0.05f, 1f));
+
+
+
+
+        // Move the owl towards the flight destination
+        transform.position = Vector2.MoveTowards(transform.position, flightDestination.position, Time.deltaTime * flightSpeed);
+
+        if (!isReturningToStart) {
+            playerMovement.transform.localPosition = playerAttachPoint.localPosition;
+        }
+
         // Move the owl towards the current flight path point
-        if (Vector2.Distance(transform.position, flightDestination.position) < 0.1f)
+
+        if (distanceToNextPoint < 0.1f)
         {
-            currentFlightPointIndex++;
+            currentFlightPointIndex = isReturningToStart ? currentFlightPointIndex - 1 : currentFlightPointIndex + 1;
+            
             if (currentFlightPointIndex >= flightPathPoints.Count)
             {
                 EndAttach();
                 return;
             }
-            flightDestination = flightPathPoints[currentFlightPointIndex];
-        }
 
-        // Move the owl towards the flight destination
-        transform.position = Vector2.MoveTowards(transform.position, flightDestination.position, Time.deltaTime * flightSpeed);
+            if (currentFlightPointIndex < 0)
+            {
+                isReturningToStart = false;
+                currentState = OwlState.Idle;
+
+                transform.position = flightOrigin; // Return to the origin point
+                currentFlightPointIndex = 1; // Reset to the first flight point after returning
+                return;
+                
+            }
+
+            flightDestination = flightPathPoints[currentFlightPointIndex];
+
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -109,14 +141,19 @@ public class Owl : MonoBehaviour, IProximityAlert
             playerMovement.AttachToOwl();
             currentState = OwlState.Flying;
 
+            initialDistanceToPoint = Vector2.Distance(flightOrigin, flightPathPoints[currentFlightPointIndex].position);
+            initalFlightDirection = transform.up;
+
             playerCamera.StartForceZoom(cameraZoomAmount, PlayerCamera.CameraState.GlideZoom);
         }
     }
 
     void EndAttach()
     {
+        isReturningToStart = true;
         playerMovement.DetachFromOwl();
-        currentState = OwlState.Idle;
+        currentFlightPointIndex = flightPathPoints.Count - 2; // Start returning to the last point
+        //currentState = OwlState.Idle;
     }
 
     public void PlayerInProximity(GameObject player)
@@ -128,6 +165,11 @@ public class Owl : MonoBehaviour, IProximityAlert
     public void PlayerOutOfProximity(GameObject player)
     {
         anim.SetBool("isAlert", false);
+    }
+
+    public void ReturnToStart()
+    {
+        
     }
 
     enum OwlState
