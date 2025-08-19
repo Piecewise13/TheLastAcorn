@@ -852,7 +852,7 @@ public class PlayerMove : MonoBehaviour
         if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
-            //            print("collision velo: " + collision.relativeVelocity);
+            print("collision velo: " + collision.relativeVelocity);
 
             // Ignore if velocity is below threshold
             if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)
@@ -1018,6 +1018,7 @@ public class PlayerMove : MonoBehaviour
     {
         DisableMove();
         rb.gravityScale = 0f;
+        playerCollider.enabled = false;
         currentState = PlayerState.VineSwinging;
         //animator.SetBool("isVineSwinging", true);
     }
@@ -1026,6 +1027,7 @@ public class PlayerMove : MonoBehaviour
     {
         EnableMove();
         rb.gravityScale = 1f;
+        playerCollider.enabled = true;
         currentState = PlayerState.Fall;
         //animator.SetBool("isVineSwinging", false);
     }
