@@ -368,7 +368,7 @@ MonoBehaviour:
   climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
   spamCheeseMax: 5
   defaultGlideSpeed: 10
-  maxGlideSpeed: 40
+  maxGlideSpeed: 45
   maxGlideSpeedInGust: 60
   flightMultiper: 1
   glideHitVelocityThreshold: 30

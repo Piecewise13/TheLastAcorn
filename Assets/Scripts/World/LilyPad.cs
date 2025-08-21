@@ -46,11 +46,23 @@ public class LilyPad : MonoBehaviour
         var colGameObject = collision.gameObject.transform.root.gameObject;
 
         var colRb = colGameObject.GetComponent<Rigidbody2D>();
-        if (colRb != null)
+        if (colRb == null)
+        {
+            return;
+        }
+
+        float colYVelocity = Mathf.Abs(colVelo.y);
+        if (colYVelocity < 10f)
+        {
+            colRb.linearVelocity = new Vector2(colVelo.x, 10f);
+        }
+        else
         {
             colRb.linearVelocity = new Vector2(colVelo.x, Math.Abs(colVelo.y * bounceForce));
-            StartCoroutine(SinkLilyPad(sinkTime, disabledTime));
         }
+
+        StartCoroutine(SinkLilyPad(sinkTime, disabledTime));
+
     }
 
 
