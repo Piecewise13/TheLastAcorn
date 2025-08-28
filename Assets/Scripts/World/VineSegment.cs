@@ -16,6 +16,8 @@ public class VineSegment : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    [SerializeField] Transform vineRoot;
+
     private Rigidbody2D playerRb;
     private Transform playerTransform;
 
@@ -36,17 +38,12 @@ public class VineSegment : MonoBehaviour
 
     [Header("Default Values")]
     [SerializeField] private float defaultMass = 1f;
-    [SerializeField] private float defaultGravityScale = 4f;
 
     [Header("Attached Values")]
     [SerializeField] private float attachedMass = 20f;
-    [SerializeField] private float attachedGravityScale = 2f;
 
-    [SerializeField] private static float linVeloMultiplier = 5f;
 
-    private float playerDirection = 1f; // 1 for right, -1 for left
-
-    private float deceleration;
+    private bool shouldAccelerate = true;
 
     private float attachVeloMag;
 
@@ -73,7 +70,7 @@ public class VineSegment : MonoBehaviour
 
         if (!canAttach)
         {
-            if(vineDetachTimer > vineDetachTime)
+            if (vineDetachTimer > vineDetachTime)
             {
                 canAttach = true;
                 vineDetachTimer = 0f;
@@ -91,26 +88,31 @@ public class VineSegment : MonoBehaviour
         {
             return;
         }
-
-        if (deceleration < attachVeloMag - 5f) {
-            deceleration += linVeloMultiplier * Time.fixedDeltaTime;
-        }
-
-        if (rb.linearVelocity.magnitude < 5f) {
+        
+        if(rb.linearVelocity.magnitude < 1f)
+        {
+            shouldAccelerate = false;
             return;
         }
 
+        Debug.DrawRay(transform.position, rb.linearVelocity);
 
-        //Set the magnitude of rb.linearVelocity to attachVeloMag, preserving its direction
-        if (rb.linearVelocity != Vector2.zero)
+        if (shouldAccelerate)
         {
-            rb.linearVelocity += Vector2.up * attachVeloMag * Time.fixedDeltaTime + Vector2.right * playerDirection * attachVeloMag * Time.fixedDeltaTime;
 
+            Vector2 dirToRoot = (vineRoot.position - transform.position).normalized;
+
+            Vector2 tangentDir = Quaternion.Euler(0, 0, -90) * dirToRoot; // Rotate dirToRoot 90 degrees CCW using RotateAngle
+            rb.linearVelocity += tangentDir * attachVeloMag * Time.fixedDeltaTime * 0.6f;
+            //rb.linearVelocity += rb.linearVelocity.normalized * attachVeloMag * Time.fixedDeltaTime;
+            // rb.linearVelocity += Vector2.up * attachVeloMag * Time.fixedDeltaTime * 0.5f
+            //         + Vector2.right * attachVeloMag * Time.fixedDeltaTime * 0.5f;
         }
+
 
     }
 
-    
+
 
 
     //if the player is attached, make the linear dampening low
@@ -136,6 +138,7 @@ public class VineSegment : MonoBehaviour
 
     void AttachPlayer()
     {
+        shouldAccelerate = true;
         playerAttached = true;
 
         playerMove.StartVineSwing(); // Start vine swinging state
@@ -145,13 +148,7 @@ public class VineSegment : MonoBehaviour
 
         print(playerRb.linearVelocity);
 
-        deceleration = 0f;
-
-        attachVeloMag = playerRb.linearVelocity.magnitude;
-
-        playerDirection = playerRb.linearVelocity.x > 0 ? 1f : -1f; // Determine player's direction
-
-        print("Player direction: " + playerDirection);
+        attachVeloMag = playerRb.linearVelocity.x;
 
         playerRb.linearVelocity = Vector2.zero; // Stop the player's movement
 
@@ -164,7 +161,7 @@ public class VineSegment : MonoBehaviour
         playerAttached = false;
 
         playerRb.linearVelocity = rb.linearVelocity;
-        
+
         print(playerRb.linearVelocity);
 
         playerMove.EndVineSwing();

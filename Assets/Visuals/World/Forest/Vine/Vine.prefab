@@ -104,7 +104,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 2
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -134,7 +134,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.51}
-  m_ConnectedAnchor: {x: 0, y: -0.49000016}
+  m_ConnectedAnchor: {x: 0, y: -0.48999938}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -202,10 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4
 --- !u!1 &2527311659579909497
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,7 +309,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 4
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -340,7 +339,7 @@ HingeJoint2D:
   m_BreakAction: 3
   m_AutoConfigureConnectedAnchor: 1
   m_Anchor: {x: 0, y: 0.51}
-  m_ConnectedAnchor: {x: 111.16226, y: 61.004555}
+  m_ConnectedAnchor: {x: 457.9126, y: 149.65001}
   m_UseConnectedAnchor: 1
   m_UseMotor: 0
   m_Motor:
@@ -408,10 +407,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4
 --- !u!1 &3634134318423623369
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +514,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 1
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -614,10 +612,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4
 --- !u!1 &5402731245103771588
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +756,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 0.5
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -857,10 +854,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4
 --- !u!1 &8456504450840291385
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,7 +961,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 0.25
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -1063,10 +1059,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4
 --- !u!1 &9089205309801168909
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1166,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDamping: 0.75
+  m_LinearDamping: 0.25
   m_AngularDamping: 2.36
   m_GravityScale: 2
   m_Material: {fileID: 0}
@@ -1269,7 +1264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180232f9345034ed9b99ef129bfcdb21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vineRoot: {fileID: 3389275790421699044}
   defaultMass: 1
-  defaultGravityScale: 2
   attachedMass: 10
-  attachedGravityScale: 4

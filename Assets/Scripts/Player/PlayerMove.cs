@@ -13,6 +13,8 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private PlayerGameControls playerMovementMap;
 
+    private PlayerEffectsManager effectsManager;
+
     /// <summary>
     /// Input action for player movement.
     /// </summary>
@@ -144,12 +146,6 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private float climbTime;
 
-
-    /// <summary>
-    /// Maximum intensity of the shake effect while climbing.
-    /// </summary>
-    [SerializeField] private float maxShakeIntensity = 0.2f;
-
     /// <summary>
     /// Reference to the climb particle system.
     ///     </summary>
@@ -236,6 +232,8 @@ public class PlayerMove : MonoBehaviour
         playerMovementMap = new PlayerGameControls();
 
         lifeManager = GetComponent<PlayerLifeManager>();
+
+        effectsManager = GetComponent<PlayerEffectsManager>();
 
         // Assign movement action and enable it
         moveAction = playerMovementMap.Gameplay.Move;
@@ -343,8 +341,8 @@ public class PlayerMove : MonoBehaviour
         if (climbTime > 0)
         {
             climbTime -= Time.deltaTime / 2f;
-            UpdateClimbFatigueColor();
-            UpdateClimbParticles();
+            effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
+            effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         }
 
         if (currentState == PlayerState.Glide)
@@ -632,8 +630,8 @@ public class PlayerMove : MonoBehaviour
         }
 
         climbTime += Time.deltaTime;
-        UpdateClimbParticles();
-        UpdateClimbFatigueColor();
+        effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
+        effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -648,8 +646,8 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        ApplyClimbShake();
-        ControllerRumble();
+        effectsManager.ApplyClimbShake(climbTime / maxClimbTime);
+        effectsManager.ControllerRumble(climbTime / maxClimbTime);
 
         // Calculate intended move location
         Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
@@ -701,49 +699,7 @@ public class PlayerMove : MonoBehaviour
         animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
     }
 
-    private void UpdateClimbParticles()
-    {
-        var emission = climbParticle.emission;
-        emission.rateOverTime = Mathf.Lerp(0, climbParticleRateOverTime, climbTime / maxClimbTime);
-    }
 
-    private void UpdateClimbFatigueColor()
-    {
-        graphicSprite.color = Color.Lerp(Color.white, climbFatigueColor, climbTime / maxClimbTime);
-    }
-
-    private void ApplyClimbShake()
-    {
-        if (graphic == null) return;
-
-        float shakeRatio = Mathf.Clamp01(climbTime / maxClimbTime);
-        float shakeAmount = maxShakeIntensity * shakeRatio;
-        Vector3 shakeOffset = new Vector3(
-            Random.Range(-shakeAmount, shakeAmount),
-            Random.Range(-shakeAmount, shakeAmount),
-            0f
-        );
-        graphic.transform.localPosition = graphicOriginalLocalPos + shakeOffset;
-    }
-
-    private void ControllerRumble()
-    {
-        Gamepad gamepad = Gamepad.current;
-        if (gamepad != null)
-        {
-            float intensity = Mathf.Clamp01(climbTime / maxClimbTime);
-            gamepad.SetMotorSpeeds(intensity, intensity);
-        }
-    }
-
-    private void StopControllerRumble()
-    {
-        Gamepad gamepad = Gamepad.current;
-        if (gamepad != null)
-        {
-            gamepad.SetMotorSpeeds(0, 0);
-        }
-    }
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
@@ -767,7 +723,7 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Stops climbing and resets relevant properties.
     /// </summary>
-    private void StopClimb()
+    public void StopClimb()
     {
         animator.SetBool("isClimbing", false);
 
@@ -778,7 +734,7 @@ public class PlayerMove : MonoBehaviour
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        StopControllerRumble();
+        effectsManager.StopControllerRumble();
 
         // Reset graphic position when climb ends
         if (graphic != null)
@@ -793,10 +749,7 @@ public class PlayerMove : MonoBehaviour
 
         // Reset climb time and particle emission
         climbTime = 0;
-        var emission = climbParticle.emission;
-        emission.rateOverTime = 0;
 
-        graphicSprite.color = Color.white;
     }
 
     #endregion
@@ -878,8 +831,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-
-
     public void StunPlayer()
     {
         if (currentState == PlayerState.STUNNED)
@@ -890,13 +841,10 @@ public class PlayerMove : MonoBehaviour
         DisableMove();
 
         currentState = PlayerState.STUNNED;
-        stunnedEffect.SetActive(true);
-        animator.SetBool("isStunned", true);
-        animator.SetBool("isFalling", false);
-        animator.SetBool("isGliding", false);
-        animator.SetBool("isClimbing", false);
-        animator.SetBool("isClimbMoving", false);
+        
+        effectsManager.StartStunEffect();
     }
+
 
     public void StopStun()
     {
@@ -909,17 +857,13 @@ public class PlayerMove : MonoBehaviour
 
         EnableMove();
 
-        currentState = PlayerState.Fall;
-
-        stunnedEffect.SetActive(false);
-        animator.SetBool("isStunned", false);
-        animator.SetBool("isFalling", false);
-        animator.SetBool("isGliding", false);
-        animator.SetBool("isClimbing", false);
-        animator.SetBool("isClimbMoving", false);
+        effectsManager.EndStunEffect();
 
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+
     }
+
 
     /// <summary>
     /// Enables the movement input action.
