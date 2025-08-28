@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -41,9 +42,13 @@ public class VineSegment : MonoBehaviour
     [SerializeField] private float attachedMass = 20f;
     [SerializeField] private float attachedGravityScale = 2f;
 
-    [SerializeField] private static float linVeloMultiplier = 10f;
+    [SerializeField] private static float linVeloMultiplier = 5f;
 
     private float playerDirection = 1f; // 1 for right, -1 for left
+
+    private float deceleration;
+
+    private float attachVeloMag;
 
 
     void Awake()
@@ -87,11 +92,25 @@ public class VineSegment : MonoBehaviour
             return;
         }
 
+        if (deceleration < attachVeloMag - 5f) {
+            deceleration += linVeloMultiplier * Time.fixedDeltaTime;
+        }
 
-        rb.linearVelocity += Vector2.up * linVeloMultiplier * Time.fixedDeltaTime
-        + Vector2.right * linVeloMultiplier * Time.fixedDeltaTime * playerDirection;
+        if (rb.linearVelocity.magnitude < 5f) {
+            return;
+        }
+
+
+        //Set the magnitude of rb.linearVelocity to attachVeloMag, preserving its direction
+        if (rb.linearVelocity != Vector2.zero)
+        {
+            rb.linearVelocity += Vector2.up * attachVeloMag * Time.fixedDeltaTime + Vector2.right * playerDirection * attachVeloMag * Time.fixedDeltaTime;
+
+        }
 
     }
+
+    
 
 
     //if the player is attached, make the linear dampening low
@@ -126,6 +145,10 @@ public class VineSegment : MonoBehaviour
 
         print(playerRb.linearVelocity);
 
+        deceleration = 0f;
+
+        attachVeloMag = playerRb.linearVelocity.magnitude;
+
         playerDirection = playerRb.linearVelocity.x > 0 ? 1f : -1f; // Determine player's direction
 
         print("Player direction: " + playerDirection);
@@ -141,6 +164,8 @@ public class VineSegment : MonoBehaviour
         playerAttached = false;
 
         playerRb.linearVelocity = rb.linearVelocity;
+        
+        print(playerRb.linearVelocity);
 
         playerMove.EndVineSwing();
 
