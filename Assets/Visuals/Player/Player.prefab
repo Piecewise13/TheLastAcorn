@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 6548402314755964825}
   - component: {fileID: 1413400348418949058}
   - component: {fileID: 151922112089434294}
+  - component: {fileID: 4666516038342513158}
   - component: {fileID: 6681820592772038295}
   - component: {fileID: 7065884537941970894}
   - component: {fileID: 8528002820493749180}
@@ -362,11 +363,9 @@ MonoBehaviour:
   climbCheckOrigin: {fileID: 7051655410438313344}
   climbSpeed: 9
   maxClimbTime: 1.7
-  maxShakeIntensity: 0.15
-  climbParticle: {fileID: 2401446795892416030}
-  climbParticleRateOverTime: 7
-  climbFatigueColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
-  spamCheeseMax: 5
+  isAttachedToMoss: 0
+  mossSlipSpeed: 15
+  mossDetachTime: 2
   defaultGlideSpeed: 10
   maxGlideSpeed: 45
   maxGlideSpeedInGust: 60
@@ -400,6 +399,26 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   currentState: 0
+--- !u!114 &4666516038342513158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839978602859707386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22e6571f1caf73438ec11080a1e0637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphic: {fileID: 4195014037269511010}
+  graphicSprite: {fileID: 867419554417715573}
+  stunnedEffect: {fileID: 979618266919138849}
+  playerCollider: {fileID: 5663293700936031498}
+  climbParticle: {fileID: 2401446795892416030}
+  climbParticleRateOverTime: 20
+  climbFatigueColor: {r: 1, g: 0.45882353, b: 0.45882353, a: 1}
+  maxShakeIntensity: 0.2
 --- !u!50 &6681820592772038295
 Rigidbody2D:
   serializedVersion: 5

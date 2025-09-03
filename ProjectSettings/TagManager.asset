@@ -8,6 +8,7 @@ TagManager:
   - GoldAcorn
   - Statue
   - Vine
+  - Moss
   layers:
   - Default
   - TransparentFX

@@ -146,29 +146,17 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private float climbTime;
 
-    /// <summary>
-    /// Reference to the climb particle system.
-    ///     </summary>
+    [SerializeField] private bool isAttachedToMoss = false;
 
-    [SerializeField] private ParticleSystem climbParticle;
+    [SerializeField] private float mossSlipSpeed;
+    private float mossSlipAmount;
+    [SerializeField] private float mossDetachTime;
 
-    /// <summary>
-    /// Maximum rate over time for the climb particle emission.
-    /// </summary>
-    [SerializeField] private float climbParticleRateOverTime = 20f;
-
-    [SerializeField] private Color climbFatigueColor;
 
     /// <summary>
     /// Original local position of the graphic for shake effect reset.
     /// </summary>
     private Vector3 graphicOriginalLocalPos;
-
-    /// <summary>
-    /// Maximum number of times player can spam climb to reach a branch.
-    /// </summary>
-    [SerializeField] private int spamCheeseMax = 5;
-    private int spamCheeseCount = 0;
 
     [Header("Glide")]
 
@@ -408,7 +396,7 @@ public class PlayerMove : MonoBehaviour
             FlipGraphic(moveInput.x);
     }
 
-        private void SideMovementCameraZoom()
+    private void SideMovementCameraZoom()
     {
 
         if (currentState != PlayerState.Glide && currentState != PlayerState.Fall)
@@ -599,6 +587,7 @@ public class PlayerMove : MonoBehaviour
             float minDist = Vector2.Distance(transform.position, closest.ClosestPoint(transform.position));
             for (int i = 1; i < climbableColliders.Length; i++)
             {
+
                 float dist = Vector2.Distance(transform.position, climbableColliders[i].ClosestPoint(transform.position));
                 if (dist < minDist)
                 {
@@ -655,14 +644,37 @@ public class PlayerMove : MonoBehaviour
 
         // Check if moveLocation is still inside any climbable collider
         bool insideAny = false;
+
+        isAttachedToMoss = false;
+
         foreach (var col in overlappingColliders)
         {
+
+            if (col.gameObject.CompareTag("Moss"))
+            {
+                isAttachedToMoss = true;
+                break;
+            }
+
             if (col.OverlapPoint(moveLocation))
             {
                 insideAny = true;
-                break;
             }
         }
+
+
+        if (isAttachedToMoss)
+        {
+            mossSlipAmount += Time.deltaTime * mossSlipSpeed;
+
+            moveLocation -= Vector2.up * mossSlipAmount * Time.deltaTime;
+
+
+            transform.position = moveLocation;
+            return;
+        }
+
+
 
         if (insideAny)
         {
@@ -699,6 +711,11 @@ public class PlayerMove : MonoBehaviour
         animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
     }
 
+    private void MossSlip()
+    {
+
+    }
+
 
 
     /// <summary>
@@ -731,6 +748,10 @@ public class PlayerMove : MonoBehaviour
 
         playerCollider.excludeLayers = 0;
 
+        //Moss reset
+        mossSlipAmount = 0;
+        isAttachedToMoss = false;
+
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 
@@ -749,6 +770,9 @@ public class PlayerMove : MonoBehaviour
 
         // Reset climb time and particle emission
         climbTime = 0;
+
+        effectsManager.UpdateClimbFatigueColor(0);
+        effectsManager.UpdateClimbParticles(0);
 
     }
 
@@ -841,7 +865,7 @@ public class PlayerMove : MonoBehaviour
         DisableMove();
 
         currentState = PlayerState.STUNNED;
-        
+
         effectsManager.StartStunEffect();
     }
 
