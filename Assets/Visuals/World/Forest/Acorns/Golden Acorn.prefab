@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0652f9e2c515747988034b318605a50b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGoldenAcorn: 0
+  isGoldenAcorn: 1
   value: 2
   acornId: 
 --- !u!50 &1152741978464402341

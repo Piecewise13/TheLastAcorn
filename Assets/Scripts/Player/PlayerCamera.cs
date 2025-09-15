@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,13 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     private PlayerGameControls playerMovementMap;
 
+/// <summary>
+/// Event triggered when the camera zoom state changes.
+/// true if zoomed out, false if zoomed in.
+/// </summary>
+    public event Action<bool> OnZoomChanged;
+
+    [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject acornArrow;
 
     private InputAction zoomAction;
@@ -79,7 +87,11 @@ public class PlayerCamera : MonoBehaviour
         if (context.performed)
         {
             cameraState = CameraState.PlayerZoomed;
+
+            OnZoomChanged?.Invoke(true);
+
             acornArrow.SetActive(true);
+            HUD.SetActive(false);
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
@@ -89,9 +101,13 @@ public class PlayerCamera : MonoBehaviour
         {
             cameraState = CameraState.Default;
             acornArrow.SetActive(false);
+            HUD.SetActive(true);
             playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;
+            
+            OnZoomChanged?.Invoke(false);
+
             zoomInSFX?.Play();
         }
     }

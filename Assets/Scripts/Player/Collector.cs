@@ -21,7 +21,7 @@ public class Collector : MonoBehaviour
         if (!other.TryGetComponent<ICollectible>(out var collectible)) return;
 
         other.enabled = false;
-        ScoreManager.Instance.AddScore(collectible.Value);
+
         
         // Also update level-specific score for audio system
         if (LevelScoreManager.Instance != null)

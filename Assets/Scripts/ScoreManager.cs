@@ -5,20 +5,23 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
-    [SerializeField] private int levelMaxScore = 3;
+    [SerializeField] private int levelMinScore = 3;
     private static int score;
     public int CurrentScore => score;
+
     public event Action<int> OnScoreChanged;
 
     private void Awake()
     {
-        if (Instance == null) 
+        if (Instance == null)
         {
+
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
+
             // Load persistent score on first initialization
             score = SaveLoadManager.LoadTotalScore();
+
         }
         else Destroy(gameObject);
     }
@@ -37,7 +40,7 @@ public class ScoreManager : MonoBehaviour
         SaveLoadManager.SaveTotalScore(score);
     }
 
-    public int GetMaxScore(){return levelMaxScore;}
+    public int GetMinimumScore(){return levelMinScore;}
 
     public int GetScore(){return score;}
 
@@ -52,7 +55,7 @@ public class ScoreManager : MonoBehaviour
     // Reset current scene acorns and adjust total score
     public void ResetCurrentSceneScore()
     {
-        int currentSceneAcornCount = SaveLoadManager.GetCurrentSceneAcornCount();
+        int currentSceneAcornCount = SaveLoadManager.GetPendingSceneAcornCount();
         if (currentSceneAcornCount > 0)
         {
             score -= currentSceneAcornCount; // Subtract collected acorns from total

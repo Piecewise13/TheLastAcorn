@@ -25,7 +25,7 @@ public class AudioSceneManager : MonoBehaviour
 
     void Awake()
     {
-        targetScore = FindFirstObjectByType<ScoreManager>()?.GetMaxScore() ?? 0;
+        targetScore = FindFirstObjectByType<ScoreManager>()?.GetMinimumScore() ?? 0;
 
         int layerCount = Mathf.Clamp(acornLayers.Length, 0, 5);
         layerPlayed = new bool[layerCount];

@@ -18,14 +18,32 @@ EditorBuildSettings:
     path: Assets/Scenes/Spring/Spring Level 2.unity
     guid: f5f3678400a4947538fbb0df343672ff
   - enabled: 1
-    path: Assets/Scenes/Spring/Spring Level 3.unity
-    guid: 8c866f01b26d5424aa4142aadbf831ca
-  - enabled: 1
     path: Assets/Scenes/Spring/Spring Level 4.unity
     guid: ed2fb20a15f774e9d868abe05f7e4b23
   - enabled: 1
+    path: Assets/Scenes/Spring/Spring Level 5.unity
+    guid: 8eeded89211c04f5d9128f27634c4277
+  - enabled: 1
+    path: Assets/Scenes/Spring/Spring Level 6.unity
+    guid: 569acf5429c5f4d30a714ec2dc59f1db
+  - enabled: 1
     path: Assets/Scenes/End Credit Scene.unity
     guid: 82d276026bfb14d7f8c3a6258848d67e
+  - enabled: 1
+    path: Assets/Scenes/Summer/Summer Level 1.unity
+    guid: a5f7cfee43165be43a868675ea6809f2
+  - enabled: 1
+    path: Assets/Scenes/Summer/Summer Level 2.unity
+    guid: 8365859c39d6f4f669563c545f655fdb
+  - enabled: 1
+    path: Assets/Scenes/Summer/Summer Level 3.unity
+    guid: 90e42d49ec17f5349b134fe895e4f5d2
+  - enabled: 1
+    path: Assets/Scenes/Summer/Summer Level 4.unity
+    guid: d9bc45ddbd98ecd48a923461d3b6a801
+  - enabled: 1
+    path: Assets/Scenes/Summer/Summer Level 5.unity
+    guid: fc15e6fbdfefe42b58964ede613ed2e0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: ec28f7662aed54aa3a680e098e8a6142, type: 3}
   m_UseUCBPForAssetBundles: 0

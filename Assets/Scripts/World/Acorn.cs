@@ -50,8 +50,11 @@ public class Acorn : MonoBehaviour, ICollectible
     {
         // Mark this acorn as collected in the save system
         string currentLevel = SceneManager.GetActiveScene().name;
-        SaveLoadManager.MarkAcornCollected(currentLevel, acornId, value);
+        SaveLoadManager.MarkAcornCollected(currentLevel, this);
+        ScoreManager.Instance.AddScore(Value);
     }
+
+
     
     public bool IsGoldenAcorn()
     {
