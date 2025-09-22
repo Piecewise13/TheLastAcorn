@@ -12,6 +12,7 @@ public class AcornArrow : MonoBehaviour
     [SerializeField] private float arrowScreenDistance;
 
     [SerializeField] private float maxAcornDistance = 50f;
+    [SerializeField] private float minAcornDistance = 20f;
 
     private GameObject[] spawnedArrows;
 
@@ -83,13 +84,13 @@ public class AcornArrow : MonoBehaviour
             Vector3 screenPos = playerCamera.WorldToViewportPoint(acornWorldPos);
 
             bool isBehind = screenPos.z < 0;
-            bool isOnScreen = screenPos.x >= 0 && screenPos.x <= 1 && screenPos.y >= 0 && screenPos.y <= 1 && !isBehind;
+            //bool isOnScreen = screenPos.x >= 0 && screenPos.x <= 1 && screenPos.y >= 0 && screenPos.y <= 1 && !isBehind;
 
             float acornDistance = Vector2.Distance(playerCamera.transform.position, acornWorldPos);
 
 
 
-            if (isOnScreen || acornDistance > maxAcornDistance)
+            if (acornDistance > maxAcornDistance || acornDistance < minAcornDistance)
             // If the acorn is on screen or too far away, hide the arrow
             {
                 spawnedArrows[i].SetActive(false);

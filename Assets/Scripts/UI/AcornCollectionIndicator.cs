@@ -9,6 +9,14 @@ using UnityEditor.MPE;
 
 public class AcornCollectionIndicator : MonoBehaviour
 {
+/*
+    This script manages the UI indicators for acorn collection.
+    It switches between a discrete indicator and a progress bar based on the player's collected acorn score.
+    It listens to score changes and updates the UI accordingly.
+
+
+    This is really rough and needs to be cleaned up and optimized
+*/
 
     private PlayerCamera playerCamera;
 
@@ -95,9 +103,13 @@ public class AcornCollectionIndicator : MonoBehaviour
 
         ParseCollectedAcorns();
 
-
         acornIndicators = new GameObject[totalAcornsInScene];
         goldenAcornIndicators = new GameObject[totalGoldenAcornsInScene];
+
+        SpawnDiscreteAcorns();
+
+
+
 
 
         if (collectedAcornScore < ScoreManager.Instance.GetMinimumScore())
@@ -110,7 +122,7 @@ public class AcornCollectionIndicator : MonoBehaviour
         {
             progressBarObject.SetActive(false);
             discreteObject.SetActive(true);
-            SpawnDiscreteAcorns();
+
         }
 
 
@@ -128,6 +140,7 @@ public class AcornCollectionIndicator : MonoBehaviour
 
         if (collectedAcornScore < ScoreManager.Instance.GetMinimumScore())
         {
+            minCollectedSlider.value = (float)collectedAcornScore / ScoreManager.Instance.GetMinimumScore();
             progressBarObject.SetActive(isVisible);
             discreteObject.SetActive(!isVisible);
         }
@@ -155,8 +168,7 @@ public class AcornCollectionIndicator : MonoBehaviour
 
         ParseCollectedAcorns();
 
-        ClearDiscreteAcorns();
-        SpawnDiscreteAcorns();
+        UpdateDiscreteAcorns();
 
         gameObject.SetActive(true);
 
@@ -175,6 +187,10 @@ public class AcornCollectionIndicator : MonoBehaviour
         }
         else
         {
+
+            UpdateDiscreteAcorns();
+
+            StartCoroutine(FlashDiscreteIndicator());
 
             progressBarObject.SetActive(false);
             discreteObject.SetActive(true);
@@ -203,23 +219,20 @@ public class AcornCollectionIndicator : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    IEnumerator FlashDiscreteIndicator(GameObject indicator)
+    IEnumerator FlashDiscreteIndicator()
     {
-        float flashDuration = 0.1f;
-        float elapsedTime = 0f;
+        discreteObject.SetActive(true);
 
-        Image img = indicator.GetComponent<Image>();
-        Color originalColor = img.color;
-        Color flashColor = Color.yellow; // Change to desired flash color
+        float flashDuration = 2f;
 
-        while (elapsedTime < flashDuration)
-        {
-            img.color = Color.Lerp(originalColor, flashColor, (elapsedTime / flashDuration));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
 
-        img.color = originalColor;
+        //Image img = isGoldenAcorn ? goldenAcornIndicators[collectedGoldenAcornsInScene - 1].GetComponent<Image>() : acornIndicators[collectedAcornsInScene - 1].GetComponent<Image>();
+
+        yield return new WaitForSeconds(flashDuration);
+
+        discreteObject.SetActive(false);
+
+        //img.color = Color.white;
     }
 
     /// <summary>
@@ -291,18 +304,32 @@ public class AcornCollectionIndicator : MonoBehaviour
     }
 
 
-    void ClearDiscreteAcorns()
+    void UpdateDiscreteAcorns()
     {
-        foreach (var item in acornIndicators)
+        for (int i = 0; i < totalAcornsInScene; i++)
         {
-            Destroy(item);
+            if (i < collectedAcornsInScene)
+            {
+                acornIndicators[i].GetComponent<Image>().sprite = acornIndicatorFull;
+            }
+            else
+            {
+                acornIndicators[i].GetComponent<Image>().sprite = acornIndicatorEmpty;
+            }
         }
 
-        foreach (var item in goldenAcornIndicators)
+        for (int i = 0; i < totalGoldenAcornsInScene; i++)
         {
-            Destroy(item);
+            if (i < collectedGoldenAcornsInScene)
+            {
+                goldenAcornIndicators[i].GetComponent<Image>().sprite = goldenAcornIndicatorFull;
+            }
+            else
+            {
+                goldenAcornIndicators[i].GetComponent<Image>().sprite = goldenAcornIndicatorEmpty;
+            }
         }
-    }  
+    }
 
     void SpawnDiscreteAcorns()
     {

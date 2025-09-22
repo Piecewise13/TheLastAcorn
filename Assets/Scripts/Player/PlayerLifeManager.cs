@@ -208,6 +208,7 @@ public class PlayerLifeManager : MonoBehaviour
         SaveLoadManager.ResetCurrentSceneAcorns();
 
         CheckpointManager.Instance.RespawnPlayer(gameObject);
+        playerMove.StopStun();
         currentLives = maxLives;
         lifeUI.sprite = lifeIcons[currentLives];
     }

@@ -10,7 +10,7 @@ public class Totem : MonoBehaviour
     [SerializeField] private string nextSceneName = "NextScene";
 
     [Header("Score")]
-    [SerializeField] private int targetScore = 5;
+    [SerializeField] private int targetScore = 3;
 
     [Header("Success Feedback")]
     [SerializeField] private ParticleSystem confetti;
@@ -35,10 +35,10 @@ public class Totem : MonoBehaviour
 
         StartCoroutine(ReadySequence());
 
-        // if (ScoreManager.Instance.CurrentScore >= targetScore)
-        //     StartCoroutine(ReadySequence());
-        // else
-        //     StartCoroutine(NotReadySequence());
+        if (ScoreManager.Instance.CurrentScore >= targetScore)
+            StartCoroutine(ReadySequence());
+        else
+            StartCoroutine(NotReadySequence());
     }
 
     IEnumerator ReadySequence()

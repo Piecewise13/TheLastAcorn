@@ -881,6 +881,8 @@ public class PlayerMove : MonoBehaviour
 
         EnableMove();
 
+        currentState = PlayerState.Fall;
+
         effectsManager.EndStunEffect();
 
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;

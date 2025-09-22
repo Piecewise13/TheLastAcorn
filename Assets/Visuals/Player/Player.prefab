@@ -8752,7 +8752,7 @@ Transform:
   m_GameObject: {fileID: 5771070996691650930}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 448.22, y: 158.48001, z: 10}
+  m_LocalPosition: {x: -0.37, y: -6.28, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9109,7 +9109,7 @@ MonoBehaviour:
   acornIndicatorEmpty: {fileID: -6952222765271741442, guid: b2e558824bc6a458bab5c75f947616d5, type: 3}
   acornIndicatorFull: {fileID: -6406794871735507730, guid: 547d95c149e674f2782ee883060f164b, type: 3}
   goldenAcornIndicatorEmpty: {fileID: -6009015630136754181, guid: 2dd1a70f0a3134526ab20d08cc1fb055, type: 3}
-  goldenAcornIndicatorFull: {fileID: -2958918142840865221, guid: eef8f1d0d2e494e7faa02c58bcd57522, type: 3}
+  goldenAcornIndicatorFull: {fileID: -9064142111150935749, guid: eef8f1d0d2e494e7faa02c58bcd57522, type: 3}
   acornIndicators: []
   goldenAcornIndicators: []
   progressBarObject: {fileID: 3378097297452400381}
