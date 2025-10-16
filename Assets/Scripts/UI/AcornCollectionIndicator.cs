@@ -1,11 +1,8 @@
-using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
-using System;
-using UnityEditor.MPE;
+using System.Collections.Generic;
 
 public class AcornCollectionIndicator : MonoBehaviour
 {

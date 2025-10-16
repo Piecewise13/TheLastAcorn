@@ -299,11 +299,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 148.8
+      value: -66.1
       objectReference: {fileID: 0}
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.1
+      value: 26.2
       objectReference: {fileID: 0}
     - target: {fileID: 6548402314755964825, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2754,7 +2754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caee5237ecfba42e682b08b836237161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelMaxScore: 4
+  levelMinScore: 3
 --- !u!114 &455154730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104392,6 +104392,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialSpawnPoint: {fileID: 1470892609}
+  levelRevisitSpawnPoint: {fileID: 0}
 --- !u!1 &1471908542
 GameObject:
   m_ObjectHideFlags: 0
