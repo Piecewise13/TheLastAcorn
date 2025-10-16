@@ -1,141 +1,173 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FoxScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public Transform player;
-    [SerializeField] public float minDistance = 100f;
-    [SerializeField] private float walkMultiplier = 0.3f;
-    public float speed = 3f;
 
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
-    private CircleCollider2D attackRadius;
-    private bool isRunning = false;
-    private bool inAttackRadius = false;
-    private float walkTimer = 0f;
-    private float maxWalkTime = 1f;
-    private float speedMultiplier = 1f;
+    private Rigidbody2D rb;
+
+    [SerializeField]private FoxState currentState = FoxState.Idle;
+
+    private GameObject player;
+
+    private bool isGrounded = false;
+
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 2f;
+
+    [SerializeField] private float jumpForce = 5f;
+
+    [Header("Front Raycast (Pathfinding)")]
+    [SerializeField] private LayerMask obstacleMask = ~0;
+    [SerializeField] private GameObject groundCheck;
+    [SerializeField] private float rayDistance = 1f;
+
+    [SerializeField] private GameObject rayOriginObject;
+    [SerializeField] private float rayAngle;
+    [SerializeField] private int rayCount = 3;
+    [SerializeField] private float raySpread = 0.5f; // spread along the object's up axis
+
+    private bool obstacleAhead = false;
 
     void Awake()
     {
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        if (player == null)
-        {
-            Debug.LogWarning("Player not found! Make sure the player has the 'Player' tag.");
-        }
+        rb = GetComponent<Rigidbody2D>();
     }
     void Start()
     {
-        animator.SetBool("isRunning", false);
-        animator.SetBool("isWalking", false);
-        animator.SetBool("isAttacking", false);
+        player = GameObject.FindGameObjectWithTag("Player");
+        currentState = FoxState.Chase;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player != null)
+
+        if(currentState == FoxState.Jump)
         {
-            float distance = Vector3.Distance(transform.position, player.position);
-            bool sameLevel = Mathf.Abs(transform.position.y - player.position.y) < 0.5f;
+            return;
+        }
 
-            if (distance < minDistance && sameLevel && !inAttackRadius)
-            {
-                Vector3 direction = (player.position - transform.position).normalized;
-                if (direction.magnitude < 0.1f) // Prevents jittering when very close
-                {
-                    direction = Vector3.zero;
-                }
-                if (direction.x < 0)
-                {
-                    spriteRenderer.flipX = true; // Face left
-                    animator.SetBool("isFlipped", true);
-                }
-                else if (direction.x > 0)
-                {
-                    spriteRenderer.flipX = false; // Face right
-                    animator.SetBool("isFlipped", false);
-                }
-                walkTimer += Time.deltaTime;
-                if (walkTimer >= maxWalkTime)
-                {
-                    if (!isRunning)
-                    {
-                        animator.SetBool("isWalking", false);
-                        animator.SetBool("isRunning", true);
-                        speedMultiplier = 1f;
-                        isRunning = true;
-                    }
-                }
-                else
-                {
-                    animator.SetBool("isWalking", true);
-                    speedMultiplier = walkMultiplier;
-                }
-                direction.y = 0; // Ignore vertical movement
-                transform.position += direction * speed * speedMultiplier * Time.deltaTime;
+        if (currentState == FoxState.Chase)
+        {
+            PathFinding();
+        }
 
+        FaceTarget(player.transform.position);
+        Move();
+    }
 
-            }
-            else
-            {
-                if (isRunning)
-                {
-                    animator.SetBool("isRunning", false);
-                    isRunning = false;
-                }
+    void FixedUpdate()
+    {
+        GroundCheck();
 
-                if (animator.GetBool("isWalking"))
-                {
-                    animator.SetBool("isWalking", false);
-                }
+    }
 
-                walkTimer = 0f; // Reset walk timer when not chasing
-                speedMultiplier = 1f; // Reset speed multiplier
-            }
+    void Move()
+    {
+        transform.position += transform.right * transform.localScale.x * Time.deltaTime * moveSpeed / 10;
+    }
+
+    void FaceTarget(Vector2 targetPosition)
+    {
+        if (targetPosition.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+        else
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        }
+    }
+
+    void StartJump()
+    {
+        currentState = FoxState.Jump;
+
+        rb.AddForce(new Vector2(Mathf.Sign(transform.localScale.x) * jumpForce, jumpForce * 2), ForceMode2D.Impulse);
+    }
+
+    void PathFinding()
+    {
+        // Determine forward direction considering possible flipped scale
+        Vector2 forward = (Vector2)transform.right * Mathf.Sign(transform.localScale.x);
+
+        RaycastHit2D[] hits = new RaycastHit2D[2];
+
+        // Ray origins are spread along the local up axis
+        for (int i = 0; i < 2; i++)
+        {
+            float angleDeg = (i == 0) ? 0f : Mathf.Sign(transform.localScale.x) * rayAngle;
+            Vector2 rayDirection = (Vector2)(Quaternion.Euler(0f, 0f, angleDeg) * (Vector3)forward);
+
+            Vector2 origin = (Vector2)transform.position;
+
+            hits[i] = Physics2D.Raycast(rayOriginObject.transform.position, rayDirection, rayDistance, obstacleMask);
+            Debug.DrawRay(origin, rayDirection * rayDistance, hits[i].collider != null ? Color.red : Color.green);
+
+        }
+
+        if (hits[0].collider != null && hits[1].collider == null)
+        {
+            StartJump();
+            return;
+        }
+
+    }
+
+    void GroundCheck()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.transform.position, 0.1f, obstacleMask);
+
+        if(isGrounded && currentState == FoxState.Jump)
+        {
+            currentState = FoxState.Chase;
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            inAttackRadius = true; // Player has entered the attack radius
-            Debug.Log("Player entered attack radius: " + inAttackRadius);
-            Attack(other);
-        }
+
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
-        {
-            inAttackRadius = false; // Reset attack radius when player exits
-            Debug.Log("Player exited attack radius: " + inAttackRadius);
-        }
+
+    }
+
+    void GetTargetPoint()
+    {
+        
+    }
+
+    void StartStalk()
+    {
+        currentState = FoxState.Stalk;
+    }
+
+    void StartChase()
+    {
+        currentState = FoxState.Chase;
     }
 
     void Attack(Collider2D collision)
     {
-        animator.SetTrigger("attack");
-        if (inAttackRadius)
-        {
-            PlayerLifeManager playerLifeManager = player.transform.root.GetComponent<PlayerLifeManager>();
-            Debug.Log("Player Life Manager found: " + (playerLifeManager != null));
-            if (playerLifeManager != null)
-            {
-                Debug.Log("Attacking player");
-                playerLifeManager.DamagePlayer(Vector2.up * 10f); // Adjust the launch force as needed
-            }
-        }
-        Invoke("ResetAttack", 2.0f); // Adjust the delay as needed
+
     }
 
     void ResetAttack()
     {
-        inAttackRadius = false;
+
+    }
+
+
+
+    enum FoxState
+    {
+        Idle,
+        Jump,
+        Stalk,
+        Chase,
+        Attack,
     }
 }
