@@ -27,7 +27,7 @@ public class WindGust : MonoBehaviour
             return;
         }
 
-        float gustForce = playerMove.GetPlayerState() == PlayerState.Glide ? glideGustForce : idleGustForce;
+        float gustForce = playerMove.GetPlayerState() == PlayerMove.PlayerState.Glide ? glideGustForce : idleGustForce;
 
         //playerRb.AddForce(transform.right * gustForce, ForceMode2D.Force);
         playerRb.linearVelocity = playerRb.linearVelocity + (Vector2)transform.right * gustForce * Time.fixedDeltaTime;

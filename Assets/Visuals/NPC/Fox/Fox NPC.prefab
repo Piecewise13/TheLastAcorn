@@ -132,9 +132,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02992b8188384a87bb7a087d646ce1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
+  stalkMoveSpeed: 2
+  chaseMoveSpeed: 4
+  jumpForce: 5
+  jumpForceRatio: 1.2
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  groundCheck: {fileID: 0}
   rayDistance: 1
   rayOriginObject: {fileID: 0}
   rayAngle: 0
@@ -196,7 +202,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.04360927, y: -0.06549312}
+  m_Offset: {x: -0.013459034, y: -0.06549312}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.38461542, y: -0.06666667}
@@ -206,7 +212,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.3760923, y: 0.076568216}
+  m_Size: {x: 0.26195574, y: 0.076568216}
   m_EdgeRadius: 0
 --- !u!1 &7981693913898086288
 GameObject:

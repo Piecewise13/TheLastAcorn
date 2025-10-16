@@ -791,7 +791,9 @@ public class PlayerMove : MonoBehaviour
         }
 
         // Check for ground using overlap circle
-        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        Collider2D col = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        bool isGrounded = col != null;
 
         // If grounded, update state and animations
         if (isGrounded && currentState != PlayerState.Grounded)
@@ -804,6 +806,11 @@ public class PlayerMove : MonoBehaviour
             ResetClimb();
 
             ResetGlide();
+
+            if (col.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+            {
+                
+            }
 
 
             currentState = PlayerState.Grounded;
@@ -1013,17 +1020,18 @@ public class PlayerMove : MonoBehaviour
     {
         return currentState;
     }
+
+    public enum PlayerState
+    {
+        Grounded,
+        Climb,
+        Glide,
+        Fall,
+        RidingOwl,
+        VineSwinging,
+        STUNNED
+
+    }
 }
 
 
-public enum PlayerState
-{
-    Grounded,
-    Climb,
-    Glide,
-    Fall,
-    RidingOwl,
-    VineSwinging,
-    STUNNED
-
-}

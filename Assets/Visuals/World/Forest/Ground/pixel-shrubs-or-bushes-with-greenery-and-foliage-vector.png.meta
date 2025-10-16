@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: 9f017093a6b7341f89b29de5676bdc75
+guid: 21bde9e872d6b47f994cdc9435141c96
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8479599488506246487
-    second: Fox_Run_0
-  - first:
-      213: 8940692198057652324
-    second: Fox_Run_1
-  - first:
-      213: 7450302445780164450
-    second: Fox_Run_2
-  - first:
-      213: -1755410692150350131
-    second: Fox_Run_3
-  - first:
-      213: -6847414180449743322
-    second: Fox_Run_4
+      213: -4711826518767784032
+    second: pixel-shrubs-or-bushes-with-greenery-and-foliage-vector_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,17 +96,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fox_Run_0
+      name: pixel-shrubs-or-bushes-with-greenery-and-foliage-vector_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 1
-        width: 53
-        height: 28
+        x: 71
+        y: 146
+        width: 1227
+        height: 724
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,96 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9aa400a2139625a80800000000000000
-      internalID: -8479599488506246487
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Run_1
-      rect:
-        serializedVersion: 2
-        x: 101
-        y: 1
-        width: 48
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 460355f2f28b31c70800000000000000
-      internalID: 8940692198057652324
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Run_2
-      rect:
-        serializedVersion: 2
-        x: 183
-        y: 4
-        width: 44
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 26f53fdd99ac46760800000000000000
-      internalID: 7450302445780164450
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Run_3
-      rect:
-        serializedVersion: 2
-        x: 258
-        y: 1
-        width: 48
-        height: 30
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dcea47ba64783a7e0800000000000000
-      internalID: -1755410692150350131
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Run_4
-      rect:
-        serializedVersion: 2
-        x: 337
-        y: 2
-        width: 49
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 62e0250051919f0a0800000000000000
-      internalID: -6847414180449743322
+      spriteID: 0afa499deba3c9eb0800000000000000
+      internalID: -4711826518767784032
       vertices: []
       indices: 
       edges: []
@@ -234,12 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Fox_Run_0: -8479599488506246487
-      Fox_Run_1: 8940692198057652324
-      Fox_Run_2: 7450302445780164450
-      Fox_Run_3: -1755410692150350131
-      Fox_Run_4: -6847414180449743322
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,37 +1,22 @@
 fileFormatVersion: 2
-guid: 6b289411699ce4a8ba7d5ad9025089db
+guid: 9f017093a6b7341f89b29de5676bdc75
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 420991283195186980
-    second: Fox_Idle_0
+      213: -8479599488506246487
+    second: Fox_Run_0
   - first:
-      213: 6499369822132175386
-    second: Fox_Idle_1
+      213: 8940692198057652324
+    second: Fox_Run_1
   - first:
-      213: 5975362707896055044
-    second: Fox_Idle_2
+      213: 7450302445780164450
+    second: Fox_Run_2
   - first:
-      213: 3500553189013071025
-    second: Fox_Idle_3
+      213: -1755410692150350131
+    second: Fox_Run_3
   - first:
-      213: 6811086727476824066
-    second: Fox_Idle_4
-  - first:
-      213: -8179505995576468363
-    second: Fox_Idle_5
-  - first:
-      213: 3019536344121028819
-    second: Fox_Idle_6
-  - first:
-      213: -4293284621291375319
-    second: Fox_Idle_7
-  - first:
-      213: -7550289555476541405
-    second: Fox_Idle_8
-  - first:
-      213: 8766653306388108052
-    second: Fox_Idle_9
+      213: -6847414180449743322
+    second: Fox_Run_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -123,17 +108,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fox_Idle_0
+      name: Fox_Run_0
       rect:
         serializedVersion: 2
-        x: 24
+        x: 13
         y: 1
-        width: 41
-        height: 32
+        width: 53
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 42f82607759a7d500800000000000000
-      internalID: 420991283195186980
+      spriteID: 9aa400a2139625a80800000000000000
+      internalID: -8479599488506246487
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fox_Idle_1
+      name: Fox_Run_1
       rect:
         serializedVersion: 2
-        x: 104
+        x: 101
         y: 1
-        width: 41
-        height: 32
+        width: 48
+        height: 25
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,151 +162,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a1205180b66623a50800000000000000
-      internalID: 6499369822132175386
+      spriteID: 460355f2f28b31c70800000000000000
+      internalID: 8940692198057652324
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fox_Idle_2
+      name: Fox_Run_2
       rect:
         serializedVersion: 2
-        x: 184
-        y: 1
-        width: 41
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 405b24859b0cce250800000000000000
-      internalID: 5975362707896055044
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_3
-      rect:
-        serializedVersion: 2
-        x: 264
-        y: 1
-        width: 41
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1b42c742496749030800000000000000
-      internalID: 3500553189013071025
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_4
-      rect:
-        serializedVersion: 2
-        x: 344
-        y: 1
-        width: 41
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 20842adba47d58e50800000000000000
-      internalID: 6811086727476824066
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_5
-      rect:
-        serializedVersion: 2
-        x: 425
-        y: 1
-        width: 40
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 57c9c7742ae8c7e80800000000000000
-      internalID: -8179505995576468363
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_6
-      rect:
-        serializedVersion: 2
-        x: 506
-        y: 1
-        width: 39
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d037b98e4c87e920800000000000000
-      internalID: 3019536344121028819
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_7
-      rect:
-        serializedVersion: 2
-        x: 582
-        y: 1
-        width: 43
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 925b74c32603b64c0800000000000000
-      internalID: -4293284621291375319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Fox_Idle_8
-      rect:
-        serializedVersion: 2
-        x: 661
-        y: 1
+        x: 183
+        y: 4
         width: 44
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26f53fdd99ac46760800000000000000
+      internalID: 7450302445780164450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fox_Run_3
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 1
+        width: 48
         height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -318,20 +206,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3209a7607abf73790800000000000000
-      internalID: -7550289555476541405
+      spriteID: dcea47ba64783a7e0800000000000000
+      internalID: -1755410692150350131
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Fox_Idle_9
+      name: Fox_Run_4
       rect:
         serializedVersion: 2
-        x: 744
-        y: 1
-        width: 41
-        height: 31
+        x: 337
+        y: 2
+        width: 49
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -340,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 41354440cb869a970800000000000000
-      internalID: 8766653306388108052
+      spriteID: 62e0250051919f0a0800000000000000
+      internalID: -6847414180449743322
       vertices: []
       indices: 
       edges: []
@@ -360,16 +248,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fox_Idle_0: 420991283195186980
-      Fox_Idle_1: 6499369822132175386
-      Fox_Idle_2: 5975362707896055044
-      Fox_Idle_3: 3500553189013071025
-      Fox_Idle_4: 6811086727476824066
-      Fox_Idle_5: -8179505995576468363
-      Fox_Idle_6: 3019536344121028819
-      Fox_Idle_7: -4293284621291375319
-      Fox_Idle_8: -7550289555476541405
-      Fox_Idle_9: 8766653306388108052
+      Fox_Run_0: -8479599488506246487
+      Fox_Run_1: 8940692198057652324
+      Fox_Run_2: 7450302445780164450
+      Fox_Run_3: -1755410692150350131
+      Fox_Run_4: -6847414180449743322
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
