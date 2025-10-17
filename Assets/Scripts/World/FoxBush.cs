@@ -71,6 +71,8 @@ public class FoxBush : MonoBehaviour
         float dist0 = Vector2.Distance(bushes[0].transform.position, playerPosition);
         float dist1 = bushes.Length > 1 ? Vector2.Distance(bushes[1].transform.position, playerPosition) : float.MaxValue;
 
+        //TODO: Find a way to see if the player is reachable from this bush. Since there is no navigation mesh, this is tricky.
+
         if ((dist0 <= dist1 && dist0 > minDistance) || bushes.Length == 1)
         {
             bushes[0].SpawnFox();

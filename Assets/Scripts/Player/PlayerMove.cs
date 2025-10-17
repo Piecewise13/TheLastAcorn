@@ -809,7 +809,7 @@ public class PlayerMove : MonoBehaviour
 
             if (col.gameObject.layer == LayerMask.NameToLayer("Terrain"))
             {
-                
+                FoxBush.TrySpawnFoxAtPlayer(transform.position);
             }
 
 

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4761532399500499667
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5078600670744116012}
+  m_Layer: 8
+  m_Name: PF Ray Origin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5078600670744116012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761532399500499667}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.058, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1293403341697906193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5506973434818345946
 GameObject:
   m_ObjectHideFlags: 0
@@ -14,7 +45,7 @@ GameObject:
   - component: {fileID: 2393434428642893150}
   - component: {fileID: 4462386982497335588}
   - component: {fileID: 8036416634206889887}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fox NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,11 +62,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5268515840256942426}
   - {fileID: 5059602052949433145}
+  - {fileID: 1293403341697906193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7813590510275308218
@@ -119,7 +151,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &2393434428642893150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,19 +165,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  stalkMoveSpeed: 2
-  chaseMoveSpeed: 4
-  jumpForce: 5
-  jumpForceRatio: 1.2
+  jumpForce: 1.5
+  jumpForceRatio: 1.75
+  airMoveSpeed: 2
+  stalkMoveSpeed: 3
+  stalkDuration: 4
+  playerDetectionDistance: 50
+  chaseMoveSpeed: 8
+  maxDistanceBetweenFoxAndPlayer: 70
+  pounceForce: 10
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 4294967295
-  groundCheck: {fileID: 0}
-  rayDistance: 1
-  rayOriginObject: {fileID: 0}
-  rayAngle: 0
-  rayCount: 3
-  raySpread: 0.5
+    m_Bits: 512
+  groundCheck:
+  - {fileID: 8154028310226663171}
+  - {fileID: 7125721313634501225}
+  rayDistance: 5
+  rayOriginObject: {fileID: 4761532399500499667}
+  rayAngle: 30
 --- !u!95 &4462386982497335588
 Animator:
   serializedVersion: 7
@@ -181,7 +218,7 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -214,6 +251,71 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.26195574, y: 0.076568216}
   m_EdgeRadius: 0
+--- !u!1 &7125721313634501225
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1543405017292496375}
+  m_Layer: 8
+  m_Name: Ground Check Back
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1543405017292496375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125721313634501225}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.082, y: -0.107, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1293403341697906193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7688447580285367086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1293403341697906193}
+  m_Layer: 8
+  m_Name: Move Components
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1293403341697906193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7688447580285367086}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6793770719494185951}
+  - {fileID: 1543405017292496375}
+  - {fileID: 5078600670744116012}
+  m_Father: {fileID: 5235658994661689913}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7981693913898086288
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +326,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5268515840256942426}
   - component: {fileID: 7258481400505828538}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,6 +384,37 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.25
+--- !u!1 &8154028310226663171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6793770719494185951}
+  m_Layer: 8
+  m_Name: Ground Check Front
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6793770719494185951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8154028310226663171}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09, y: -0.107, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1293403341697906193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3126294864033686580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -293,6 +426,10 @@ PrefabInstance:
     - target: {fileID: -2253911629886400664, guid: bdc58bd64f0ce4f0fb3505595123c118, type: 3}
       propertyPath: m_Name
       value: Graphic
+      objectReference: {fileID: 0}
+    - target: {fileID: -2253911629886400664, guid: bdc58bd64f0ce4f0fb3505595123c118, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7878350319992209165, guid: bdc58bd64f0ce4f0fb3505595123c118, type: 3}
       propertyPath: m_LocalPosition.x

@@ -41,7 +41,7 @@ public class FoxScript : MonoBehaviour
     [Space(20)]
     [Header("Front Raycast (Pathfinding)")]
     [SerializeField] private LayerMask obstacleMask = ~0;
-    [SerializeField] private GameObject groundCheck;
+    [SerializeField] private GameObject[] groundCheck;
     [SerializeField] private float rayDistance = 1f;
 
     [SerializeField] private GameObject rayOriginObject;
@@ -154,7 +154,7 @@ public class FoxScript : MonoBehaviour
 
     void ChaseTarget()
     {
-        if (Vector2.Distance(transform.position, player.transform.position) > maxDistanceBetweenFoxAndPlayer)
+        if (Vector2.Distance(transform.position, moveTarget.transform.position) > maxDistanceBetweenFoxAndPlayer)
         {
             GiveUp();
             return;
@@ -180,12 +180,16 @@ public class FoxScript : MonoBehaviour
 
     void ReturnToBush()
     {
-        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 1f)
+
+        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 4f)
         {
             FoxBush.ResetFoxSpawn();
             Destroy(gameObject);
             return;
         }
+
+        FaceTarget(moveTarget.transform.position);
+        Move();
     }
 
     void FaceTarget(Vector2 targetPosition)
@@ -236,7 +240,16 @@ public class FoxScript : MonoBehaviour
 
     void GroundCheck()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.transform.position, 0.1f, obstacleMask);
+        isGrounded = false;
+        foreach (var gc in groundCheck)
+        {
+            if (gc == null) continue;
+            if (Physics2D.OverlapCircle(gc.transform.position, 0.1f, obstacleMask))
+            {
+                isGrounded = true;
+                break;
+            }
+        }
 
         if (isGrounded && currentState == FoxState.Jump)
         {
@@ -274,9 +287,24 @@ public class FoxScript : MonoBehaviour
 
     void GiveUp()
     {
-    
+
         currentState = FoxState.GiveUp;
+        var closestBushes = FoxBush.GetClosestBushes(transform.position);
+
+        if (closestBushes.Length == 0)
+        {
+            // No bushes found, just destroy the fox
+            FoxBush.ResetFoxSpawn();
+            Destroy(gameObject);
+        }
+
         //make the move target a bush
+        moveTarget = closestBushes[0].transform.gameObject;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        
     }
 
     enum FoxState
