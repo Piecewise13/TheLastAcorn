@@ -5,8 +5,16 @@ public class FoxBush : MonoBehaviour
     [Header("Fox Settings")]
     static bool foxSpawned = false;
     [SerializeField] private GameObject foxPrefab;
-
     private static GameObject currentFox;
+    private static FoxScript currentFoxScript;
+
+    private float bushShakeTimer = 0f;
+    [SerializeField]private float bushShakeDuration = 1.5f;
+
+    private bool isBushShaking = false;
+
+
+
 
 
     [Header("Bush Management")]
@@ -37,6 +45,18 @@ public class FoxBush : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isBushShaking || foxSpawned)
+        {
+            return;
+        }
+
+        if (bushShakeTimer < bushShakeDuration)
+        {
+            bushShakeTimer += Time.deltaTime;
+            return;
+        }
+
+        SpawnFox();
 
     }
 
@@ -47,8 +67,10 @@ public class FoxBush : MonoBehaviour
             return;
         }
 
+        isBushShaking = false;
         foxSpawned = true;
         currentFox = Instantiate(foxPrefab, transform.position, Quaternion.identity);
+        currentFoxScript = currentFox.GetComponent<FoxScript>();
     }
 
     public static void ResetFoxSpawn()
@@ -60,6 +82,7 @@ public class FoxBush : MonoBehaviour
     {
         if (foxSpawned)
         {
+            currentFoxScript.PlayerLandedOnGround();
             return;
         }
 
@@ -75,12 +98,18 @@ public class FoxBush : MonoBehaviour
 
         if ((dist0 <= dist1 && dist0 > minDistance) || bushes.Length == 1)
         {
-            bushes[0].SpawnFox();
+            bushes[0].StartBushShake();
         }
         else
         {
-            bushes[1].SpawnFox();
+            bushes[1].StartBushShake();
         }
+    }
+
+    public void StartBushShake()
+    {
+        isBushShaking = true;
+        bushShakeTimer = 0f;
     }
 
     static public FoxBush[] GetClosestBushes(Vector2 position)

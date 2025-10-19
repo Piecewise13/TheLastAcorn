@@ -1,17 +1,30 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FoxScript : MonoBehaviour
+public class FoxScript : MonoBehaviour, IProximityAlert
 {
 
     private Rigidbody2D rb;
 
+    [SerializeField] private Animator animator;
+
     [SerializeField] private FoxState currentState = FoxState.Idle;
+
 
     private GameObject player;
     private PlayerMove playerMove;
+    private PlayerLifeManager playerLifeManager;
 
     private bool isGrounded = false;
+
+    [SerializeField] private float lifeTime = 20f;
+    private float lifeTimer = 0f;
+
+    [Header("Attack")]
+    [SerializeField] private float attackCooldown = 2f;
+    private float lastAttackTime = 0f;
+
 
 
     [Header("Movement")]
@@ -23,6 +36,12 @@ public class FoxScript : MonoBehaviour
     [Tooltip("The y force to x force ratio when jumping.")]
     [SerializeField] private float jumpForceRatio = 1.2f;
     [SerializeField] private float airMoveSpeed = 1f;
+
+    private float jumpCooldown = 0.25f;
+    private float jumpCooldownTimer = 0f;
+
+    private float jumpBufferTimer = 0f;
+    private float jumpBufferDuration = 0.2f;
 
     [Space(5)]
     [Header("Stalk")]
@@ -36,6 +55,8 @@ public class FoxScript : MonoBehaviour
     [SerializeField] private float chaseMoveSpeed = 4f;
     [SerializeField] private float maxDistanceBetweenFoxAndPlayer = 70f;
     [SerializeField] private float pounceForce = 10f;
+    [SerializeField] private float pounceDuration = 3f;
+    private float waitTimer = 0f;
 
 
     [Space(20)]
@@ -56,10 +77,13 @@ public class FoxScript : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform.root.gameObject;
         playerMove = player.GetComponent<PlayerMove>();
+        playerLifeManager = player.GetComponent<PlayerLifeManager>();
 
         moveTarget = player;
 
         currentState = FoxState.Idle;
+
+        SearchForTarget();
     }
 
     // Update is called once per frame
@@ -69,13 +93,25 @@ public class FoxScript : MonoBehaviour
         {
             //if in idle state, search for target and return
             case FoxState.Idle:
-                SearchForTarget();
+                if (waitTimer < pounceDuration)
+                {
+
+                    FaceTarget(player.transform.position);
+                    waitTimer += Time.deltaTime;
+                    return;
+                }
+                GiveUp();
                 return;
             case FoxState.Jump:
                 //do nothing, wait until grounded
                 transform.position += transform.right * transform.localScale.x * Time.deltaTime * airMoveSpeed / 10;
                 return;
-            case FoxState.Pounce:
+
+            case FoxState.Attack:
+                if (lastAttackTime + attackCooldown < Time.time)
+                {
+                    StartStalk();
+                }
                 return;
 
             case FoxState.Chase:
@@ -107,6 +143,11 @@ public class FoxScript : MonoBehaviour
         transform.position += transform.right * transform.localScale.x * Time.deltaTime * moveSpeed / 10;
     }
 
+    void StartJump()
+    {
+
+    }
+
     void Jump()
     {
         if (!isGrounded)
@@ -119,14 +160,26 @@ public class FoxScript : MonoBehaviour
             return;
         }
 
+        jumpBufferTimer = 0f;
+        animator.SetBool("isJumping", true);
+
+        RaycastHit2D hit = Physics2D.Raycast(rayOriginObject.transform.position, (Vector2)transform.right * Mathf.Sign(transform.localScale.x), rayDistance, obstacleMask);
+
+
+        float verticalForce = Mathf.Lerp(1f, 3f, hit.distance / rayDistance);
         currentState = FoxState.Jump;
 
-        rb.AddForce(new Vector2(Mathf.Sign(transform.localScale.x) * jumpForce, jumpForce * jumpForceRatio), ForceMode2D.Impulse);
+        Vector2 forceDirection = Vector2.up * verticalForce + Vector2.right * Mathf.Sign(transform.localScale.x);
+
+        //Mathf.Sign(transform.localScale.x) * jumpForce
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 
     void StartStalk()
     {
         currentState = FoxState.Stalk;
+        animator.SetBool("isStalking", true);
+        animator.SetBool("isChasing", false);
     }
 
     void StalkTarget()
@@ -150,6 +203,8 @@ public class FoxScript : MonoBehaviour
     void StartChase()
     {
         currentState = FoxState.Chase;
+        animator.SetBool("isChasing", true);
+        animator.SetBool("isStalking", false);
     }
 
     void ChaseTarget()
@@ -167,9 +222,7 @@ public class FoxScript : MonoBehaviour
         //Check if the player is above us and within range to pounce
         if (Mathf.Abs(player.transform.position.x - transform.position.x) < 1f && player.transform.position.y > transform.position.y + 2f)
         {
-            currentState = FoxState.Pounce;
-            Vector2 direction = (player.transform.position - transform.position).normalized;
-            rb.AddForce(direction * pounceForce, ForceMode2D.Impulse);
+            Pounce();
             return;
         }
 
@@ -178,17 +231,31 @@ public class FoxScript : MonoBehaviour
         Move();
     }
 
+    void Pounce()
+    {
+        jumpBufferTimer = 0f;
+        animator.SetBool("isJumping", true);
+        waitTimer = 0f;
+        currentState = FoxState.Pounce;
+        Vector2 direction = (player.transform.position - transform.position).normalized;
+        rb.AddForce(direction * pounceForce, ForceMode2D.Impulse);
+    }
+
     void ReturnToBush()
     {
-
-        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 4f)
+        animator.SetBool("isStalking", true);
+        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 4f || lifeTimer <= 0f)
         {
+
             FoxBush.ResetFoxSpawn();
             Destroy(gameObject);
             return;
         }
+        
+        lifeTimer -= Time.deltaTime;
 
         FaceTarget(moveTarget.transform.position);
+        PathFinding();
         Move();
     }
 
@@ -226,13 +293,19 @@ public class FoxScript : MonoBehaviour
 
         if (hits[0].collider != null && hits[1].collider == null)
         {
+            if (jumpCooldownTimer > 0)
+            {
+                jumpCooldownTimer -= Time.deltaTime;
+                return;
+            }
+
             Jump();
             return;
         }
 
         if (hits[0].collider != null && hits[1].collider != null)
         {
-            currentState = FoxState.Idle;
+            GiveUp();
             return;
         }
 
@@ -240,6 +313,12 @@ public class FoxScript : MonoBehaviour
 
     void GroundCheck()
     {
+        if (jumpBufferTimer < jumpBufferDuration)
+        {
+            jumpBufferTimer += Time.deltaTime;
+            return;
+        }
+
         isGrounded = false;
         foreach (var gc in groundCheck)
         {
@@ -251,16 +330,39 @@ public class FoxScript : MonoBehaviour
             }
         }
 
-        if (isGrounded && currentState == FoxState.Jump)
+        if (!isGrounded)
         {
-            currentState = FoxState.Chase;
             return;
         }
 
-        if (isGrounded && currentState == FoxState.Pounce)
+        print("Landed");
+
+        if (currentState == FoxState.Jump)
         {
-            GiveUp();
+            animator.SetBool("isJumping", false);
+
+            jumpCooldownTimer = jumpCooldown;
+
+            if (stalkTimer < stalkDuration)
+            {
+                StartStalk();
+                print("Landed from Jump to Stalk");
+                return;
+            }
+
+            StartChase();
+
             return;
+        }
+
+        if (currentState == FoxState.Pounce)
+        {
+            currentState = FoxState.Idle;
+            print("Landed from Pounce");
+            animator.SetBool("isChasing", false);
+            animator.SetBool("isStalking", false);
+            animator.SetBool("isJumping", false);
+
         }
 
 
@@ -269,6 +371,7 @@ public class FoxScript : MonoBehaviour
     {
         if (Vector2.Distance(transform.position, player.transform.position) > playerDetectionDistance)
         {
+            GiveUp();
             return;
         }
 
@@ -284,12 +387,29 @@ public class FoxScript : MonoBehaviour
         }
     }
 
+    public void PlayerLandedOnGround()
+    {
+        if (currentState == FoxState.Idle)
+        {
+            StartChase();
+            return;
+        }
+
+        if (currentState == FoxState.GiveUp)
+        {
+            SearchForTarget();
+            return;
+        }
+    }
+
 
     void GiveUp()
     {
-
+        animator.SetBool("isChasing", false);
         currentState = FoxState.GiveUp;
         var closestBushes = FoxBush.GetClosestBushes(transform.position);
+
+        lifeTimer = lifeTime;
 
         if (closestBushes.Length == 0)
         {
@@ -301,10 +421,27 @@ public class FoxScript : MonoBehaviour
         //make the move target a bush
         moveTarget = closestBushes[0].transform.gameObject;
     }
-
-    void OnCollisionEnter(Collision collision)
+    
+    private void Attack()
     {
+        currentState = FoxState.Attack;
+        animator.SetTrigger("attack");
+        lastAttackTime = Time.time; 
+        playerLifeManager.DamagePlayer();
+    }
+
+    public void PlayerInProximity(GameObject player)
+    {
+        if (attackCooldown + lastAttackTime < Time.time)
+        {
+            Attack();
+            return;
+        }
         
+    }
+
+    public void PlayerOutOfProximity(GameObject player)
+    {
     }
 
     enum FoxState

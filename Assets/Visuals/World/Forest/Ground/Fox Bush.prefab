@@ -101,3 +101,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foxPrefab: {fileID: 5506973434818345946, guid: 64e5ee8d1a4c84c9ea4190bcb1a24836, type: 3}
+  bushShakeDuration: 1

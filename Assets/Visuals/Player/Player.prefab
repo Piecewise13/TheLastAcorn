@@ -8138,7 +8138,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 10
   m_Sprite: {fileID: 5544403088270506010, guid: 6b790fa8dfe0c7040a63adee1d435fc7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -8776,6 +8776,7 @@ MonoBehaviour:
   goldArrow: {fileID: 2171646205611909578, guid: 818e1da6adb23a049bb495dbc3a44365, type: 3}
   arrowScreenDistance: 200
   maxAcornDistance: 200
+  minAcornDistance: 20
   statueArrowPrefab: {fileID: 2171646205611909578, guid: ab4a9f49ee2ab436794c10193c5cc8f9, type: 3}
 --- !u!1 &5822916115413610612
 GameObject:
