@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pixel-shrubs-or-bushes-with-greenery-and-foliage-vector_0: -4711826518767784032
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
