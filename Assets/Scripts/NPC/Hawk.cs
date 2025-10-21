@@ -17,9 +17,15 @@ public class Hawk : MonoBehaviour, IProximityAlert
 
     [Header("Flight Settings")]
     [SerializeField] private float defaultFlightSpeed;
-    [SerializeField] private float minFlightSpeed;
     [SerializeField] private float flightSpeed;
+    [SerializeField] private float acceleration;
+
+    private float targetFlightSpeed;
+
     [SerializeField] private float maxNestDistance;
+    private Vector2 moveDirection;
+
+    [SerializeField]private float turnSpeed = 2f;
 
     [Header("Targeting Settings")]
     [SerializeField] private float targetingDuration;
@@ -49,19 +55,20 @@ public class Hawk : MonoBehaviour, IProximityAlert
         switch (currentState)
         {
             case HawkState.Idle:
-                flightSpeed = minFlightSpeed;
+                targetFlightSpeed = defaultFlightSpeed;
                 break;
             case HawkState.Returning:
-                flightSpeed = defaultFlightSpeed;
+                targetFlightSpeed = defaultFlightSpeed;
                 ReturnToNest();
                 break;
             case HawkState.Attacking:
                 // Implement attacking behavior
                 flightSpeed = diveAttackSpeed;
+                targetFlightSpeed = diveAttackSpeed;
                 AttackPlayer();
                 break;
             case HawkState.GoingToDiveStart:
-                flightSpeed = defaultFlightSpeed;
+                targetFlightSpeed = defaultFlightSpeed;
                 MoveTowardsDiveStart();
                 break;
             case HawkState.Targeting:
@@ -73,8 +80,10 @@ public class Hawk : MonoBehaviour, IProximityAlert
 
     private void FlyTowardsTarget(Vector3 target)
     {
+        flightSpeed = Mathf.Lerp(flightSpeed, targetFlightSpeed, acceleration * Time.deltaTime);
 
-        transform.position = Vector3.MoveTowards(transform.position, target, flightSpeed * Time.deltaTime);
+        moveDirection = Vector2.Lerp(moveDirection, (target - transform.position).normalized, turnSpeed * Time.deltaTime).normalized;
+        transform.position = moveDirection * flightSpeed * Time.deltaTime + (Vector2)transform.position;
     }
 
     private void ReturnToNest()
@@ -82,8 +91,9 @@ public class Hawk : MonoBehaviour, IProximityAlert
 
         FlyTowardsTarget(nest.position);
         float distanceToNest = Vector3.Distance(transform.position, nest.position);
-        if (distanceToNest <= 0.1f)
+        if (distanceToNest <= 2f)
         {
+            transform.position = nest.position;
             currentState = HawkState.Idle;
         }
     }
@@ -103,7 +113,7 @@ public class Hawk : MonoBehaviour, IProximityAlert
             return;
         }
 
-        if (Vector2.Distance(transform.position, diveTarget) <= 0.1f)
+        if (Vector2.Distance(transform.position, diveTarget) <= 1f)
         {
             EndDiveAttack();
             return;
@@ -130,12 +140,20 @@ public class Hawk : MonoBehaviour, IProximityAlert
             currentState = HawkState.Attacking;
 
             targetingTimer = 0f;
-            flightSpeed = diveAttackSpeed;
 
             ResetTargetingShake();
             return;
         }
-        diveTarget = player.transform.position;
+
+        if (Vector2.Distance(nest.position, player.transform.position) > maxNestDistance * 1.5f)
+        {
+            currentState = HawkState.Returning;
+            return;
+        }
+
+        moveDirection = (player.transform.position - transform.position).normalized;
+
+        diveTarget = (player.transform.position - transform.position) * 1.25f + transform.position;
         targetingTimer += Time.deltaTime;
         ShakeBasedOnTargeting();
     }
@@ -170,16 +188,16 @@ public class Hawk : MonoBehaviour, IProximityAlert
             return;
         }
 
-        setTargetingPosition = player.transform.position + new Vector3(Random.Range(10f, 10f), 20f, 0);
+        setTargetingPosition = player.transform.position + new Vector3(Random.Range(15f, 15f), 20f, 0);
         hasTargetingPos = true;
-        flightSpeed = minFlightSpeed;
+        targetFlightSpeed = defaultFlightSpeed;
     }
 
     private void MoveTowardsDiveStart()
     {
         // Implement going to dive start behavior
         FlyTowardsTarget(setTargetingPosition);
-        if (Vector3.Distance(transform.position, setTargetingPosition) <= 0.1f)
+        if (Vector3.Distance(transform.position, setTargetingPosition) <= 2f)
         {
             currentState = HawkState.Targeting;
             targetingBasePosition = transform.position;

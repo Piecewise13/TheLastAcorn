@@ -17,7 +17,7 @@ public class ProximityTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && proximityAlert != null)
+         if (collision.CompareTag("Player") && proximityAlert != null)
         {
             proximityAlert.PlayerInProximity(collision.gameObject);
         }
