@@ -23,7 +23,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            CheckpointManager.Instance.SetCheckpoint(this);
+            CheckpointManager.Instance.SetCheckpoint(transform.position);
 
 
             SaveLoadManager.SaveCollectedAcorns();

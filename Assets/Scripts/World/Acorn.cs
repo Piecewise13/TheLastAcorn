@@ -6,6 +6,8 @@ public class Acorn : MonoBehaviour, ICollectible
 
     private CircleCollider2D acornCollider;
 
+    private CheckpointManager checkpointManager;
+
     [SerializeField] private bool isGoldenAcorn = false; // Flag to indicate if this is a golden acorn
     [SerializeField] int value = 1; // define this with team
     [SerializeField] string acornId; // Unique identifier for this acorn
@@ -48,6 +50,7 @@ public class Acorn : MonoBehaviour, ICollectible
 
     public void OnCollected()
     {
+        CheckpointManager.Instance.SetCheckpoint(transform.position);
         // Mark this acorn as collected in the save system
         string currentLevel = SceneManager.GetActiveScene().name;
         SaveLoadManager.MarkAcornCollected(currentLevel, this);

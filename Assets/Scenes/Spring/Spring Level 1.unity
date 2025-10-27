@@ -112949,7 +112949,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f5b3fcc4fec4fecb901d84d8f2e46c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSpawnPoint: 0
+  defaultSpawnPoint: 1
   disablePersistence: 0
   showDebugLogs: 0
 --- !u!4 &1400475056
@@ -118306,13 +118306,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fox Bush
       objectReference: {fileID: 0}
+    - target: {fileID: 6201526808921251079, guid: 7659dce35832941c6bacb326b1b8b5f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6479679945012029475, guid: 7659dce35832941c6bacb326b1b8b5f7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -38.94
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 6479679945012029475, guid: 7659dce35832941c6bacb326b1b8b5f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.04
+      value: 12.8
       objectReference: {fileID: 0}
     - target: {fileID: 6479679945012029475, guid: 7659dce35832941c6bacb326b1b8b5f7, type: 3}
       propertyPath: m_LocalPosition.z

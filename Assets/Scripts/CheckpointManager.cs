@@ -37,11 +37,9 @@ public class CheckpointManager : MonoBehaviour
     /// Call this to update the active respawn location.
     /// </summary>
     /// <param name="checkpoint">Transform of the new checkpoint.</param>
-    public void SetCheckpoint(Checkpoint checkpoint)
+    public void SetCheckpoint(Vector3 checkpoint)
     {
-        if (checkpoint == null) return;
-        currentCheckpoint = checkpoint;
-        currentCheckpointTransform = checkpoint.transform;
+        currentCheckpointTransform.position = checkpoint;
     }
 
     /// <summary>
