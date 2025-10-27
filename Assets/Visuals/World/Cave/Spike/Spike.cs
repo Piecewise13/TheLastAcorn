@@ -3,7 +3,7 @@ using UnityEngine;
 public class Spike : MonoBehaviour
 {
 
-
+    [SerializeField] private float damageLaunch = 30f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,7 +24,7 @@ public class Spike : MonoBehaviour
             var root = other.transform.root;
 
             PlayerLifeManager lifeManager = root.GetComponent<PlayerLifeManager>();
-            lifeManager.DamagePlayer(transform.up * 30f);
+            lifeManager.DamagePlayer(transform.up * damageLaunch);
 
         }
     }

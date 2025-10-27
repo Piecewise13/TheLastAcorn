@@ -10,8 +10,10 @@ public class CheckpointManager : MonoBehaviour
 
     [Tooltip("Starting position if no checkpoint has been reached yet.")]
     [SerializeField] private Transform initialSpawnPoint;
+    [SerializeField] private Transform levelRevisitSpawnPoint;
 
-    private Transform currentCheckpoint;
+    private Transform currentCheckpointTransform;
+    private Checkpoint currentCheckpoint;
 
     /// <summary>
     /// Event fired when player respawns - passes respawn position.
@@ -28,17 +30,16 @@ public class CheckpointManager : MonoBehaviour
         }
 
         // Set default checkpoint
-        currentCheckpoint = initialSpawnPoint;
+        currentCheckpointTransform = initialSpawnPoint;
     }
 
     /// <summary>
     /// Call this to update the active respawn location.
     /// </summary>
     /// <param name="checkpoint">Transform of the new checkpoint.</param>
-    public void SetCheckpoint(Transform checkpoint)
+    public void SetCheckpoint(Vector3 checkpoint)
     {
-        if (checkpoint == null) return;
-        currentCheckpoint = checkpoint;
+        currentCheckpointTransform.position = checkpoint;
     }
 
     /// <summary>
@@ -54,13 +55,31 @@ public class CheckpointManager : MonoBehaviour
         }
 
         // Move player to checkpoint position
-        player.transform.position = currentCheckpoint.position;
+        player.transform.position = currentCheckpointTransform.position;
 
         // Optionally reset velocity if Rigidbody2D is present
         var rb = player.GetComponent<Rigidbody2D>();
         if (rb != null) rb.linearVelocity = Vector2.zero;
-        
 
-        OnPlayerRespawn?.Invoke(currentCheckpoint.position);
+
+        OnPlayerRespawn?.Invoke(currentCheckpointTransform.position);
+    }
+
+    public void SpawnAtInitalLocation(GameObject player)
+    {
+        if (initialSpawnPoint != null)
+        {
+            currentCheckpointTransform = initialSpawnPoint;
+            player.transform.position = initialSpawnPoint.position;
+        }
+    }
+
+    public void SpawnAtEndingLocation(GameObject player)
+    {
+        if (levelRevisitSpawnPoint != null)
+        {
+            currentCheckpointTransform = levelRevisitSpawnPoint;
+            player.transform.position = levelRevisitSpawnPoint.position;
+        }
     }
 }

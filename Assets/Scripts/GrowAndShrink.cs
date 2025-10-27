@@ -103,7 +103,6 @@ public class GrowAndShrink : MonoBehaviour
 
         transform.localScale = targetScale;
         gameObject.SetActive(false);
-        Destroy(gameObject);
     }
 
     private float EvaluateEase(float t, ScaleEase ease)

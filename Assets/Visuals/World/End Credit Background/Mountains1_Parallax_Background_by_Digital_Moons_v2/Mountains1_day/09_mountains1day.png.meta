@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      09_mountains1day_0: -6648716008055262230
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0295f14e1c307af4681618da8d704ceb
+guid: 6b790fa8dfe0c7040a63adee1d435fc7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4694761808220932258
-    second: Squirrel-Idle_0
+      213: 5544403088270506010
+    second: Squirrel-Idle 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Squirrel-Idle_0
+      name: Squirrel-Idle 1_0
       rect:
         serializedVersion: 2
         x: 12
@@ -108,15 +108,15 @@ TextureImporter:
         width: 69
         height: 69
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a8441c9df4272140800000000000000
-      internalID: 4694761808220932258
+      spriteID: a1831f7bb3da1fc40800000000000000
+      internalID: 5544403088270506010
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: ce7a04da53ca74701904a0119135602d
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Squirrel-Idle_0: 4694761808220932258
+      Squirrel-Idle 1_0: 5544403088270506010
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

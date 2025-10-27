@@ -1,0 +1,598 @@
+fileFormatVersion: 2
+guid: 0304b5c09c8e94da9addd4b674b7dff9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8995181502148847499
+    second: Layer1_Flowers_0
+  - first:
+      213: 815089060778609921
+    second: Layer1_Flowers_1
+  - first:
+      213: -358228570876174802
+    second: Layer1_Flowers_2
+  - first:
+      213: 2302609342001386839
+    second: Layer1_Flowers_3
+  - first:
+      213: 6917455333720652853
+    second: Layer1_Flowers_4
+  - first:
+      213: -4971075345928325926
+    second: Layer1_Flowers_5
+  - first:
+      213: -4651288593144079061
+    second: Layer1_Flowers_6
+  - first:
+      213: 8731406774322688757
+    second: Layer1_Flowers_7
+  - first:
+      213: -6596777140985629521
+    second: Layer1_Flowers_8
+  - first:
+      213: 4663165183811547103
+    second: Layer1_Flowers_9
+  - first:
+      213: 919536801926120587
+    second: Layer1_Flowers_10
+  - first:
+      213: 3043688976102862414
+    second: Layer1_Flowers_11
+  - first:
+      213: -8795975903377251709
+    second: Layer1_Flowers_12
+  - first:
+      213: 5362161735076385022
+    second: Layer1_Flowers_13
+  - first:
+      213: 1224985919767194171
+    second: Layer1_Flowers_14
+  - first:
+      213: -4936231302665285173
+    second: Layer1_Flowers_15
+  - first:
+      213: 3381571558060023646
+    second: Layer1_Flowers_16
+  - first:
+      213: 1462001391065210157
+    second: Layer1_Flowers_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 80
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Layer1_Flowers_0
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 873
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 578d0421512ba2380800000000000000
+      internalID: -8995181502148847499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_1
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 784
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10d0408ae27cf4b00800000000000000
+      internalID: 815089060778609921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_2
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 783
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2e97844301570bf0800000000000000
+      internalID: -358228570876174802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_3
+      rect:
+        serializedVersion: 2
+        x: 1144
+        y: 776
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7551d7e2ff284ff10800000000000000
+      internalID: 2302609342001386839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_4
+      rect:
+        serializedVersion: 2
+        x: 1827
+        y: 803
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53cfc0cc9fcbfff50800000000000000
+      internalID: 6917455333720652853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_5
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 725
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad47d3e8f41330bb0800000000000000
+      internalID: -4971075345928325926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_6
+      rect:
+        serializedVersion: 2
+        x: 1503
+        y: 711
+        width: 35
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2d12d90bad437fb0800000000000000
+      internalID: -4651288593144079061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_7
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 666
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f271f443303c2970800000000000000
+      internalID: 8731406774322688757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_8
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 608
+        width: 36
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa47229342a8374a0800000000000000
+      internalID: -6596777140985629521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_9
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 614
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdf6e063704e6b040800000000000000
+      internalID: 4663165183811547103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_10
+      rect:
+        serializedVersion: 2
+        x: 1302
+        y: 608
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8484b479d9d2cc00800000000000000
+      internalID: 919536801926120587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_11
+      rect:
+        serializedVersion: 2
+        x: 1971
+        y: 621
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4e22636ffa5d3a20800000000000000
+      internalID: 3043688976102862414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_12
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 510
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 382ad4ad48a6ee580800000000000000
+      internalID: -8795975903377251709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_13
+      rect:
+        serializedVersion: 2
+        x: 726
+        y: 505
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef09b6720b93a6a40800000000000000
+      internalID: 5362161735076385022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_14
+      rect:
+        serializedVersion: 2
+        x: 1645
+        y: 517
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3a249a2436000110800000000000000
+      internalID: 1224985919767194171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_15
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 492
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc1d87398cbfe7bb0800000000000000
+      internalID: -4936231302665285173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_16
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 478
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5f5bbc6a61cdee20800000000000000
+      internalID: 3381571558060023646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Layer1_Flowers_17
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 407
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2d9197e4821a4410800000000000000
+      internalID: 1462001391065210157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Layer1_Flowers_0: -8995181502148847499
+      Layer1_Flowers_1: 815089060778609921
+      Layer1_Flowers_10: 919536801926120587
+      Layer1_Flowers_11: 3043688976102862414
+      Layer1_Flowers_12: -8795975903377251709
+      Layer1_Flowers_13: 5362161735076385022
+      Layer1_Flowers_14: 1224985919767194171
+      Layer1_Flowers_15: -4936231302665285173
+      Layer1_Flowers_16: 3381571558060023646
+      Layer1_Flowers_17: 1462001391065210157
+      Layer1_Flowers_2: -358228570876174802
+      Layer1_Flowers_3: 2302609342001386839
+      Layer1_Flowers_4: 6917455333720652853
+      Layer1_Flowers_5: -4971075345928325926
+      Layer1_Flowers_6: -4651288593144079061
+      Layer1_Flowers_7: 8731406774322688757
+      Layer1_Flowers_8: -6596777140985629521
+      Layer1_Flowers_9: 4663165183811547103
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

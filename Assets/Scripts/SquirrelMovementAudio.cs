@@ -60,7 +60,7 @@ public class SquirrelMovementAudio : MonoBehaviour
     [SerializeField] private bool enablePitchBend = true;
 
     private AudioSource src;
-    private PlayerState lastState = (PlayerState)(-1);
+    private PlayerMove.PlayerState lastState = (PlayerMove.PlayerState)(-1);
 
     void Awake()
     {
@@ -88,7 +88,7 @@ public class SquirrelMovementAudio : MonoBehaviour
 
         if (!src.isPlaying) return;
 
-        if (state == PlayerState.Climb || state == PlayerState.STUNNED)
+        if (state == PlayerMove.PlayerState.Climb || state == PlayerMove.PlayerState.STUNNED)
         {
             var s = GetSettings(state);
             src.volume = s.volumeRange.y;
@@ -97,7 +97,7 @@ public class SquirrelMovementAudio : MonoBehaviour
         }
 
         var set   = GetSettings(state);
-        float vel = state == PlayerState.Fall ? Mathf.Abs(rb.linearVelocity.y)
+        float vel = state == PlayerMove.PlayerState.Fall ? Mathf.Abs(rb.linearVelocity.y)
                                               : Mathf.Abs(rb.linearVelocity.x);
 
         float vol = Remap(vel, set.speedRange, set.volumeRange);
@@ -112,13 +112,13 @@ public class SquirrelMovementAudio : MonoBehaviour
         if (jumpPlayer) jumpPlayer.Play();
     }
 
-    StateAudio GetSettings(PlayerState s) => s switch
+    StateAudio GetSettings(PlayerMove.PlayerState s) => s switch
     {
-        PlayerState.Grounded => grounded,
-        PlayerState.Climb    => climb,
-        PlayerState.Glide    => glide,
-        PlayerState.Fall     => fall,
-        PlayerState.STUNNED  => stunned,
+        PlayerMove.PlayerState.Grounded => grounded,
+        PlayerMove.PlayerState.Climb    => climb,
+        PlayerMove.PlayerState.Glide    => glide,
+        PlayerMove.PlayerState.Fall     => fall,
+        PlayerMove.PlayerState.STUNNED  => stunned,
         _                    => default
     };
 

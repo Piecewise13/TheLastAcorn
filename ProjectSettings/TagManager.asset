@@ -7,6 +7,8 @@ TagManager:
   - Acorn
   - GoldAcorn
   - Statue
+  - Vine
+  - Moss
   layers:
   - Default
   - TransparentFX
@@ -16,11 +18,11 @@ TagManager:
   - UI
   - Climbable
   - Player
-  - DamageTrigger
+  - PlayerTrigger
   - Terrain
   - Acorn
-  - 
-  - 
+  - Platform
+  - NPC
   - 
   - 
   - 
