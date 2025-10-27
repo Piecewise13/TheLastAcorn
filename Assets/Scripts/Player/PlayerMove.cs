@@ -78,12 +78,7 @@ public class PlayerMove : MonoBehaviour
     /// <summary>
     /// Horizontal velocity applied when hitting a tree while gliding.
     /// </summary>
-    [SerializeField] private float damageHitXVelo = 10f;
-
-    /// <summary>
-    /// Vertical velocity applied when hitting a tree while gliding.
-    /// </summary>
-    [SerializeField] private float damageHitYVelo = 5f;
+    [SerializeField] private float collisionLaunchForce = 10f;
 
     [Space(20)]
     [Header("Ground Check")]
@@ -109,6 +104,8 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float groundMoveSpeed = 12.0f;
     [SerializeField] private float airMoveSpeed = 9.0f;
+
+    [SerializeField] private ParticleSystem speedLineParticles;
 
     [Header("Climb")]
     /// <summary>
@@ -326,12 +323,26 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        if (rb.linearVelocity.magnitude > minDamageSpeed )
+        {
+            if (!speedLineParticles.isPlaying)
+            {
+                speedLineParticles.Play();
+                print("playing");
+            }
+        } else
+        {
+            speedLineParticles.Stop();
+        }
+
         if (climbTime > 0)
         {
             climbTime -= Time.deltaTime / 2f;
             effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
             effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         }
+
+
 
         if (currentState == PlayerState.Glide)
         {
@@ -836,20 +847,15 @@ public class PlayerMove : MonoBehaviour
         if (((1 << collision.gameObject.layer) & collideDamageLayer) != 0)
         {
 
-            print("collision velo: " + collision.relativeVelocity);
+            print("collision velo: " + collision.relativeVelocity.magnitude);
 
             // Ignore if velocity is below threshold
-            if (Mathf.Abs(collision.relativeVelocity.x) >= minDamageSpeed)
+            if (Mathf.Abs(collision.relativeVelocity.magnitude) >= minDamageSpeed)
             {
                 // Get contact normal for force direction
                 var contactNormal = collision.GetContact(0).normal;
 
-                if (Vector2.Angle(contactNormal, Vector2.up) < 45f)
-                {
-                    return;
-                }
-
-                var launchDir = Vector2.up * damageHitYVelo + Vector2.right * contactNormal * damageHitXVelo;
+                var launchDir = collision.relativeVelocity.normalized * collisionLaunchForce;
 
                 lifeManager.DamagePlayer(launchDir);
 
