@@ -266,6 +266,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: leapTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
+      propertyPath: leapDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 151922112089434294, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
       propertyPath: maxClimbTime
       value: 1.7
       objectReference: {fileID: 0}

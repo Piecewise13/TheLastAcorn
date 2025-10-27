@@ -128,10 +128,6 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private Transform climbCheckOrigin;
 
-    /// <summary>
-    /// Speed at which the player climbs.
-    /// </summary>
-    [SerializeField] private float climbSpeed = 5.0f;
 
     /// <summary>
     /// Maximum time allowed for climbing.
@@ -143,11 +139,13 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private float climbTime;
 
-    [SerializeField] private bool isAttachedToMoss = false;
+    [Header("New Climb Vars")]
 
-    [SerializeField] private float mossSlipSpeed;
-    private float mossSlipAmount;
-    [SerializeField] private float mossDetachTime;
+
+
+
+
+
 
 
     /// <summary>
@@ -574,6 +572,7 @@ public class PlayerMove : MonoBehaviour
         // Stop climbing if already climbing and button released
         if (currentState == PlayerState.Climb && context.canceled)
         {
+
             StopClimb();
             return;
         }
@@ -616,128 +615,72 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    
+    [SerializeField] private float climbingBaseTimingWindow;
+
+    private float climbAttachVelocity;
+
+    private Vector3 climbTargetPoint;
+    private Vector3 climbStartPoint;
+
+    [SerializeField] private float leapSpeed;
+
+    private float leapTimer;
+    [SerializeField] private float leapTime;
+    [SerializeField] private float leapDistance;
+
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
     /// </summary>
+    private void ClimbInput(InputAction.CallbackContext context)
+    {
+        climbStartPoint = transform.position;
+        climbTargetPoint = GetNextClimbingPoint();
+        leapTimer = 0f; 
+
+        // Update climb time and effects
+        climbTime += Time.deltaTime;
+        effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
+        effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
+
+        animator.SetBool("isClimbMoving", true);
+
+        // Check if climb time exceeded maximum allowed time
+        if (climbTime >= maxClimbTime)
+        {
+            StopClimb();
+        }
+    }
+
     private void Climb()
     {
-
-        if (climbTime > maxClimbTime)
+        if (leapTimer >= leapTime)
         {
-            animator.SetTrigger("detachClimb");
-            StopClimb();
             return;
         }
-
-        climbTime += Time.deltaTime;
-        effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
-        effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
-
-        rb.gravityScale = 0;
-        rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
-
-        Vector2 moveInput = moveAction.ReadValue<Vector2>();
-        // Find all climbable colliders currently overlapping
-        Collider2D[] overlappingColliders = Physics2D.OverlapCircleAll(transform.position, 0.5f, climbableLayer);
-
-        if (overlappingColliders.Length == 0)
-        {
-            StopClimb();
-            return;
-        }
-
-        effectsManager.ApplyClimbShake(climbTime / maxClimbTime);
-        effectsManager.ControllerRumble(climbTime / maxClimbTime);
-
-        // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
-        Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
-
-        // Check if moveLocation is still inside any climbable collider
-        bool insideAny = false;
-
-        isAttachedToMoss = false;
-
-        foreach (var col in overlappingColliders)
-        {
-
-            if (col.gameObject.CompareTag("Moss"))
-            {
-                isAttachedToMoss = true;
-                break;
-            }
-
-            if (col.OverlapPoint(moveLocation))
-            {
-                insideAny = true;
-            }
-        }
-
-
-        if (isAttachedToMoss)
-        {
-            mossSlipAmount += Time.deltaTime * mossSlipSpeed;
-
-            moveLocation -= Vector2.up * mossSlipAmount * Time.deltaTime;
-
-
-            transform.position = moveLocation;
-            return;
-        }
-
-
-
-        if (insideAny)
-        {
-            transform.position = moveLocation;
-        }
-        else
-        {
-            // Try to find the closest climbable collider to transition to
-            Collider2D closest = null;
-            float minDist = float.MaxValue;
-            foreach (var col in overlappingColliders)
-            {
-                Vector2 closestPoint = col.ClosestPoint(moveLocation);
-                float dist = Vector2.Distance(moveLocation, closestPoint);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closest = col;
-                }
-            }
-
-            if (closest != null && minDist < 0.5f)
-            {
-                // Smoothly move towards the edge of the next collider
-                Vector2 targetPos = closest.ClosestPoint(moveLocation);
-                transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
-            }
-            else
-            {
-                StopClimb();
-            }
-        }
-
-        animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
+        leapTimer += Time.deltaTime;
+        transform.position = Vector3.Lerp(climbStartPoint, climbTargetPoint, leapTimer / leapTime);
     }
 
-    private void MossSlip()
+    private Vector2 GetNextClimbingPoint()
     {
 
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+
+        Vector3 nextPoint = transform.position + new Vector3(moveInput.x, leapDistance);
+        return nextPoint;
     }
-
-
 
     /// <summary>
     /// Starts climbing by updating state and disabling collider.
     /// </summary>
     private void StartClimb()
     {
-
-
-
         currentState = PlayerState.Climb;
+        climbStartPoint = transform.position;
+
+        jumpAction.performed += ClimbInput;
+        leapTimer = leapTime; // Prevent immediate movement until next input
 
         playerCollider.excludeLayers = noCollisionClimbLayer;
 
@@ -757,11 +700,9 @@ public class PlayerMove : MonoBehaviour
 
         currentState = PlayerState.Fall;
 
-        playerCollider.excludeLayers = 0;
+        jumpAction.performed -= ClimbInput;
 
-        //Moss reset
-        mossSlipAmount = 0;
-        isAttachedToMoss = false;
+        playerCollider.excludeLayers = 0;
 
         rb.gravityScale = 1;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
