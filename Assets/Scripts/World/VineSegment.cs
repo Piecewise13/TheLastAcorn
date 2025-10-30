@@ -162,7 +162,7 @@ public class VineSegment : MonoBehaviour
 
         playerRb.linearVelocity = rb.linearVelocity;
 
-        print(playerRb.linearVelocity);
+        //print(playerRb.linearVelocity);
 
         playerMove.EndVineSwing();
 

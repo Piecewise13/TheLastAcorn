@@ -592,6 +592,8 @@ public class PlayerMove : MonoBehaviour
 
         if (climbableColliders.Length > 0)
         {
+            climbAttachVelocity = rb.linearVelocity.magnitude;
+
             // Find the closest climbable collider to the player
             Collider2D closest = climbableColliders[0];
             float minDist = Vector2.Distance(transform.position, closest.ClosestPoint(transform.position));
@@ -615,8 +617,12 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    
+
     [SerializeField] private float climbingBaseTimingWindow;
+    private float climbingTimingWindow;
+    [SerializeField] private float climbingTimingWindowDecreaseRate = 0.3f;
+
+    private float climbingTimingWindowTimer;
 
     private float climbAttachVelocity;
 
@@ -625,18 +631,49 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private float leapSpeed;
 
+
+    private bool isLeaping;
     private float leapTimer;
     [SerializeField] private float leapTime;
     [SerializeField] private float leapDistance;
+
+    [SerializeField] private GameObject climbWindowIndicator;
+    [SerializeField] private GameObject climbMaxWindowIndicator;
+
+    [SerializeField] SpriteRenderer climbWindowIndicatorSprite;
+
+    [SerializeField] private float windowIndicatorMaxScale = 1.75f;
+
+    [SerializeField] private float windowIndicatorMinScale = 0.75f;
+
+    [SerializeField] private float indicatorMaxScale = 2f;
+
+    [SerializeField] private AnimationCurve climbSpeedCurve;
+
+
+
 
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
     /// </summary>
     private void ClimbInput(InputAction.CallbackContext context)
     {
+        if (isLeaping)
+        {
+            climbingTimingWindow -= climbingTimingWindow * 0.5f;
+            climbWindowIndicatorSprite.color = Color.red;
+            return;
+        }
+
         climbStartPoint = transform.position;
         climbTargetPoint = GetNextClimbingPoint();
-        leapTimer = 0f; 
+
+
+        leapTimer = 0f;
+        isLeaping = true;
+
+        //climbingTimingWindow -= climbingTimingWindow * climbingTimingWindowDecreaseRate;
+
 
         // Update climb time and effects
         climbTime += Time.deltaTime;
@@ -651,13 +688,45 @@ public class PlayerMove : MonoBehaviour
             StopClimb();
         }
     }
+    
+    private void ClimbWindowIndicator()
+    {
+
+        //climbMaxWindowIndicator.transform.localScale = Vector3.Lerp(Vector3.one * windowIndicatorMinScale, Vector3.one * windowIndicatorMaxScale, climbingTimingWindow / climbingBaseTimingWindow);
+
+
+        if (climbingTimingWindowTimer >= climbingTimingWindow)
+        {
+            animator.SetTrigger("detachClimb");
+            StopClimb();
+            return;
+        }
+
+        if (!isLeaping)
+        {
+            climbWindowIndicatorSprite.color = new Color(1f, 1f, 1f, 1f);
+            climbingTimingWindowTimer += Time.deltaTime;
+        }
+
+        climbWindowIndicator.transform.localScale = Vector3.Lerp(Vector3.one * indicatorMaxScale, Vector3.one * windowIndicatorMinScale, climbingTimingWindowTimer / climbingTimingWindow);
+    }
 
     private void Climb()
     {
-        if (leapTimer >= leapTime)
+        ClimbWindowIndicator();
+
+        if (!isLeaping)
         {
             return;
         }
+        climbWindowIndicatorSprite.color = new Color(0f, 0f, 0f, 0.1f);
+
+        if (leapTimer >= leapTime)
+        {
+            isLeaping = false;
+            return;
+        }
+        
         leapTimer += Time.deltaTime;
         transform.position = Vector3.Lerp(climbStartPoint, climbTargetPoint, leapTimer / leapTime);
     }
@@ -667,7 +736,34 @@ public class PlayerMove : MonoBehaviour
 
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
 
-        Vector3 nextPoint = transform.position + new Vector3(moveInput.x, leapDistance);
+        Vector3 nextPoint = transform.position + new Vector3(moveInput.x * 2f, leapDistance);
+
+        if (Physics2D.OverlapCircle(nextPoint, 0.1f, climbableLayer) == null)
+        {
+            if(moveInput.x < 0)
+            {
+                Debug.DrawRay(nextPoint, Vector2.left * 5f, Color.red, 20f);
+                RaycastHit2D hitLeft;
+                hitLeft = Physics2D.Raycast(nextPoint, Vector2.left, 5f, climbableLayer);
+
+                if (hitLeft.collider != null)
+                {
+                    nextPoint = new Vector3(hitLeft.point.x + 0.2f, nextPoint.y);
+                }
+                //Physics2D.Linecast(transform.position, transform.position + Vector3.left * (climbCheckReach + 0.5f), out hitLeft, climbableLayer);
+            } else if (moveInput.x > 0)
+            {
+                Debug.DrawRay(nextPoint, Vector2.right * 5f, Color.red, 20f);
+                RaycastHit2D hitRight;
+                hitRight = Physics2D.Raycast(nextPoint, Vector2.right, 5f, climbableLayer);
+
+                if (hitRight.collider != null)
+                {
+                    nextPoint = new Vector3(hitRight.point.x - 0.2f, nextPoint.y);
+                }
+                //Physics2D.Linecast(transform.position, transform.position + Vector3.right * (climbCheckReach + 0.5f), out hitRight, climbableLayer);
+            }
+        }
         return nextPoint;
     }
 
@@ -679,8 +775,16 @@ public class PlayerMove : MonoBehaviour
         currentState = PlayerState.Climb;
         climbStartPoint = transform.position;
 
+        leapTime = Mathf.Lerp(0.15f, 0.4f, climbSpeedCurve.Evaluate(1 - (climbAttachVelocity / maxGlideSpeed)));
+        leapDistance = Mathf.Lerp(5f, 10f, climbSpeedCurve.Evaluate(1 - (climbAttachVelocity / maxGlideSpeed)));
+
+        climbWindowIndicator.SetActive(true);
+
+
         jumpAction.performed += ClimbInput;
         leapTimer = leapTime; // Prevent immediate movement until next input
+
+        isLeaping = false;
 
         playerCollider.excludeLayers = noCollisionClimbLayer;
 
@@ -722,6 +826,13 @@ public class PlayerMove : MonoBehaviour
 
         // Reset climb time and particle emission
         climbTime = 0;
+
+        climbingTimingWindow = climbingBaseTimingWindow;
+        climbAttachVelocity = 0f;
+        climbingTimingWindowTimer = 0f;
+
+        climbWindowIndicator.transform.localScale = Vector3.one * windowIndicatorMaxScale;
+        climbWindowIndicator.SetActive(false);
 
         effectsManager.UpdateClimbFatigueColor(0);
         effectsManager.UpdateClimbParticles(0);
