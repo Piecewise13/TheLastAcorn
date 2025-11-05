@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLifeManager : MonoBehaviour
 {
+
     private Rigidbody2D rb;
 
     private PlayerMove playerMove;
@@ -62,14 +63,6 @@ public class PlayerLifeManager : MonoBehaviour
         DamagePlayer(Vector2.up * damageLaunchForce);
     }
 
-    public void StunPlayer() // stuns player without damaging them
-    {
-        animator.SetTrigger("Hurt");
-        playerMove.StunPlayer();
-        isHurt = true;
-        damageTimer = 0;
-    }
-
     public void DamagePlayer(Vector2 launchDir)
     {
         if (isImmune)
@@ -98,6 +91,14 @@ public class PlayerLifeManager : MonoBehaviour
 
         if (currentLives <= 0)
             StartCoroutine(RespawnPlayerAfterDelay());
+    }
+
+    public void StunPlayer() // stuns player without damaging them
+    {
+        animator.SetTrigger("Hurt");
+        playerMove.StunPlayer();
+        isHurt = true;
+        damageTimer = 0;
     }
 
     public void DamagePlayerAndRelocate(Vector2 respawnPos)

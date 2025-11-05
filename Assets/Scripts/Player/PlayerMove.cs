@@ -559,6 +559,9 @@ public class PlayerMove : MonoBehaviour
 
     #region Climb Region
 
+
+
+
     /// <summary>
     /// Handles attach input for starting or stopping climbing.
     /// </summary>
@@ -616,6 +619,10 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+
+    [SerializeField] private AnimationCurve climbSpeedAnimationCurve;
+    [SerializeField] private float maxClimbSpeed, minClimbSpeed;
+
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
     /// </summary>
@@ -632,6 +639,8 @@ public class PlayerMove : MonoBehaviour
         climbTime += Time.deltaTime;
         effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
+
+        float climbSpeedFactor = Mathf.Lerp(minClimbSpeed, maxClimbSpeed, 1 - climbSpeedAnimationCurve.Evaluate(climbTime / maxClimbTime));
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -650,7 +659,7 @@ public class PlayerMove : MonoBehaviour
         effectsManager.ControllerRumble(climbTime / maxClimbTime);
 
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeed + Vector3.up * climbSpeed * Time.deltaTime);
+        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeedFactor + Vector3.up * climbSpeedFactor * Time.deltaTime);
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -720,11 +729,6 @@ public class PlayerMove : MonoBehaviour
         }
 
         animator.SetBool("isClimbMoving", moveInput != Vector2.zero);
-    }
-
-    private void MossSlip()
-    {
-
     }
 
 

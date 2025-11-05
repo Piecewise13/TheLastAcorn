@@ -23,7 +23,7 @@ public class Acorn : MonoBehaviour, ICollectible
         if (string.IsNullOrEmpty(acornId))
             acornId = GenerateAcornId();
 
-        SpawnAcorn(Vector3.zero);
+        SpawnAcorn();
 
         CheckpointManager.Instance.OnPlayerRespawn += SpawnAcorn;
     }
@@ -35,7 +35,7 @@ public class Acorn : MonoBehaviour, ICollectible
         return $"{pos.x:F2}_{pos.y:F2}_{pos.z:F2}";
     }
 
-    public void SpawnAcorn(Vector3 position)
+    public void SpawnAcorn()
     {
         // Check if this acorn was already collected
         string currentLevel = SceneManager.GetActiveScene().name;

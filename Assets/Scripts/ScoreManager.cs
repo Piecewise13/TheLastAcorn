@@ -11,6 +11,9 @@ public class ScoreManager : MonoBehaviour
 
     public event Action<int> OnScoreChanged;
 
+    //Reorganize this to be somewhere else
+
+
     private void Awake()
     {
         if (Instance == null)

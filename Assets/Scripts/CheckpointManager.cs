@@ -18,7 +18,7 @@ public class CheckpointManager : MonoBehaviour
     /// <summary>
     /// Event fired when player respawns - passes respawn position.
     /// </summary>
-    public event Action<Vector3> OnPlayerRespawn;
+    public event Action OnPlayerRespawn;
 
     private void Awake()
     {
@@ -62,7 +62,7 @@ public class CheckpointManager : MonoBehaviour
         if (rb != null) rb.linearVelocity = Vector2.zero;
 
 
-        OnPlayerRespawn?.Invoke(currentCheckpointTransform.position);
+        OnPlayerRespawn?.Invoke();
     }
 
     public void SpawnAtInitalLocation(GameObject player)
