@@ -3,8 +3,19 @@ using UnityEngine;
 public class CaveZoneTrigger : MonoBehaviour
 {
 
+    [SerializeField] private bool startInCave = false;
+
     [SerializeField] private GameObject forestVisuals;
     [SerializeField] private GameObject caveVisuals;
+
+    [SerializeField] private GameObject caveOutsideBlackout;
+
+    void Start()
+    {
+        forestVisuals.SetActive(!startInCave);
+        caveVisuals.SetActive(startInCave);
+
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -23,11 +34,7 @@ public class CaveZoneTrigger : MonoBehaviour
             caveVisuals.SetActive(false);
         }
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()

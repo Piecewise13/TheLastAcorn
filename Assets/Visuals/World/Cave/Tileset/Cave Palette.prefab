@@ -56,7 +56,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 13
-      m_TileSpriteIndex: 0
+      m_TileSpriteIndex: 2
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -125,13 +125,13 @@ Tilemap:
   - first: {x: 2, y: -1, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 12
-      m_TileSpriteIndex: 0
+      m_TileIndex: 14
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
-      m_AllTileFlags: 1073741826
+      m_AllTileFlags: 1073741825
   - first: {x: 3, y: -1, z: 0}
     second:
       serializedVersion: 2
@@ -218,16 +218,18 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 345783546e2fe4b419c0d92515e5870a, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 12a7a4332641d4a488e563a7fef78149, type: 2}
-  - m_RefCount: 2
+  - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 2788ac5e3f5216e4aa289ed8452c8602, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 36bae8d193504494aa0a579620bec638, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: adf18545ecf5cbc44ae5d24384cac78e, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 4
+  - m_RefCount: 2
     m_Data: {fileID: 1387033617, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 775830867, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
-  - m_RefCount: 1
+  - m_RefCount: 2
     m_Data: {fileID: -1808145453, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1101782847, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
@@ -247,6 +249,8 @@ Tilemap:
     m_Data: {fileID: 192006481, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1730496394, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: 273431692, guid: 311c966b86d8d7e4a96335307a7a3dfd, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 15
     m_Data:
@@ -390,7 +394,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &5146978305830432604
+--- !u!114 &3555501339186187335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
