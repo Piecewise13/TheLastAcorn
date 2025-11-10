@@ -31,14 +31,22 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
 
     [SerializeField] private float maxNestDistance;
     private Vector2 moveDirection;
+    private Vector2 previousMoveDirection;
 
     [SerializeField] private float turnSpeed = 2f;
+
+    [SerializeField] private float minTurnSpeed, maxTurnSpeed;
+    
+    [Header("Turn Detection")]
+    [SerializeField] private float straightLineSpeedMultiplier = 1.5f;
+    [SerializeField] private float turnSpeedMultiplier = 0.7f;
+    [SerializeField] private float turnThreshold = 0.1f; // How much direction change counts as a turn
 
     [Header("Targeting Settings")]
     [SerializeField] private float targetingDuration;
     private float targetingTimer;
     private bool hasTargetingPos = false;
-    private Vector3 setTargetingPosition;
+    private Vector3 targetingStartPosition;
     [SerializeField] private float maxTargetShake;
     private Vector3 targetingBasePosition;
 
@@ -104,9 +112,28 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
 
     private void FlyTowardsTarget(Vector3 target)
     {
-        flightSpeed = Mathf.Lerp(flightSpeed, targetFlightSpeed, acceleration * Time.deltaTime);
-
-        moveDirection = Vector2.Lerp(moveDirection, (target - transform.position).normalized, turnSpeed * Time.deltaTime).normalized;
+        Vector2 targetDirection = (target - transform.position).normalized;
+        
+        // Detect if we're turning by comparing current and target direction
+        float directionChange = Vector2.Dot(moveDirection, targetDirection);
+        bool isTurning = directionChange < (1f - turnThreshold);
+        
+        // Adjust target speed based on whether we're turning or going straight
+        float speedModifier = isTurning ? turnSpeedMultiplier : straightLineSpeedMultiplier;
+        float adjustedTargetSpeed = targetFlightSpeed * speedModifier;
+        
+        // Accelerate/decelerate to target speed
+        flightSpeed = Mathf.Lerp(flightSpeed, adjustedTargetSpeed, acceleration * Time.deltaTime);
+        
+        // Adjust turn speed based on whether we're turning
+        float currentTurnSpeed = isTurning ? maxTurnSpeed : minTurnSpeed;
+        turnSpeed = Mathf.Lerp(minTurnSpeed, maxTurnSpeed, flightSpeed / chaseSpeed);
+        
+        // Update movement direction
+        previousMoveDirection = moveDirection;
+        moveDirection = Vector2.Lerp(moveDirection, targetDirection, currentTurnSpeed * Time.deltaTime).normalized;
+        
+        // Move the hawk
         transform.position = moveDirection * flightSpeed * Time.deltaTime + (Vector2)transform.position;
     }
 
@@ -154,8 +181,14 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
 
     private void StartDiveBomb()
     {
+        targetingSetupTimer = 0;
+        targetFlightSpeed = defaultFlightSpeed;
         currentState = HawkState.GoingToDiveStart;
-        SetDiveStartLocation();
+        
+        // Initialize circle angle to current position relative to player
+        Vector3 directionToHawk = transform.position - player.transform.position;
+        circleAngle = Mathf.Atan2(directionToHawk.y, directionToHawk.x);
+
     }
     private void DiveBombPlayer()
     {
@@ -185,6 +218,7 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
         */
 
     }
+
 
     private void TargetPlayer()
     {
@@ -233,29 +267,42 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
         transform.position = targetingBasePosition;
     }
 
-    private void SetDiveStartLocation()
-    {
+    Vector3 targetingOffset;
+    [SerializeField] private float targetingSetupDuration = 5f;
+    [SerializeField] private float targetingSetupTimer = 0f;
+    
+    [Header("Circling Settings")]
+    [SerializeField] private float circleRadius = 15f;
+    [SerializeField] private float circleHeight = 15f;
+    [SerializeField] private float circleSpeed = 2f;
+    private float circleAngle = 0f;
 
-        if (hasTargetingPos)
-        {
-            return;
-        }
-
-        setTargetingPosition = player.transform.position + new Vector3(Random.Range(15f, 15f), 20f, 0);
-        hasTargetingPos = true;
-        targetFlightSpeed = defaultFlightSpeed;
-    }
 
     private void MoveTowardsDiveStart()
     {
-        // Implement going to dive start behavior
-        FlyTowardsTarget(setTargetingPosition);
-        if (Vector3.Distance(transform.position, setTargetingPosition) <= 2f)
+        if (targetingSetupDuration < targetingSetupTimer)
         {
             currentState = HawkState.Targeting;
             targetingBasePosition = transform.position;
-            hasTargetingPos = false;
+            return;
         }
+
+        targetingSetupTimer += Time.deltaTime;
+        
+        // Update circle angle for circular motion
+        circleAngle += circleSpeed * Time.deltaTime;
+        
+        // Calculate circular position around player
+        Vector3 circleOffset = new Vector3(
+            Mathf.Cos(circleAngle) * circleRadius,
+            Mathf.Sin(circleAngle) * circleRadius + circleHeight,
+            0f
+        );
+        
+        Vector3 targetPosition = player.transform.position + circleOffset;
+
+        // Implement going to dive start behavior
+        FlyTowardsTarget(targetPosition);
     }
 
     #endregion
@@ -293,5 +340,6 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
         transform.position = nest.position;
         flightSpeed = 0f;
         moveDirection = Vector2.zero;
+        previousMoveDirection = Vector2.zero;
     }
 }
