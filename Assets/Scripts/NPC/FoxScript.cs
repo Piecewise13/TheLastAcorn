@@ -2,8 +2,18 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FoxScript : MonoBehaviour, IProximityAlert
+public class FoxScript : ResetOnDeathObject, IProximityAlert
 {
+    public override void ResetObject()
+    {
+        // Add logic to reset the fox's state here
+        currentState = FoxState.Idle;
+        transform.position = homePoint.position;
+        rb.linearVelocity = Vector2.zero;
+        animator.SetBool("isChasing", false);
+        animator.SetBool("isStalking", false);
+        animator.SetBool("isJumping", false);
+    }
 
     private Rigidbody2D rb;
 
@@ -18,8 +28,12 @@ public class FoxScript : MonoBehaviour, IProximityAlert
 
     private bool isGrounded = false;
 
-    [SerializeField] private float lifeTime = 20f;
-    private float lifeTimer = 0f;
+
+
+    // [SerializeField] private float lifeTime = 20f;
+    // private float lifeTimer = 0f;
+
+    [SerializeField] private Transform homePoint;
 
     [Header("Attack")]
     [SerializeField] private float attackCooldown = 2f;
@@ -36,6 +50,8 @@ public class FoxScript : MonoBehaviour, IProximityAlert
     [Tooltip("The y force to x force ratio when jumping.")]
     [SerializeField] private float jumpForceRatio = 1.2f;
     [SerializeField] private float airMoveSpeed = 1f;
+
+    private FoxState prejumpState;
 
     private float jumpCooldown = 0.25f;
     private float jumpCooldownTimer = 0f;
@@ -73,8 +89,9 @@ public class FoxScript : MonoBehaviour, IProximityAlert
         rb = GetComponent<Rigidbody2D>();
 
     }
-    void Start()
+    new void Start()
     {
+        base.Start();
         player = GameObject.FindGameObjectWithTag("Player").transform.root.gameObject;
         playerMove = player.GetComponent<PlayerMove>();
         playerLifeManager = player.GetComponent<PlayerLifeManager>();
@@ -93,25 +110,11 @@ public class FoxScript : MonoBehaviour, IProximityAlert
         {
             //if in idle state, search for target and return
             case FoxState.Idle:
-                if (waitTimer < pounceDuration)
-                {
-
-                    FaceTarget(player.transform.position);
-                    waitTimer += Time.deltaTime;
-                    return;
-                }
-                GiveUp();
+                SearchForTarget();
                 return;
             case FoxState.Jump:
                 //do nothing, wait until grounded
                 transform.position += transform.right * transform.localScale.x * Time.deltaTime * airMoveSpeed / 10;
-                return;
-
-            case FoxState.Attack:
-                if (lastAttackTime + attackCooldown < Time.time)
-                {
-                    StartStalk();
-                }
                 return;
 
             case FoxState.Chase:
@@ -121,7 +124,7 @@ public class FoxScript : MonoBehaviour, IProximityAlert
                 StalkTarget();
                 break;
             case FoxState.GiveUp:
-                ReturnToBush();
+                ReturnToHome();
                 break;
 
             default:
@@ -143,11 +146,6 @@ public class FoxScript : MonoBehaviour, IProximityAlert
         transform.position += transform.right * transform.localScale.x * Time.deltaTime * moveSpeed / 10;
     }
 
-    void StartJump()
-    {
-
-    }
-
     void Jump()
     {
         if (!isGrounded)
@@ -160,6 +158,8 @@ public class FoxScript : MonoBehaviour, IProximityAlert
             return;
         }
 
+
+
         jumpBufferTimer = 0f;
         animator.SetBool("isJumping", true);
 
@@ -167,6 +167,7 @@ public class FoxScript : MonoBehaviour, IProximityAlert
 
 
         float verticalForce = Mathf.Lerp(1f, 3f, hit.distance / rayDistance);
+        prejumpState = currentState;
         currentState = FoxState.Jump;
 
         Vector2 forceDirection = Vector2.up * verticalForce + Vector2.right * Mathf.Sign(transform.localScale.x);
@@ -218,7 +219,6 @@ public class FoxScript : MonoBehaviour, IProximityAlert
         PathFinding();
 
 
-
         //Check if the player is above us and within range to pounce
         if (Mathf.Abs(player.transform.position.x - transform.position.x) < 1f && player.transform.position.y > transform.position.y + 2f)
         {
@@ -241,18 +241,17 @@ public class FoxScript : MonoBehaviour, IProximityAlert
         rb.AddForce(direction * pounceForce, ForceMode2D.Impulse);
     }
 
-    void ReturnToBush()
+    void ReturnToHome()
     {
         animator.SetBool("isStalking", true);
-        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 4f || lifeTimer <= 0f)
+        if (Vector2.Distance(transform.position, moveTarget.transform.position) < 2f)
         {
 
-            FoxBush.ResetFoxSpawn();
-            Destroy(gameObject);
+            animator.SetBool("isStalking", false);
+            animator.SetBool("isChasing", false);
+            currentState = FoxState.Idle;
             return;
         }
-        
-        lifeTimer -= Time.deltaTime;
 
         FaceTarget(moveTarget.transform.position);
         PathFinding();
@@ -335,33 +334,31 @@ public class FoxScript : MonoBehaviour, IProximityAlert
             return;
         }
 
+        animator.SetBool("isJumping", false);
+
         print("Landed");
 
         if (currentState == FoxState.Jump)
         {
-            animator.SetBool("isJumping", false);
 
             jumpCooldownTimer = jumpCooldown;
 
-            if (stalkTimer < stalkDuration)
+            if(prejumpState == FoxState.Chase)
+            {
+                StartChase();
+            } else if (prejumpState == FoxState.Stalk)
             {
                 StartStalk();
-                print("Landed from Jump to Stalk");
-                return;
             }
-
-            StartChase();
 
             return;
         }
 
         if (currentState == FoxState.Pounce)
         {
-            currentState = FoxState.Idle;
-            print("Landed from Pounce");
-            animator.SetBool("isChasing", false);
-            animator.SetBool("isStalking", false);
-            animator.SetBool("isJumping", false);
+
+            GiveUp();
+            return; 
 
         }
 
@@ -371,19 +368,24 @@ public class FoxScript : MonoBehaviour, IProximityAlert
     {
         if (Vector2.Distance(transform.position, player.transform.position) > playerDetectionDistance)
         {
-            GiveUp();
+            if (currentState == FoxState.Chase)
+            {
+                GiveUp();
+                return;
+            }
+
             return;
         }
 
+        var rayHit = Physics2D.Linecast(transform.position, player.transform.position, obstacleMask);
 
-        // if (Physics2D.Linecast(transform.position, player.transform.position, obstacleMask))
-        // {
-        //     return;
-        // }
+        print(rayHit.collider);
 
-        if (playerMove.GetPlayerState() == PlayerMove.PlayerState.Grounded)
+        if (playerMove.GetPlayerState() == PlayerMove.PlayerState.Grounded 
+        && rayHit.collider == null)
         {
-            StartStalk();
+            StartChase();
+            return;
         }
     }
 
@@ -407,19 +409,19 @@ public class FoxScript : MonoBehaviour, IProximityAlert
     {
         animator.SetBool("isChasing", false);
         currentState = FoxState.GiveUp;
-        var closestBushes = FoxBush.GetClosestBushes(transform.position);
+        // //var closestBushes = FoxBush.GetClosestBushes(transform.position);
 
-        lifeTimer = lifeTime;
+        // // lifeTimer = lifeTime;
 
-        if (closestBushes.Length == 0)
-        {
-            // No bushes found, just destroy the fox
-            FoxBush.ResetFoxSpawn();
-            Destroy(gameObject);
-        }
+        // // if (closestBushes.Length == 0)
+        // // {
+        // //     // No bushes found, just destroy the fox
+        // //     FoxBush.ResetFoxSpawn();
+        // //     Destroy(gameObject);
+        // // }
 
-        //make the move target a bush
-        moveTarget = closestBushes[0].transform.gameObject;
+        // //make the move target a bush
+        moveTarget =  homePoint.gameObject;
     }
     
     private void Attack()

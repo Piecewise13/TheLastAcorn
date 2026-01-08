@@ -1,5 +1,6 @@
 
 using System.ComponentModel;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -73,7 +74,6 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private LayerMask collideDamageLayer;
 
-    [SerializeField] private float minDamageSpeed;
 
     /// <summary>
     /// Horizontal velocity applied when hitting a tree while gliding.
@@ -142,6 +142,8 @@ public class PlayerMove : MonoBehaviour
     /// Current elapsed climb time.
     /// </summary>
     private float climbTime;
+    
+    private float attachVelocity;
 
     [SerializeField] private bool isAttachedToMoss = false;
 
@@ -166,20 +168,12 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float maxGlideSpeed = 35f;
     [SerializeField] private float maxGlideSpeedInGust = 50f;
 
+    [SerializeField] private float glideSuperSpeedMin;
+
 
     private bool inGust = false;
 
     [SerializeField] private float flightMultiper = 2f;
-
-    /// <summary>
-    /// Multiplier for glide speed, increases over time.
-    /// </summary>
-    private float glideSpeedMultiplier = 1f;
-
-    /// <summary>
-    /// Minimum velocity threshold to trigger a glide hit.
-    /// </summary>
-    [SerializeField] private float glideHitVelocityThreshold = 5f;
 
     private bool glideButtonReleasedSinceClimb = true;
 
@@ -323,7 +317,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (rb.linearVelocity.magnitude > minDamageSpeed )
+        if (rb.linearVelocity.magnitude > glideSuperSpeedMin )
         {
             if (!speedLineParticles.isPlaying)
             {
@@ -458,6 +452,13 @@ public class PlayerMove : MonoBehaviour
         //     DetachFromOwl();
         //     return;
         // }
+        
+        // Handle tree leap when climbing
+        if (currentState == PlayerState.Climb)
+        {
+            LeapFromTree();
+            return;
+        }
 
         // Only allow jumping if grounded and not stunned
         if (currentState != PlayerState.Grounded)
@@ -478,6 +479,52 @@ public class PlayerMove : MonoBehaviour
         animator.SetBool("isFalling", true);
 
         jumpBufferTimer = jumpBufferTime;
+    }
+    
+    /// <summary>
+    /// Handles leaping from a tree with horizontal momentum based on climb speed.
+    /// </summary>
+    private void LeapFromTree()
+    {
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        
+        // Determine leap direction from horizontal input
+        float leapDirection = 0f;
+        if (moveInput.x != 0)
+        {
+            leapDirection = Mathf.Sign(moveInput.x);
+        }
+        else
+        {
+            // If no input, leap away from tree based on current facing direction
+            leapDirection = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
+        }
+        
+        // Calculate horizontal leap velocity based on current climb speed
+        float horizontalLeapVelocity = currentClimbSpeed * leapHorizontalMultiplier * leapDirection;
+        
+        // Stop climbing and enable physics
+        StopClimb();
+        
+        // Apply leap forces
+        rb.linearVelocity = new Vector2(horizontalLeapVelocity, 0f);
+        rb.AddForce(Vector2.up * leapUpwardForce, ForceMode2D.Impulse);
+        
+        // Flip graphic based on leap direction
+        if (moveInput.x != 0)
+        {
+            FlipGraphic(moveInput.x);
+        }
+        
+        Jumped?.Invoke();
+        
+        // Trigger jump animation
+        animator.SetTrigger("Jump");
+        animator.SetBool("isFalling", true);
+        
+        jumpBufferTimer = jumpBufferTime;
+        
+        Debug.Log($"Leaped from tree! Horizontal velocity: {horizontalLeapVelocity:F1}, Climb speed was: {currentClimbSpeed:F1}");
     }
 
     #region Glide Region
@@ -552,7 +599,7 @@ public class PlayerMove : MonoBehaviour
 
     void ResetGlide()
     {
-        glideSpeedMultiplier = 1f;
+
     }
 
     #endregion
@@ -621,7 +668,15 @@ public class PlayerMove : MonoBehaviour
 
 
     [SerializeField] private AnimationCurve climbSpeedAnimationCurve;
-    [SerializeField] private float maxClimbSpeed, minClimbSpeed;
+    [SerializeField] private float normalClimbSpeed, fastClimbSpeed;
+    private float currentMaxClimbSpeed;
+    private float currentClimbSpeed;
+    
+    [Header("Tree Leap")]
+    [Tooltip("Upward force applied when leaping from tree")]
+    [SerializeField] private float leapUpwardForce = 8f;
+    [Tooltip("Multiplier for horizontal leap velocity based on climb speed")]
+    [SerializeField] private float leapHorizontalMultiplier = 2f;
 
     /// <summary>
     /// Handles climbing movement and shake effect while climbing.
@@ -640,7 +695,8 @@ public class PlayerMove : MonoBehaviour
         effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
 
-        float climbSpeedFactor = Mathf.Lerp(minClimbSpeed, maxClimbSpeed, 1 - climbSpeedAnimationCurve.Evaluate(climbTime / maxClimbTime));
+        float climbSpeedFactor = Mathf.Lerp(currentMaxClimbSpeed, 0, climbSpeedAnimationCurve.Evaluate(climbTime / maxClimbTime));
+        currentClimbSpeed = climbSpeedFactor; // Store for leap calculation
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -738,7 +794,10 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private void StartClimb()
     {
+        // Store attach velocity for reward calculation
+        attachVelocity = rb.linearVelocity.magnitude;
 
+        currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : normalClimbSpeed;
 
 
         currentState = PlayerState.Climb;
@@ -790,7 +849,6 @@ public class PlayerMove : MonoBehaviour
         effectsManager.UpdateClimbParticles(0);
 
     }
-
     #endregion
 
     /// <summary>
@@ -854,7 +912,7 @@ public class PlayerMove : MonoBehaviour
             print("collision velo: " + collision.relativeVelocity.magnitude);
 
             // Ignore if velocity is below threshold
-            if (Mathf.Abs(collision.relativeVelocity.magnitude) >= minDamageSpeed)
+            if (Mathf.Abs(collision.relativeVelocity.magnitude) >= glideSuperSpeedMin)
             {
                 // Get contact normal for force direction
                 var contactNormal = collision.GetContact(0).normal;

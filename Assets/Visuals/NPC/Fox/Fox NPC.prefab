@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2139781489638126768}
   currentState: 0
-  lifeTime: 20
+  homePoint: {fileID: 0}
   attackCooldown: 2
   jumpForce: 8
   jumpForceRatio: 1.5
@@ -242,8 +242,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.03272121, y: 0.07728666}
-  m_Size: {x: 0.24182822, y: 0.1214655}
+  m_Offset: {x: 0.03272121, y: 0.07819296}
+  m_Size: {x: 0.24182825, y: 0.11965295}
   m_Direction: 1
 --- !u!1 &7125721313634501225
 GameObject:
@@ -416,7 +416,7 @@ Transform:
   m_GameObject: {fileID: 8154028310226663171}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.121, y: 0.019, z: 0}
+  m_LocalPosition: {x: 0.1062, y: 0.019, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

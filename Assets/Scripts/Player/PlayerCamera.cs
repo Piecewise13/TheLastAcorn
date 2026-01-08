@@ -20,7 +20,8 @@ public class PlayerCamera : MonoBehaviour
 
     private InputAction zoomAction;
 
-    private Camera cam;
+    [SerializeField]private Camera foregroundCam;
+    [SerializeField] private Camera backgroundCam;
 
     public PlayerMove playerMove;
 
@@ -33,6 +34,8 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField] private float zoomSpeed;
     [SerializeField] private float zoomTime;
+
+    [SerializeField] private float backgroundFOVMultiplier = 0.5f; // Controls how much the background FOV scales with zoom
 
     private bool canZoom = true;
 
@@ -48,7 +51,7 @@ public class PlayerCamera : MonoBehaviour
     void Awake()
     {
         playerMovementMap = new PlayerGameControls();
-        cam = GetComponent<Camera>();
+        
 
         zoomAction = playerMovementMap.Gameplay.CameraZoom;
         zoomAction.performed += Zoom;
@@ -72,7 +75,12 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, zoomTimer / zoomTime);
+        foregroundCam.orthographicSize = Mathf.Lerp(foregroundCam.orthographicSize, targetZoom, zoomTimer / zoomTime);
+        // Scale perspective camera FOV proportionally with orthographic size
+        // Base FOV of 125 at default zoom level (zoomInAmount)
+        float zoomRatio = foregroundCam.orthographicSize / zoomInAmount;
+        float fovScale = 1f + (zoomRatio - 1f) * backgroundFOVMultiplier;
+        backgroundCam.fieldOfView = 125f * fovScale;
         zoomTimer += Time.deltaTime;
     }
 

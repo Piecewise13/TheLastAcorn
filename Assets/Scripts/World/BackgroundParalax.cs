@@ -43,7 +43,7 @@ public class BackgroundParalax : MonoBehaviour
         {
             if (backgrounds[i] == null) continue;
             float parallax = parallaxFactors[i];
-            Vector3 backgroundTargetPos = backgrounds[i].position + new Vector3(deltaMovement.x * parallax, 0, 0);
+            Vector3 backgroundTargetPos = backgrounds[i].position + new Vector3(deltaMovement.x * parallax, deltaMovement.y * parallax, 0);
             backgrounds[i].position = backgroundTargetPos;
         }
 
