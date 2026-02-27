@@ -1,4 +1,3 @@
-
 using System.ComponentModel;
 using Unity.Mathematics;
 using UnityEngine;
@@ -138,6 +137,9 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float maxClimbTime;
 
+    [Range(0.01f, 1f)]
+    [SerializeField] private float recoverSpeed = .25f;
+
     /// <summary>
     /// Current elapsed climb time.
     /// </summary>
@@ -150,6 +152,14 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float mossSlipSpeed;
     private float mossSlipAmount;
     [SerializeField] private float mossDetachTime;
+
+    [SerializeField] private AnimationCurve climbRechargeCurve;
+
+    // Slippery surface settings: when overlapping these layers while climbing the player will accelerate downward
+    [Header("Slippery")]
+    [SerializeField] private LayerMask slipperyLayer;
+    [SerializeField] private float slipAcceleration = 8f; // units/s^2 downward while slipping
+    private float currentSlipVelocity = 0f;
 
 
     /// <summary>
@@ -305,6 +315,9 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    private float climbEndTime;
+
+
     private void FallingLogic()
     {
 
@@ -331,7 +344,11 @@ public class PlayerMove : MonoBehaviour
 
         if (climbTime > 0)
         {
-            climbTime -= Time.deltaTime / 2f;
+            float t = (Time.time  - climbEndTime);
+
+            //float lerpSpeed = climbRechargeCurve.Evaluate(Mathf.InverseLerp(climbEndTime, 0f, climbTime));
+            climbTime = Mathf.Lerp(climbTime, 0f, recoverSpeed * t* t * t * Time.deltaTime);
+
             effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
             effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         }
@@ -714,6 +731,8 @@ public class PlayerMove : MonoBehaviour
         effectsManager.ApplyClimbShake(climbTime / maxClimbTime);
         effectsManager.ControllerRumble(climbTime / maxClimbTime);
 
+        climbEndTime = Time.time;
+
         // Calculate intended move location
         Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeedFactor + Vector3.up * climbSpeedFactor * Time.deltaTime);
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
@@ -722,6 +741,8 @@ public class PlayerMove : MonoBehaviour
         bool insideAny = false;
 
         isAttachedToMoss = false;
+        bool isOnSlippery = false;
+        bool isOnNormalClimbable = false;
 
         foreach (var col in overlappingColliders)
         {
@@ -732,10 +753,27 @@ public class PlayerMove : MonoBehaviour
                 break;
             }
 
+            // detect slippery layers by layer mask
+            if ((slipperyLayer.value & (1 << col.gameObject.layer)) != 0)
+            {
+                isOnSlippery = true;
+            }
+            else
+            {
+                // any collider not on the slippery layer counts as normal climbable
+                isOnNormalClimbable = true;
+            }
+
             if (col.OverlapPoint(moveLocation))
             {
                 insideAny = true;
             }
+        }
+
+        // If overlapping both slippery and normal climbable, treat as normal climb
+        if (isOnNormalClimbable)
+        {
+            isOnSlippery = false;
         }
 
 
@@ -750,6 +788,19 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
+        // If on slippery surface while climbing, accelerate downward over time
+        if (isOnSlippery)
+        {
+            // integrate slip velocity (v = v0 + a * dt)
+            currentSlipVelocity += slipAcceleration * Time.deltaTime;
+            // apply slip displacement (dy = v * dt)
+            moveLocation += Vector2.down * currentSlipVelocity * Time.deltaTime;
+        }
+        else
+        {
+            // reset slip velocity when not on slippery
+            currentSlipVelocity = 0f;
+        }
 
 
         if (insideAny)
@@ -837,6 +888,9 @@ public class PlayerMove : MonoBehaviour
 
         // Require button release before next glide
         glideButtonReleasedSinceClimb = false;
+
+        // reset slip velocity when climb ends
+        currentSlipVelocity = 0f;
     }
 
     private void ResetClimb()
@@ -847,6 +901,9 @@ public class PlayerMove : MonoBehaviour
 
         effectsManager.UpdateClimbFatigueColor(0);
         effectsManager.UpdateClimbParticles(0);
+
+        // ensure slip velocity is cleared when resetting climb
+        currentSlipVelocity = 0f;
 
     }
     #endregion
