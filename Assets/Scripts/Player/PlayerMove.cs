@@ -137,8 +137,10 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private float maxClimbTime;
 
-    [Range(0.01f, 1f)]
+    [Range(0.01f, 3f)]
     [SerializeField] private float recoverSpeed = .25f;
+
+    [SerializeField] private float climbRechargeDelay = 1f;
 
     /// <summary>
     /// Current elapsed climb time.
@@ -318,6 +320,8 @@ public class PlayerMove : MonoBehaviour
     private float climbEndTime;
 
 
+
+
     private void FallingLogic()
     {
 
@@ -342,12 +346,12 @@ public class PlayerMove : MonoBehaviour
             speedLineParticles.Stop();
         }
 
-        if (climbTime > 0)
+        if (climbTime > 0 && Time.time - climbEndTime > climbRechargeDelay)
         {
             float t = (Time.time  - climbEndTime);
 
             //float lerpSpeed = climbRechargeCurve.Evaluate(Mathf.InverseLerp(climbEndTime, 0f, climbTime));
-            climbTime = Mathf.Lerp(climbTime, 0f, recoverSpeed * t* t * t * Time.deltaTime);
+            climbTime = Mathf.Lerp(climbTime, 0f, recoverSpeed * Mathf.Pow(t, 2) * Time.deltaTime);
 
             effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
             effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
