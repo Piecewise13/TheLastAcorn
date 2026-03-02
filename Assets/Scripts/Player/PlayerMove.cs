@@ -636,6 +636,10 @@ public class PlayerMove : MonoBehaviour
     /// <param name="context">Input action callback context.</param>
     private void Attach(InputAction.CallbackContext context)
     {
+
+
+        print("attach input: " + context.phase);
+
         // Prevent attaching if stunned
         if (currentState == PlayerState.STUNNED)
         {
@@ -873,7 +877,10 @@ public class PlayerMove : MonoBehaviour
     {
         animator.SetBool("isClimbing", false);
 
-        currentState = PlayerState.Fall;
+        if(currentState == PlayerState.Climb)
+        {
+            currentState = PlayerState.Fall;
+        }
 
         playerCollider.excludeLayers = 0;
 

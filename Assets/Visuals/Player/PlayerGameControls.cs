@@ -106,7 +106,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""id"": ""e12f27cf-5033-40e7-af87-d4a120e0d50d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""Press(pressPoint=0.75,behavior=2)"",
+                    ""interactions"": ""Press(pressPoint=0.75)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -301,7 +301,7 @@ public partial class @PlayerGameControls: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""9449b322-ec43-4c1e-8a30-8e554422a717"",
                     ""path"": ""<Gamepad>/rightTrigger"",
-                    ""interactions"": ""Press(pressPoint=0.75,behavior=2)"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Attach"",
