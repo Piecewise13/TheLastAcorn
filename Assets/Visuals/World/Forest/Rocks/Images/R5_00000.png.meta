@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b8823aaeee3be4cdc9f13c36c6a8b340
+guid: 3a28ae341732fff4d8248e830efea1d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8476764939301271271
-    second: rock2_0
+      213: -2029855446530048986
+    second: R5_00000_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 5
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,40 +96,62 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rock2_0
+      name: R5_00000_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 31
-        height: 14
+        x: 139
+        y: 202
+        width: 804
+        height: 569
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: 103, y: -263.5}
+        - {x: 181, y: -228.5}
+        - {x: 240, y: -207.5}
+        - {x: 283, y: -148.5}
+        - {x: 347, y: -96.5}
+        - {x: 395, y: -28.5}
+        - {x: 399, y: -6.5}
+        - {x: 399, y: 31.5}
+        - {x: 393, y: 84.5}
+        - {x: 362, y: 128.5}
+        - {x: 321, y: 134.5}
+        - {x: 276, y: 184.5}
+        - {x: 212, y: 242.5}
+        - {x: 171, y: 239.5}
+        - {x: 67, y: 284.5}
+        - {x: -50, y: 284.5}
+        - {x: -145, y: 265.5}
+        - {x: -221, y: 255.5}
+        - {x: -337, y: 195.5}
+        - {x: -347, y: 182.5}
+        - {x: -357, y: 158.5}
+        - {x: -399, y: 118.5}
+        - {x: -399, y: 61.5}
+        - {x: -395, y: 52.5}
+        - {x: -380, y: -49.5}
+        - {x: -331, y: -80.5}
+        - {x: -325, y: -107.5}
+        - {x: -310, y: -142.5}
+        - {x: -268, y: -139.5}
+        - {x: -262, y: -177.5}
+        - {x: -212, y: -224.5}
+        - {x: -160, y: -250.5}
+        - {x: -130, y: -280.5}
+        - {x: -118, y: -281.5}
+        - {x: 32, y: -281.5}
+      tessellationDetail: 0.06
       bones: []
-      spriteID: 7e6b98becc483a570800000000000000
-      internalID: 8476764939301271271
+      spriteID: 62c3f2cd93184d3e0800000000000000
+      internalID: -2029855446530048986
       vertices: []
       indices: 
       edges: []
@@ -138,7 +160,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: c89429a8393b5fe41b206ea8a115faf7
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +170,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      rock2_0: 8476764939301271271
+      R5_00000_0: -2029855446530048986
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

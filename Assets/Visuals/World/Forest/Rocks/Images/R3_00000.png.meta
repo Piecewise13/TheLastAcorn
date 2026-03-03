@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e266bf8db0ebc403989285263d57752b
+guid: 11d44e63d21a24343ab7c449fe7759fb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2893266303148912703
-    second: rock8_0
+      213: -88438606997410787
+    second: R3_00000_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 5
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -96,40 +96,60 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rock8_0
+      name: R3_00000_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 0
-        width: 26
-        height: 14
+        x: 134
+        y: 149
+        width: 768
+        height: 592
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      physicsShape:
+      - - {x: 108, y: -284}
+        - {x: 127, y: -270}
+        - {x: 227, y: -236}
+        - {x: 337, y: -125}
+        - {x: 378, y: -67}
+        - {x: 381, y: -53}
+        - {x: 381, y: -20}
+        - {x: 365, y: 9}
+        - {x: 381, y: 47}
+        - {x: 381, y: 52}
+        - {x: 354, y: 103}
+        - {x: 295, y: 149}
+        - {x: 238, y: 227}
+        - {x: 145, y: 263}
+        - {x: 104, y: 286}
+        - {x: 56, y: 293}
+        - {x: -16, y: 293}
+        - {x: -157, y: 272}
+        - {x: -226, y: 242}
+        - {x: -291, y: 211}
+        - {x: -370, y: 163}
+        - {x: -381, y: 137}
+        - {x: -381, y: 73}
+        - {x: -375, y: 9}
+        - {x: -334, y: -46}
+        - {x: -318, y: -113}
+        - {x: -267, y: -124}
+        - {x: -237, y: -184}
+        - {x: -200, y: -218}
+        - {x: -111, y: -279}
+        - {x: -73, y: -278}
+        - {x: -4, y: -293}
+        - {x: 46, y: -293}
+      tessellationDetail: 0.06
       bones: []
-      spriteID: f307ccf9f52f62820800000000000000
-      internalID: 2893266303148912703
+      spriteID: d1c2d753e8dc5cef0800000000000000
+      internalID: -88438606997410787
       vertices: []
       indices: 
       edges: []
@@ -138,7 +158,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 40e2848a1ff23614e9f882fcffc702e1
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +168,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      rock8_0: 2893266303148912703
+      R3_00000_0: -88438606997410787
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
