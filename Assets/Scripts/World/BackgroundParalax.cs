@@ -22,7 +22,7 @@ public class BackgroundParalax : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("MainCamera").transform;
 
         if (player != null)
             previousPlayerPosition = player.position;

@@ -9,6 +9,7 @@ TagManager:
   - Statue
   - Vine
   - Moss
+  - Camera
   layers:
   - Default
   - TransparentFX

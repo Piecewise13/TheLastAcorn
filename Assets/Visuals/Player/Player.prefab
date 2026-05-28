@@ -415,9 +415,21 @@ MonoBehaviour:
   climbCheckOrigin: {fileID: 7051655410438313344}
   climbSpeed: 9
   maxClimbTime: 1.7
+  recoverSpeed: 0.25
+  climbRechargeDelay: 1
   isAttachedToMoss: 0
   mossSlipSpeed: 15
   mossDetachTime: 2
+  climbRechargeCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  slipperyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  slipAcceleration: 8
   defaultGlideSpeed: 10
   maxGlideSpeed: 45
   maxGlideSpeedInGust: 60
@@ -1192,6 +1204,7 @@ Transform:
   - {fileID: 1495721763193886156}
   - {fileID: 1687995972138434823}
   - {fileID: 3218830852405638572}
+  - {fileID: 1628820320852523159}
   m_Father: {fileID: 9149958767366715690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8493575095091244138
@@ -1332,11 +1345,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HUD: {fileID: 1875953612149308505}
   acornArrow: {fileID: 5771070996691650930}
+  foregroundCam: {fileID: 0}
+  backgroundCam: {fileID: 0}
+  cinemachineCam: {fileID: 0}
+  zoomPerspectiveShift: 125
   playerMove: {fileID: 151922112089434294}
   zoomOutAmount: 45
   zoomInAmount: 20
   zoomSpeed: 2
   zoomTime: 2
+  backgroundFOVMultiplier: 0.5
   cameraState: 1
   zoomInSFX: {fileID: 1316628860150957882}
   zoomOutSFX: {fileID: 3005658991925814336}
@@ -7143,11 +7161,11 @@ Transform:
   m_GameObject: {fileID: 3464158959837938549}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.4000015, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 9149958767366715690}
+  m_Father: {fileID: 1901743541553315578}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1887437254341166390
 Camera:
@@ -9227,7 +9245,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1901743541553315578}
-  - {fileID: 1628820320852523159}
   m_Father: {fileID: 6548402314755964825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6710077420685831748

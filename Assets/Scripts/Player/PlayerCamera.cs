@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField]private Camera foregroundCam;
     [SerializeField] private Camera backgroundCam;
+
+    [SerializeField]CinemachineCamera cinemachineCam;
+
+    [SerializeField] float zoomPerspectiveShift = 125f;
 
     public PlayerMove playerMove;
 
@@ -75,12 +80,12 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
-        foregroundCam.orthographicSize = Mathf.Lerp(foregroundCam.orthographicSize, targetZoom, zoomTimer / zoomTime);
+        cinemachineCam.Lens.OrthographicSize = Mathf.Lerp(cinemachineCam.Lens.OrthographicSize, targetZoom, zoomTimer / zoomTime);
         // Scale perspective camera FOV proportionally with orthographic size
         // Base FOV of 125 at default zoom level (zoomInAmount)
-        float zoomRatio = foregroundCam.orthographicSize / zoomInAmount;
+        float zoomRatio = cinemachineCam.Lens.OrthographicSize / zoomInAmount;
         float fovScale = 1f + (zoomRatio - 1f) * backgroundFOVMultiplier;
-        backgroundCam.fieldOfView = 125f * fovScale;
+        backgroundCam.fieldOfView = zoomPerspectiveShift * fovScale;
         zoomTimer += Time.deltaTime;
     }
 
