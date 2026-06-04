@@ -11,11 +11,17 @@ public class DebugSettings : MonoBehaviour
     [SerializeField] private bool disablePersistence = false;
     [SerializeField] private bool showDebugLogs = false;
 
+    [SerializeField] private bool bypassTutorial = false;
+
     public static DebugSettings Instance { get; private set; }
 
     public bool DisablePersistence => disablePersistence;
     public bool ShowDebugLogs => showDebugLogs;
+    public bool BypassTutorial => bypassTutorial;
     public bool DefaultSpawnPoint => defaultSpawnPoint;
+
+    private Transform playerTransform;
+    private Vector3 playerStartingPosition;
 
     private void Awake()
     {
@@ -32,6 +38,12 @@ public class DebugSettings : MonoBehaviour
         }
         else Destroy(gameObject);
 
+    }
+
+    private void Start()
+    {
+        playerTransform = FindAnyObjectByType<PlayerMove>().transform;
+        playerStartingPosition = playerTransform.position;
     }
 
     private void OnValidate()
@@ -55,5 +67,10 @@ public class DebugSettings : MonoBehaviour
         {
             Debug.Log("[DebugSettings] PlayerPrefs reset complete.");
         }
+    }
+
+    public void ResetPlayerPostition()
+    {
+        playerTransform.position = playerStartingPosition;
     }
 }

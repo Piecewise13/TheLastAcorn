@@ -17,5 +17,10 @@ public class DebugEditorMenu : Editor
             // Call a method on your component when the button is pressed
             myComponent.ResetPlayerPrefs();
         }
+
+        if (GUILayout.Button("Reset Player Position"))
+        {
+            myComponent.ResetPlayerPostition();
+        }
     }
 }

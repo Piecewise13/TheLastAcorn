@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.Mathematics;
 using UnityEngine;
@@ -5,6 +6,32 @@ using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
+
+
+    public enum PlayerState
+    {
+        Grounded,
+        Climb,
+        Glide,
+        Fall,
+        RidingOwl,
+        VineSwinging,
+        STUNNED
+    }
+
+    public enum Abilities
+    {
+        Zoom,
+        Glide,
+        Leap
+    }
+
+    private Dictionary<Abilities, bool> abilityUnlocked = new Dictionary<Abilities, bool>()
+    {
+        { Abilities.Zoom, false },
+        { Abilities.Glide, false },
+        { Abilities.Leap, false }
+    };
 
     private PlayerLifeManager lifeManager;
 
@@ -46,7 +73,7 @@ public class PlayerMove : MonoBehaviour
     /// </summary>
     private Animator animator;
 
-
+#region Component Variables
     [Header("Components")]
     /// <summary>
     /// Reference to the player's graphic GameObject.
@@ -95,6 +122,8 @@ public class PlayerMove : MonoBehaviour
     /// LayerMask for identifying ground.
     /// </summary>
     [SerializeField] private LayerMask groundLayer;
+
+    #endregion
 
     [Space(20)]
     [Header("Movement")]
@@ -556,6 +585,11 @@ public class PlayerMove : MonoBehaviour
     /// <param name="context">Input action callback context.</param>
     private void GlideInput(InputAction.CallbackContext context)
     {
+
+        if(!abilityUnlocked[Abilities.Glide])
+        {
+            return;
+        }
 
         if (context.canceled)
         {
@@ -1157,17 +1191,11 @@ public class PlayerMove : MonoBehaviour
         return currentState;
     }
 
-    public enum PlayerState
+    public bool GetAbilityUnlocked(Abilities ability)
     {
-        Grounded,
-        Climb,
-        Glide,
-        Fall,
-        RidingOwl,
-        VineSwinging,
-        STUNNED
-
+        return abilityUnlocked[ability];
     }
+
 }
 
 

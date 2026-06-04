@@ -44,6 +44,12 @@ public class TutorialMaster : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if(DebugSettings.Instance.BypassTutorial)
+        {
+            Debug.Log("[TutorialMaster] Bypassing tutorial due to debug settings.");
+            return;
+        }
+
         playerMove = FindAnyObjectByType<PlayerMove>();
         playerMove.DisableMove();
         HideAllSteps();

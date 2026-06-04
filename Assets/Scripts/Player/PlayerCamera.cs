@@ -97,6 +97,11 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
+        if (!playerMove.GetAbilityUnlocked(PlayerMove.Abilities.Zoom))
+        {
+            return;
+        }
+
         if (context.performed)
         {
             cameraState = CameraState.PlayerZoomed;
