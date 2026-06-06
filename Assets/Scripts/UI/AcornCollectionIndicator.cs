@@ -85,8 +85,8 @@ public class AcornCollectionIndicator : MonoBehaviour
 
         ScoreManager.Instance.OnScoreChanged += UpdateUI;
 
-
-        playerCamera.OnZoomChanged += UpdateVisibility;
+        playerCamera.OnZoomStarted += () => UpdateVisibility(true);
+        playerCamera.OnZoomEnded += () => UpdateVisibility(false);
 
 
         //minCollectedSlider = GetComponentInChildren<Slider>();

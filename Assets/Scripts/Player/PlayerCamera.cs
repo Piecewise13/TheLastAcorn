@@ -10,11 +10,11 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     private PlayerGameControls playerMovementMap;
 
-/// <summary>
-/// Event triggered when the camera zoom state changes.
-/// true if zoomed out, false if zoomed in.
-/// </summary>
-    public event Action<bool> OnZoomChanged;
+
+    public event Action OnZoomStarted;
+    public event Action OnZoomEnded;
+
+    private PlayerAbilityManager abilityManager;
 
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject acornArrow;
@@ -42,8 +42,6 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField] private float backgroundFOVMultiplier = 0.5f; // Controls how much the background FOV scales with zoom
 
-    private bool canZoom = true;
-
     [SerializeField] private CameraState cameraState = CameraState.Default;
 
     [Header("Feedback")]
@@ -61,7 +59,6 @@ public class PlayerCamera : MonoBehaviour
         zoomAction = playerMovementMap.Gameplay.CameraZoom;
         zoomAction.performed += Zoom;
         zoomAction.canceled += Zoom;
-        zoomAction.Enable();
 
     }
 
@@ -69,7 +66,13 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         targetZoom = zoomInAmount;
+
+        abilityManager = GetComponentInParent<PlayerAbilityManager>();
         rb = GetComponentInParent<Rigidbody2D>();
+
+        abilityManager.OnAbilityUnlocked += UnlockZoom;
+
+        
     }
 
     // Update is called once per frame
@@ -89,6 +92,15 @@ public class PlayerCamera : MonoBehaviour
         zoomTimer += Time.deltaTime;
     }
 
+    private void UnlockZoom(PlayerAbilityManager.Abilities ability)
+    {
+        if (ability == PlayerAbilityManager.Abilities.Zoom)
+        {
+            zoomAction.Enable();
+        }
+    }
+
+
     private void Zoom(InputAction.CallbackContext context)
     {
 
@@ -97,16 +109,11 @@ public class PlayerCamera : MonoBehaviour
             return;
         }
 
-        if (!playerMove.GetAbilityUnlocked(PlayerMove.Abilities.Zoom))
-        {
-            return;
-        }
-
         if (context.performed)
         {
             cameraState = CameraState.PlayerZoomed;
 
-            OnZoomChanged?.Invoke(true);
+            OnZoomStarted?.Invoke();
 
             acornArrow.SetActive(true);
             HUD.SetActive(false);
@@ -123,8 +130,8 @@ public class PlayerCamera : MonoBehaviour
             playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;
-            
-            OnZoomChanged?.Invoke(false);
+
+            OnZoomEnded?.Invoke();
 
             zoomInSFX?.Play();
         }

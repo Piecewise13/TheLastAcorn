@@ -126,7 +126,7 @@ public class PlayerLifeManager : MonoBehaviour
     void Update()
     {
 
-        if (playerMove.GetPlayerState() == PlayerMove.PlayerState.Grounded)
+        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
         {
             lastGroundLocation = transform.position; // Update last ground location when grounded
         }

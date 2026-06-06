@@ -381,7 +381,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
 
         print(rayHit.collider);
 
-        if (playerMove.GetPlayerState() == PlayerMove.PlayerState.Grounded 
+        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded 
         && rayHit.collider == null)
         {
             StartChase();

@@ -70,7 +70,7 @@ public class Gate : MonoBehaviour
             return;
         }
         
-        if (playerMove.GetPlayerState() == PlayerMove.PlayerState.Grounded)
+        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
         {
            print("Player grounded, resetting gate charges." + ResetCharges.GetInvocationList().Length);
             numChargeCollected = 0;
