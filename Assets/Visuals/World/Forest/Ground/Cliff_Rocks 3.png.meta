@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Cliff_Rocks 3_0: 405976061652964811
+      Cliff_Rocks 3_1: -1274853032760231833
+      Cliff_Rocks 3_2: -8335277980749724129
+      Cliff_Rocks 3_3: 603077053135463193
+      Cliff_Rocks 3_4: -6290851478823369049
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

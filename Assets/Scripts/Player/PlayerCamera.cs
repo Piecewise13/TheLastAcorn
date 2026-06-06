@@ -116,7 +116,7 @@ public class PlayerCamera : MonoBehaviour
             OnZoomStarted?.Invoke();
 
             acornArrow.SetActive(true);
-            HUD.SetActive(false);
+            ViewManager.Instance.ClearViews();
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
             zoomTimer = 0;
@@ -126,7 +126,7 @@ public class PlayerCamera : MonoBehaviour
         {
             cameraState = CameraState.Default;
             acornArrow.SetActive(false);
-            HUD.SetActive(true);
+            ViewManager.Instance.ResetToHUD();
             playerMove.EnableMove();
             targetZoom = zoomInAmount;
             zoomTimer = 0;

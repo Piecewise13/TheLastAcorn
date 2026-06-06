@@ -23,6 +23,6 @@ public class UnlockAbilityView : UIView
     public void UnlockAbility(int ability)
     {
         PlayerAbilityManager.Instance.UnlockAbility((PlayerAbilityManager.Abilities)ability);
-        Hide();
+        ViewManager.Instance.ResetToHUD();
     }
 }

@@ -3,9 +3,9 @@ using UnityEngine;
 public abstract class UIView : MonoBehaviour
 {
 
-    [SerializeField] private ViewID viewID;
+    [SerializeField] protected ViewID viewID;
 
-    [SerializeField] private int layer;
+    [SerializeField] protected int layer;
 
     public int Layer => layer;
 

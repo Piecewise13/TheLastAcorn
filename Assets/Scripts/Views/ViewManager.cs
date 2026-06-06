@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -17,11 +18,31 @@ public class ViewManager : MonoBehaviour
     public static ViewManager Instance { get; private set; }
 
     private Stack<UIView> viewStack = new Stack<UIView>();
-
+    
+    [SerializeField] private UIView hudView;
+    
+    [SerializeField] private UIView abilityUnlockView;
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     void Start()
     {
         
+        hudView.Hide();
+        abilityUnlockView.Hide();
+
+        PushView(hudView);
     }
 
     // Update is called once per frame
@@ -49,6 +70,7 @@ public class ViewManager : MonoBehaviour
         {
             viewStack.Peek().Show();
         }
+        
     }
 
     public void ClearViews()
@@ -58,4 +80,15 @@ public class ViewManager : MonoBehaviour
             viewStack.Pop().Hide();
         }
     }
+
+    public void PushAbilityUnlockView(){
+        ClearViews();
+        PushView(abilityUnlockView);
+    }
+
+    public void ResetToHUD(){
+        ClearViews();
+        PushView(hudView);
+    }
+
 }

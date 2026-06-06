@@ -7,8 +7,10 @@ using UnityEngine.Timeline;
 public class TutorialMaster : MonoBehaviour
 {
     public static TutorialMaster Instance { get; private set; }
+    
+    //test
 
-    [SerializeField] public enum TutorialEvents
+    [Serializable] public enum TutorialEvents
     {
         FirstMove,
         BasicClimb,

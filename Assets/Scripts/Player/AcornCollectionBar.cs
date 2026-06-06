@@ -54,7 +54,6 @@ public class AcornCollectionBar : MonoBehaviour
         float target = segmentRequired > 0 ? Mathf.Clamp01((float)segmentAcorns / segmentRequired) : 0f;
         StartFill(target, onComplete: () =>
         {
-            StartHide();
             onComplete?.Invoke();
         });
     }
@@ -66,11 +65,6 @@ public class AcornCollectionBar : MonoBehaviour
         fillCoroutine = StartCoroutine(AnimateFill(target, onComplete));
     }
 
-    void StartHide()
-    {
-        if (hideCoroutine != null) StopCoroutine(hideCoroutine);
-        hideCoroutine = StartCoroutine(HideAfterDelay());
-    }
 
     IEnumerator AnimateFill(float target, Action onComplete = null)
     {
@@ -83,14 +77,12 @@ public class AcornCollectionBar : MonoBehaviour
             yield return null;
         }
         progressSlider.value = target;
+        
+        yield return new WaitForSeconds(hideDelay);
+        
         onComplete?.Invoke();
     }
 
-    IEnumerator HideAfterDelay()
-    {
-        yield return new WaitForSeconds(hideDelay);
-        gameObject.SetActive(false);
-    }
 
     IEnumerator CompleteAnimation()
     {
