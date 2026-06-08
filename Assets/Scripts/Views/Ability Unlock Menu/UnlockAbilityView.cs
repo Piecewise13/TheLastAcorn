@@ -22,7 +22,7 @@ public class UnlockAbilityView : UIView
 
     public void UnlockAbility(int ability)
     {
-        PlayerAbilityManager.Instance.UnlockAbility((PlayerAbilityManager.Abilities)ability);
+        PlayerAbilityManager.Instance.UnlockAbility();
         ViewManager.Instance.ResetToHUD();
     }
 }

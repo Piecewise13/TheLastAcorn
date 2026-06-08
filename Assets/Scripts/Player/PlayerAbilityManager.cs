@@ -7,6 +7,10 @@ public class PlayerAbilityManager : MonoBehaviour
     public static PlayerAbilityManager Instance { get; private set; }
 
     public enum Abilities { Zoom, Glide, Leap }
+    
+    private Animator animator;
+    private PlayerMove playerMove;
+    private PlayerCamera playerCamera;
 
     [Serializable]
     struct AbilityUnlockStep
@@ -60,7 +64,14 @@ public class PlayerAbilityManager : MonoBehaviour
             if (abilityUnlocked[(int)unlockSteps[i].ability]) currentStepIndex++;
     }
 
-    private void Start() => StartCoroutine(SubscribeToScore());
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        playerMove = GetComponent<PlayerMove>();
+        playerCamera = GetComponentInChildren<PlayerCamera>();
+        
+        StartCoroutine(SubscribeToScore());
+    }
 
     private IEnumerator SubscribeToScore()
     {
@@ -93,15 +104,6 @@ public class PlayerAbilityManager : MonoBehaviour
         if (!anyUnlocked)
             OnSegmentChanged?.Invoke(segmentAcorns, CurrentSegmentCost);
 
-        while (currentStepIndex < unlockSteps.Length &&
-               segmentAcorns >= unlockSteps[currentStepIndex].segmentCost)
-        {
-            segmentAcorns -= unlockSteps[currentStepIndex].segmentCost;
-            //ShowAbilityUnlockScreen();
-            currentStepIndex++;
-            anyUnlocked = true;
-        }
-
     }
 
     // private void ShowAbilityUnlockScreen()
@@ -110,12 +112,19 @@ public class PlayerAbilityManager : MonoBehaviour
     //         abilityUnlockView.SetActive(true);
     // }
 
-    public void UnlockAbility(Abilities ability)
+    public void UnlockAbility()
     {
-        abilityUnlocked[(int)ability] = true;
-        Debug.Log($"Unlocked ability: {ability}");
-        OnAbilityUnlocked?.Invoke(ability);
+        abilityUnlocked[currentStepIndex] = true;
+        Debug.Log($"Unlocked ability: {(Abilities)currentStepIndex}");
+        OnAbilityUnlocked?.Invoke((Abilities)currentStepIndex);
         SaveAbilities();
+    }
+
+    public void StartUnlockAbility()
+    {
+        playerMove.DisableMove();
+        animator.SetBool("isUnlockingAbility", true);
+        playerCamera.SetCameraTarget(playerMove.gameObject);
     }
 
     private void SaveAbilities()

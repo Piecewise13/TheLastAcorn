@@ -10,6 +10,7 @@ TagManager:
   - Vine
   - Moss
   - Camera
+  - FadeCamera
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Platform
   - NPC
   - Slippery
-  - 
+  - Fade Camera
   - 
   - 
   - 
@@ -49,3 +50,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []

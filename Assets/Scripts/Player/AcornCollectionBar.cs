@@ -60,8 +60,17 @@ public class AcornCollectionBar : MonoBehaviour
 
     void StartFill(float target, Action onComplete = null)
     {
+        
+        
         if (fillCoroutine != null) StopCoroutine(fillCoroutine);
         if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+
+        if (target >= 1)
+        {
+            fillCoroutine = StartCoroutine(CompleteAnimation(onComplete));
+            return;
+        }
+        
         fillCoroutine = StartCoroutine(AnimateFill(target, onComplete));
     }
 
@@ -84,7 +93,7 @@ public class AcornCollectionBar : MonoBehaviour
     }
 
 
-    IEnumerator CompleteAnimation()
+    IEnumerator CompleteAnimation(Action onComplete = null)
     {
         // Fill to full
         float start = progressSlider.value;
@@ -116,11 +125,14 @@ public class AcornCollectionBar : MonoBehaviour
         }
 
         yield return new WaitForSeconds(completeHoldDuration);
+        
+        onComplete?.Invoke();
 
         progressSlider.value = 0f;
         SpawnIndicatorBars();
         gameObject.SetActive(false);
         completingAnimation = false;
+
     }
 
 
@@ -147,5 +159,10 @@ public class AcornCollectionBar : MonoBehaviour
             float x = (width * i / count) - width / 2f;
             irt.anchoredPosition = new Vector2(x, 0);
         }
+    }
+
+    public void ResetCompletionBar()
+    {
+        progressSlider.value = 0f;
     }
 }

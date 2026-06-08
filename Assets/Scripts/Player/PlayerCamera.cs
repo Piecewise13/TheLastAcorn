@@ -25,6 +25,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private Camera backgroundCam;
 
     [SerializeField]CinemachineCamera cinemachineCam;
+    [SerializeField] private Transform defaultTrackingTarget;
 
     [SerializeField] float zoomPerspectiveShift = 125f;
 
@@ -163,6 +164,17 @@ public class PlayerCamera : MonoBehaviour
         this.targetZoom = newZoom;
         zoomTimer = 0;
     }
+
+    public void SetCameraTarget(GameObject target)
+    {
+        cinemachineCam.LookAt = target.transform;
+    }
+
+    public void ResetTrackingTarget()
+    {
+        cinemachineCam.LookAt = defaultTrackingTarget;
+    }
+    
 
     public void EndForceZoom(CameraState state)
     {

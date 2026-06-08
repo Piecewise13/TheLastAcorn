@@ -36,8 +36,11 @@ public class HUDView : UIView
             completionBar.gameObject.SetActive(false);
             
             if (segmentRequired > 0 && segmentAcorns >= segmentRequired) {
+                
                 playerMove.DisableMove();
-                ViewManager.Instance.PushAbilityUnlockView(); 
+                completionBar.ResetCompletionBar();
+
+                PlayerAbilityManager.Instance.StartUnlockAbility();
                 
                 //TODO: Hook up to gameplay manager to disable play while in the upgrade view
             }
