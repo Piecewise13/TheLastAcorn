@@ -167,7 +167,7 @@ public class PlayerCamera : MonoBehaviour
 
     public void SetCameraTarget(GameObject target)
     {
-        cinemachineCam.LookAt = target.transform;
+        cinemachineCam.Target.TrackingTarget = target.transform;
     }
 
     public void ResetTrackingTarget()

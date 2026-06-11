@@ -117,13 +117,18 @@ public class PlayerAbilityManager : MonoBehaviour
         abilityUnlocked[currentStepIndex] = true;
         Debug.Log($"Unlocked ability: {(Abilities)currentStepIndex}");
         OnAbilityUnlocked?.Invoke((Abilities)currentStepIndex);
+        animator.SetBool("isUnlockingAbility", false);
+        ViewManager.Instance.ResetToHUD();
+        playerCamera.ResetTrackingTarget();
         SaveAbilities();
     }
 
     public void StartUnlockAbility()
     {
         playerMove.DisableMove();
+        
         animator.SetBool("isUnlockingAbility", true);
+        ViewManager.Instance.ClearViews();
         playerCamera.SetCameraTarget(playerMove.gameObject);
     }
 
