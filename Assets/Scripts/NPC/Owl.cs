@@ -15,7 +15,7 @@ public class Owl : MonoBehaviour, IProximityAlert
 
     private PlayerMove playerMovement;
 
-    private PlayerCamera playerCamera;
+    private PlayerCameraManager playerCamera;
 
     private Animator anim;
 
@@ -120,7 +120,7 @@ public class Owl : MonoBehaviour, IProximityAlert
         if (playerMovement == null || playerCamera == null)
         {
             playerMovement = root.GetComponent<PlayerMove>();
-            playerCamera = root.GetComponentInChildren<PlayerCamera>();
+            playerCamera = root.GetComponentInChildren<PlayerCameraManager>();
         }
         owlAttachAction.Enable();
     }
@@ -144,7 +144,7 @@ public class Owl : MonoBehaviour, IProximityAlert
             initialDistanceToPoint = Vector2.Distance(flightOrigin, flightPathPoints[currentFlightPointIndex].position);
             initalFlightDirection = transform.up;
 
-            playerCamera.StartForceZoom(cameraZoomAmount, PlayerCamera.CameraState.GlideZoom);
+            playerCamera.StartForceZoom(cameraZoomAmount, PlayerCameraManager.CameraState.GlideZoom);
         }
     }
 

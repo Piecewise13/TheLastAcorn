@@ -43,7 +43,7 @@ public class PlayerStateManager : MonoBehaviour
     {
         if (CurrentState == newState) return;
 
-        Debug.Log($"Changing player state from {CurrentState} to {newState}");
+        //Debug.Log($"Changing player state from {CurrentState} to {newState}");
         PlayerState previousState = CurrentState;
         CurrentState = newState;
         OnStateChanged?.Invoke(previousState, newState);

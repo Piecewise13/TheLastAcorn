@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
 using System.Collections.Generic;
-using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 
-public class AcornCollectionBar : MonoBehaviour
+public class AcornCollectionBar : ViewBase
 {
     [Header("UI")]
     [SerializeField] private GameObject barContainer;
@@ -13,24 +15,19 @@ public class AcornCollectionBar : MonoBehaviour
     [SerializeField] private TMP_Text acornCounter;
     [SerializeField] private GameObject acornLine;
     [SerializeField] private GameObject lineHolder;
+    private RectTransform lineHolderRect => lineHolder.GetComponent<RectTransform>();
 
     [Header("Animation")]
-    [SerializeField] private float fillDuration = 0.4f;
-    [SerializeField] private float hideDelay = 1.5f;
-    [SerializeField] private float completeHoldDuration = 0.6f;
-    [SerializeField] private float completePunchScale = 1.15f;
-    [SerializeField] private float completePunchDuration = 0.25f;
+    [SerializeField] private MMF_Player revealFeedback;
+    [SerializeField] private MMF_Player fillFeedback;
+    [SerializeField] private FloatController sliderFloatController;
 
-    [Header("Optional override")]
-    [Tooltip("Leave at 0 to use fillRect's width. Set > 0 to force a pixel length.")]
-    [SerializeField] float fullWidth = 0f;
+
 
     public static bool AllCollected { get; private set; }
 
     private List<GameObject> indicatorInstances = new List<GameObject>();
-    private Coroutine fillCoroutine;
-    private Coroutine hideCoroutine;
-    private bool subscribed;
+
     private bool completingAnimation; // blocks segment updates while CompleteAnimation runs
 
     void Awake()
@@ -41,113 +38,79 @@ public class AcornCollectionBar : MonoBehaviour
             enabled = false;
             return;
         }
+        
         progressSlider.value = 0f;
     }
+    
 
+
+    /// <summary>
+    /// Reveals the bar (if needed) and animates the fill to the collected amount.
+    /// Awaitable so callers can guarantee the bar is fully filled before continuing
+    /// (e.g. before starting the ability unlock sequence).
+    /// </summary>
+    public async UniTask RunSegment(int acornsCollectedInSegment, int acornsRequiredForSegment, CancellationToken token)
+    {
+        if (acornsRequiredForSegment <= 0) return;
+
+        progressSlider.maxValue = Mathf.Max(1, acornsRequiredForSegment);
+        SpawnIndicatorBars(acornsRequiredForSegment);
+
+        await ShowCompletionBar(acornsCollectedInSegment, acornsRequiredForSegment, token);
+    }
 
     // Called on every collection that doesn't cross an unlock
-    public void ShowCompletionBar(int segmentAcorns, int segmentRequired, Action onComplete = null)
+    public async UniTask ShowCompletionBar(int acornsCollectedInSegment, int acornsRequiredForSegment, CancellationToken token)
     {
         if (completingAnimation) return;
-        if (segmentRequired < 0) return;
+        if (acornsRequiredForSegment < 0) return;
 
-        float target = segmentRequired > 0 ? Mathf.Clamp01((float)segmentAcorns / segmentRequired) : 0f;
-        StartFill(target, onComplete: () =>
-        {
-            onComplete?.Invoke();
-        });
+        //float target = acornsRequiredForSegment > 0 ? Mathf.Clamp01((float)acornsCollectedInSegment / acornsRequiredForSegment) : 0f;
+
+        await AnimateReveal(token);
+
+        await AnimateFill(acornsCollectedInSegment, token);
+
     }
 
-    void StartFill(float target, Action onComplete = null)
+    private async UniTask AnimateReveal(CancellationToken token)
     {
-        
-        
-        if (fillCoroutine != null) StopCoroutine(fillCoroutine);
-        if (hideCoroutine != null) StopCoroutine(hideCoroutine);
+        if (revealFeedback == null) return;
 
-        if (target >= 1)
-        {
-            fillCoroutine = StartCoroutine(CompleteAnimation(onComplete));
-            return;
-        }
-        
-        fillCoroutine = StartCoroutine(AnimateFill(target, onComplete));
+        await revealFeedback.PlayFeedbacksAsync(token);
     }
 
-
-    IEnumerator AnimateFill(float target, Action onComplete = null)
+    private async UniTask AnimateFill(int collected, CancellationToken token)
     {
-        float start = progressSlider.value;
-        float elapsed = 0f;
-        while (elapsed < fillDuration)
-        {
-            elapsed += Time.deltaTime;
-            progressSlider.value = Mathf.Lerp(start, target, elapsed / fillDuration);
-            yield return null;
-        }
+        if (fillFeedback == null) return;
+
+        int target = Mathf.Clamp(collected, 0, Mathf.RoundToInt(progressSlider.maxValue));
+        float duration = fillFeedback.TotalDuration;
+        
+        sliderFloatController.ToDestinationDuration = duration;
+        sliderFloatController.ToDestinationValue = target;
+        sliderFloatController.ToDestination();
+        
+        await fillFeedback.PlayFeedbacksAsync(token);
+
         progressSlider.value = target;
         
-        yield return new WaitForSeconds(hideDelay);
-        
-        onComplete?.Invoke();
+        sliderFloatController.CurrentValue = target;
     }
+    
 
-
-    IEnumerator CompleteAnimation(Action onComplete = null)
-    {
-        // Fill to full
-        float start = progressSlider.value;
-        float elapsed = 0f;
-        while (elapsed < fillDuration)
-        {
-            elapsed += Time.deltaTime;
-            progressSlider.value = Mathf.Lerp(start, 1f, elapsed / fillDuration);
-            yield return null;
-        }
-        progressSlider.value = 1f;
-
-        // Punch-scale
-        GameObject target = barContainer != null ? barContainer : progressSlider.gameObject;
-        RectTransform rt = target.GetComponent<RectTransform>();
-        if (rt != null)
-        {
-            Vector3 originalScale = rt.localScale;
-            elapsed = 0f;
-            while (elapsed < completePunchDuration)
-            {
-                elapsed += Time.deltaTime;
-                float scale = Mathf.Lerp(1f, completePunchScale,
-                    Mathf.Sin((elapsed / completePunchDuration) * Mathf.PI));
-                rt.localScale = originalScale * scale;
-                yield return null;
-            }
-            rt.localScale = originalScale;
-        }
-
-        yield return new WaitForSeconds(completeHoldDuration);
-        
-        onComplete?.Invoke();
-
-        progressSlider.value = 0f;
-        SpawnIndicatorBars();
-        gameObject.SetActive(false);
-        completingAnimation = false;
-
-    }
-
-
-    public void SpawnIndicatorBars()
+    public void SpawnIndicatorBars(int requiredAcorns)
     {
         foreach (var obj in indicatorInstances)
             if (obj != null) Destroy(obj);
         indicatorInstances.Clear();
 
-        int count = PlayerAbilityManager.Instance.CurrentSegmentCost;
+        int count = requiredAcorns;
         if (count < 0 || count <= 1 || acornLine == null ||
             progressSlider.fillRect == null || lineHolder == null)
             return;
 
-        float width = fullWidth > 0f ? fullWidth : lineHolder.GetComponent<RectTransform>().rect.width;
+        float width = lineHolderRect.rect.width;
 
         for (int i = 1; i < count; i++)
         {
@@ -155,14 +118,18 @@ public class AcornCollectionBar : MonoBehaviour
             indicator.SetActive(true);
             indicatorInstances.Add(indicator);
             // Uncomment to reposition divider lines:
-            RectTransform irt = indicator.GetComponent<RectTransform>();
+            var irt = indicator.GetComponent<RectTransform>();
             float x = (width * i / count) - width / 2f;
             irt.anchoredPosition = new Vector2(x, 0);
         }
     }
 
-    public void ResetCompletionBar()
+    public void Setup(int requiredAcorns)
     {
+
+        progressSlider.maxValue = Mathf.Max(0, requiredAcorns);
         progressSlider.value = 0f;
+
+        SpawnIndicatorBars(requiredAcorns);
     }
 }

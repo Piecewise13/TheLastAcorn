@@ -1,17 +1,12 @@
 using System;
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerAbilityManager : MonoBehaviour
 {
-    public static PlayerAbilityManager Instance { get; private set; }
-
-    public enum Abilities { Zoom, Glide, Leap }
     
-    private Animator animator;
-    private PlayerMove playerMove;
-    private PlayerCamera playerCamera;
-
     [Serializable]
     struct AbilityUnlockStep
     {
@@ -19,6 +14,16 @@ public class PlayerAbilityManager : MonoBehaviour
         [Tooltip("Acorns needed to unlock this ability, counted fresh from the previous unlock.")]
         public int segmentCost;
     }
+    
+    public static PlayerAbilityManager Instance { get; private set; }
+
+    public enum Abilities { Zoom, Glide, Leap }
+    
+    private PlayerMove playerMove;
+    private PlayerCameraManager playerCamera;
+
+    [SerializeField] private UnlockZoomView unlockZoomView = null!;
+    [SerializeField] private AcornCollectionBar acornCollectionBarPrefab = null!;
 
     [SerializeField] AbilityUnlockStep[] unlockSteps = new AbilityUnlockStep[]
     {
@@ -33,6 +38,13 @@ public class PlayerAbilityManager : MonoBehaviour
     private int currentStepIndex; // index of the next ability to unlock
     private int segmentAcorns;    // acorns collected toward the current unlock
     private int lastScore;        // last total seen; used to compute per-collection delta
+    public int SegmentAcorns => segmentAcorns;
+
+    /// Total acorns needed for the current segment, or -1 if all unlocked.
+    public int CurrentSegmentCost =>
+        currentStepIndex < unlockSteps.Length ? unlockSteps[currentStepIndex].segmentCost : -1;
+    
+    [SerializeField] private int unlockStepIndex = 0;
 
     /// Fires when any ability is unlocked.
     public event Action<Abilities> OnAbilityUnlocked;
@@ -41,11 +53,6 @@ public class PlayerAbilityManager : MonoBehaviour
     /// Parameters: (acorns in current segment, cost of current segment)
     public event Action<int, int> OnSegmentChanged;
 
-    public int SegmentAcorns => segmentAcorns;
-
-    /// Total acorns needed for the current segment, or -1 if all unlocked.
-    public int CurrentSegmentCost =>
-        currentStepIndex < unlockSteps.Length ? unlockSteps[currentStepIndex].segmentCost : -1;
 
     private void Awake()
     {
@@ -66,9 +73,8 @@ public class PlayerAbilityManager : MonoBehaviour
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
         playerMove = GetComponent<PlayerMove>();
-        playerCamera = GetComponentInChildren<PlayerCamera>();
+        playerCamera = GetComponentInChildren<PlayerCameraManager>();
         
         StartCoroutine(SubscribeToScore());
     }
@@ -86,6 +92,9 @@ public class PlayerAbilityManager : MonoBehaviour
             ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
     }
 
+    private AcornCollectionBar activeBar;
+    private bool processingSegment;
+
     private void HandleScoreChanged(int newTotal)
     {
         if (currentStepIndex >= unlockSteps.Length) return;
@@ -96,41 +105,82 @@ public class PlayerAbilityManager : MonoBehaviour
 
         segmentAcorns += delta;
 
-        bool anyUnlocked = false;
-
-
-        // Only broadcast progress when no unlock happened this frame.
-        // Unlock frames are handled by OnAbilityUnlocked subscribers.
-        if (!anyUnlocked)
-            OnSegmentChanged?.Invoke(segmentAcorns, CurrentSegmentCost);
-
+        HandleSegmentProgress().Forget();
     }
 
-    // private void ShowAbilityUnlockScreen()
-    // {
-    //     if (abilityUnlockView != null)
-    //         abilityUnlockView.SetActive(true);
-    // }
-
-    public void UnlockAbility()
+    private async UniTaskVoid HandleSegmentProgress()
     {
-        abilityUnlocked[currentStepIndex] = true;
-        Debug.Log($"Unlocked ability: {(Abilities)currentStepIndex}");
-        OnAbilityUnlocked?.Invoke((Abilities)currentStepIndex);
-        animator.SetBool("isUnlockingAbility", false);
-        ViewManager.Instance.ResetToHUD();
+        if (processingSegment) return;
+        processingSegment = true;
+
+        try
+        {
+            int cost = CurrentSegmentCost;
+            bool segmentComplete = segmentAcorns >= cost;
+
+            // Always animate the fill, including the final acorn that completes the
+            // segment. The bar is pushed/owned by the ViewManager and we await the
+            // fill so it reaches full before the unlock sequence begins.
+            await ShowAndFillBar(segmentAcorns, cost);
+
+            if (segmentComplete)
+            {
+                await StartUnlockAbility();
+            }
+            else
+            {
+                OnSegmentChanged?.Invoke(segmentAcorns, cost);
+            }
+        }
+        finally
+        {
+            processingSegment = false;
+        }
+    }
+
+    private async UniTask ShowAndFillBar(int collected, int required)
+    {
+        if (acornCollectionBarPrefab == null || ViewManager.Instance == null) return;
+
+        if (activeBar == null)
+        {
+            var view = await ViewManager.Instance.PushView(acornCollectionBarPrefab);
+            activeBar = view as AcornCollectionBar;
+        }
+
+        if (activeBar != null)
+            await activeBar.RunSegment(collected, required, CancellationToken.None);
+    }
+    public async UniTask UnlockAbility()
+    {
+        if (currentStepIndex >= unlockSteps.Length) return;
+
+        Abilities unlockedAbility = unlockSteps[currentStepIndex].ability;
+        abilityUnlocked[(int)unlockedAbility] = true;
+        currentStepIndex++;
+        segmentAcorns = 0;
+        
+        await ViewManager.Instance.ClearViews();
+        activeBar = null; // bar was destroyed by ClearViews
+
         playerCamera.ResetTrackingTarget();
+        OverlayCameraController.Instance.ReleasePlayerOverlay();
+
+        OnAbilityUnlocked?.Invoke(unlockedAbility);
         SaveAbilities();
     }
 
-    public void StartUnlockAbility()
+    public async UniTask StartUnlockAbility()
     {
         playerMove.DisableMove();
-        
-        animator.SetBool("isUnlockingAbility", true);
-        ViewManager.Instance.ClearViews();
+       
         playerCamera.SetCameraTarget(playerMove.gameObject);
+        
+        ViewManager.Instance.ClearViewsInstant();
+        activeBar = null; // bar was destroyed by ClearViewsInstant
+        await ViewManager.Instance.PushView(unlockZoomView);
     }
+
 
     private void SaveAbilities()
     {

@@ -33,7 +33,7 @@ public class AcornArrow : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerCamera = Camera.main;
+        playerCamera = CameraRig.Instance.Foreground;
 
         acorns = GameObject.FindGameObjectsWithTag("Acorn");
         goldAcorns = GameObject.FindGameObjectsWithTag("GoldAcorn");

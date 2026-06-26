@@ -22,10 +22,10 @@ public class CaveCameraZoom : MonoBehaviour
         var otherRoot = collision.transform.root;
         if (otherRoot.CompareTag("Player"))
         {
-            var playerCamera = otherRoot.GetComponentInChildren<PlayerCamera>();
+            var playerCamera = otherRoot.GetComponentInChildren<PlayerCameraManager>();
             if (playerCamera != null)
             {
-                playerCamera.StartForceZoom(cameraZoomAmount, PlayerCamera.CameraState.CaveZoomed);
+                playerCamera.StartForceZoom(cameraZoomAmount, PlayerCameraManager.CameraState.CaveZoomed);
             }
         }
     }
@@ -35,10 +35,10 @@ public class CaveCameraZoom : MonoBehaviour
         var otherRoot = collision.transform.root;
         if (otherRoot.CompareTag("Player"))
         {
-            var playerCamera = otherRoot.GetComponentInChildren<PlayerCamera>();
+            var playerCamera = otherRoot.GetComponentInChildren<PlayerCameraManager>();
             if (playerCamera != null)
             {
-                playerCamera.EndForceZoom(PlayerCamera.CameraState.CaveZoomed);
+                playerCamera.EndForceZoom(PlayerCameraManager.CameraState.CaveZoomed);
             }
         }
     }

@@ -15,7 +15,7 @@ public class AcornCollectionIndicator : MonoBehaviour
     This is really rough and needs to be cleaned up and optimized
 */
 
-    private PlayerCamera playerCamera;
+    private PlayerCameraManager playerCamera;
 
     [Header("Discrete Indicator")]
 
@@ -80,7 +80,7 @@ public class AcornCollectionIndicator : MonoBehaviour
         discreteObject.SetActive(false);
         progressBarObject.SetActive(false);
 
-        playerCamera = GetComponentInParent<PlayerCamera>();
+        playerCamera = GetComponentInParent<PlayerCameraManager>();
 
 
         ScoreManager.Instance.OnScoreChanged += UpdateUI;

@@ -6,9 +6,6 @@ using UnityEngine.InputSystem;
 
 public partial class PlayerMove : MonoBehaviour
 {
-
-
-
     private PlayerLifeManager lifeManager;
 
     private PlayerAbilityManager abilityManager;
@@ -70,7 +67,7 @@ public partial class PlayerMove : MonoBehaviour
     /// </summary>
     [SerializeField] private GameObject stunnedEffect;
 
-    [SerializeField] private PlayerCamera playerCamera;
+    [SerializeField] private PlayerCameraManager playerCamera;
 
     [Header("Collision")]
     /// <summary>
@@ -183,7 +180,7 @@ public partial class PlayerMove : MonoBehaviour
         // Get Animator and Rigidbody2D components
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        playerCamera = GetComponentInChildren<PlayerCamera>();
+        playerCamera = GetComponentInChildren<PlayerCameraManager>();
         // Store original graphic position for shake effect
         if (graphic != null)
             graphicOriginalLocalPos = graphic.transform.localPosition;
@@ -268,7 +265,7 @@ public partial class PlayerMove : MonoBehaviour
         {
             rb.gravityScale = 1.5f;
             jumpHeldDuration = 0f;
-            playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
+            playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
             return;
         }
 
@@ -363,7 +360,7 @@ public partial class PlayerMove : MonoBehaviour
 
         if (PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Glide && PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Fall)
         {
-            playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
+            playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
             return;
         }
 
@@ -371,7 +368,7 @@ public partial class PlayerMove : MonoBehaviour
 
         if (sideMovementSpeed > sideSpeedThreshold)
         {
-            playerCamera.StartForceZoom(Mathf.Lerp(playerCamera.GetDefaultZoom(), maxSideMovementZoom, sideMovementZoomCurve.Evaluate(sideMovementSpeed / maxGlideSpeed)), PlayerCamera.CameraState.GlideZoom);
+            playerCamera.StartForceZoom(Mathf.Lerp(playerCamera.GetDefaultZoom(), maxSideMovementZoom, sideMovementZoomCurve.Evaluate(sideMovementSpeed / maxGlideSpeed)), PlayerCameraManager.CameraState.GlideZoom);
         }
 
     }
@@ -608,7 +605,7 @@ public partial class PlayerMove : MonoBehaviour
             transform.SetParent(null, true);
         }
 
-        playerCamera.EndForceZoom(PlayerCamera.CameraState.GlideZoom);
+        playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
         PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
         rb.gravityScale = 1f;
         animator.SetBool("isClimbMoving", false);

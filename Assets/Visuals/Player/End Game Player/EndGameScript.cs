@@ -5,7 +5,7 @@ public class EndGameScript : MonoBehaviour
 {
 
     PlayerMove playerMove;
-    PlayerCamera playerCamera;
+    PlayerCameraManager playerCamera;
 
     public GameObject endCredits;
 
@@ -21,7 +21,7 @@ public class EndGameScript : MonoBehaviour
     void Start()
     {
         playerMove = FindFirstObjectByType<PlayerMove>();
-        playerCamera = FindFirstObjectByType<PlayerCamera>();
+        playerCamera = FindFirstObjectByType<PlayerCameraManager>();
 
         endCredits.SetActive(false);
     }

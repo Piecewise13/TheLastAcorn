@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 
 
 public enum ViewID
@@ -16,13 +18,12 @@ public enum ViewID
 public class ViewManager : MonoBehaviour
 {
     public static ViewManager Instance { get; private set; }
+    
+    private CancellationTokenSource viewTransitionCts = new CancellationTokenSource();
 
-    private Stack<UIView> viewStack = new Stack<UIView>();
+    private Stack<ViewBase> viewStack = new Stack<ViewBase>();
     
-    [SerializeField] private UIView hudView;
-    
-    [SerializeField] private UIView abilityUnlockView;
-    
+    [SerializeField] private ViewBase acornCollectionBarViewPrefab;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
@@ -35,60 +36,75 @@ public class ViewManager : MonoBehaviour
 
         Instance = this;
     }
-
-    void Start()
+    
+    /// <summary>
+    /// Pushes a view to the stack and immediately shows the view.
+    /// </summary>
+    /// <param name="viewBase">The view prefab</param>
+    /// <returns>The spawned view</returns>
+    public async UniTask<ViewBase> PushView(ViewBase viewBase)
     {
+        var newView = Instantiate(viewBase, transform);
         
-        hudView.Hide();
-        abilityUnlockView.Hide();
-
-        PushView(hudView);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        viewStack.Push(newView);
         
-    }
+        await newView.Setup();
+        await newView.Show(CancellationToken.None);
 
-    public void PushView(UIView view)
-    {
-        if (viewStack.Count > 0)
-        {
-            viewStack.Peek().Hide();
-        }
-        viewStack.Push(view);
-        view.Show();
+        return newView;
     }
 
     public void PopView()
     {
         if (viewStack.Count == 0) return;
 
-        viewStack.Pop().Hide();
+        viewStack.Pop().Hide(viewTransitionCts.Token);
         if (viewStack.Count > 0)
         {
-            viewStack.Peek().Show();
+            viewStack.Peek().Show(CancellationToken.None);
         }
         
     }
 
-    public void ClearViews()
+    public async UniTask ClearViews()
     {
         while (viewStack.Count > 0)
         {
-            viewStack.Pop().Hide();
+            var view = viewStack.Pop();
+            await view.Hide();
         }
     }
-
-    public void PushAbilityUnlockView(){
-        ClearViews();
-        PushView(abilityUnlockView);
+    
+    public void ClearViewsInstant()
+    {
+        viewTransitionCts.Cancel();
+        viewTransitionCts.Dispose();
+        viewTransitionCts = new CancellationTokenSource();
+        while (viewStack.Count > 0)
+        {
+            var view = viewStack.Pop();
+            if (view != null)
+            {
+                Destroy(view.gameObject);
+            }
+        }
     }
+    /* HUD Functions
 
-    public void ResetToHUD(){
-        ClearViews();
-        PushView(hudView);
+    public void HardResetToHUD()
+    {
+        viewTransitionCts.Cancel();
+        viewTransitionCts.Dispose();
+        viewTransitionCts = new CancellationTokenSource();
+
+        while (viewStack.Count > 0)
+        {
+            var view = viewStack.Pop();
+            if (view != null)
+                Destroy(view.gameObject);
+        }
+
+        PushView(hudViewBase);
     }
-
+    */
 }

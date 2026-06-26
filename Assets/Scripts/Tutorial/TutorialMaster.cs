@@ -28,7 +28,7 @@ public class TutorialMaster : MonoBehaviour
 
     [SerializeField] private List<TutorialStep> tutorialSteps;
     //currentStep is the step that is "active" meaning the player hasn't completed it yet but is curretly working on it. So when the player triggers the event for the current step, it will mark that step as completed and move on to the next one.
-    private int currentStep = -1;
+    private int currentStep = 0;
 
     public PlayableDirector playableDirector;
 
@@ -53,7 +53,9 @@ public class TutorialMaster : MonoBehaviour
         }
 
         playerMove = FindAnyObjectByType<PlayerMove>();
+        
         playerMove.DisableMove();
+        
         HideAllSteps();
     }
 
