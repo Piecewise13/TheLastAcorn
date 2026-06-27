@@ -147,9 +147,6 @@ public class PlayerAbilityManager : MonoBehaviour
             var view = await ViewManager.Instance.PushView(acornCollectionBarPrefab);
             activeBar = view as AcornCollectionBar;
         }
-
-        if (activeBar != null)
-            await activeBar.RunSegment(collected, required, CancellationToken.None);
     }
     public async UniTask UnlockAbility()
     {

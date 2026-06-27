@@ -20,6 +20,7 @@ public class AcornCollectionBar : ViewBase
     [Header("Animation")]
     [SerializeField] private MMF_Player revealFeedback;
     [SerializeField] private MMF_Player fillFeedback;
+    [SerializeField] private MMF_Player exitFeedback;
     [SerializeField] private FloatController sliderFloatController;
 
 
@@ -49,28 +50,20 @@ public class AcornCollectionBar : ViewBase
     /// Awaitable so callers can guarantee the bar is fully filled before continuing
     /// (e.g. before starting the ability unlock sequence).
     /// </summary>
-    public async UniTask RunSegment(int acornsCollectedInSegment, int acornsRequiredForSegment, CancellationToken token)
+    public async override UniTask RunAsync(CancellationToken token)
     {
-        if (acornsRequiredForSegment <= 0) return;
-
-        progressSlider.maxValue = Mathf.Max(1, acornsRequiredForSegment);
-        SpawnIndicatorBars(acornsRequiredForSegment);
-
-        await ShowCompletionBar(acornsCollectedInSegment, acornsRequiredForSegment, token);
-    }
-
-    // Called on every collection that doesn't cross an unlock
-    public async UniTask ShowCompletionBar(int acornsCollectedInSegment, int acornsRequiredForSegment, CancellationToken token)
-    {
-        if (completingAnimation) return;
-        if (acornsRequiredForSegment < 0) return;
-
-        //float target = acornsRequiredForSegment > 0 ? Mathf.Clamp01((float)acornsCollectedInSegment / acornsRequiredForSegment) : 0f;
-
+        if (PlayerAbilityManager.Instance.SegmentAcorns <= 0) return;
+        
+        progressSlider.maxValue = Mathf.Max(1, PlayerAbilityManager.Instance.CurrentSegmentCost);
+        SpawnIndicatorBars(PlayerAbilityManager.Instance.CurrentSegmentCost);
+        
         await AnimateReveal(token);
+        
+        //TODO: Maybe add different feedback depending on whether or not a new ability was unlocked
 
-        await AnimateFill(acornsCollectedInSegment, token);
-
+        await AnimateFill(PlayerAbilityManager.Instance.SegmentAcorns, token);
+        
+        await exitFeedback.PlayFeedbacksAsync(token);
     }
 
     private async UniTask AnimateReveal(CancellationToken token)
