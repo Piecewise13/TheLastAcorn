@@ -124159,6 +124159,7 @@ MonoBehaviour:
   backgroundCamera: {fileID: 610863113}
   overlayCamera: {fileID: 393229322}
   brain: {fileID: 1122247494}
+  boundedCameraTarget: {fileID: 1687831666}
 --- !u!4 &1354013355
 Transform:
   m_ObjectHideFlags: 0

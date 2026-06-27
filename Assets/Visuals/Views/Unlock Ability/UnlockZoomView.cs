@@ -37,15 +37,14 @@ public class UnlockZoomView : ViewBase
         await initalTextFeedback.PlayFeedbacksAsync(token);
         
         await inputPrompt.PlayFeedbacksAsync(token);
-        Debug.Log("[UnlockZoomView] Waiting for inputPrompt]");
+
         // 2. allow + wait for the zoom input
         await playerCameraManager.WaitForZoomInput(token);
-        Debug.Log("[UnlockZoomView] Exiting");
-
+        
+        CameraRig.Instance.ResetTrackingTarget();
         OverlayCameraController.Instance.ReleasePlayerOverlay();
         // 3. trigger exit feedbacks
         exitFeedback.PlayFeedbacksAsync(token);
-        Debug.Log("[UnlockZoomView] Perform Zoom");
         // 4. then start the actual zoom
         await playerCameraManager.PerformUnlockZoom(token);
     }

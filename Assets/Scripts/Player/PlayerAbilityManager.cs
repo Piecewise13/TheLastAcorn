@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class PlayerAbilityManager : MonoBehaviour
@@ -121,7 +122,7 @@ public class PlayerAbilityManager : MonoBehaviour
             // Always animate the fill, including the final acorn that completes the
             // segment. The bar is pushed/owned by the ViewManager and we await the
             // fill so it reaches full before the unlock sequence begins.
-            await ShowAndFillBar(segmentAcorns, cost);
+            await ViewManager.Instance.PushView(acornCollectionBarPrefab);
 
             if (segmentComplete)
             {
@@ -137,17 +138,7 @@ public class PlayerAbilityManager : MonoBehaviour
             processingSegment = false;
         }
     }
-
-    private async UniTask ShowAndFillBar(int collected, int required)
-    {
-        if (acornCollectionBarPrefab == null || ViewManager.Instance == null) return;
-
-        if (activeBar == null)
-        {
-            var view = await ViewManager.Instance.PushView(acornCollectionBarPrefab);
-            activeBar = view as AcornCollectionBar;
-        }
-    }
+    
     public async UniTask UnlockAbility()
     {
         if (currentStepIndex >= unlockSteps.Length) return;
@@ -160,7 +151,7 @@ public class PlayerAbilityManager : MonoBehaviour
         await ViewManager.Instance.ClearViews();
         activeBar = null; // bar was destroyed by ClearViews
 
-        playerCamera.ResetTrackingTarget();
+        CameraRig.Instance.ResetTrackingTarget();
         OverlayCameraController.Instance.ReleasePlayerOverlay();
 
         OnAbilityUnlocked?.Invoke(unlockedAbility);
@@ -171,7 +162,7 @@ public class PlayerAbilityManager : MonoBehaviour
     {
         playerMove.DisableMove();
        
-        playerCamera.SetCameraTarget(playerMove.gameObject);
+        CameraRig.Instance.SetTrackingTarget(playerMove.transform);
         
         ViewManager.Instance.ClearViewsInstant();
         activeBar = null; // bar was destroyed by ClearViewsInstant
@@ -192,4 +183,10 @@ public class PlayerAbilityManager : MonoBehaviour
     }
 
     public bool IsAbilityUnlocked(Abilities ability) => abilityUnlocked[(int)ability];
+
+    [Button("Test Acorn Collection")]
+    private async UniTask TestAcornCollection()
+    {
+        await ViewManager.Instance.PushView(acornCollectionBarPrefab);
+    }
 }

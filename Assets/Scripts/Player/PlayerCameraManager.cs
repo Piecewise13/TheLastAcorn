@@ -65,7 +65,7 @@ public class PlayerCameraManager : MonoBehaviour
         var rig = CameraRig.Instance;
         cinemachineCam = rig.Vcam;
         backgroundCam = rig.Background;
-        cinemachineCam.Target.TrackingTarget = defaultTrackingTarget;
+        rig.SetTrackingTarget(defaultTrackingTarget);
 
         playerMove = GetComponentInParent<PlayerMove>();
         abilityManager = GetComponentInParent<PlayerAbilityManager>();
@@ -141,6 +141,8 @@ public class PlayerCameraManager : MonoBehaviour
         {
             cameraState = CameraState.PlayerZoomed;
 
+            CameraRig.Instance.ResetTrackingTarget();
+
             OnZoomStarted?.Invoke();
             playerMove.DisableMove();
             targetZoom = zoomOutAmount;
@@ -184,16 +186,6 @@ public class PlayerCameraManager : MonoBehaviour
         cameraState = state;
         this.targetZoom = newZoom;
         zoomTimer = 0;
-    }
-
-    public void SetCameraTarget(GameObject target)
-    {
-        cinemachineCam.Target.TrackingTarget = target.transform;
-    }
-
-    public void ResetTrackingTarget()
-    {
-        cinemachineCam.LookAt = defaultTrackingTarget;
     }
     
 
