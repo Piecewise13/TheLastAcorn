@@ -216,6 +216,24 @@ public class PlayerCameraManager : MonoBehaviour
         return zoomInAmount;
     }
 
+    /// <summary>
+    /// The orthographic size the camera reaches when the player zooms out.
+    /// For an orthographic camera this equals the half-height of the view in world units.
+    /// </summary>
+    public float GetZoomOutAmount()
+    {
+        return zoomOutAmount;
+    }
+
+    /// <summary>
+    /// Sets the orthographic size the camera reaches when the player zooms out.
+    /// Used by the upgrade system to scale the zoom-out range.
+    /// </summary>
+    public void SetZoomOutAmount(float amount)
+    {
+        zoomOutAmount = amount;
+    }
+
     public enum CameraState
     {
         Disabled,

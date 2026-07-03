@@ -43,10 +43,9 @@ public class ViewManager : MonoBehaviour
     public async UniTask<ViewBase> PushView(ViewBase viewBase)
     {
         var newView = Instantiate(viewBase, transform);
+        await newView.Setup();
         
         viewStack.Push(newView);
-        
-        await newView.Setup();
         await newView.Show(CancellationToken.None);
 
         return newView;

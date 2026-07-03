@@ -27,6 +27,10 @@ public class Collector : MonoBehaviour
         if (LevelScoreManager.Instance != null)
             LevelScoreManager.Instance.AddLevelScore(collectible.Value);
 
+        // Notify the ability manager so it can advance ability-unlock progress.
+        if (PlayerAbilityManager.Instance != null)
+            PlayerAbilityManager.Instance.NotifyAcornCollected(collectible.Value);
+
         if (other.TryGetComponent<Acorn>(out var acorn))
             acorn.OnCollected();
 

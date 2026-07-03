@@ -113,6 +113,15 @@ public partial class PlayerMove : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sets the maximum horizontal speed the player can reach while gliding.
+    /// Used by the upgrade system.
+    /// </summary>
+    public void SetMaxGlideSpeed(float value)
+    {
+        maxGlideSpeed = value;
+    }
+
     #endregion
 
 }

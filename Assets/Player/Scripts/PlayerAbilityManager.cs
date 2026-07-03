@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
@@ -38,7 +37,6 @@ public class PlayerAbilityManager : MonoBehaviour
 
     private int currentStepIndex; // index of the next ability to unlock
     private int segmentAcorns;    // acorns collected toward the current unlock
-    private int lastScore;        // last total seen; used to compute per-collection delta
     public int SegmentAcorns => segmentAcorns;
 
     /// Total acorns needed for the current segment, or -1 if all unlocked.
@@ -76,36 +74,20 @@ public class PlayerAbilityManager : MonoBehaviour
     {
         playerMove = GetComponent<PlayerMove>();
         playerCamera = GetComponentInChildren<PlayerCameraManager>();
-        
-        StartCoroutine(SubscribeToScore());
-    }
-
-    private IEnumerator SubscribeToScore()
-    {
-        while (ScoreManager.Instance == null) yield return null;
-        lastScore = ScoreManager.Instance.CurrentScore;
-        ScoreManager.Instance.OnScoreChanged += HandleScoreChanged;
-    }
-
-    private void OnDestroy()
-    {
-        if (ScoreManager.Instance != null)
-            ScoreManager.Instance.OnScoreChanged -= HandleScoreChanged;
     }
 
     private AcornCollectionBar activeBar;
     private bool processingSegment;
 
-    private void HandleScoreChanged(int newTotal)
+    /// Called when an acorn is collected so the ability manager can advance
+    /// segment/unlock progress. The ability manager owns this counter directly.
+    public void NotifyAcornCollected(int amount)
     {
         if (currentStepIndex >= unlockSteps.Length) return;
+        if (amount <= 0) return;
 
-        int delta = newTotal - lastScore;
-        lastScore = newTotal;
-        if (delta <= 0) return;
-
-        segmentAcorns += delta;
-
+        segmentAcorns += amount;
+        Debug.unityLogger.Log("test 1");
         HandleSegmentProgress().Forget();
     }
 
@@ -123,10 +105,12 @@ public class PlayerAbilityManager : MonoBehaviour
             // segment. The bar is pushed/owned by the ViewManager and we await the
             // fill so it reaches full before the unlock sequence begins.
             await ViewManager.Instance.PushView(acornCollectionBarPrefab);
-
+            
+            Debug.unityLogger.Log("test 2");
             if (segmentComplete)
             {
                 await StartUnlockAbility();
+                UnlockAbility();
             }
             else
             {

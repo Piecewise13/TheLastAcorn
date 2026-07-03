@@ -61,10 +61,8 @@ public class TutorialMaster : MonoBehaviour
 
     public void PauseTutorial()
     {
-
-        currentStep++;
-
         StartNextStep();
+
         
         if (playableDirector != null)
         {
@@ -75,6 +73,7 @@ public class TutorialMaster : MonoBehaviour
 
     public void ResumeTutorial()
     {
+        currentStep++;
 
         if (playableDirector != null)
         {

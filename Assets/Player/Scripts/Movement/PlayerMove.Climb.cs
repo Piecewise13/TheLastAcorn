@@ -341,6 +341,15 @@ public partial class PlayerMove : MonoBehaviour
         currentSlipVelocity = 0f;
     }
 
+    /// <summary>
+    /// Sets the maximum time the player is allowed to climb before fatiguing.
+    /// Used by the upgrade system.
+    /// </summary>
+    public void SetMaxClimbTime(float value)
+    {
+        maxClimbTime = value;
+    }
+
     private void ResetClimb()
     {
 

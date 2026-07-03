@@ -20,6 +20,8 @@ public class AcornCollectionBar : ViewBase
     [Header("Animation")]
     [SerializeField] private MMF_Player revealFeedback;
     [SerializeField] private MMF_Player fillFeedback;
+    [Tooltip("Extra feedback played when this fill completes the whole segment (as opposed to adding a single acorn).")]
+    [SerializeField] private MMF_Player segmentCompleteFeedback;
     [SerializeField] private MMF_Player exitFeedback;
     [SerializeField] private FloatController sliderFloatController;
 
@@ -42,8 +44,6 @@ public class AcornCollectionBar : ViewBase
         
         progressSlider.value = 0f;
     }
-    
-
 
     /// <summary>
     /// Reveals the bar (if needed) and animates the fill to the collected amount.
@@ -59,11 +59,29 @@ public class AcornCollectionBar : ViewBase
         
         await AnimateReveal(token);
         
-        //TODO: Maybe add different feedback depending on whether or not a new ability was unlocked
-
-        await AnimateFill(PlayerAbilityManager.Instance.SegmentAcorns, token);
+        int collected = PlayerAbilityManager.Instance.SegmentAcorns;
+        int cost = PlayerAbilityManager.Instance.CurrentSegmentCost;
+        bool segmentComplete = cost > 0 && collected >= cost;
         
-        await exitFeedback.PlayFeedbacksAsync(token);
+        await AnimateFill(collected, token);
+
+        if (segmentComplete)
+        {
+            await AnimateSegmentComplete(token);
+        }
+        else
+        {
+            await exitFeedback.PlayFeedbacksAsync(token);
+        }
+        
+
+    }
+
+    private async UniTask AnimateSegmentComplete(CancellationToken token)
+    {
+        if (segmentCompleteFeedback == null) return;
+
+        await segmentCompleteFeedback.PlayFeedbacksAsync(token);
     }
 
     private async UniTask AnimateReveal(CancellationToken token)
