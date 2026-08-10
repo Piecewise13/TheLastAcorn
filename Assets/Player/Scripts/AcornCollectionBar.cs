@@ -52,15 +52,15 @@ public class AcornCollectionBar : ViewBase
     /// </summary>
     public async override UniTask RunAsync(CancellationToken token)
     {
-        if (PlayerAbilityManager.Instance.SegmentAcorns <= 0) return;
+        if (PlayerUpgradeManager.Instance.SegmentAcorns <= 0) return;
         
-        progressSlider.maxValue = Mathf.Max(1, PlayerAbilityManager.Instance.CurrentSegmentCost);
-        SpawnIndicatorBars(PlayerAbilityManager.Instance.CurrentSegmentCost);
+        progressSlider.maxValue = Mathf.Max(1, PlayerUpgradeManager.Instance.CurrentSegmentCost);
+        SpawnIndicatorBars(PlayerUpgradeManager.Instance.CurrentSegmentCost);
         
         await AnimateReveal(token);
         
-        int collected = PlayerAbilityManager.Instance.SegmentAcorns;
-        int cost = PlayerAbilityManager.Instance.CurrentSegmentCost;
+        int collected = PlayerUpgradeManager.Instance.SegmentAcorns;
+        int cost = PlayerUpgradeManager.Instance.CurrentSegmentCost;
         bool segmentComplete = cost > 0 && collected >= cost;
         
         await AnimateFill(collected, token);

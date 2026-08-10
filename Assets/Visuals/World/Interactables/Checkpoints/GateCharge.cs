@@ -41,8 +41,6 @@ public class GateCharge : MonoBehaviour
 
     [SerializeField] private float resetDuration = 1f;
 
-    [SerializeField]private bool shouldActivateOnReturn = false;
-
 
     void Start()
     {
@@ -84,13 +82,7 @@ public class GateCharge : MonoBehaviour
             }
             else if (currentState == State.Return)
             {
-                if (shouldActivateOnReturn)
-                {
-                    ActivateCharge();
-                    return;
-                }
-
-                DeactivateCharge();
+                ActivateCharge();
                 return;
             }
         }

@@ -1,47 +1,121 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
 /// <summary>
-/// Owns the player's tiered stat upgrades (climb time, zoom-out range, max glide speed).
-/// Acorns drive these upgrades via the upgrade-choice flow; this manager stores the
-/// chosen levels, persists them, and applies the resulting tier values to the player.
+/// Owns the player's stat upgrades (strength, instinct, endurance)
+/// as well as acorn collection and segment progress that drives when upgrades are offered.
 /// </summary>
 public class PlayerUpgradeManager : MonoBehaviour
 {
     public static PlayerUpgradeManager Instance { get; private set; }
 
-    public enum UpgradeStat { ClimbTime, ZoomOut, GlideSpeed }
-
-    [Serializable]
-    struct StatTiers
+    public enum UpgradeStat
     {
-        public UpgradeStat stat;
-
-        [Tooltip("Ordered tier values. Index 0 is the base value (level 0); each subsequent entry is the value granted at that upgrade level.")]
-        public float[] tierValues;
+        Strength = 0,
+        Instinct = 1,
+        Endurance = 2,
     }
 
-    [SerializeField]
-    private StatTiers[] statTiers = new StatTiers[]
+    public enum UpgradeEffectTarget
     {
-        new StatTiers { stat = UpgradeStat.ClimbTime,  tierValues = new float[] { 0f } },
-        new StatTiers { stat = UpgradeStat.ZoomOut,    tierValues = new float[] { 0f } },
-        new StatTiers { stat = UpgradeStat.GlideSpeed, tierValues = new float[] { 0f } },
+        MaxClimbTime,
+        ClimbSpeed,
+        MaxGlideSpeed,
+        ZoomOutAmount,
+    }
+
+    [Serializable]
+    struct ValueProgression
+    {
+        [Min(0)] public int maxLevel;
+        public float minValue;
+        public float maxValue;
+        [Tooltip("Remaps normalized upgrade progress before interpolating from minValue to maxValue. Empty curves are treated as linear.")]
+        public AnimationCurve interpolationCurve;
+    }
+
+    [Serializable]
+    struct UpgradeEffectProgression
+    {
+        public UpgradeEffectTarget target;
+        public ValueProgression progression;
+    }
+
+    [Serializable]
+    struct UpgradeProgression
+    {
+        public UpgradeStat stat;
+        public UpgradeEffectProgression[] effects;
+    }
+
+    // ── Stat upgrade data ────────────────────────────────────────────────────
+
+    [SerializeField]
+    private UpgradeProgression[] upgradeProgressions = new UpgradeProgression[]
+    {
+        new UpgradeProgression
+        {
+            stat = UpgradeStat.Strength,
+            effects = new[]
+            {
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxClimbTime },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.ClimbSpeed },
+            }
+        },
+        new UpgradeProgression
+        {
+            stat = UpgradeStat.Instinct,
+            effects = new[]
+            {
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.ZoomOutAmount },
+            }
+        },
+        new UpgradeProgression
+        {
+            stat = UpgradeStat.Endurance,
+            effects = new[]
+            {
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxGlideSpeed },
+            }
+        },
     };
 
     private static readonly int StatCount = Enum.GetValues(typeof(UpgradeStat)).Length;
-
     private readonly int[] statLevels = new int[StatCount];
-
     private const string SaveKey = "UpgradeLevel";
+
+    // ── Segment / acorn collection ────────────────────────────────────────────
+
+    [Tooltip("Acorn cost for each successive segment. The last entry is reused once all explicit costs are exhausted.")]
+    [SerializeField] private int[] segmentCosts = { 5 };
+
+    [SerializeField] private AcornCollectionBar acornCollectionBarPrefab = null!;
+    [SerializeField] private UpgradePlayerView upgradeViewPrefab = null!;
+
+    private int segmentAcorns;
+    private int segmentIndex;
+    private bool processingSegment;
+
+    public int SegmentAcorns => segmentAcorns;
+    public int CurrentSegmentCost => segmentCosts.Length > 0
+        ? segmentCosts[Mathf.Min(segmentIndex, segmentCosts.Length - 1)]
+        : 1;
+
+    /// <summary>Fires on every acorn collection that does not complete the segment.</summary>
+    public event Action<int, int> OnSegmentChanged;
+
+    // ── Player component refs ─────────────────────────────────────────────────
 
     private PlayerMove playerMove;
     private PlayerCameraManager playerCamera;
 
     /// <summary>Fires after a stat upgrade is applied. Parameters: (stat, new level).</summary>
     public event Action<UpgradeStat, int> OnStatUpgraded;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
@@ -60,37 +134,101 @@ public class PlayerUpgradeManager : MonoBehaviour
     {
         playerMove = GetComponent<PlayerMove>();
         playerCamera = GetComponentInChildren<PlayerCameraManager>();
-
         ApplyToPlayer();
     }
+
+    // ── Acorn / segment handling ──────────────────────────────────────────────
+
+    /// <summary>
+    /// Called by Collector when an acorn is picked up. Advances segment progress
+    /// and triggers an upgrade choice when the segment is complete.
+    /// </summary>
+    public void NotifyAcornCollected(int amount)
+    {
+        if (amount <= 0) return;
+        segmentAcorns += amount;
+        HandleSegmentProgress().Forget();
+    }
+
+    private async UniTaskVoid HandleSegmentProgress()
+    {
+        if (processingSegment) return;
+        processingSegment = true;
+
+        try
+        {
+            int currentSegmentCost = CurrentSegmentCost;
+            bool segmentComplete = segmentAcorns >= currentSegmentCost;
+
+            await ViewManager.Instance.PushView(acornCollectionBarPrefab);
+
+            if (segmentComplete)
+            {
+                segmentAcorns = 0;
+                segmentIndex++;
+
+                await StartUpgradeSelection();
+            }
+            else
+            {
+                OnSegmentChanged?.Invoke(segmentAcorns, currentSegmentCost);
+            }
+        }
+        finally
+        {
+            processingSegment = false;
+        }
+    }
+
+    public async UniTask StartUpgradeSelection()
+    {
+        playerMove.DisableMove();
+        CameraRig.Instance.SetTrackingTarget(playerMove.transform);
+        ViewManager.Instance.ClearViewsInstant();
+        await ViewManager.Instance.PushView(upgradeViewPrefab);
+    }
+
+    public async UniTask CompleteUpgradeSelection(UpgradeStat stat)
+    {
+        if (!CanAfford(stat)) return;
+
+        ApplyUpgrade(stat);
+
+        await ViewManager.Instance.ClearViews();
+        CameraRig.Instance.ResetTrackingTarget();
+        OverlayCameraController.Instance.ReleasePlayerOverlay();
+
+        if (playerMove != null)
+            playerMove.EnableMove();
+    }
+
+    // ── Upgrade affordability / application ───────────────────────────────────
+
+    /// <summary>The acorn cost for the current segment.</summary>
+    public int GetUpgradeCost() => CurrentSegmentCost;
+
+    /// <summary>True when the stat is not maxed. Cost is already paid by completing the segment.</summary>
+    public bool CanAfford(UpgradeStat stat) => !IsMaxed(stat);
+
+    // ── Stat queries ──────────────────────────────────────────────────────────
 
     /// <summary>Current upgrade level for a stat (0 = base, no upgrades applied).</summary>
     public int GetLevel(UpgradeStat stat) => statLevels[(int)stat];
 
-    /// <summary>Highest reachable level for a stat (number of configured tiers minus the base).</summary>
+    /// <summary>Highest reachable level for a stat.</summary>
     public int GetMaxLevel(UpgradeStat stat)
     {
-        float[] tiers = GetTierValues(stat);
-        return tiers != null && tiers.Length > 0 ? tiers.Length - 1 : 0;
+        if (!TryGetUpgradeProgression(stat, out var upgradeProgression) || upgradeProgression.effects == null)
+            return 0;
+
+        int maxLevel = 0;
+        for (int i = 0; i < upgradeProgression.effects.Length; i++)
+            maxLevel = Mathf.Max(maxLevel, upgradeProgression.effects[i].progression.maxLevel);
+        return maxLevel;
     }
 
-    /// <summary>True when a stat has reached its final configured tier.</summary>
+    /// <summary>True when a stat has reached its final configured level.</summary>
     public bool IsMaxed(UpgradeStat stat) => GetLevel(stat) >= GetMaxLevel(stat);
-
-    /// <summary>
-    /// The acorn cost for any upgrade — equal to the current segment cost in
-    /// PlayerAbilityManager so all upgrades share the same price.
-    /// </summary>
-    public int GetUpgradeCost() =>
-        PlayerAbilityManager.Instance != null ? PlayerAbilityManager.Instance.CurrentSegmentCost : 0;
-
-    /// <summary>True when the player has enough acorns and the stat is not maxed.</summary>
-    public bool CanAfford(UpgradeStat stat)
-    {
-        if (IsMaxed(stat)) return false;
-        int cost = GetUpgradeCost();
-        return cost > 0 && ScoreManager.Instance != null && ScoreManager.Instance.CurrentScore >= cost;
-    }
 
     /// <summary>The stats that can still be upgraded (not yet maxed).</summary>
     public List<UpgradeStat> AvailableStats()
@@ -104,36 +242,27 @@ public class PlayerUpgradeManager : MonoBehaviour
         return result;
     }
 
-    /// <summary>The tier value the stat currently resolves to, given its level.</summary>
+    /// <summary>The value the stat currently resolves to, given its level.</summary>
     public float GetCurrentValue(UpgradeStat stat)
     {
-        float[] tiers = GetTierValues(stat);
-        if (tiers == null || tiers.Length == 0) return 0f;
-        int level = Mathf.Clamp(GetLevel(stat), 0, tiers.Length - 1);
-        return tiers[level];
+        if (!TryGetPrimaryProgression(stat, out var progression)) return 0f;
+        return EvaluateProgression(progression, GetLevel(stat));
     }
 
     /// <summary>The value the stat would have if upgraded one more level, or the current value if maxed.</summary>
     public float GetNextValue(UpgradeStat stat)
     {
-        float[] tiers = GetTierValues(stat);
-        if (tiers == null || tiers.Length == 0) return 0f;
-        int next = Mathf.Clamp(GetLevel(stat) + 1, 0, tiers.Length - 1);
-        return tiers[next];
+        if (!TryGetPrimaryProgression(stat, out var progression)) return 0f;
+        return EvaluateProgression(progression, GetLevel(stat) + 1);
     }
 
     /// <summary>
-    /// Advances a stat one upgrade level (no-op if maxed or unaffordable), deducts
-    /// one segment's worth of acorns from ScoreManager, persists, and applies the
-    /// new value to the player.
+    /// Advances a stat one upgrade level (no-op if maxed), persists, and applies the
+    /// new value to the player. Cost is paid upstream by completing a segment.
     /// </summary>
     public void ApplyUpgrade(UpgradeStat stat)
     {
         if (!CanAfford(stat)) return;
-
-        int cost = GetUpgradeCost();
-        if (ScoreManager.Instance != null)
-            ScoreManager.Instance.AddScore(-cost);
 
         statLevels[(int)stat]++;
         Save();
@@ -142,8 +271,10 @@ public class PlayerUpgradeManager : MonoBehaviour
         OnStatUpgraded?.Invoke(stat, statLevels[(int)stat]);
     }
 
+    // ── Apply to player ───────────────────────────────────────────────────────
+
     /// <summary>
-    /// Pushes the current tier value of every stat onto the relevant player component.
+    /// Pushes every configured effect for every stat onto the relevant player component.
     /// Safe to call on load so persisted upgrades take effect each session.
     /// </summary>
     public void ApplyToPlayer()
@@ -151,31 +282,92 @@ public class PlayerUpgradeManager : MonoBehaviour
         if (playerMove == null) playerMove = GetComponent<PlayerMove>();
         if (playerCamera == null) playerCamera = GetComponentInChildren<PlayerCameraManager>();
 
-        if (playerMove != null)
-        {
-            if (HasTiers(UpgradeStat.ClimbTime))
-                playerMove.SetMaxClimbTime(GetCurrentValue(UpgradeStat.ClimbTime));
-            if (HasTiers(UpgradeStat.GlideSpeed))
-                playerMove.SetMaxGlideSpeed(GetCurrentValue(UpgradeStat.GlideSpeed));
-        }
+        if (upgradeProgressions == null) return;
 
-        if (playerCamera != null && HasTiers(UpgradeStat.ZoomOut))
+        for (int i = 0; i < upgradeProgressions.Length; i++)
         {
-            playerCamera.SetZoomOutAmount(GetCurrentValue(UpgradeStat.ZoomOut));
+            var upgradeProgression = upgradeProgressions[i];
+            if (upgradeProgression.effects == null) continue;
+
+            int level = GetLevel(upgradeProgression.stat);
+            for (int j = 0; j < upgradeProgression.effects.Length; j++)
+            {
+                var effect = upgradeProgression.effects[j];
+                if (effect.progression.maxLevel <= 0) continue;
+
+                float value = EvaluateProgression(effect.progression, level);
+                ApplyEffect(effect.target, value);
+            }
         }
     }
 
-    private bool HasTiers(UpgradeStat stat)
+    // ── Internals ─────────────────────────────────────────────────────────────
+
+    private bool TryGetPrimaryProgression(UpgradeStat stat, out ValueProgression progression)
     {
-        float[] tiers = GetTierValues(stat);
-        return tiers != null && tiers.Length > 0;
+        if (TryGetUpgradeProgression(stat, out var upgradeProgression) && upgradeProgression.effects != null)
+        {
+            for (int i = 0; i < upgradeProgression.effects.Length; i++)
+            {
+                progression = upgradeProgression.effects[i].progression;
+                if (progression.maxLevel > 0)
+                    return true;
+            }
+        }
+
+        progression = default;
+        return false;
     }
 
-    private float[] GetTierValues(UpgradeStat stat)
+    private bool TryGetUpgradeProgression(UpgradeStat stat, out UpgradeProgression progression)
     {
-        for (int i = 0; i < statTiers.Length; i++)
-            if (statTiers[i].stat == stat) return statTiers[i].tierValues;
-        return null;
+        if (upgradeProgressions == null)
+        {
+            progression = default;
+            return false;
+        }
+
+        for (int i = 0; i < upgradeProgressions.Length; i++)
+        {
+            if (upgradeProgressions[i].stat == stat)
+            {
+                progression = upgradeProgressions[i];
+                return true;
+            }
+        }
+
+        progression = default;
+        return false;
+    }
+
+    private void ApplyEffect(UpgradeEffectTarget target, float value)
+    {
+        switch (target)
+        {
+            case UpgradeEffectTarget.MaxClimbTime:
+                if (playerMove != null) playerMove.SetMaxClimbTime(value);
+                break;
+            case UpgradeEffectTarget.ClimbSpeed:
+                if (playerMove != null) playerMove.SetClimbSpeed(value);
+                break;
+            case UpgradeEffectTarget.MaxGlideSpeed:
+                if (playerMove != null) playerMove.SetMaxGlideSpeed(value);
+                break;
+            case UpgradeEffectTarget.ZoomOutAmount:
+                if (playerCamera != null) playerCamera.SetZoomOutAmount(value);
+                break;
+        }
+    }
+
+    private static float EvaluateProgression(ValueProgression progression, int level)
+    {
+        if (progression.maxLevel <= 0) return progression.minValue;
+
+        float progress = Mathf.Clamp01((float)level / progression.maxLevel);
+        if (progression.interpolationCurve != null && progression.interpolationCurve.length > 0)
+            progress = Mathf.Clamp01(progression.interpolationCurve.Evaluate(progress));
+
+        return Mathf.Lerp(progression.minValue, progression.maxValue, progress);
     }
 
     private void Save()

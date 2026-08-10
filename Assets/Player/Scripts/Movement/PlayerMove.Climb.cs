@@ -27,14 +27,13 @@ public partial class PlayerMove : MonoBehaviour
     [SerializeField] private Transform climbCheckOrigin;
 
     /// <summary>
-    /// Speed at which the player climbs.
-    /// </summary>
-    [SerializeField] private float climbSpeed = 5.0f;
-
-    /// <summary>
     /// Maximum time allowed for climbing.
     /// </summary>
     [SerializeField] private float maxClimbTime;
+    
+    [SerializeField] private float baselineClimbSpeed, fastClimbSpeed;
+    private float currentMaxClimbSpeed;
+    private float currentClimbSpeed;
 
     [Range(0.01f, 3f)]
     [SerializeField] private float recoverSpeed = .25f;
@@ -135,9 +134,7 @@ public partial class PlayerMove : MonoBehaviour
 
 
     [SerializeField] private AnimationCurve climbSpeedAnimationCurve;
-    [SerializeField] private float normalClimbSpeed, fastClimbSpeed;
-    private float currentMaxClimbSpeed;
-    private float currentClimbSpeed;
+
 
 
     /// <summary>
@@ -157,8 +154,7 @@ public partial class PlayerMove : MonoBehaviour
         effectsManager.UpdateClimbParticles(climbTime / maxClimbTime);
         effectsManager.UpdateClimbFatigueColor(climbTime / maxClimbTime);
 
-        float climbSpeedFactor = Mathf.Lerp(currentMaxClimbSpeed, 0, climbSpeedAnimationCurve.Evaluate(climbTime / maxClimbTime));
-        currentClimbSpeed = climbSpeedFactor; // Store for leap calculation
+        currentClimbSpeed = Mathf.Lerp(currentMaxClimbSpeed, 0, climbSpeedAnimationCurve.Evaluate(climbTime / maxClimbTime));
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -179,7 +175,7 @@ public partial class PlayerMove : MonoBehaviour
         climbEndTime = Time.time;
 
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * moveInput.x * Time.deltaTime * climbSpeedFactor + Vector3.up * climbSpeedFactor * Time.deltaTime);
+        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (moveInput.x * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -293,7 +289,7 @@ public partial class PlayerMove : MonoBehaviour
         // Store attach velocity for reward calculation
         attachVelocity = rb.linearVelocity.magnitude;
 
-        currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : normalClimbSpeed;
+        currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Climb);
@@ -348,6 +344,14 @@ public partial class PlayerMove : MonoBehaviour
     public void SetMaxClimbTime(float value)
     {
         maxClimbTime = value;
+    }
+
+    /// <summary>
+    /// Sets the normal climb speed used by the Climb Skill upgrade.
+    /// </summary>
+    public void SetClimbSpeed(float value)
+    {
+        baselineClimbSpeed = value;
     }
 
     private void ResetClimb()
