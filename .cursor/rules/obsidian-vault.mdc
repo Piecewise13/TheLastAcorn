@@ -1,0 +1,84 @@
+---
+description: Obsidian vault sync and agent learning protocol for The Last Acorn
+alwaysApply: true
+---
+
+This project's design notes, architecture reference, and task tracking live in an
+Obsidian vault outside the repo:
+
+**Vault root:** `/Users/lukemcfall/Documents/GitHub/2ndBrainVault`
+**Project folder:** `The Last Acorn/`
+
+The vault is the source of truth for tasks, design decisions, and system documentation.
+The repo is the source of truth for code. Never duplicate code into the vault — link to it.
+
+## At the start of any session involving design, architecture, planning, or vault writing
+
+1. Read `98-Agent/Preferences.md` — the user's accumulated preferences for how these
+   notes get written. This is MANDATORY before writing or editing any vault note.
+2. Read `The Last Acorn/Decision Log.md` for prior decisions, so you do not re-litigate
+   settled questions or contradict an earlier call.
+3. Read `The Last Acorn/Milestone 1 - Prologue.md` for current scope.
+
+## At the end of a session where decisions were made or work was completed
+
+1. Append a dated entry to `The Last Acorn/Devlog/YYYY-MM-DD.md` (create if absent).
+2. Append any design or architecture decisions to `The Last Acorn/Decision Log.md`.
+3. Update affected notes in `The Last Acorn/Architecture/` or `Design/`.
+4. Update task states in `The Last Acorn/Dev Tasks.md` and the milestone note.
+5. Log new bugs in `The Last Acorn/Bug Tracker.md`.
+
+Commit vault changes with a message describing what changed. The vault uses obsidian-git.
+
+## Feedback capture — how the user teaches you
+
+When the user expresses dissatisfaction with something you wrote in the vault —
+"don't like this", "not like that", "wrong", "no, rewrite it" — or approval —
+"like this", "keep this", "yes, that's right" — run this protocol:
+
+1. **Identify the target.** Determine exactly what is being criticized or praised:
+   the writing style, the structure, the level of detail, the note's existence, or
+   its placement. If genuinely ambiguous, ASK before proceeding.
+2. **Generalize.** Convert the specific reaction into a reusable rule that would
+   apply to future notes. The generalization is the valuable part — a logged
+   sentiment with no derived rule is worthless later.
+3. **Play it back and WAIT.** State the derived rule to the user and get explicit
+   confirmation before writing anything. Do not skip this. A misread preference
+   logged as fact compounds across every future session and is worse than no entry.
+4. **Append to `98-Agent/Feedback Log.md`** using the entry format defined at the
+   top of that file. Preserve the user's wording verbatim.
+5. **Update `98-Agent/Preferences.md`** with the derived rule. Keep this file under
+   30 lines — it is the file agents actually act on, and its usefulness falls off
+   sharply as it grows. Merge overlapping rules rather than appending near-duplicates.
+6. **Handle contradictions.** If the new preference conflicts with an existing one,
+   the new one wins. Move the old rule to the `## Superseded` section with a date
+   and a pointer to what replaced it. Never silently delete a preference.
+
+Scope values for entries: `vault` (applies to all note writing) or `tla` (applies
+only to The Last Acorn notes).
+
+### Promoting stable preferences
+
+When a preference has proven stable — the user reaffirms it, or marks it as a hard
+rule — copy it verbatim into the `## Hard rules` section of THIS file. Text in this
+file is guaranteed to be in context every session; text in the vault is only present
+if the read above actually happened. Reserve this for genuinely non-negotiable rules.
+
+## Hard rules
+
+<!-- Promoted from 98-Agent/Preferences.md. Keep this list short and absolute. -->
+
+- Never document legacy systems as if they were current. Check `Scene Index.md` and
+  `Legacy Inventory.md` before describing anything as active.
+- Architecture notes explain why a system exists and how it interacts with others.
+  Never restate method signatures or paraphrase code line by line.
+
+## Current project scope (as of 2026-08-20)
+
+- **Milestone 1: the Prologue** — the tutorial and the opening of the story.
+- **Canonical scenes:** `Assets/Scenes/Level1.unity`, `Assets/Scenes/Level2-Cave.unity`.
+  The new tutorial is being built inside `Level1.unity`.
+- `Assets/Scenes/Tutorial/`, `Miscellaneous/V1Scenes/`, `Miscellaneous/V2 Scenes/`,
+  and `Miscellaneous/Testing Scenes/` are LEGACY. Do not treat them as current.
+- `Assets/Scripts/Tutorial/` is SALVAGE — stale, but the intended scaffolding for the
+  new prologue tutorial.

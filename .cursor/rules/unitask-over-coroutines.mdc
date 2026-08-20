@@ -1,0 +1,54 @@
+---
+description: Prefer UniTask over Unity coroutines for all asynchronous game code
+alwaysApply: true
+---
+
+# Use UniTask, not coroutines
+
+`com.cysharp.unitask` is a project dependency. **Default to UniTask for every
+asynchronous flow.** Do not write new `IEnumerator` / `StartCoroutine` code.
+
+`Assets/Scripts/World/Gate.cs` is the reference implementation — read it before
+writing a new async sequence.
+
+## The pattern
+
+Launch from a synchronous entry point with `.Forget()`, pass
+`destroyCancellationToken` so the flow dies with the GameObject, and thread that
+token through every `await`:
+
+```csharp
+private void OpenGate()
+{
+    OpenGateSequence(destroyCancellationToken).Forget();
+}
+
+private async UniTask OpenGateSequence(CancellationToken cancellationToken)
+{
+    await UniTask.WaitUntil(AllChargesFinishedMovement, cancellationToken: cancellationToken);
+    await UniTask.WhenAll(moveTasks);
+}
+```
+
+## Translations
+
+| Coroutine | UniTask |
+|---|---|
+| `yield return null` | `await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken)` |
+| `yield return new WaitForSeconds(t)` | `await UniTask.WaitForSeconds(t, cancellationToken: token)` |
+| `while (!cond) yield return null;` | `await UniTask.WaitUntil(() => cond, cancellationToken: token)` |
+| running several coroutines and polling them | `await UniTask.WhenAll(a, b)` |
+| `StartCoroutine(X())` | `X(destroyCancellationToken).Forget()` |
+| `StopCoroutine` / `StopAllCoroutines` | cancel a `CancellationTokenSource` |
+
+Return `UniTask`, never `async void` — the exceptions are Unity/UI event handlers
+and NaughtyAttributes `[Button]` methods, which cannot be awaited.
+
+## When a coroutine is still acceptable
+
+Only these three cases, and say which one applies in a comment:
+
+1. An external API hands you an `IEnumerator` and accepts nothing else.
+2. Editor-only code that must run outside play mode.
+3. A small edit inside an already coroutine-based file where converting the whole
+   file is out of scope. Match the file — never mix both styles in one type.
