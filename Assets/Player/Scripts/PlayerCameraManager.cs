@@ -1,43 +1,39 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
 
+/// <summary>
+/// The player's own camera behaviour: the held zoom-out, the glide speed zoom, and the unlock
+/// cinematic's zoom.
+///
+/// None of it writes to the camera directly any more. Every effect here is a claim on
+/// <see cref="CameraDirector"/>, which arbitrates between them and everything else that wants the
+/// camera. That is what stops a held zoom input from stealing the camera out from under a scripted
+/// beat, and what lets one cave room hand off to the next.
+/// </summary>
 public class PlayerCameraManager : MonoBehaviour
 {
-    /// <summary>
-    /// Reference to the PlayerControls input action map.
-    /// </summary>
     private PlayerGameControls playerMovementMap;
-    
+
     public event Action OnZoomStarted;
     public event Action OnZoomEnded;
 
-    private PlayerAbilityManager abilityManager;
     private InputAction zoomAction;
 
-    private Camera backgroundCam;
-
-    private CinemachineCamera cinemachineCam;
-    [SerializeField] private Transform defaultTrackingTarget;
-
-    [SerializeField] float zoomPerspectiveShift = 80f;
-
     [SerializeField] public PlayerMove playerMove;
-
-    private Rigidbody2D rb;
 
     [SerializeField] private float zoomOutAmount;
     [SerializeField] private float zoomInAmount;
 
-    private float targetZoom;
+    [Tooltip("How long the unlock cinematic holds its zoom before handing control back.")]
+    [SerializeField] private float zoomTime = 1f;
 
-    [SerializeField] private float zoomSpeed;
-    [SerializeField] private float zoomTime;
-
-    [SerializeField] private float backgroundFOVMultiplier = 0.3f; // Controls how much the background FOV scales with zoom
+    [Tooltip("Exponential smoothing rate for the player's own zoom. The player's zoom keeps its " +
+             "spring-like feel; zone transitions use a fixed duration and curve instead.")]
+    [SerializeField] private float zoomSpeed = 6f;
 
     [SerializeField] private CameraState cameraState = CameraState.Default;
 
@@ -45,58 +41,32 @@ public class PlayerCameraManager : MonoBehaviour
     [SerializeField] private AudioPlayer zoomInSFX;
     [SerializeField] private AudioPlayer zoomOutSFX;
 
+    private readonly Dictionary<CameraState, CameraClaim> claims = new();
 
-    private float zoomTimer;
+    private bool warnedAboutMissingDirector;
 
     void Awake()
     {
         playerMovementMap = new PlayerGameControls();
-        
+
         zoomAction = playerMovementMap.Gameplay.CameraZoom;
         zoomAction.performed += Zoom;
         zoomAction.canceled += Zoom;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        targetZoom = zoomInAmount;
-
-        var rig = CameraRig.Instance;
-        cinemachineCam = rig.Vcam;
-        backgroundCam = rig.Background;
-        rig.SetTrackingTarget(defaultTrackingTarget);
-
         playerMove = GetComponentInParent<PlayerMove>();
-        abilityManager = GetComponentInParent<PlayerAbilityManager>();
-        rb = GetComponentInParent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDestroy()
     {
-        float currentSize = cinemachineCam.Lens.OrthographicSize;
-
-        if (Mathf.Approximately(currentSize, targetZoom))
+        foreach (KeyValuePair<CameraState, CameraClaim> entry in claims)
         {
-            return;
+            entry.Value?.Release();
         }
 
-        // Frame-rate-independent exponential smoothing toward the target zoom.
-        float t = 1f - Mathf.Exp(-zoomSpeed * Time.deltaTime);
-        float newSize = Mathf.Lerp(currentSize, targetZoom, t);
-        if (Mathf.Abs(newSize - targetZoom) < 0.01f)
-        {
-            newSize = targetZoom;
-        }
-        cinemachineCam.Lens.OrthographicSize = newSize;
-        CameraRig.Instance.Overlay.orthographicSize = newSize;
-
-        // Scale perspective camera FOV proportionally with orthographic size
-        // Base FOV of 125 at default zoom level (zoomInAmount)
-        float zoomRatio = newSize / zoomInAmount;
-        float fovScale = 1f + (zoomRatio - 1f) * backgroundFOVMultiplier;
-        backgroundCam.fieldOfView = zoomPerspectiveShift * fovScale;
+        claims.Clear();
     }
 
     #region Zoom Unlock
@@ -117,45 +87,47 @@ public class PlayerCameraManager : MonoBehaviour
             zoomAction.performed -= OnPerformed;
         }
     }
-    
+
     public async UniTask PerformUnlockZoom(CancellationToken token)
     {
-        targetZoom = zoomOutAmount;
-        zoomTimer = 0;
+        StartForceZoom(zoomOutAmount, CameraState.UnlockPending);
         zoomOutSFX?.Play();
-        await UniTask.WaitForSeconds(zoomTime, cancellationToken: token);
+        try
+        {
+            await UniTask.WaitForSeconds(zoomTime, cancellationToken: token);
+        }
+        finally
+        {
+            // Released here rather than left standing. This claim sits at cinematic priority, so
+            // holding it past the beat would lock every other system out of the camera for good.
+            EndForceZoom(CameraState.UnlockPending);
+        }
     }
 
     #endregion
 
-    
     private void Zoom(InputAction.CallbackContext context)
     {
+        if (cameraState == CameraState.Disabled) return;
 
-        if (cameraState == CameraState.Disabled || cameraState == CameraState.CaveZoomed)
-        {
-            return;
-        }
+        // A cave room is framed to show the whole room, so there is nothing for a zoom-out to
+        // reveal. Anything at or above room priority owns the framing and the input is ignored.
+        if (context.performed && OwnedByHigherPriority()) return;
 
         if (context.performed)
         {
             cameraState = CameraState.PlayerZoomed;
 
-            CameraRig.Instance.ResetTrackingTarget();
-
             OnZoomStarted?.Invoke();
             playerMove.DisableMove();
-            targetZoom = zoomOutAmount;
-            zoomTimer = 0;
+            StartForceZoom(zoomOutAmount, CameraState.PlayerZoomed);
             zoomOutSFX?.Play();
         }
         else if (context.canceled)
         {
-            Debug.Log("Zoom Cancelled");
             cameraState = CameraState.Default;
             playerMove.EnableMove();
-            targetZoom = zoomInAmount;
-            zoomTimer = 0;
+            EndForceZoom(CameraState.PlayerZoomed);
 
             OnZoomEnded?.Invoke();
 
@@ -163,47 +135,55 @@ public class PlayerCameraManager : MonoBehaviour
         }
     }
 
+    private static bool OwnedByHigherPriority()
+    {
+        CameraDirector director = CameraDirector.Instance;
+        return director != null && director.HasClaimAtOrAbove(CameraPriority.RoomZone);
+    }
+
+    /// <summary>
+    /// Applies a zoom for the given effect, or updates it if that effect already holds one. Safe to
+    /// call every frame — the glide zoom recomputes its size from the player's speed continuously.
+    /// </summary>
     public void StartForceZoom(float newZoom, CameraState state)
     {
-        if (cameraState == CameraState.Disabled)
+        if (cameraState == CameraState.Disabled) return;
+
+        CameraDirector director = CameraDirector.Instance;
+        if (director == null)
         {
+            if (!warnedAboutMissingDirector)
+            {
+                warnedAboutMissingDirector = true;
+                Debug.LogWarning($"[{nameof(PlayerCameraManager)}] No {nameof(CameraDirector)} in the scene, so " +
+                                 "zoom does nothing. Add it to the camera rig alongside CameraRig.", this);
+            }
+
             return;
         }
 
-        if (cameraState == state)
+        if (!claims.TryGetValue(state, out CameraClaim claim) || claim == null || claim.Released)
         {
-            this.targetZoom = newZoom;
-            zoomTimer = 0;
-            return;
+            claim = director.Request(ToPriority(state)).WithExponentialBlend(zoomSpeed);
+            claims[state] = claim;
         }
 
-        if (cameraState == CameraState.CaveZoomed)
-        {
-            return;
-        }
-
-
-        cameraState = state;
-        this.targetZoom = newZoom;
-        zoomTimer = 0;
+        claim.SetOrthographicSize(newZoom);
     }
-    
 
     public void EndForceZoom(CameraState state)
     {
-        if(cameraState != state){
-            return;
-        }
+        if (!claims.TryGetValue(state, out CameraClaim claim)) return;
 
-        cameraState = CameraState.Default;
-        targetZoom = zoomInAmount;
-        zoomTimer = 0;
+        claim?.Release();
+        claims.Remove(state);
     }
 
     public void DisableZoom()
     {
         cameraState = CameraState.Disabled;
         zoomAction.Disable();
+        EndForceZoom(CameraState.PlayerZoomed);
     }
 
     public void EnableZoom()
@@ -211,9 +191,11 @@ public class PlayerCameraManager : MonoBehaviour
         cameraState = CameraState.Default;
         zoomAction.Enable();
     }
+
     public float GetDefaultZoom()
     {
-        return zoomInAmount;
+        CameraDirector director = CameraDirector.Instance;
+        return director != null ? director.DefaultOrthographicSize : zoomInAmount;
     }
 
     /// <summary>
@@ -233,6 +215,14 @@ public class PlayerCameraManager : MonoBehaviour
     {
         zoomOutAmount = amount;
     }
+
+    private static CameraPriority ToPriority(CameraState state) => state switch
+    {
+        CameraState.GlideZoom => CameraPriority.GlideZoom,
+        CameraState.CaveZoomed => CameraPriority.RoomZone,
+        CameraState.UnlockPending => CameraPriority.Cinematic,
+        _ => CameraPriority.PlayerZoom
+    };
 
     public enum CameraState
     {

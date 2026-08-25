@@ -159,8 +159,8 @@ public virtual async UniTask Show(CancellationToken token)
 ```
 (`Assets/Scripts/Views/ViewBase.cs`)
 
-  - **Classic coroutines** (`IEnumerator` + `StartCoroutine`) for timing/poll-until-ready logic (`HUDViewBase.SubscribeWhenReady`, `PlayerLifeManager` immunity timing).
-- For new UI/view code prefer UniTask and thread the `CancellationTokenSource` (see `ViewManager.viewTransitionCts`). For simple wait/poll gameplay logic, coroutines are the established pattern.
+  - **Classic coroutines** (`IEnumerator` + `StartCoroutine`) survive in older files for timing/poll-until-ready logic (`HUDViewBase.SubscribeWhenReady`, `PlayerLifeManager` immunity timing). Treat these as legacy.
+- **UniTask is the standard for all new async code, gameplay included** — see `.cursor/rules/unitask-over-coroutines.mdc` for the required patterns and the narrow list of cases where a coroutine is still acceptable. `Assets/Scripts/World/Gate.cs` is the gameplay reference: a synchronous entry point calls `Sequence(destroyCancellationToken).Forget()`, and the `async UniTask` body threads that token through `UniTask.Yield` / `WaitUntil` / `WhenAll`. Use a `CancellationTokenSource` for flows needing explicit cancellation (see `ViewManager.viewTransitionCts`).
 
 ## Error Handling
 

@@ -10,6 +10,9 @@ public class Gate : MonoBehaviour
     private static PlayerMove playerMove;
     public event Action ResetCharges;
 
+    /// <summary>Fires once the gate has fully opened and its charges are spent.</summary>
+    public event Action GateOpened;
+
     private int numChargeCollected = 0;
 
     float groundCheckInterval = 0.1f;
@@ -113,6 +116,8 @@ public class Gate : MonoBehaviour
         {
             Destroy(gateCharge.gameObject);
         }
+
+        GateOpened?.Invoke();
     }
 
     private bool AllChargesFinishedMovement()

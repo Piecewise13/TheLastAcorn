@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2954642573412034935, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.339111
+      value: 124.69234
       objectReference: {fileID: 0}
     - target: {fileID: 2954642573412034935, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -126,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5213418861063030096, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_Name
-      value: CameraManager Variant
+      value: CaveCameraManager
       objectReference: {fileID: 0}
     - target: {fileID: 6556581914700703242, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -141,14 +141,66 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8846072594179642126, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
+      propertyPath: orthographic size
+      value: 34.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8846072594179642126, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 49143
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5213418861063030096, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4523443160363944290}
   m_SourcePrefab: {fileID: 100100000, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
+--- !u!1 &3479654395587787292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5213418861063030096, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
+  m_PrefabInstance: {fileID: 8652540687731474252}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4523443160363944290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3479654395587787292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af95801e1adee4162a03498de60af5f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraDirector
+  defaultOrthographicSize: 24
+  defaultTransitionDuration: 0.6
+  defaultTransitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  backgroundBaseFieldOfView: 80
+  backgroundFieldOfViewMultiplier: 0.3
 --- !u!4 &6699545352052450769 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2660060477214530205, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}

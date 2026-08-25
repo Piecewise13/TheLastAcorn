@@ -17,8 +17,15 @@ public class CameraRig : MonoBehaviour
     public Camera Background => backgroundCamera;
     public Camera Overlay => overlayCamera;
     public Transform BoundedCameraTarget => boundedCameraTarget;
-    
-    //TODO: Use a statemachine if needed for cutscenes and stuff 
+
+    /// <summary>
+    /// The claim backing <see cref="SetTrackingTarget"/>. These two methods predate
+    /// <see cref="CameraDirector"/> and are kept as a bridge so their existing callers — the ability
+    /// unlock, the upgrade flow, and the unlock view — keep their set/reset shape while still going
+    /// through the arbiter. New code should request its own claim instead.
+    /// </summary>
+    private CameraClaim cinematicClaim;
+
     void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -27,11 +34,26 @@ public class CameraRig : MonoBehaviour
 
     public void SetTrackingTarget(Transform target)
     {
-        vcam.Target.TrackingTarget = target;
+        CameraDirector director = CameraDirector.Instance;
+        if (director == null)
+        {
+            vcam.Target.TrackingTarget = target;
+            return;
+        }
+
+        cinematicClaim ??= director.Request(CameraPriority.Cinematic);
+        cinematicClaim.SetTarget(target);
     }
 
     public void ResetTrackingTarget()
     {
-        vcam.Target.TrackingTarget = boundedCameraTarget;
+        if (CameraDirector.Instance == null)
+        {
+            vcam.Target.TrackingTarget = boundedCameraTarget;
+            return;
+        }
+
+        cinematicClaim?.Release();
+        cinematicClaim = null;
     }
 }

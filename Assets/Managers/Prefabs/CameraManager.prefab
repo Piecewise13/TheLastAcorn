@@ -924,7 +924,6 @@ GameObject:
   - component: {fileID: 6556581914700703242}
   - component: {fileID: 3030042018666870484}
   - component: {fileID: 3939365182565385002}
-  - component: {fileID: 5144061849554795793}
   - component: {fileID: 27745138087989883}
   m_Layer: 7
   m_Name: VM Camera
@@ -1010,26 +1009,6 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 0, z: -40}
---- !u!114 &5144061849554795793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7184058182781808130}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BoundingShape2D: {fileID: 0}
-  Damping: 5
-  SlowingDistance: 10
-  OversizeWindow:
-    Enabled: 1
-    MaxWindowSize: 0
-    Padding: 3
-  m_LegacyMaxWindowSize: -2
 --- !u!114 &27745138087989883
 MonoBehaviour:
   m_ObjectHideFlags: 0
