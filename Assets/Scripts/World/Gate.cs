@@ -117,6 +117,7 @@ public class Gate : MonoBehaviour
             Destroy(gateCharge.gameObject);
         }
 
+        await PlayerAbilityManager.Instance.UnlockAbility(PlayerAbilityManager.Abilities.Glide);
         GateOpened?.Invoke();
     }
 

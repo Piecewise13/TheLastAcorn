@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BackgroundParalax : MonoBehaviour
+public class ParalaxManager : MonoBehaviour
 {
     [System.Serializable]
     public class ParallaxLayer

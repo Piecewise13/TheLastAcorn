@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a80e3d0f2571249d89465ab933fb060f, type: 3}
+  m_Name: BlueRockSet
+  m_EditorClassIdentifier: Assembly-CSharp::CaveRockLibrary
+  minScale: 1.4
+  maxScale: 1.6
+  rockSets:
+  - name: Blue
+    rocks:
+    - prefab: {fileID: 219423110096769812, guid: 825f0e5dc2f68493ca06f4a4ee6b3068, type: 3}
+      weight: 1
+    - prefab: {fileID: 3235885412683450986, guid: 9f4ab1808c2ba4a5fb1237f661bbead1, type: 3}
+      weight: 1
+    - prefab: {fileID: 5473035774359478606, guid: cc587a70839144412b436a691fdc2a91, type: 3}
+      weight: 1
+    - prefab: {fileID: 8073701534364830996, guid: 8b5f255a4260845e1afd5de4d8a345d0, type: 3}
+      weight: 1
+    - prefab: {fileID: 1822476490046509350, guid: 3d4c1e96773ca4fdf98e9c6a2f13dcce, type: 3}
+      weight: 1
+    - prefab: {fileID: 2103848962614998864, guid: e6e68dee6515042f4859ebc7a664bc00, type: 3}
+      weight: 1
+  - name: 
+    rocks:
+    - prefab: {fileID: 219423110096769812, guid: 825f0e5dc2f68493ca06f4a4ee6b3068, type: 3}
+      weight: 1
+  depthTiers:
+  - name: Blue
+    parallaxFactor: -0.2
+    parallaxVariance: 0
+    overrideSortingOrder: 0
+    sortingOrder: 0
+    materialOverride: {fileID: 0}

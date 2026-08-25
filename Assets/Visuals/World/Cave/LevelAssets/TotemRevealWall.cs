@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using MoreMountains.Feedbacks;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -18,8 +19,7 @@ public class TotemRevealWall : MonoBehaviour
 {
     [SerializeField] private RockWallRumble rumble;
 
-    [Tooltip("Animator trigger that moves the wall from Idle into Reveal")]
-    [SerializeField] private string revealTrigger = "Reveal";
+    [SerializeField] private MMF_Player revealFeedbacks = null!;
 
     public event Action RevealCompleted;
 
@@ -32,46 +32,15 @@ public class TotemRevealWall : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the reveal. The rumble is started here rather than from an AnimationEvent because
-    /// events keyed at frame 0 do not reliably fire on a clip's first play.
-    /// </summary>
-    public void BeginReveal()
-    {
-        if (rumble == null)
-        {
-            Debug.LogWarning($"[{nameof(TotemRevealWall)}] No {nameof(RockWallRumble)} assigned, the rocks will not shake.", this);
-        }
-
-        rumble?.StartRumble();
-        animator.SetTrigger(revealTrigger);
-    }
-
-    /// <summary>
     /// Starts the reveal and completes once the clip reaches its OnRevealComplete event, so the
     /// caller can hold control until the path is open.
     /// </summary>
-    public UniTask BeginRevealAsync(CancellationToken cancellationToken)
+    public async UniTask BeginRevealAsync(CancellationToken cancellationToken)
     {
-        if (revealCompletion == null)
-        {
-            revealCompletion = new UniTaskCompletionSource();
-            BeginReveal();
-        }
-
-        return revealCompletion.Task.AttachExternalCancellation(cancellationToken);
+        
+        await revealFeedbacks.PlayFeedbacksAsync(cancellationToken);
     }
-
-    // Called from AnimationEvents on the Reveal clip. Keeping the rumble's start and stop on the
-    // timeline is what lets it overlap the animated movement for as long as the clip wants.
-    public void StartRumble()
-    {
-        rumble?.StartRumble();
-    }
-
-    public void StopRumble()
-    {
-        rumble?.StopRumble();
-    }
+    
 
     public void OnRevealComplete()
     {
@@ -95,7 +64,7 @@ public class TotemRevealWall : MonoBehaviour
             return;
         }
 
-        BeginReveal();
+        BeginRevealAsync(CancellationToken.None);
     }
 
     [Button("Clear Rumble (Debug)")]

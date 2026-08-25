@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Slide
+    m_ConditionEvent: Reveal
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 480778797846189709}
@@ -61,7 +61,7 @@ AnimatorController:
   m_Name: TotemEntryWall_Level1
   serializedVersion: 6
   m_AnimatorParameters:
-  - m_Name: Slide
+  - m_Name: Reveal
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0

@@ -13,7 +13,7 @@ public class PlayerAbilityManager : MonoBehaviour
 {
     public static PlayerAbilityManager Instance { get; private set; }
 
-    public enum Abilities { Zoom, Glide, Leap }
+    public enum Abilities { Zoom = 0, Glide = 1, Leap = 2 }
 
     [Serializable]
     struct AbilityUnlockStep
@@ -77,20 +77,18 @@ public class PlayerAbilityManager : MonoBehaviour
     }
 
     /// <summary>Marks the current pending ability as unlocked and fires the event.</summary>
-    public async UniTask UnlockAbility()
+    public async UniTask UnlockAbility(Abilities ability)
     {
         if (!HasPendingUnlock()) return;
-
-        Abilities unlockedAbility = unlockSteps[currentStepIndex].ability;
-        abilityUnlocked[(int)unlockedAbility] = true;
-        currentStepIndex++;
+        
+        abilityUnlocked[(int)ability] = true;
 
         await ViewManager.Instance.ClearViews();
 
         CameraRig.Instance.ResetTrackingTarget();
         OverlayCameraController.Instance.ReleasePlayerOverlay();
 
-        OnAbilityUnlocked?.Invoke(unlockedAbility);
+        OnAbilityUnlocked?.Invoke(ability);
         SaveAbilities();
     }
 
