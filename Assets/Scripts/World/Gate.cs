@@ -28,6 +28,15 @@ public class Gate : MonoBehaviour
 
     [Header("Feedbacks")] [SerializeField] private MMF_Player activateFeedback;
 
+    [Header("Initial State")]
+    [Tooltip("Marks this gate as one the player has already opened. Its charges are removed, the " +
+             "activation feedbacks run on load so the eyes and fireflies are already going, and it " +
+             "cannot be opened a second time. Purely presentational — no ability is unlocked and " +
+             "GateOpened does not fire.")]
+    [SerializeField] private bool startActivated;
+
+    private bool isActivated;
+
 
     private void Start()
     {
@@ -36,6 +45,11 @@ public class Gate : MonoBehaviour
             playerMove = FindAnyObjectByType<PlayerMove>();
         }
 
+        if (startActivated)
+        {
+            ActivateImmediately();
+            return;
+        }
 
         for (int i = 0; i < gateCharges.Count; i++)
         {
@@ -53,6 +67,37 @@ public class Gate : MonoBehaviour
             gateCharges[i].SetGatePosition(gateTop.position + offset);
             gateCharges[i].ActivateCharge();
         }
+    }
+
+    /// <summary>
+    /// Drops the gate straight into its opened state for a scene where the player has already used it.
+    /// </summary>
+    /// <remarks>
+    /// The feedbacks are played rather than skipped. <see cref="MMF_Particles"/> has no
+    /// skip-to-the-end behaviour and <c>SkipToTheEnd</c> finishes by calling <c>StopFeedbacks</c>, so
+    /// skipping would leave the fireflies stopped instead of running. Playing them means the eyes and
+    /// fireflies ramp up over the feedback's own duration, which is hidden by the scene fading in.
+    /// </remarks>
+    private void ActivateImmediately()
+    {
+        isActivated = true;
+
+        // Held rather than zeroed so Update's "already finished" guard still reads as complete after
+        // the charges are gone.
+        numChargeCollected = gateCharges.Count;
+
+        foreach (GateCharge gateCharge in gateCharges)
+        {
+            if (gateCharge != null) Destroy(gateCharge.gameObject);
+        }
+
+        if (activateFeedback == null)
+        {
+            Debug.LogWarning($"[{nameof(Gate)}] {nameof(startActivated)} is set but no activate feedback is assigned, so the gate will look closed.", this);
+            return;
+        }
+
+        activateFeedback.PlayFeedbacks();
     }
 
     void Update()
@@ -79,6 +124,7 @@ public class Gate : MonoBehaviour
 /// </summary>
     public void Collect()
     {
+        if (isActivated) return;
 
         numChargeCollected++;
 
@@ -90,6 +136,9 @@ public class Gate : MonoBehaviour
 
     private void OpenGate()
     {
+        // Latched before the sequence starts, so a late Collect cannot kick off a second unlock.
+        isActivated = true;
+
         OpenGateSequence(destroyCancellationToken).Forget();
     }
 
