@@ -41,32 +41,15 @@ public class CaveRockSet
 }
 
 /// <summary>
-/// A depth band in the cave. Choosing a tier is the single knob that decides how far back a
-/// boundary reads: it fixes the parallax factor the boundary's layer should run at, how big the
-/// rocks are, and where they sort. The cave's existing bands are Very Front (-0.4),
-/// Frontground (-0.2), the player plane (0) and Background (+0.05); negative moves faster than
-/// the player and so reads as in front.
+/// A material preset for a boundary's rocks. Choosing a tier fixes what material the rocks wear.
+/// Sorting now lives on the boundary (one flat order for all its rocks), and depth/parallax live on
+/// the boundary's <see cref="CaveParallaxProfile"/>, so a tier carries neither Z, factor, nor sorting.
 /// </summary>
 [System.Serializable]
 public class CaveDepthTier
 {
     [Tooltip("Display name shown in the boundary's tier dropdown.")]
     public string name = "Tier";
-
-    [Tooltip("Parallax factor this tier's layer should run at. Negative reads as in front of the " +
-             "player plane, positive as behind. The boundary inspector checks the scene's " +
-             "BackgroundParalax against this and offers to fix a mismatch.")]
-    public float parallaxFactor = -0.2f;
-
-    [Tooltip("Per-rock spread around the factor, applied by BackgroundParalax itself.")]
-    [Min(0f)] public float parallaxVariance = 0.05f;
-
-    [Tooltip("Leave off to keep whatever sorting order each prefab ships with.")]
-    public bool overrideSortingOrder = true;
-
-    [Tooltip("Sorting order for the first rock on the boundary. The boundary's Sorting Step " +
-             "walks this along the chain.")]
-    public int sortingOrder = 3;
 
     [Tooltip("Optional material forced onto every rock in this tier. Leave empty to keep the " +
              "prefab's own material.")]
@@ -147,7 +130,8 @@ public class CaveRockLibrary : ScriptableObject
         {
             CaveDepthTier tier = depthTiers[i];
             string label = string.IsNullOrEmpty(tier.name) ? $"Tier {i}" : tier.name;
-            names[i] = $"{label}  ({tier.parallaxFactor:0.###})";
+            string material = tier.materialOverride != null ? tier.materialOverride.name : "prefab material";
+            names[i] = $"{label}  ({material})";
         }
         return names;
     }

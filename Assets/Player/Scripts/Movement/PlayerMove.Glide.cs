@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public partial class PlayerMove : MonoBehaviour
+public partial class PlayerMoveManager : MonoBehaviour
 {
       
     [Header("Glide")]

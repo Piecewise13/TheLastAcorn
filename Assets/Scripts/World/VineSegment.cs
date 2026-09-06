@@ -21,7 +21,7 @@ public class VineSegment : MonoBehaviour
     private Rigidbody2D playerRb;
     private Transform playerTransform;
 
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
 
     private bool playerAttached = false;
 
@@ -141,7 +141,7 @@ public class VineSegment : MonoBehaviour
         shouldAccelerate = true;
         playerAttached = true;
 
-        playerMove.StartVineSwing(); // Start vine swinging state
+        playerMoveManager.StartVineSwing(); // Start vine swinging state
 
         vineAttachPoint = transform.InverseTransformPoint(playerTransform.position);
         rb.linearVelocity = playerRb.linearVelocity; // Stop the vine's movement
@@ -164,7 +164,7 @@ public class VineSegment : MonoBehaviour
 
         print(playerRb.linearVelocity);
 
-        playerMove.EndVineSwing();
+        playerMoveManager.EndVineSwing();
 
         canAttach = false;
 
@@ -184,9 +184,9 @@ public class VineSegment : MonoBehaviour
         playerTransform = other.transform.root;
 
 
-        if (playerMove == null)
+        if (playerMoveManager == null)
         {
-            playerMove = playerTransform.GetComponent<PlayerMove>();
+            playerMoveManager = playerTransform.GetComponent<PlayerMoveManager>();
         }
 
         if (playerRb == null)

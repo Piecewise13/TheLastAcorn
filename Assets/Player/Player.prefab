@@ -211,11 +211,10 @@ GameObject:
   - component: {fileID: 4666516038342513158}
   - component: {fileID: 6681820592772038295}
   - component: {fileID: 7065884537941970894}
-  - component: {fileID: 8528002820493749180}
   - component: {fileID: 8473392702331176542}
   - component: {fileID: 4631846947154348158}
+  - component: {fileID: 8528002820493749180}
   - component: {fileID: 8620691023707094143}
-  - component: {fileID: 978155281833041330}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -261,8 +260,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   climbCheckOrigin: {fileID: 7051655410438313344}
-  climbSpeed: 9
   maxClimbTime: 1.8
+  baselineClimbSpeed: 0
+  fastClimbSpeed: 20
   recoverSpeed: 0.7
   climbRechargeDelay: 0.5
   isAttachedToMoss: 0
@@ -320,8 +320,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  normalClimbSpeed: 12
-  fastClimbSpeed: 20
   defaultGlideSpeed: 10
   maxGlideSpeed: 45
   maxGlideSpeedInGust: 60
@@ -434,31 +432,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerCollider: {fileID: 5663293700936031498}
   sfxPlayer: {fileID: 2288457960114244201}
---- !u!114 &8528002820493749180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839978602859707386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7a282d69801449a59150d96d3d7ad0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSprite: {fileID: 867419554417715573}
-  damageTime: 0.75
-  immuneTime: 3
-  damageLaunchForce: 30
-  maxLives: 1
-  lifeIcons:
-  - {fileID: 21300000, guid: 7b22eb0ed1a0c44419a8c482eb92f7cd, type: 3}
-  - {fileID: 21300000, guid: 804d9b670b3ee47af9c3caed7f62412f, type: 3}
-  - {fileID: 21300000, guid: 5d11d2a5789bb4de5a94ebf0f47deb87, type: 3}
-  - {fileID: 21300000, guid: 32ca38b303aa54996acffa10ae774a13, type: 3}
-  lifeUI: {fileID: 0}
-  hurtSfx: {fileID: 8398673676831126659}
-  uiSfx: {fileID: 0}
 --- !u!114 &8473392702331176542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,6 +467,31 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8528002820493749180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839978602859707386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a282d69801449a59150d96d3d7ad0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSprite: {fileID: 867419554417715573}
+  damageTime: 0.75
+  immuneTime: 3
+  damageLaunchForce: 30
+  maxLives: 1
+  lifeIcons:
+  - {fileID: 21300000, guid: 7b22eb0ed1a0c44419a8c482eb92f7cd, type: 3}
+  - {fileID: 21300000, guid: 804d9b670b3ee47af9c3caed7f62412f, type: 3}
+  - {fileID: 21300000, guid: 5d11d2a5789bb4de5a94ebf0f47deb87, type: 3}
+  - {fileID: 21300000, guid: 32ca38b303aa54996acffa10ae774a13, type: 3}
+  lifeUI: {fileID: 0}
+  hurtSfx: {fileID: 8398673676831126659}
+  uiSfx: {fileID: 0}
 --- !u!114 &8620691023707094143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,27 +504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57331ac2797fd485caff643dbeeb07c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &978155281833041330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 839978602859707386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82b9b7fcf5944c168b093c4207d6043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unlockZoomView: {fileID: 3784460192342504824, guid: 7f03816dbfae0470ebe0de3bf91906f4, type: 3}
-  unlockSteps:
-  - ability: 0
-    segmentCost: 1
-  - ability: 1
-    segmentCost: 3
-  - ability: 2
-    segmentCost: 5
-  unlockStepIndex: 0
 --- !u!1 &979618266919138849
 GameObject:
   m_ObjectHideFlags: 0
@@ -6221,16 +6198,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f88b624b3436445c8bf5f9c0c22e873b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HUD: {fileID: 0}
-  acornArrow: {fileID: 0}
-  defaultTrackingTarget: {fileID: 0}
-  zoomPerspectiveShift: 80
-  playerMove: {fileID: 151922112089434294}
+  playerMoveManager: {fileID: 0}
   zoomOutAmount: 45
   zoomInAmount: 20
-  zoomSpeed: 2
   zoomTime: 2
-  backgroundFOVMultiplier: 0.1
+  zoomSpeed: 2
   cameraState: 1
   zoomInSFX: {fileID: 1316628860150957882}
   zoomOutSFX: {fileID: 3005658991925814336}

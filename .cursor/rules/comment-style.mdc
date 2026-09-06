@@ -1,0 +1,48 @@
+---
+description: Comment length and placement conventions for C#
+globs: **/*.cs
+alwaysApply: false
+---
+
+# Comment style
+
+Keep type/member summary comments short and push mechanics to the point of use.
+
+- A summary / XML `<summary>` doc block is **5 lines max**. State what the thing
+  is and why it exists — not how it works step by step.
+- Do not narrate the implementation in the header. If a mechanism needs
+  explaining, use **short inline comments inside the method** at the line that
+  does the interesting work.
+- One idea per inline comment. Prefer a single line over a paragraph.
+
+## Example
+
+```csharp
+// BAD - 16-line header narrating the whole mechanism
+/// <summary>
+/// Base class for game-wide services that must survive every scene load and of
+/// which there is exactly one for the whole session (see GameManager's list).
+/// First-wins: the first instance to Awake claims Instance, reparents to the
+/// scene root, and is marked DontDestroyOnLoad. Any later duplicate destroys its
+/// own GameObject. The static is cleared only by the instance that owns it, so
+/// repeated additive load/unload cannot leave a stale reference behind.
+/// Scene-bound managers must NOT use this ... (etc)
+/// </summary>
+public abstract class PersistentSingleton<T> : MonoBehaviour where T : PersistentSingleton<T>
+
+// GOOD - short header, mechanics inline where they happen
+/// <summary>
+/// Game-wide service that survives scene loads; exactly one per session.
+/// Not for scene-bound managers (there can be several of those at once).
+/// </summary>
+public abstract class PersistentSingleton<T> : MonoBehaviour where T : PersistentSingleton<T>
+{
+    protected virtual void Awake()
+    {
+        // First-wins: a later duplicate destroys itself.
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = (T)this;
+        DontDestroyOnLoad(gameObject);
+    }
+}
+```

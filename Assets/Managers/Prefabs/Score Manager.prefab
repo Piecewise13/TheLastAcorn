@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6769059971067575733}
   - component: {fileID: 3472837243071642360}
-  - component: {fileID: 4999128304509027448}
   m_Layer: 0
   m_Name: Score Manager
   m_TagString: Untagged
@@ -46,15 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelMinScore: 3
---- !u!114 &4999128304509027448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4882375129811949098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3d8e353daa14e6c8fbcc0189d58e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

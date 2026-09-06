@@ -4,7 +4,7 @@ using UnityEngine;
 public class EndGameScript : MonoBehaviour
 {
 
-    PlayerMove playerMove;
+    PlayerMoveManager playerMoveManager;
     PlayerCameraManager playerCamera;
 
     public GameObject endCredits;
@@ -20,7 +20,7 @@ public class EndGameScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerMove = FindFirstObjectByType<PlayerMove>();
+        playerMoveManager = FindFirstObjectByType<PlayerMoveManager>();
         playerCamera = FindFirstObjectByType<PlayerCameraManager>();
 
         endCredits.SetActive(false);
@@ -30,7 +30,7 @@ public class EndGameScript : MonoBehaviour
     {
         if (!collision.transform.root.CompareTag("Player")) return;
         
-        playerMove.DisableMove();
+        playerMoveManager.DisableMove();
         FadeAudio();
         playerCamera.DisableZoom();
         playerCamera.enabled = false;

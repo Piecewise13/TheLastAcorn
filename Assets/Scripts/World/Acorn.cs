@@ -25,7 +25,15 @@ public class Acorn : MonoBehaviour, ICollectible
 
         SpawnAcorn();
 
-        CheckpointManager.Instance.OnPlayerRespawn += SpawnAcorn;
+        checkpointManager = CheckpointManager.For(gameObject.scene);
+        if (checkpointManager != null)
+            checkpointManager.OnPlayerRespawn += SpawnAcorn;
+    }
+
+    private void OnDestroy()
+    {
+        if (checkpointManager != null)
+            checkpointManager.OnPlayerRespawn -= SpawnAcorn;
     }
 
     private string GenerateAcornId()
@@ -50,7 +58,7 @@ public class Acorn : MonoBehaviour, ICollectible
 
     public void OnCollected()
     {
-        CheckpointManager.Instance.SetCheckpoint(transform.position);
+        checkpointManager?.SetCheckpoint(transform.position);
         // Mark this acorn as collected in the save system
         string currentLevel = SceneManager.GetActiveScene().name;
         SaveLoadManager.MarkAcornCollected(currentLevel, this);

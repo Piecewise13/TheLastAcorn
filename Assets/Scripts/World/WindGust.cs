@@ -9,14 +9,14 @@ public class WindGust : MonoBehaviour
 
     private bool hasPlayer = false;
     private Rigidbody2D playerRb;
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
 
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerMove = FindAnyObjectByType<PlayerMove>();
+        playerMoveManager = FindAnyObjectByType<PlayerMoveManager>();
     }
 
 
@@ -27,7 +27,7 @@ public class WindGust : MonoBehaviour
             return;
         }
 
-        float gustForce = playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Glide ? glideGustForce : idleGustForce;
+        float gustForce = playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Glide ? glideGustForce : idleGustForce;
 
         //playerRb.AddForce(transform.right * gustForce, ForceMode2D.Force);
         playerRb.linearVelocity = playerRb.linearVelocity + (Vector2)transform.right * gustForce * Time.fixedDeltaTime;
@@ -47,12 +47,12 @@ public class WindGust : MonoBehaviour
         playerRb = root.GetComponent<Rigidbody2D>();
         //playerRb.linearVelocity = Vector2.zero; // Reset velocity when entering gust
 
-        playerMove.EnterGust();
+        playerMoveManager.EnterGust();
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
         hasPlayer = false;
-        playerMove.ExitGust();
+        playerMoveManager.ExitGust();
     }
 }

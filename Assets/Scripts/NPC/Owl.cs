@@ -13,7 +13,7 @@ public class Owl : MonoBehaviour, IProximityAlert
     private InputAction owlAttachAction;
 
 
-    private PlayerMove playerMovement;
+    private PlayerMoveManager playerMovement;
 
     private PlayerCameraManager playerCamera;
 
@@ -119,7 +119,7 @@ public class Owl : MonoBehaviour, IProximityAlert
 
         if (playerMovement == null || playerCamera == null)
         {
-            playerMovement = root.GetComponent<PlayerMove>();
+            playerMovement = root.GetComponent<PlayerMoveManager>();
             playerCamera = root.GetComponentInChildren<PlayerCameraManager>();
         }
         owlAttachAction.Enable();

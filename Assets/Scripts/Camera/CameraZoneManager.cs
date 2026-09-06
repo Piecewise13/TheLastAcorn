@@ -1,87 +1,154 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Registry for the camera zones in the loaded scene, and the home of the zone authoring tools.
-///
-/// Zones self-register, so a manager is not required for them to work — it exists so sequences can
-/// resolve a zone by id, so spawns can resolve one by position, and so the editor has a single place
-/// to author the whole set from. One list serves all three rather than an authoring list and a
-/// runtime list that can drift apart.
+/// The camera framing for one area: a bounds confiner plus the zones authored under it. Several areas
+/// can live in a single scene (e.g. two caves stitched together); one is <see cref="Active"/> at a
+/// time and everything reads the active area's confiner and zone set. Cross between areas through
+/// <see cref="CameraDirector.SwitchArea(CameraZoneManager)"/>. Zones self-register, so a manager is
+/// not required for them to work.
 /// </summary>
+[RequireComponent(typeof(PolygonCollider2D))]
 public class CameraZoneManager : MonoBehaviour
 {
-    public static CameraZoneManager Instance { get; private set; }
+    private static readonly List<CameraZoneManager> all = new();
 
-    private static readonly List<CameraZone> zones = new();
+    /// <summary>The area whose confiner and zones are currently in force, or null if none is loaded.</summary>
+    public static CameraZoneManager Active { get; private set; }
+
+    /// <summary>Raised when <see cref="Active"/> changes, carrying the new active area (may be null).</summary>
+    public static event Action<CameraZoneManager> ActiveChanged;
+
+    /// <summary>Every loaded area, in registration order.</summary>
+    public static IReadOnlyList<CameraZoneManager> All => all;
+
+    [Tooltip("Make this the active area as soon as it loads. Set it on the area the player starts in " +
+             "and leave it off the others. With none set, the first area to load wins.")]
+    [SerializeField] private bool activeByDefault;
+
+    [Tooltip("This area's camera bounds. Defaults to the collider on this object.")]
+    [SerializeField] private PolygonCollider2D confiner;
 
     [Tooltip("Aspect ratio the zone framing gizmos are drawn at. Authored framing fits vertically " +
              "at any aspect, but the horizontal fit follows this number.")]
     [SerializeField] private float targetAspect = 16f / 9f;
 
-    public static IReadOnlyList<CameraZone> Zones => zones;
+    // Zones owned by this area, self-registered in their OnEnable. Switching areas swaps this whole
+    // set, so each area frames only its own rooms.
+    private readonly List<CameraZone> zones = new();
+
+    /// <summary>This area's camera bounds shape, read by <see cref="CameraGhost"/>.</summary>
+    public PolygonCollider2D Confiner => confiner;
 
     public float TargetAspect => targetAspect;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (Instance != null && Instance != this)
+        if (!all.Contains(this)) all.Add(this);
+        if (confiner == null) confiner = GetComponent<PolygonCollider2D>();
+
+        // First area to load becomes active; an area flagged activeByDefault claims it outright.
+        if (Active == null || activeByDefault) SetActive(this);
+    }
+
+    private void OnDisable()
+    {
+        all.Remove(this);
+
+        // If the active area is unloading, fall back to any other loaded area rather than leave a
+        // dangling Active pointing at a dead object.
+        if (Active == this)
         {
-            Destroy(this);
-            return;
+            Active = all.Count > 0 ? all[0] : null;
+            ActiveChanged?.Invoke(Active);
         }
-
-        Instance = this;
     }
 
-    private void OnDestroy()
+#if UNITY_EDITOR
+    private void Reset() => confiner = GetComponent<PolygonCollider2D>();
+#endif
+
+    /// <summary>
+    /// Makes <paramref name="manager"/> the active area: its confiner and zones take over. The
+    /// outgoing area's held claims are released so it cannot keep pulling the camera after the switch.
+    /// </summary>
+    public static void SetActive(CameraZoneManager manager)
     {
-        if (Instance == this) Instance = null;
+        if (Active == manager) return;
+
+        // A teleport does not fire OnTriggerExit2D, so the outgoing area's room claim would otherwise
+        // linger in the director's stack and resurface whenever the new area has a framing gap.
+        Active?.ReleaseZoneClaims();
+        Active = manager;
+        ActiveChanged?.Invoke(Active);
     }
+
+    private void ReleaseZoneClaims()
+    {
+        for (int i = 0; i < zones.Count; i++) zones[i]?.ReleaseClaims();
+    }
+
+    /// <summary>Zones in the active area.</summary>
+    public static IReadOnlyList<CameraZone> Zones =>
+        Active != null ? Active.zones : (IReadOnlyList<CameraZone>)Array.Empty<CameraZone>();
 
     public static void Register(CameraZone zone)
     {
-        if (zone != null && !zones.Contains(zone)) zones.Add(zone);
+        if (zone == null) return;
+
+        // A zone belongs to the area it sits under; an unparented zone falls back to the active area.
+        CameraZoneManager owner = zone.GetComponentInParent<CameraZoneManager>(true) ?? Active;
+        if (owner == null)
+        {
+            Debug.LogWarning($"[{nameof(CameraZoneManager)}] Zone '{zone.name}' has no parent area and no active area to join.", zone);
+            return;
+        }
+
+        if (!owner.zones.Contains(zone)) owner.zones.Add(zone);
     }
 
     public static void Unregister(CameraZone zone)
     {
-        zones.Remove(zone);
+        if (zone == null) return;
+
+        for (int i = 0; i < all.Count; i++) all[i].zones.Remove(zone);
     }
 
-    /// <summary>Finds a zone by its id. Used by sequences that activate a zone from an event.</summary>
+    /// <summary>Finds a zone by its id in the active area. Used by sequences that activate a zone from an event.</summary>
     public static CameraZone Find(string zoneId)
     {
-        if (string.IsNullOrEmpty(zoneId)) return null;
+        if (string.IsNullOrEmpty(zoneId) || Active == null) return null;
 
-        for (int i = 0; i < zones.Count; i++)
+        List<CameraZone> list = Active.zones;
+        for (int i = 0; i < list.Count; i++)
         {
-            if (zones[i] != null && zones[i].ZoneId == zoneId) return zones[i];
+            if (list[i] != null && list[i].ZoneId == zoneId) return list[i];
         }
 
         return null;
     }
 
     /// <summary>
-    /// The zone containing a world point, if any. Spawn and respawn resolve their framing this way
-    /// because a teleport into an already-overlapping trigger does not re-fire OnTriggerEnter2D.
+    /// The active-area zone containing a world point, if any. Spawn and respawn resolve their framing
+    /// this way because a teleport into an already-overlapping trigger does not re-fire OnTriggerEnter2D.
     /// </summary>
     public static CameraZone ResolveAt(Vector2 point)
     {
-        for (int i = zones.Count - 1; i >= 0; i--)
+        if (Active == null) return null;
+
+        List<CameraZone> list = Active.zones;
+        for (int i = list.Count - 1; i >= 0; i--)
         {
-            CameraZone zone = zones[i];
+            CameraZone zone = list[i];
             if (zone != null && zone.AllowsTrigger && zone.ContainsPoint(point)) return zone;
         }
 
         return null;
     }
 
-    /// <summary>Frames whichever zone contains the point, with no transition. Call after a respawn.</summary>
-    public static void ApplyAt(Vector2 point)
-    {
-        ResolveAt(point)?.ApplyImmediate();
-    }
+    /// <summary>Frames whichever active-area zone contains the point, with no transition. Call after a respawn.</summary>
+    public static void ApplyAt(Vector2 point) => ResolveAt(point)?.ApplyImmediate();
 
 #if UNITY_EDITOR
     /// <summary>

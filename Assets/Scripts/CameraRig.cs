@@ -1,22 +1,18 @@
 using Unity.Cinemachine;
 using UnityEngine;
 
-public class CameraRig : MonoBehaviour
+public class CameraRig : SceneService<CameraRig>
 {
-    public static CameraRig Instance { get; private set; }
-    
     [SerializeField] private CinemachineCamera vcam;
     [SerializeField] private Camera foregroundCamera;
     [SerializeField] private Camera backgroundCamera;
     [SerializeField] private Camera overlayCamera;
     [SerializeField] private CinemachineBrain brain;
-    [SerializeField] private Transform boundedCameraTarget;
-    
+
     public CinemachineCamera Vcam => vcam;
     public Camera Foreground => foregroundCamera;
     public Camera Background => backgroundCamera;
     public Camera Overlay => overlayCamera;
-    public Transform BoundedCameraTarget => boundedCameraTarget;
 
     /// <summary>
     /// The claim backing <see cref="SetTrackingTarget"/>. These two methods predate
@@ -26,15 +22,16 @@ public class CameraRig : MonoBehaviour
     /// </summary>
     private CameraClaim cinematicClaim;
 
-    void Awake()
+    void Start()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
+        // Reset in Start rather than Awake: the director resolves via the registry, so waiting a
+        // step lets same-scene registrations settle before the rig asks for its director.
+        ResetTrackingTarget();
     }
 
     public void SetTrackingTarget(Transform target)
     {
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.For(gameObject.scene);
         if (director == null)
         {
             vcam.Target.TrackingTarget = target;
@@ -47,12 +44,8 @@ public class CameraRig : MonoBehaviour
 
     public void ResetTrackingTarget()
     {
-        if (CameraDirector.Instance == null)
-        {
-            vcam.Target.TrackingTarget = boundedCameraTarget;
-            return;
-        }
-
+        // The director owns the follow target now, so a reset just drops the cinematic claim and lets
+        // the director fall back to its ghost. With no director there is nothing to reset through.
         cinematicClaim?.Release();
         cinematicClaim = null;
     }

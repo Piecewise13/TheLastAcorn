@@ -27,7 +27,7 @@ public class UnlockZoomView : ViewBase
         
         playerCameraManager = FindAnyObjectByType<PlayerCameraManager>();
 
-        await OverlayCameraController.Instance.RequestPlayerOverlay();
+        await OverlayCameraController.Current.RequestPlayerOverlay();
 
     }
 
@@ -41,8 +41,8 @@ public class UnlockZoomView : ViewBase
         // 2. allow + wait for the zoom input
         await playerCameraManager.WaitForZoomInput(token);
         
-        CameraRig.Instance.ResetTrackingTarget();
-        OverlayCameraController.Instance.ReleasePlayerOverlay();
+        CameraRig.Current.ResetTrackingTarget();
+        OverlayCameraController.Current.ReleasePlayerOverlay();
         // 3. trigger exit feedbacks
         exitFeedback.PlayFeedbacksAsync(token);
         // 4. then start the actual zoom
@@ -52,7 +52,7 @@ public class UnlockZoomView : ViewBase
     private async UniTask ExitView()
     {
         exitFeedback.PlayFeedbacks();
-        OverlayCameraController.Instance.ReleasePlayerOverlay();
+        OverlayCameraController.Current.ReleasePlayerOverlay();
     }
 
     private async UniTask WaitForZoomAsync(CancellationToken token)

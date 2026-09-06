@@ -4,7 +4,7 @@ using UnityEngine;
 public class SquirrelMovementAudio : MonoBehaviour
 {
     [Header("Links")]
-    [SerializeField] private PlayerMove  player;
+    [SerializeField] private PlayerMoveManager  player;
     [SerializeField] private Rigidbody2D rb;
 
     [System.Serializable]
@@ -68,12 +68,12 @@ public class SquirrelMovementAudio : MonoBehaviour
         src.loop = true;
         src.playOnAwake = false;
 
-        if (!player) player = GetComponentInParent<PlayerMove>();
+        if (!player) player = GetComponentInParent<PlayerMoveManager>();
         if (!rb)     rb     = player.GetComponent<Rigidbody2D>();
     }
 
-    void OnEnable()  => PlayerMove.Jumped += OnJump;
-    void OnDisable() => PlayerMove.Jumped -= OnJump;
+    void OnEnable()  => PlayerMoveManager.Jumped += OnJump;
+    void OnDisable() => PlayerMoveManager.Jumped -= OnJump;
 
     void Update()
     {

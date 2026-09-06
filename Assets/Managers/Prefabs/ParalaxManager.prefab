@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2780163635373082315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2685409915739809170}
+  - component: {fileID: 2909840572818613772}
+  m_Layer: 0
+  m_Name: ParalaxManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2685409915739809170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2780163635373082315}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -244.3576, y: -36.94387, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2909840572818613772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2780163635373082315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a520ed371e64a09b1ff0f259a96d8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BackgroundParalax
+  player: {fileID: 0}
+  layers:
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.4
+    variance: 0.1
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.2
+    variance: 0.05
+    recurseIntoChildren: 1
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.2
+    variance: 0
+    recurseIntoChildren: 1
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.2
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: 0.05
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: 0.05
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.5
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.2
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  - layerRoot: {fileID: 0}
+    baseParallaxFactor: -0.2
+    variance: 0
+    recurseIntoChildren: 0
+    includeInactiveChildren: 0
+    seedSalt: 0
+  backgrounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  parallaxFactors:
+  - -0.3
+  - -0.5
+  - 0.05
+  isLocationDependent: 1

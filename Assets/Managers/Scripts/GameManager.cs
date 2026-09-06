@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         OnReady?.Invoke();
         InstantiatePersistent();
         SpawnStage2Objects();
+        SaveLoadManager.InitializeSceneState(SceneManager.GetActiveScene().name);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        SaveLoadManager.InitializeSceneState(scene.name);
         SpawnStage2Objects();
     }
 

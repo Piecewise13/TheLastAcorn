@@ -8,10 +8,8 @@ using UnityEngine;
 /// Owns the player's stat upgrades (strength, instinct, endurance)
 /// as well as acorn collection and segment progress that drives when upgrades are offered.
 /// </summary>
-public class PlayerUpgradeManager : MonoBehaviour
+public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 {
-    public static PlayerUpgradeManager Instance { get; private set; }
-
     public enum UpgradeStat
     {
         Strength = 0,
@@ -109,7 +107,7 @@ public class PlayerUpgradeManager : MonoBehaviour
 
     // ── Player component refs ─────────────────────────────────────────────────
 
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
     private PlayerCameraManager playerCamera;
 
     /// <summary>Fires after a stat upgrade is applied. Parameters: (stat, new level).</summary>
@@ -117,23 +115,42 @@ public class PlayerUpgradeManager : MonoBehaviour
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        base.Awake();
+        if (Instance != this) return; // duplicate, being destroyed
 
         for (int i = 0; i < StatCount; i++)
             statLevels[i] = PlayerPrefs.GetInt(SaveKey + i, 0);
     }
 
+    private void OnEnable()
+    {
+        if (Instance != this) return;
+        PlayerStateManager.OnPlayerRegistered += HandlePlayerRegistered;
+    }
+
+    private void OnDisable()
+    {
+        PlayerStateManager.OnPlayerRegistered -= HandlePlayerRegistered;
+    }
+
     private void Start()
     {
-        playerMove = GetComponent<PlayerMove>();
-        playerCamera = GetComponentInChildren<PlayerCameraManager>();
+        // Catch a player that already came online before this persistent manager subscribed
+        // (first scene). Subsequent scenes arrive via the event.
+        if (Instance == this && PlayerStateManager.Instance != null)
+            HandlePlayerRegistered(PlayerStateManager.Instance.playerGameObject);
+    }
+
+    // No longer a component on the player: bind to the current player body and re-apply persisted
+    // upgrades so each new scene's player picks them up.
+    private void HandlePlayerRegistered(GameObject player)
+    {
+        if (Instance != this || player == null) return;
+
+        playerMoveManager = player.GetComponent<PlayerMoveManager>();
+        playerCamera = player.GetComponentInChildren<PlayerCameraManager>();
         ApplyToPlayer();
     }
 
@@ -182,8 +199,8 @@ public class PlayerUpgradeManager : MonoBehaviour
 
     public async UniTask StartUpgradeSelection()
     {
-        playerMove.DisableMove();
-        CameraRig.Instance.SetTrackingTarget(playerMove.transform);
+        playerMoveManager.DisableMove();
+        CameraRig.Current.SetTrackingTarget(playerMoveManager.transform);
         ViewManager.Instance.ClearViewsInstant();
         await ViewManager.Instance.PushView(upgradeViewPrefab);
     }
@@ -195,11 +212,11 @@ public class PlayerUpgradeManager : MonoBehaviour
         ApplyUpgrade(stat);
 
         await ViewManager.Instance.ClearViews();
-        CameraRig.Instance.ResetTrackingTarget();
-        OverlayCameraController.Instance.ReleasePlayerOverlay();
+        CameraRig.Current.ResetTrackingTarget();
+        OverlayCameraController.Current.ReleasePlayerOverlay();
 
-        if (playerMove != null)
-            playerMove.EnableMove();
+        if (playerMoveManager != null)
+            playerMoveManager.EnableMove();
     }
 
     // ── Upgrade affordability / application ───────────────────────────────────
@@ -279,8 +296,16 @@ public class PlayerUpgradeManager : MonoBehaviour
     /// </summary>
     public void ApplyToPlayer()
     {
-        if (playerMove == null) playerMove = GetComponent<PlayerMove>();
-        if (playerCamera == null) playerCamera = GetComponentInChildren<PlayerCameraManager>();
+        // Resolve from the current player body (this manager is persistent and not on the player).
+        if ((playerMoveManager == null || playerCamera == null) && PlayerStateManager.Instance != null)
+        {
+            GameObject player = PlayerStateManager.Instance.playerGameObject;
+            if (player != null)
+            {
+                if (playerMoveManager == null) playerMoveManager = player.GetComponent<PlayerMoveManager>();
+                if (playerCamera == null) playerCamera = player.GetComponentInChildren<PlayerCameraManager>();
+            }
+        }
 
         if (upgradeProgressions == null) return;
 
@@ -345,13 +370,13 @@ public class PlayerUpgradeManager : MonoBehaviour
         switch (target)
         {
             case UpgradeEffectTarget.MaxClimbTime:
-                if (playerMove != null) playerMove.SetMaxClimbTime(value);
+                if (playerMoveManager != null) playerMoveManager.SetMaxClimbTime(value);
                 break;
             case UpgradeEffectTarget.ClimbSpeed:
-                if (playerMove != null) playerMove.SetClimbSpeed(value);
+                if (playerMoveManager != null) playerMoveManager.SetClimbSpeed(value);
                 break;
             case UpgradeEffectTarget.MaxGlideSpeed:
-                if (playerMove != null) playerMove.SetMaxGlideSpeed(value);
+                if (playerMoveManager != null) playerMoveManager.SetMaxGlideSpeed(value);
                 break;
             case UpgradeEffectTarget.ZoomOutAmount:
                 if (playerCamera != null) playerCamera.SetZoomOutAmount(value);

@@ -15,25 +15,14 @@ public enum ViewID
 
 
 
-public class ViewManager : MonoBehaviour
+// Persistent across scene loads: a single ViewManager (and the views on its stack) survives scene
+// swaps, so a view pushed in one scene can outlive the load into the next. Any ViewManager placed in
+// a later scene finds this one already alive and destroys itself (see PersistentSingleton).
+public class ViewManager : PersistentSingleton<ViewManager>
 {
-    public static ViewManager Instance { get; private set; }
-    
     private CancellationTokenSource viewTransitionCts = new CancellationTokenSource();
 
     private Stack<ViewBase> viewStack = new Stack<ViewBase>();
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
     
     /// <summary>
     /// Pushes a view to the stack and immediately shows the view.

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class PlayerMove: MonoBehaviour
+public partial class PlayerMoveManager: MonoBehaviour
 {
 
     [Header("Tree Leap")]

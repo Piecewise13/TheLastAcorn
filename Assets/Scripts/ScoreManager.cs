@@ -1,10 +1,8 @@
 using UnityEngine;
 using System;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreManager : PersistentSingleton<ScoreManager>
 {
-    public static ScoreManager Instance { get; private set; }
-
     [SerializeField] private int levelMinScore = 3;
     private static int score;
     public int CurrentScore => score;
@@ -14,19 +12,13 @@ public class ScoreManager : MonoBehaviour
     //Reorganize this to be somewhere else
 
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
-        {
+        base.Awake();
+        if (Instance != this) return; // duplicate, being destroyed
 
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            // Load persistent score on first initialization
-            score = SaveLoadManager.LoadTotalScore();
-
-        }
-        else Destroy(gameObject);
+        // Load persistent score on first initialization
+        score = SaveLoadManager.LoadTotalScore();
     }
 
     private void Start()

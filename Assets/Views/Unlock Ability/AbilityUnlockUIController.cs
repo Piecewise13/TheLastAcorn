@@ -9,7 +9,7 @@ public class AbilityUnlockUIController : MonoBehaviour
 
     public UnlockZoomView unlockZoomView;
 
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()

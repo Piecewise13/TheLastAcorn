@@ -1,48 +1,59 @@
 
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 
 [System.Serializable]
-public class DebugSettings : MonoBehaviour
+public class DebugSettings : PersistentSingleton<DebugSettings>
 {
     [Header("Debug Options")]
-    [SerializeField] private bool defaultSpawnPoint = true;
+    [Tooltip("When hitting Play, snap the player to this scene's start point. Off: leave the player GameObject where it sits. Does not apply to scenes loaded after Play.")]
+    [FormerlySerializedAs("defaultSpawnPoint")]
+    [SerializeField] private bool spawnAtSceneStartOnPlay = true;
     [SerializeField] private bool disablePersistence = false;
     [SerializeField] private bool showDebugLogs = false;
 
     [SerializeField] private bool bypassTutorial = false;
 
-    public static DebugSettings Instance { get; private set; }
-
     public bool DisablePersistence => disablePersistence;
     public bool ShowDebugLogs => showDebugLogs;
     public bool BypassTutorial => bypassTutorial;
-    public bool DefaultSpawnPoint => defaultSpawnPoint;
+    public bool SpawnAtSceneStartOnPlay => spawnAtSceneStartOnPlay;
 
     private Transform playerTransform;
     private Vector3 playerStartingPosition;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (Instance == null)
+        base.Awake();
+        if (Instance != this) return; // duplicate, being destroyed
+
+        if (showDebugLogs)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            if (showDebugLogs)
-            {
-                Debug.Log($"[DebugSettings] Initialized - Persistence: {(!DisablePersistence ? "ENABLED" : "DISABLED")}");
-                Debug.Log($"[DebugSettings] Initialized - Default Spawn Point: {(DefaultSpawnPoint ? "ENABLED" : "DISABLED")}");
-            }
+            Debug.Log($"[DebugSettings] Initialized - Persistence: {(!DisablePersistence ? "ENABLED" : "DISABLED")}");
+            Debug.Log($"[DebugSettings] Initialized - Spawn At Scene Start On Play: {(SpawnAtSceneStartOnPlay ? "ENABLED" : "DISABLED")}");
         }
-        else Destroy(gameObject);
-
     }
 
     private void Start()
     {
-        playerTransform = FindAnyObjectByType<PlayerMove>().transform;
+        if (Instance != this) return;
+
+        if (DisablePersistence)
+        {
+            ScoreManager.Instance?.ResetScore();
+            if (LevelScoreManager.Instance != null)
+                LevelScoreManager.Instance.ResetLevelScore();
+        }
+
+        PlayerMoveManager move = FindAnyObjectByType<PlayerMoveManager>();
+        if (move == null) return;
+
+        playerTransform = move.transform.root;
+
+        if (spawnAtSceneStartOnPlay)
+            CheckpointManager.Current?.SpawnAtStart(playerTransform.gameObject);
+
         playerStartingPosition = playerTransform.position;
     }
 
@@ -71,6 +82,7 @@ public class DebugSettings : MonoBehaviour
 
     public void ResetPlayerPostition()
     {
-        playerTransform.position = playerStartingPosition;
+        if (playerTransform != null)
+            playerTransform.position = playerStartingPosition;
     }
 }

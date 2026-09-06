@@ -8,7 +8,7 @@ public class PlayerLifeManager : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
 
     private Animator animator;
 
@@ -52,7 +52,7 @@ public class PlayerLifeManager : MonoBehaviour
     {
         // DebugSettings.Instance.DisablePersistence is read-only and cannot be set here.
         currentLives = maxLives;
-        playerMove = GetComponent<PlayerMove>();
+        playerMoveManager = GetComponent<PlayerMoveManager>();
         rb = GetComponent<Rigidbody2D>();
 
         animator = GetComponent<Animator>();
@@ -78,7 +78,7 @@ public class PlayerLifeManager : MonoBehaviour
         rb.linearVelocity = Vector2.zero; // Reset velocity to prevent sliding;
         rb.AddForce(launchDir, ForceMode2D.Impulse); // Adjust 10f for desired launch force
 
-        playerMove.StunPlayer();
+        playerMoveManager.StunPlayer();
         isHurt = true;
         damageTimer = 0;
 
@@ -96,7 +96,7 @@ public class PlayerLifeManager : MonoBehaviour
     public void StunPlayer() // stuns player without damaging them
     {
         animator.SetTrigger("Hurt");
-        playerMove.StunPlayer();
+        playerMoveManager.StunPlayer();
         isHurt = true;
         damageTimer = 0;
     }
@@ -126,7 +126,7 @@ public class PlayerLifeManager : MonoBehaviour
     void Update()
     {
 
-        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
+        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
         {
             lastGroundLocation = transform.position; // Update last ground location when grounded
         }
@@ -135,7 +135,7 @@ public class PlayerLifeManager : MonoBehaviour
         {
             if (damageTimer > damageTime)
             {
-                playerMove.StopStun();
+                playerMoveManager.StopStun();
                 isHurt = false;
             }
             damageTimer += Time.deltaTime;
@@ -208,8 +208,8 @@ public class PlayerLifeManager : MonoBehaviour
         
         SaveLoadManager.ResetCurrentSceneAcorns();
 
-        CheckpointManager.Instance.RespawnPlayer(gameObject);
-        playerMove.StopStun();
+        CheckpointManager.For(gameObject.scene)?.RespawnPlayer(gameObject);
+        playerMoveManager.StopStun();
         currentLives = maxLives;
         lifeUI.sprite = lifeIcons[currentLives];
     }

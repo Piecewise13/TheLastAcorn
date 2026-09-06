@@ -32,7 +32,7 @@ public class TutorialMaster : MonoBehaviour
 
     public PlayableDirector playableDirector;
 
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,9 +52,9 @@ public class TutorialMaster : MonoBehaviour
             return;
         }
 
-        playerMove = FindAnyObjectByType<PlayerMove>();
+        playerMoveManager = FindAnyObjectByType<PlayerMoveManager>();
         
-        playerMove.DisableMove();
+        playerMoveManager.DisableMove();
         
         HideAllSteps();
     }
@@ -98,7 +98,7 @@ public class TutorialMaster : MonoBehaviour
     {
         if (currentStep == 0)
         {
-                playerMove.EnableMove();
+                playerMoveManager.EnableMove();
         }
         ShowStepObjects();
     }

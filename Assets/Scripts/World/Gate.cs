@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MoreMountains.Feedbacks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Gate : MonoBehaviour
 {
-    private static PlayerMove playerMove;
+    private static PlayerMoveManager playerMoveManager;
     public event Action ResetCharges;
 
     /// <summary>Fires once the gate has fully opened and its charges are spent.</summary>
@@ -40,9 +41,9 @@ public class Gate : MonoBehaviour
 
     private void Start()
     {
-        if (playerMove == null)
+        if (playerMoveManager == null)
         {
-            playerMove = FindAnyObjectByType<PlayerMove>();
+            playerMoveManager = FindAnyObjectByType<PlayerMoveManager>();
         }
 
         if (startActivated)
@@ -68,16 +69,7 @@ public class Gate : MonoBehaviour
             gateCharges[i].ActivateCharge();
         }
     }
-
-    /// <summary>
-    /// Drops the gate straight into its opened state for a scene where the player has already used it.
-    /// </summary>
-    /// <remarks>
-    /// The feedbacks are played rather than skipped. <see cref="MMF_Particles"/> has no
-    /// skip-to-the-end behaviour and <c>SkipToTheEnd</c> finishes by calling <c>StopFeedbacks</c>, so
-    /// skipping would leave the fireflies stopped instead of running. Playing them means the eyes and
-    /// fireflies ramp up over the feedback's own duration, which is hidden by the scene fading in.
-    /// </remarks>
+    
     private void ActivateImmediately()
     {
         isActivated = true;
@@ -102,7 +94,7 @@ public class Gate : MonoBehaviour
 
     void Update()
     {
-        if(numChargeCollected == 0 && playerMove != null){
+        if(numChargeCollected == 0 && playerMoveManager != null){
             return;
         }
 
@@ -110,7 +102,7 @@ public class Gate : MonoBehaviour
             return;
         }
         
-        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
+        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
         {
            print("Player grounded, resetting gate charges." + ResetCharges.GetInvocationList().Length);
             numChargeCollected = 0;
@@ -158,7 +150,7 @@ public class Gate : MonoBehaviour
         // Wait for all charges to reach the gate top
         await UniTask.WhenAll(moveTasks);
 
-        activateFeedback.PlayFeedbacks();
+        await activateFeedback.PlayFeedbacksAsync(destroyCancellationToken);
 
         // Delete the gate charges
         foreach (GateCharge gateCharge in gateCharges)

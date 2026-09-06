@@ -19,7 +19,7 @@ public class CaveGlideUnlockSequence : MonoBehaviour
     [SerializeField] private TotemRevealWall wall;
 
     [Tooltip("Left empty, the player is found by tag when the sequence runs.")]
-    [SerializeField] private PlayerMove playerMove;
+    [SerializeField] private PlayerMoveManager playerMoveManager;
 
     [Header("Triggers")]
     [Tooltip("Runs when this gate finishes opening. Leave empty if the glide unlock is the trigger.")]
@@ -88,7 +88,7 @@ public class CaveGlideUnlockSequence : MonoBehaviour
             return;
         }
 
-        PlayerMove player = ResolvePlayer();
+        PlayerMoveManager player = ResolvePlayer();
 
         // The player is frozen for the whole beat. That is not only presentation: a frozen player
         // cannot walk into another camera zone mid-sequence, so nothing can compete for the camera.
@@ -113,18 +113,18 @@ public class CaveGlideUnlockSequence : MonoBehaviour
         }
     }
 
-    private PlayerMove ResolvePlayer()
+    private PlayerMoveManager ResolvePlayer()
     {
-        if (playerMove != null) return playerMove;
+        if (playerMoveManager != null) return playerMoveManager;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playerMove = player != null ? player.GetComponentInChildren<PlayerMove>() : null;
+        playerMoveManager = player != null ? player.GetComponentInChildren<PlayerMoveManager>() : null;
 
-        if (playerMove == null)
+        if (playerMoveManager == null)
         {
             Debug.LogWarning($"[{nameof(CaveGlideUnlockSequence)}] No PlayerMove found, the player will not be frozen.", this);
         }
 
-        return playerMove;
+        return playerMoveManager;
     }
 }

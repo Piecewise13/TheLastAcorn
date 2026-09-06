@@ -23,7 +23,7 @@ public class PlayerCameraManager : MonoBehaviour
 
     private InputAction zoomAction;
 
-    [SerializeField] public PlayerMove playerMove;
+    [SerializeField] public PlayerMoveManager playerMoveManager;
 
     [SerializeField] private float zoomOutAmount;
     [SerializeField] private float zoomInAmount;
@@ -56,7 +56,7 @@ public class PlayerCameraManager : MonoBehaviour
 
     void Start()
     {
-        playerMove = GetComponentInParent<PlayerMove>();
+        playerMoveManager = GetComponentInParent<PlayerMoveManager>();
     }
 
     void OnDestroy()
@@ -119,14 +119,14 @@ public class PlayerCameraManager : MonoBehaviour
             cameraState = CameraState.PlayerZoomed;
 
             OnZoomStarted?.Invoke();
-            playerMove.DisableMove();
+            playerMoveManager.DisableMove();
             StartForceZoom(zoomOutAmount, CameraState.PlayerZoomed);
             zoomOutSFX?.Play();
         }
         else if (context.canceled)
         {
             cameraState = CameraState.Default;
-            playerMove.EnableMove();
+            playerMoveManager.EnableMove();
             EndForceZoom(CameraState.PlayerZoomed);
 
             OnZoomEnded?.Invoke();
@@ -137,7 +137,7 @@ public class PlayerCameraManager : MonoBehaviour
 
     private static bool OwnedByHigherPriority()
     {
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.Current;
         return director != null && director.HasClaimAtOrAbove(CameraPriority.RoomZone);
     }
 
@@ -149,7 +149,7 @@ public class PlayerCameraManager : MonoBehaviour
     {
         if (cameraState == CameraState.Disabled) return;
 
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.Current;
         if (director == null)
         {
             if (!warnedAboutMissingDirector)
@@ -194,7 +194,7 @@ public class PlayerCameraManager : MonoBehaviour
 
     public float GetDefaultZoom()
     {
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.Current;
         return director != null ? director.DefaultOrthographicSize : zoomInAmount;
     }
 
@@ -241,7 +241,7 @@ public class PlayerCameraManager : MonoBehaviour
     [NaughtyAttributes.Button("Ability Unlock Test")]
     private async void UnlockAbilityTest()
     {
-        await OverlayCameraController.Instance.RequestPlayerOverlay();
+        await OverlayCameraController.Current.RequestPlayerOverlay();
         ViewManager.Instance.PushView(zoomView).Forget();
     }
 #endif

@@ -1,85 +1,55 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
 /// <summary>
-/// Manages player respawn points (checkpoints) and triggers respawn when needed.
+/// Per-scene respawn: one authored start, a Vector3 for the last checkpoint.
+/// Absence from a scene means that scene has no scripted start.
 /// </summary>
-public class CheckpointManager : MonoBehaviour
+public class CheckpointManager : SceneService<CheckpointManager>
 {
-    public static CheckpointManager Instance { get; private set; }
-
-    [Tooltip("Starting position if no checkpoint has been reached yet.")]
+    [Tooltip("Where the player appears on Play (if debug snaps to start) and after death before any checkpoint.")]
     [SerializeField] private Transform initialSpawnPoint;
-    [SerializeField] private Transform levelRevisitSpawnPoint;
 
-    private Transform currentCheckpointTransform;
-    private Checkpoint currentCheckpoint;
+    private Vector3 currentCheckpoint;
 
-    /// <summary>
-    /// Event fired when player respawns - passes respawn position.
-    /// </summary>
     public event Action OnPlayerRespawn;
+
+    public bool HasStartPoint => initialSpawnPoint != null;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        // Set default checkpoint
-        currentCheckpointTransform = initialSpawnPoint;
+        if (initialSpawnPoint != null)
+            currentCheckpoint = initialSpawnPoint.position;
     }
 
-    /// <summary>
-    /// Call this to update the active respawn location.
-    /// </summary>
-    /// <param name="checkpoint">Transform of the new checkpoint.</param>
     public void SetCheckpoint(Vector3 checkpoint)
     {
-        currentCheckpointTransform.position = checkpoint;
+        currentCheckpoint = checkpoint;
     }
 
-    /// <summary>
-    /// Respawns the player at the last checkpoint.
-    /// </summary>
-    /// <param name="player">Player GameObject to respawn.</param>
     public void RespawnPlayer(GameObject player)
     {
-        if (player == null)
-        {
-            Debug.LogWarning("Attempted to respawn a null player reference.");
-            return;
-        }
-
-        // Move player to checkpoint position
-        player.transform.position = currentCheckpointTransform.position;
-
-        // Optionally reset velocity if Rigidbody2D is present
-        var rb = player.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = Vector2.zero;
-
-
+        PlacePlayer(player, currentCheckpoint);
         OnPlayerRespawn?.Invoke();
     }
 
-    public void SpawnAtInitalLocation(GameObject player)
+    /// <summary>Play-button snap and any explicit "start of this scene" placement. Does not change the active checkpoint.</summary>
+    public void SpawnAtStart(GameObject player)
     {
-        if (initialSpawnPoint != null)
-        {
-            currentCheckpointTransform = initialSpawnPoint;
-            player.transform.position = initialSpawnPoint.position;
-        }
+        if (initialSpawnPoint == null) return;
+        PlacePlayer(player, initialSpawnPoint.position);
     }
 
-    public void SpawnAtEndingLocation(GameObject player)
+    private static void PlacePlayer(GameObject player, Vector3 position)
     {
-        if (levelRevisitSpawnPoint != null)
+        if (player == null)
         {
-            currentCheckpointTransform = levelRevisitSpawnPoint;
-            player.transform.position = levelRevisitSpawnPoint.position;
+            Debug.LogWarning("Attempted to place a null player reference.");
+            return;
         }
+
+        player.transform.position = position;
+        var rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = Vector2.zero;
     }
 }

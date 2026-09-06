@@ -1,11 +1,12 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 
-public class OverlayCameraController : MonoBehaviour
+public class OverlayCameraController : SceneService<OverlayCameraController>
 {
-    public static OverlayCameraController Instance { get; private set; }
+    [SerializeField] private Transform whiteBackground = null!;
 
     [SerializeField] private MMF_Player whiteFadeEnter = null!;
     [SerializeField] private MMF_Player whiteFadeExit = null!;
@@ -14,15 +15,15 @@ public class OverlayCameraController : MonoBehaviour
     private Camera overlayCamera;
     private bool isOverlayEnabled;
 
-    void Awake()
-    {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-    }
+    // Instance, not static: each scene has its own overlay controller, so a shared cache would let
+    // one scene's controller hand back another scene's (destroyed) player.
+    private PlayerMoveManager playerMovement = null!;
+    
+    public bool IsOverlayEnabled => isOverlayEnabled;
 
     void Start()
     {
-        var rig = CameraRig.Instance;
+        var rig = CameraRig.For(gameObject.scene);
         foregroundCamera = rig.Foreground;
         overlayCamera = rig.Overlay;
         UpdateOverlayState();
@@ -40,9 +41,23 @@ public class OverlayCameraController : MonoBehaviour
 
     public async UniTask RequestPlayerOverlay()
     {
+        playerMovement = ResolvePlayer();
+        whiteBackground.position = playerMovement.transform.position;
         isOverlayEnabled = true;
         UpdateOverlayState();
         await whiteFadeEnter.PlayFeedbacksAsync(CancellationToken.None);
+    }
+
+    public void ForcePlayerOverlay()
+    {
+        playerMovement = ResolvePlayer();
+        whiteBackground.position = playerMovement.transform.position;
+        
+        
+        whiteFadeEnter.PlayFeedbacks();
+        whiteFadeEnter.SkipToTheEnd();
+        isOverlayEnabled = true;
+        UpdateOverlayState();
     }
 
     public async UniTask ReleasePlayerOverlay()
@@ -69,5 +84,22 @@ public class OverlayCameraController : MonoBehaviour
         {
             foregroundCamera.enabled = !isOverlayEnabled;
         }
+    }
+    
+    [CanBeNull]
+    private PlayerMoveManager ResolvePlayer()
+    {
+        if (PlayerStateManager.Instance == null)
+        {
+            Debug.LogError("[Overlay Camera] couldn't get player reference");
+            return null;
+        }
+
+        if (playerMovement != null)
+        {
+            return playerMovement;
+        }
+        
+        return PlayerStateManager.Instance.playerGameObject.GetComponent<PlayerMoveManager>();
     }
 }

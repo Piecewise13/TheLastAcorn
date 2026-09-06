@@ -23,7 +23,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
 
 
     private GameObject player;
-    private PlayerMove playerMove;
+    private PlayerMoveManager playerMoveManager;
     private PlayerLifeManager playerLifeManager;
 
     private bool isGrounded = false;
@@ -93,7 +93,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player").transform.root.gameObject;
-        playerMove = player.GetComponent<PlayerMove>();
+        playerMoveManager = player.GetComponent<PlayerMoveManager>();
         playerLifeManager = player.GetComponent<PlayerLifeManager>();
 
         moveTarget = player;
@@ -381,7 +381,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
 
         print(rayHit.collider);
 
-        if (playerMove.GetPlayerState() == PlayerStateManager.PlayerState.Grounded 
+        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded 
         && rayHit.collider == null)
         {
             StartChase();

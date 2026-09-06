@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HUDViewBase : ViewBase
 {
-    PlayerMove playerMove;
+    PlayerMoveManager playerMoveManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,8 +13,8 @@ public class HUDViewBase : ViewBase
 
     private void HandleAbilityUnlocked(PlayerAbilityManager.Abilities ability)
     {
-        if (playerMove != null)
-            playerMove.EnableMove();
+        if (playerMoveManager != null)
+            playerMoveManager.EnableMove();
     }
 
     IEnumerator SubscribeWhenReady()
@@ -22,7 +22,7 @@ public class HUDViewBase : ViewBase
         while (PlayerAbilityManager.Instance == null)
             yield return null;
 
-        playerMove = FindAnyObjectByType<PlayerMove>();
+        playerMoveManager = FindAnyObjectByType<PlayerMoveManager>();
 
         PlayerAbilityManager.Instance.OnAbilityUnlocked += HandleAbilityUnlocked;
     }

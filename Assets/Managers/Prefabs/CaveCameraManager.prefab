@@ -58,11 +58,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2954642573412034935, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 124.69234
+      value: -55.231766
       objectReference: {fileID: 0}
     - target: {fileID: 2954642573412034935, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.2255096
+      value: 72.43992
       objectReference: {fileID: 0}
     - target: {fileID: 3030042018666870484, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: Target.TrackingTarget
@@ -134,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6556581914700703242, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.2255135
+      value: -7.2255096
       objectReference: {fileID: 0}
     - target: {fileID: 7530743122873603112, guid: b79fef954f0cf40828f8ea75c80571a2, type: 3}
       propertyPath: m_CullingMask.m_Bits

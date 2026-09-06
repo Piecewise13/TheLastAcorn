@@ -94,12 +94,12 @@ public class CameraZone : MonoBehaviour
     public void ApplyImmediate()
     {
         AcquireRoomClaim(CameraBlendMode.Instant);
-        CameraDirector.Instance?.SnapNow();
+        CameraDirector.For(gameObject.scene)?.SnapNow();
     }
 
     private void AcquireRoomClaim(CameraBlendMode mode)
     {
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.For(gameObject.scene);
         if (director == null) return;
 
         if (roomClaim == null || roomClaim.Released)
@@ -126,6 +126,14 @@ public class CameraZone : MonoBehaviour
         roomClaim = null;
     }
 
+    /// <summary>Drops every claim this zone holds. Called when its area is switched away so a stale
+    /// claim cannot keep pulling the camera in the new area.</summary>
+    internal void ReleaseClaims()
+    {
+        ReleaseRoomClaim();
+        Deactivate();
+    }
+
     private bool HasCurve => transitionCurve != null && transitionCurve.length > 0;
 
     /// <summary>
@@ -134,7 +142,7 @@ public class CameraZone : MonoBehaviour
     /// </summary>
     public CameraClaim Claim(CameraPriority priority = CameraPriority.EventZone)
     {
-        CameraDirector director = CameraDirector.Instance;
+        CameraDirector director = CameraDirector.For(gameObject.scene);
         if (director == null) return null;
 
         return director.Request(priority)
