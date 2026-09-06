@@ -22,6 +22,10 @@ public class CaveBoundaryEditor : Editor
     private int selectedPoint = -1;
     private int sceneControlId;
 
+    // Set while a scene handle (point or offset) is being dragged; flushed to an auto-regenerate on
+    // the next mouse-up so the rebuild happens once on release rather than every drag frame.
+    private bool pendingSceneRegen;
+
     [MenuItem("Tools/The Last Acorn/Cave Boundary")]
     private static void CreateBoundary()
     {
@@ -33,6 +37,7 @@ public class CaveBoundaryEditor : Editor
         go.transform.position = new Vector3(center.x, center.y, 0f);
 
         CaveBoundary boundary = go.AddComponent<CaveBoundary>();
+        boundary.Seed = CaveBoundary.NewSeed();
         boundary.Points.Add(new Vector2(-10f, 0f));
         boundary.Points.Add(new Vector2(10f, 0f));
 
@@ -48,13 +53,22 @@ public class CaveBoundaryEditor : Editor
         serializedObject.Update();
         var boundary = (CaveBoundary)target;
 
+        // Everything up to the Generate section is settings the placement reads, so a change here
+        // should rebuild. The action buttons (Generate/Clear/Center) live below and are deliberately
+        // left out of the check — a Clear must not immediately auto-regenerate the rocks back.
+        EditorGUI.BeginChangeCheck();
         DrawLibrarySection(boundary);
-        DrawOutputSection(boundary);
         DrawShapeSection(boundary);
         DrawPlacementSection();
+        DrawParallaxSection(boundary);
+        bool settingsChanged = EditorGUI.EndChangeCheck();
+
         DrawGenerateSection(boundary);
 
         serializedObject.ApplyModifiedProperties();
+
+        if (settingsChanged)
+            CaveBoundaryAutoRegenerate.Schedule(boundary);
     }
 
     private void DrawLibrarySection(CaveBoundary boundary)
@@ -80,9 +94,10 @@ public class CaveBoundaryEditor : Editor
         CaveDepthTier tier = boundary.Tier;
         if (tier != null)
         {
+            string material = tier.materialOverride != null ? tier.materialOverride.name : "prefab material";
             EditorGUILayout.LabelField(
                 $"Scale {library.MinScale:0.##}–{library.MaxScale:0.##} (library-wide)   " +
-                $"sorting {tier.sortingOrder}   parallax {tier.parallaxFactor:0.###} ±{tier.parallaxVariance:0.###}",
+                $"material {material}",
                 EditorStyles.miniLabel);
         }
     }
@@ -102,81 +117,35 @@ public class CaveBoundaryEditor : Editor
             property.intValue = picked;
     }
 
-    private void DrawOutputSection(CaveBoundary boundary)
+    private void DrawParallaxSection(CaveBoundary boundary)
     {
         EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Output", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("rockParent"));
+        EditorGUILayout.LabelField("Parallax", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("parallaxProfile"));
 
-        if (boundary.Tier == null)
-            return;
-
-        // Apply first: the status is read from the scene, so a rock parent edited above needs to be
-        // live before we check it, or the box lags a frame behind the field.
-        serializedObject.ApplyModifiedProperties();
-        DrawParallaxStatus(boundary);
-    }
-
-    private void DrawParallaxStatus(CaveBoundary boundary)
-    {
-        CaveDepthTier tier = boundary.Tier;
-        CaveParallaxStatus status = CaveBoundaryGenerator.InspectParallax(boundary);
-        string parentName = boundary.RockParent.name;
-
-        if (!status.hasLayer)
+        CaveParallaxProfile profile = boundary.ParallaxProfile;
+        if (profile == null)
         {
             EditorGUILayout.HelpBox(
-                $"'{parentName}' is not registered with any BackgroundParalax layer, so these rocks " +
-                "will not parallax at all.",
+                "No Cave Parallax Profile assigned, so these rocks hold still at runtime. Create one " +
+                "via Assets > Create > The Last Acorn > Cave Parallax Profile and drop it here.",
                 MessageType.Warning);
-
-            ParalaxManager host = CaveBoundaryGenerator.FindBestParallaxHost();
-            using (new EditorGUI.DisabledScope(host == null))
-            {
-                string hostLabel = host != null ? host.gameObject.name : "no BackgroundParalax in scene";
-                if (GUILayout.Button($"Register as layer on '{hostLabel}'"))
-                {
-                    CaveBoundaryGenerator.RegisterLayer(boundary, host);
-                }
-            }
-            return;
+        }
+        else
+        {
+            DrawIndexPopup("parallaxTierIndex", "Parallax Tier", profile.GetTierNames(),
+                "The profile has no tiers yet — add one on the Cave Parallax Profile asset.");
         }
 
-        EditorGUILayout.LabelField(
-            $"Layer: {status.layerRoot.name} on {status.component.gameObject.name}" +
-            (status.nested ? "  (rocks nested below the root)" : string.Empty),
-            EditorStyles.miniLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("verticalInfluence"));
 
-        if (!status.FactorMatches(tier) || !status.VarianceMatches(tier))
+        if (profile != null && profile.Tiers.Count > 0)
         {
-            EditorGUILayout.HelpBox(
-                $"Layer runs at {status.actualFactor:0.###} ±{status.actualVariance:0.###} but the " +
-                $"'{tier.name}' tier expects {tier.parallaxFactor:0.###} ±{tier.parallaxVariance:0.###}. " +
-                "The rocks will read at the wrong depth.",
-                MessageType.Warning);
-
-            if (GUILayout.Button("Set layer to this tier's factor"))
-                CaveBoundaryGenerator.ApplyTierToLayer(boundary, status);
-        }
-
-        if (status.NeedsRecurse)
-        {
-            EditorGUILayout.HelpBox(
-                $"'{status.layerRoot.name}' does not walk its subtree, so only its direct children " +
-                $"move — and these rocks sit deeper, under '{parentName}'. They will stay still.",
-                MessageType.Warning);
-
-            if (GUILayout.Button("Enable Recurse Into Children on the layer"))
-                CaveBoundaryGenerator.EnableRecurse(status);
-        }
-
-        if (status.duplicateCount > 0)
-        {
-            EditorGUILayout.HelpBox(
-                $"This layer root is registered {status.duplicateCount + 1} times on the same " +
-                "BackgroundParalax. Every duplicate moves the rocks again, so they parallax at a " +
-                "multiple of the intended factor. Remove the extras by hand.",
-                MessageType.Error);
+            EditorGUILayout.LabelField(
+                "Rocks scatter across the tier's Z Jitter; each rock's factor is interpolated by " +
+                "where its Z lands — nearest takes the min factor and slides fastest, furthest takes " +
+                "the max. Regenerate after changing Z Jitter to re-place the rocks.",
+                EditorStyles.miniLabel);
         }
     }
 
@@ -220,9 +189,14 @@ public class CaveBoundaryEditor : Editor
 
         if (addMode)
         {
+            string where = ContinuesFromSelection(boundary)
+                ? $"after point {selectedPoint}"
+                : "at the end of the line";
+
             EditorGUILayout.HelpBox(
-                "Click in the Scene view to append a point. Shift-click near the line to insert one " +
-                "between two existing points. Select a handle and press Delete to remove it.",
+                $"Click in the Scene view to add a point {where}. Click a handle first to draw on " +
+                "from that node instead of the end. Shift-click near the line to insert one between " +
+                "two existing points. Select a handle and press Delete to remove it.",
                 MessageType.Info);
         }
     }
@@ -247,7 +221,7 @@ public class CaveBoundaryEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Sorting", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("sortingStep"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("sortingOrder"));
     }
 
 
@@ -256,38 +230,70 @@ public class CaveBoundaryEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Generate", EditorStyles.boldLabel);
 
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("autoRegenerate"));
+
+        // The seed lives here beside its Re-roll button, so it sits outside the inspector-wide change
+        // check. Watch it on its own and schedule a rebuild when either the field or the button moves it.
+        bool seedChanged;
         using (new EditorGUILayout.HorizontalScope())
         {
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("seed"));
+            seedChanged = EditorGUI.EndChangeCheck();
+
             if (GUILayout.Button("Re-roll", GUILayout.Width(70f)))
             {
                 serializedObject.ApplyModifiedProperties();
                 Undo.RecordObject(boundary, "Re-roll Cave Boundary");
-                boundary.Seed = Random.Range(1, int.MaxValue);
+                boundary.Seed = CaveBoundary.NewSeed();
                 EditorUtility.SetDirty(boundary);
+                seedChanged = true;
             }
         }
 
         serializedObject.ApplyModifiedProperties();
 
+        if (seedChanged)
+            CaveBoundaryAutoRegenerate.Schedule(boundary);
+
         int alive = CaveBoundaryGenerator.CountAlive(boundary);
         int detached = CaveBoundaryGenerator.CountDetached(boundary);
+        int clearable = CaveBoundaryGenerator.CountClearable(boundary);
         EditorGUILayout.LabelField(
             detached > 0
                 ? $"{alive} rocks placed, {detached} moved by hand (kept on rebuild)"
                 : $"{alive} rocks placed",
             EditorStyles.miniLabel);
 
+        if (clearable > alive)
+        {
+            EditorGUILayout.LabelField(
+                $"{clearable - alive} more object(s) under this boundary the tool did not place. " +
+                "Clear takes those too.",
+                EditorStyles.miniLabel);
+        }
+
         using (new EditorGUILayout.HorizontalScope())
         {
             if (GUILayout.Button(alive > 0 ? "Regenerate" : "Generate", GUILayout.Height(28f)))
                 CaveBoundaryGenerator.Generate(boundary, false);
 
-            using (new EditorGUI.DisabledScope(alive == 0))
+            using (new EditorGUI.DisabledScope(clearable == 0))
             {
-                if (GUILayout.Button("Clear", GUILayout.Height(28f), GUILayout.Width(70f)))
+                var clearLabel = new GUIContent(
+                    "Clear",
+                    "Deletes every object under this boundary, including rocks moved or added by " +
+                    "hand. Undoable in one step.");
+
+                if (GUILayout.Button(clearLabel, GUILayout.Height(28f), GUILayout.Width(70f)))
                     CaveBoundaryGenerator.Clear(boundary);
             }
+        }
+
+        using (new EditorGUI.DisabledScope(alive == 0))
+        {
+            if (GUILayout.Button("Center Pivot on Rocks"))
+                CaveBoundaryGenerator.CenterPivotOnRocks(boundary);
         }
 
         using (new EditorGUI.DisabledScope(detached == 0))
@@ -316,6 +322,7 @@ public class CaveBoundaryEditor : Editor
         selectedPoint = -1;
         EditorUtility.SetDirty(boundary);
         SceneView.RepaintAll();
+        CaveBoundaryAutoRegenerate.Schedule(boundary);
     }
 
     // -------------------------------------------------------------------------
@@ -336,6 +343,14 @@ public class CaveBoundaryEditor : Editor
         DrawNormals(boundary);
         DrawPointHandles(boundary);
         HandleInput(boundary);
+
+        // A point or offset drag reports "changed" every frame it moves; rebuilding then would thrash
+        // and fight the handle. Instead we flag the drag and rebuild once on release (mouse up).
+        if (pendingSceneRegen && Event.current.type == EventType.MouseUp)
+        {
+            pendingSceneRegen = false;
+            CaveBoundaryAutoRegenerate.Schedule(boundary);
+        }
     }
 
     private void DrawLine(CaveBoundary boundary)
@@ -403,6 +418,7 @@ public class CaveBoundaryEditor : Editor
             boundary.NormalOffset = Vector3.Dot(moved - anchor, normal) - standoff;
             EditorUtility.SetDirty(boundary);
             Repaint();
+            pendingSceneRegen = true;
         }
 
         float jitter = boundary.NormalOffsetJitter;
@@ -431,12 +447,19 @@ public class CaveBoundaryEditor : Editor
                 selectedPoint = i;
                 EditorUtility.SetDirty(boundary);
                 Repaint();
+                pendingSceneRegen = true;
             }
 
             if (GUIUtility.hotControl == id && selectedPoint != i)
             {
                 selectedPoint = i;
                 Repaint();
+            }
+
+            if (addMode && i == selectedPoint && ContinuesFromSelection(boundary))
+            {
+                Handles.color = SelectedColor;
+                Handles.Label(world + Vector3.up * size * 2f, "adding from here");
             }
         }
     }
@@ -469,6 +492,14 @@ public class CaveBoundaryEditor : Editor
         var local = new Vector2(local3.x, local3.y);
 
         int insertAt = insert ? FindSegmentToSplit(boundary, world) : -1;
+        if (insertAt < 0 && ContinuesFromSelection(boundary))
+        {
+            // A selected handle is the pen tip: the point lands just after that node instead of on
+            // the far end of the line. The new point becomes the tip in turn, so a run of clicks
+            // draws forward from wherever the author started rather than jumping back to the end.
+            insertAt = selectedPoint;
+        }
+
         if (insertAt >= 0)
         {
             boundary.Points.Insert(insertAt + 1, local);
@@ -483,6 +514,18 @@ public class CaveBoundaryEditor : Editor
         EditorUtility.SetDirty(boundary);
         SceneView.RepaintAll();
         Repaint();
+        // The added point lands on mouse-down; rebuild on the following mouse-up like a drag does.
+        pendingSceneRegen = true;
+    }
+
+    /// <summary>
+    /// True when a selected handle should absorb the next added point. The last point is excluded
+    /// because continuing from it is the same thing as appending, and appending keeps the simpler
+    /// undo entry and label.
+    /// </summary>
+    private bool ContinuesFromSelection(CaveBoundary boundary)
+    {
+        return selectedPoint >= 0 && selectedPoint < boundary.Points.Count - 1;
     }
 
     /// <summary>

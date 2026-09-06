@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -39,6 +40,7 @@ public class CaveGeneratedRock
 /// is the editor tool's job (see CaveBoundaryEditor), so nothing here runs in a build.
 /// </summary>
 [DisallowMultipleComponent]
+[DefaultExecutionOrder(1000)]
 public class CaveBoundary : MonoBehaviour
 {
     /// <summary>Runaway guard. A boundary this dense is a mis-set overlap, not a real request.</summary>
@@ -48,12 +50,6 @@ public class CaveBoundary : MonoBehaviour
     [SerializeField] private CaveRockLibrary library;
     [SerializeField] private int rockSetIndex;
     [SerializeField] private int depthTierIndex;
-
-    [Header("Output")]
-    [Tooltip("Where generated rocks are parented. Leave empty to parent them under this boundary, " +
-             "which makes the boundary its own parallax layer root. Point it at an existing group " +
-             "(Frontground Objects/Top and friends) to fold into a layer that already exists.")]
-    [SerializeField] private Transform rockParent;
 
     [Header("Shape")]
     [Tooltip("Boundary points in this object's local space. Edit them with the handles in the Scene view.")]
@@ -93,14 +89,32 @@ public class CaveBoundary : MonoBehaviour
     [SerializeField] private bool mirrorVariety = true;
 
     [Header("Sorting")]
-    [Tooltip("Added to the tier's sorting order for each rock along the chain, so later rocks draw " +
-             "in front of earlier ones. 0 gives every rock the tier's order.")]
-    [SerializeField] private int sortingStep;
+    [Tooltip("The order in layer every rock on this boundary spawns with. All rocks share this one " +
+             "value; raise it to draw the whole boundary in front of another, lower it to push it back.")]
+    [SerializeField] private int sortingOrder = 3;
 
     [Header("Randomisation")]
-    [Tooltip("Same seed and same shape always produce the same rocks. Re-roll in the inspector for " +
-             "a different arrangement.")]
-    [SerializeField] private int seed = 1;
+    [Tooltip("Same seed and same shape always produce the same rocks. Every new boundary starts on " +
+             "its own random seed, so two boundaries never lay the same rocks; re-roll in the " +
+             "inspector for a different arrangement.")]
+    [SerializeField] private int seed;
+
+    [Header("Parallax")]
+    [Tooltip("The set of depth bands this boundary can read at. Shared asset — drop the same one on " +
+             "every boundary and pick a band per boundary. Leave empty and the rocks hold still.")]
+    [SerializeField] private CaveParallaxProfile parallaxProfile;
+
+    [Tooltip("Which band in the profile this boundary uses — its Z spread and near/far factors.")]
+    [SerializeField] private int parallaxTierIndex;
+
+    [Tooltip("How much of the parallax applies vertically. 1 drifts up and down as much as sideways; " +
+             "0 keeps every rock level, which reads best on a cave that scrolls mostly horizontally.")]
+    [Range(0f, 1f)] [SerializeField] private float verticalInfluence = 1f;
+
+    [Tooltip("Editor only: rebuild the rocks automatically when this boundary's settings or shape " +
+             "change and when you enter play mode, so you never have to press Regenerate. Hand-moved " +
+             "rocks are still kept.")]
+    [SerializeField] private bool autoRegenerate = true;
 
     [SerializeField, HideInInspector] private List<CaveGeneratedRock> generated = new List<CaveGeneratedRock>();
 
@@ -108,8 +122,8 @@ public class CaveBoundary : MonoBehaviour
     public int RockSetIndex => rockSetIndex;
     public int DepthTierIndex => depthTierIndex;
 
-    /// <summary>The transform generated rocks are parented under; this boundary when unset.</summary>
-    public Transform RockParent => rockParent != null ? rockParent : transform;
+    /// <summary>The transform generated rocks are parented under: always this boundary.</summary>
+    public Transform RockParent => transform;
 
     /// <summary>Live list, mutated directly by the scene view handles.</summary>
     public List<Vector2> Points => points;
@@ -132,6 +146,150 @@ public class CaveBoundary : MonoBehaviour
     }
 
     public CaveDepthTier Tier => library != null ? library.GetDepthTier(depthTierIndex) : null;
+
+    /// <summary>The parallax profile this boundary reads its depth band from.</summary>
+    public CaveParallaxProfile ParallaxProfile => parallaxProfile;
+
+    /// <summary>The selected depth band — its Z spread and near/far factors — or null if unset.</summary>
+    public CaveParallaxTier ParallaxTier => parallaxProfile != null ? parallaxProfile.GetTier(parallaxTierIndex) : null;
+
+    /// <summary>Editor-only flag read by the auto-regenerate hooks. See CaveBoundaryAutoRegenerate.</summary>
+    public bool AutoRegenerate => autoRegenerate;
+
+    /// <summary>
+    /// A fresh arrangement seed. Never 0, so a serialised 0 still reads as "this boundary has not
+    /// been seeded yet" and the tool can fill it in.
+    /// </summary>
+    public static int NewSeed()
+    {
+        return UnityEngine.Random.Range(1, int.MaxValue);
+    }
+
+    public bool HasSeed => seed != 0;
+
+    /// <summary>
+    /// Unity message, editor only: a boundary added to a scene seeds itself, so dropping two of them
+    /// on the same shape does not produce the same rocks twice.
+    /// </summary>
+    private void Reset()
+    {
+        seed = NewSeed();
+    }
+
+    // -------------------------------------------------------------------------
+    // Runtime parallax
+    // -------------------------------------------------------------------------
+
+    /// <summary>One placed rock, with the spot it belongs and the factor its depth maps to.</summary>
+    private struct RockParallax
+    {
+        public Transform transform;
+        public Vector2 anchor;
+        public float factor;
+    }
+
+    private RockParallax[] runtimeRocks;
+    private Camera parallaxCamera;
+
+    private void Start()
+    {
+        BuildRuntimeRocks();
+    }
+
+    /// <summary>
+    /// Caches every placed rock with the spot it belongs and the parallax factor its depth earns.
+    /// The factor is spread across the boundary's own Z span using the selected
+    /// <see cref="CaveParallaxTier"/>: the nearest rock (minimum Z) takes the tier's min factor and
+    /// slides fastest, the furthest (maximum Z) takes its max factor and barely moves, with everything
+    /// between interpolated. A missing profile/tier leaves every factor at 0, so the rocks hold still
+    /// rather than throwing. Built once from the generated list, which persists into play.
+    /// </summary>
+    private void BuildRuntimeRocks()
+    {
+        var transforms = new List<Transform>(generated.Count);
+        float minZ = float.MaxValue;
+        float maxZ = float.MinValue;
+
+        foreach (CaveGeneratedRock record in generated)
+        {
+            if (record == null || record.instance == null)
+                continue;
+
+            Transform t = record.instance.transform;
+            float z = t.position.z;
+            transforms.Add(t);
+
+            if (z < minZ) minZ = z;
+            if (z > maxZ) maxZ = z;
+        }
+
+        CaveParallaxTier parallaxTier = ParallaxTier;
+        float minFactor = parallaxTier != null ? parallaxTier.minParallaxFactor : 0f;
+        float maxFactor = parallaxTier != null ? parallaxTier.maxParallaxFactor : 0f;
+
+        // A boundary with no Z spread (jitter off) has no near/far to interpolate, so put every rock
+        // halfway between the two factors rather than dividing by zero.
+        bool flat = maxZ - minZ < 1e-4f;
+
+        var built = new RockParallax[transforms.Count];
+        for (int i = 0; i < transforms.Count; i++)
+        {
+            Vector3 world = transforms[i].position;
+            float t = flat ? 0.5f : Mathf.InverseLerp(minZ, maxZ, world.z);
+
+            built[i] = new RockParallax
+            {
+                transform = transforms[i],
+                anchor = new Vector2(world.x, world.y),
+                factor = Mathf.Lerp(minFactor, maxFactor, t)
+            };
+        }
+
+        runtimeRocks = built;
+    }
+
+    /// <summary>
+    /// Places every rock relative to its anchor from the camera, in LateUpdate so Cinemachine has
+    /// already moved the camera. Anchored and absolute: a rock sits on its authored spot when the
+    /// camera is on it and slides off by its factor as the camera moves away, so nothing accumulates
+    /// or drifts. Negative factors overshoot and read as in front; positive track the camera and
+    /// read as far back.
+    /// </summary>
+    private void LateUpdate()
+    {
+        Camera view = ParallaxCamera();
+        if (view == null || runtimeRocks == null)
+            return;
+
+        Vector3 camera = view.transform.position;
+        for (int i = 0; i < runtimeRocks.Length; i++)
+        {
+            Transform t = runtimeRocks[i].transform;
+            if (t == null)
+                continue;
+
+            float factor = runtimeRocks[i].factor;
+            Vector2 anchor = runtimeRocks[i].anchor;
+
+            float x = anchor.x + (camera.x - anchor.x) * factor;
+            float y = anchor.y + (camera.y - anchor.y) * factor * verticalInfluence;
+            t.position = new Vector3(x, y, t.position.z);
+        }
+    }
+
+    /// <summary>
+    /// The foreground camera, resolved late. The rig can arrive after the level it parallaxes — an
+    /// additive load, or a scene opened on its own — so this keeps asking rather than giving up.
+    /// </summary>
+    private Camera ParallaxCamera()
+    {
+        if (parallaxCamera != null)
+            return parallaxCamera;
+
+        CameraRig rig = CameraRig.Current;
+        parallaxCamera = rig != null ? rig.Foreground : null;
+        return parallaxCamera;
+    }
 
     // -------------------------------------------------------------------------
     // Shape queries
@@ -214,6 +372,7 @@ public class CaveBoundary : MonoBehaviour
         var placements = new List<CaveRockPlacement>();
 
         CaveDepthTier tier = Tier;
+        CaveParallaxTier parallaxTier = ParallaxTier;
         if (library == null || tier == null || points.Count < 2)
             return placements;
 
@@ -246,13 +405,19 @@ public class CaveBoundary : MonoBehaviour
             // vertical flip. One roll covers both, and gives floors their variety too.
             float scaleX = mirrorVariety && rng.Next(2) == 0 ? -rockScale : rockScale;
 
+            // Depth drives the parallax: each rock gets a Z jittered from the selected parallax tier,
+            // and the runtime spreads factor across that Z span. Rolled from the seeded stream so a
+            // rebuild of an unchanged boundary reproduces the same depths.
+            float jitter = parallaxTier != null ? parallaxTier.ZJitter : 0f;
+            float z = Range(rng, jitter);
+
             placements.Add(new CaveRockPlacement
             {
                 entry = entry,
-                worldPosition = new Vector3(position.x, position.y, 0f),
+                worldPosition = new Vector3(position.x, position.y, z),
                 worldRotation = Quaternion.Euler(0f, 0f, angle),
                 localScale = new Vector3(scaleX, rockScale, rockScale),
-                sortingOrder = tier.sortingOrder + sortingStep * index
+                sortingOrder = sortingOrder
             });
 
             float width = SpriteWidth(entry.prefab) * rockScale;

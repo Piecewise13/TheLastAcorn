@@ -30,7 +30,9 @@ public class ParalaxManager : MonoBehaviour
         public float factor;
     }
 
-    public Transform player; // Assign the player transform in the inspector
+    [Tooltip("What the parallax moves against. Left alone this resolves to the rig's foreground " +
+             "camera at runtime; assign something here as a fallback for scenes that have no rig.")]
+    public Transform player;
 
     [SerializeField] private ParallaxLayer[] layers;
 
@@ -48,8 +50,25 @@ public class ParalaxManager : MonoBehaviour
     void Start()
     {
         BuildTargets();
+        ResolveReference();
+    }
 
-        player = CameraRig.Instance.Foreground.transform;
+    /// <summary>
+    /// Points <see cref="player"/> at the foreground camera and takes the baseline the deltas are
+    /// measured from.
+    ///
+    /// The rig can legitimately be absent here — a level opened on its own, or one loaded before the
+    /// scene that owns the rig. Reading through it unguarded threw part-way through Start, which left
+    /// the baseline at zero while the inspector's fallback transform stayed non-null, so the first
+    /// frame applied the camera's entire world position as a delta and shoved every object off the
+    /// authored layout. Hence the guard, and the retry from Update.
+    /// </summary>
+    private void ResolveReference()
+    {
+        CameraRig rig = CameraRig.Current;
+        Camera foreground = rig != null ? rig.Foreground : null;
+        if (foreground != null)
+            player = foreground.transform;
 
         if (player != null)
             previousPlayerPosition = player.position;
@@ -143,14 +162,26 @@ public class ParalaxManager : MonoBehaviour
 
     private void Update()
     {
-        if (player == null) return;
-
-        if (isLocationDependent && !hasPlayer)
+        if (player == null)
         {
-            return;
+            // The rig may have arrived since Start, so keep trying rather than sitting dead for the
+            // rest of the level.
+            ResolveReference();
+            if (player == null) return;
         }
 
         Vector3 deltaMovement = player.position - previousPlayerPosition;
+
+        // Advance the baseline every frame, gated or not. Skipping it while the player was outside
+        // the trigger banked the whole absence and spent it in a single frame on re-entry, which
+        // read as every object popping sideways.
+        previousPlayerPosition = player.position;
+
+        if (isLocationDependent && !hasPlayer)
+            return;
+
+        if (targets == null)
+            return;
 
         for (int i = 0; i < targets.Length; i++)
         {
@@ -160,8 +191,6 @@ public class ParalaxManager : MonoBehaviour
             float parallax = targets[i].factor;
             target.position += new Vector3(deltaMovement.x * parallax, deltaMovement.y * parallax, 0);
         }
-
-        previousPlayerPosition = player.position;
     }
 
     private static string GetHierarchyPath(Transform transform)

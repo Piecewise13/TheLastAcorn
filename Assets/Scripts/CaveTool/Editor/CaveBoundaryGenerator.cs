@@ -3,33 +3,8 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// What the scene's <see cref="ParalaxManager"/> actually says about a boundary's rock parent,
-/// checked against the depth tier the boundary claims to be in. A boundary can look right in the
-/// editor and still not parallax at all — that is the state of the cave's TotemSection today — so
-/// the tool reports this rather than assuming the wiring is there.
-/// </summary>
-public struct CaveParallaxStatus
-{
-    public ParalaxManager component;
-    public int layerIndex;
-    public Transform layerRoot;
-    public bool hasLayer;
-    public bool nested;
-    public bool recurseIntoChildren;
-    public float actualFactor;
-    public float actualVariance;
-    public int duplicateCount;
-
-    public bool FactorMatches(CaveDepthTier tier) => tier != null && Mathf.Approximately(actualFactor, tier.parallaxFactor);
-    public bool VarianceMatches(CaveDepthTier tier) => tier != null && Mathf.Approximately(actualVariance, tier.parallaxVariance);
-
-    /// <summary>Rocks sitting below the layer root only move if the layer walks the whole subtree.</summary>
-    public bool NeedsRecurse => hasLayer && nested && !recurseIntoChildren;
-}
-
-/// <summary>
-/// Creates, rebuilds and clears the rocks along a <see cref="CaveBoundary"/>, and keeps the
-/// boundary's depth tier honest against the scene's parallax layers.
+/// Creates, rebuilds and clears the rocks along a <see cref="CaveBoundary"/>. Parallax is no longer
+/// its concern — the boundary drives each rock's motion itself from the rock's Z at runtime.
 ///
 /// Rebuilding is non-destructive: a rock whose pose still matches what the tool recorded when it
 /// placed it gets replaced, and a rock the author has since nudged is left where they put it.
@@ -58,6 +33,14 @@ public static class CaveBoundaryGenerator
         {
             Debug.LogWarning("Cave Boundary: assign a Cave Rock Library with at least one depth tier.", boundary);
             return;
+        }
+
+        // AddComponent from script skips Reset, so a boundary can still reach here unseeded. Seed it
+        // now rather than letting every such boundary share seed 0's arrangement.
+        if (!boundary.HasSeed)
+        {
+            Undo.RecordObject(boundary, "Seed Cave Boundary");
+            boundary.Seed = CaveBoundary.NewSeed();
         }
 
         List<CaveRockPlacement> placements = boundary.BuildPlacements();
@@ -100,6 +83,10 @@ public static class CaveBoundaryGenerator
                 boundary.Generated.Add(record);
         }
 
+        // Put the pivot in the middle of what was just placed, so the boundary's own transform sits
+        // at the centre of the rock cluster rather than wherever the line happened to start.
+        CenterPivotOnRocks(boundary);
+
         EditorUtility.SetDirty(boundary);
         Undo.CollapseUndoOperations(group);
 
@@ -110,6 +97,11 @@ public static class CaveBoundaryGenerator
         }
     }
 
+    /// <summary>
+    /// Empties the boundary: everything under the rock parent goes, recorded or not. Rocks moved by
+    /// hand, rocks whose record was lost to an undo, rocks dropped in by hand — all of it. The
+    /// non-destructive path is Regenerate; Clear means clear. Undoable in one step.
+    /// </summary>
     public static void Clear(CaveBoundary boundary)
     {
         if (boundary == null)
@@ -120,15 +112,129 @@ public static class CaveBoundaryGenerator
         int group = Undo.GetCurrentGroup();
 
         Undo.RecordObject(boundary, "Clear Cave Boundary");
+
+        // Snapshot the children first: destroying them walks the child list out from under us.
+        Transform parent = boundary.RockParent;
+        var children = new Transform[parent.childCount];
+        for (int i = 0; i < children.Length; i++)
+            children[i] = parent.GetChild(i);
+
+        foreach (Transform child in children)
+        {
+            if (child != null)
+                Undo.DestroyObjectImmediate(child.gameObject);
+        }
+
+        // A recorded rock the author dragged out of the boundary is still this tool's to clean up.
         foreach (CaveGeneratedRock record in boundary.Generated)
         {
             if (record != null && record.instance != null)
                 Undo.DestroyObjectImmediate(record.instance);
         }
+
         boundary.Generated.Clear();
 
         EditorUtility.SetDirty(boundary);
         Undo.CollapseUndoOperations(group);
+    }
+
+    /// <summary>
+    /// Moves the boundary's transform to the centre of the combined bounding box of every rock it
+    /// has placed, without moving the rocks or the drawn line in the world. The rocks are children,
+    /// so shifting the pivot would drag them; their world poses and the local <c>points</c> are
+    /// cached and restored so only the pivot moves.
+    ///
+    /// This keeps the boundary's own transform in the middle of what it drew, which reads more
+    /// naturally in the hierarchy and gizmos than a pivot stranded at the start of the rock line.
+    /// </summary>
+    public static void CenterPivotOnRocks(CaveBoundary boundary)
+    {
+        if (boundary == null)
+            return;
+
+        if (!TryGetRockBounds(boundary, out Bounds bounds))
+            return;
+
+        Transform t = boundary.transform;
+        var target = new Vector3(bounds.center.x, bounds.center.y, t.position.z);
+        if ((target - t.position).sqrMagnitude < 1e-8f)
+            return;
+
+        Undo.RecordObject(t, "Center Cave Boundary Pivot");
+        Undo.RecordObject(boundary, "Center Cave Boundary Pivot");
+
+        // Cache child world poses so the rocks hold still when the pivot moves out from under them.
+        int childCount = t.childCount;
+        var children = new Transform[childCount];
+        var childWorldPos = new Vector3[childCount];
+        var childWorldRot = new Quaternion[childCount];
+        for (int i = 0; i < childCount; i++)
+        {
+            children[i] = t.GetChild(i);
+            Undo.RecordObject(children[i], "Center Cave Boundary Pivot");
+            childWorldPos[i] = children[i].position;
+            childWorldRot[i] = children[i].rotation;
+        }
+
+        // The drawn line is stored in local space, so it would slide with the pivot too.
+        var worldPoints = new Vector3[boundary.Points.Count];
+        for (int i = 0; i < worldPoints.Length; i++)
+            worldPoints[i] = boundary.GetWorldPoint(i);
+
+        t.position = target;
+
+        for (int i = 0; i < childCount; i++)
+        {
+            children[i].position = childWorldPos[i];
+            children[i].rotation = childWorldRot[i];
+        }
+
+        for (int i = 0; i < worldPoints.Length; i++)
+            boundary.SetWorldPoint(i, worldPoints[i]);
+
+        // The recorded local poses drive non-destructive rebuilds; refresh them to the new local
+        // space or every rock would read as hand-moved on the next Regenerate.
+        foreach (CaveGeneratedRock record in boundary.Generated)
+        {
+            if (record == null || record.instance == null)
+                continue;
+
+            Transform rt = record.instance.transform;
+            record.localPosition = rt.localPosition;
+            record.localRotation = rt.localRotation;
+            record.localScale = rt.localScale;
+        }
+    }
+
+    /// <summary>World-space bounds of every alive rock renderer under the boundary.</summary>
+    private static bool TryGetRockBounds(CaveBoundary boundary, out Bounds bounds)
+    {
+        bounds = default;
+        bool any = false;
+
+        foreach (CaveGeneratedRock record in boundary.Generated)
+        {
+            if (record == null || record.instance == null)
+                continue;
+
+            foreach (Renderer renderer in record.instance.GetComponentsInChildren<Renderer>())
+            {
+                if (renderer == null)
+                    continue;
+
+                if (!any)
+                {
+                    bounds = renderer.bounds;
+                    any = true;
+                }
+                else
+                {
+                    bounds.Encapsulate(renderer.bounds);
+                }
+            }
+        }
+
+        return any;
     }
 
     private static CaveGeneratedRock Place(CaveRockPlacement placement, Transform parent, CaveDepthTier tier)
@@ -152,10 +258,8 @@ public static class CaveBoundaryGenerator
         SpriteRenderer renderer = instance.GetComponentInChildren<SpriteRenderer>();
         if (renderer != null)
         {
-            if (tier.overrideSortingOrder)
-                renderer.sortingOrder = sortingOrder;
-            else
-                sortingOrder = renderer.sortingOrder;
+            // Every rock on the boundary takes the boundary's one sorting order.
+            renderer.sortingOrder = sortingOrder;
 
             if (tier.materialOverride != null)
                 renderer.sharedMaterial = tier.materialOverride;
@@ -204,6 +308,30 @@ public static class CaveBoundaryGenerator
         return count;
     }
 
+    /// <summary>
+    /// How many objects a Clear would destroy. Everything under the parent counts, whether the tool
+    /// placed it or not, plus any recorded rock that has since been dragged out of the boundary.
+    /// </summary>
+    public static int CountClearable(CaveBoundary boundary)
+    {
+        if (boundary == null)
+            return 0;
+
+        Transform parent = boundary.RockParent;
+        int count = parent.childCount;
+
+        foreach (CaveGeneratedRock record in boundary.Generated)
+        {
+            if (record == null || record.instance == null)
+                continue;
+
+            if (!record.instance.transform.IsChildOf(parent))
+                count++;
+        }
+
+        return count;
+    }
+
     public static int CountAlive(CaveBoundary boundary)
     {
         int count = 0;
@@ -213,139 +341,5 @@ public static class CaveBoundaryGenerator
                 count++;
         }
         return count;
-    }
-
-    // -------------------------------------------------------------------------
-    // Parallax wiring
-    // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// Looks for the layer that will actually move this boundary's rocks. Reads the private layer
-    /// array through SerializedObject so BackgroundParalax keeps its own encapsulation.
-    /// </summary>
-    public static CaveParallaxStatus InspectParallax(CaveBoundary boundary)
-    {
-        var status = new CaveParallaxStatus();
-        if (boundary == null)
-            return status;
-
-        Transform rockParent = boundary.RockParent;
-        ParalaxManager[] components = Object.FindObjectsByType<ParalaxManager>(FindObjectsSortMode.None);
-
-        foreach (ParalaxManager component in components)
-        {
-            var serialized = new SerializedObject(component);
-            SerializedProperty layers = serialized.FindProperty("layers");
-            if (layers == null || !layers.isArray)
-                continue;
-
-            for (int i = 0; i < layers.arraySize; i++)
-            {
-                SerializedProperty element = layers.GetArrayElementAtIndex(i);
-                var root = element.FindPropertyRelative("layerRoot").objectReferenceValue as Transform;
-                if (root == null)
-                    continue;
-
-                bool isSelf = root == rockParent;
-                bool isAncestor = !isSelf && rockParent.IsChildOf(root);
-                if (!isSelf && !isAncestor)
-                    continue;
-
-                if (status.hasLayer)
-                {
-                    // The cave already has SmallCave registered twice, which doubles its movement.
-                    // Surface a repeat rather than silently reporting only the first match.
-                    status.duplicateCount++;
-                    continue;
-                }
-
-                status.component = component;
-                status.layerIndex = i;
-                status.layerRoot = root;
-                status.hasLayer = true;
-                status.nested = isAncestor;
-                status.recurseIntoChildren = element.FindPropertyRelative("recurseIntoChildren").boolValue;
-                status.actualFactor = element.FindPropertyRelative("baseParallaxFactor").floatValue;
-                status.actualVariance = element.FindPropertyRelative("variance").floatValue;
-            }
-        }
-
-        return status;
-    }
-
-    /// <summary>
-    /// Adds the boundary's rock parent as a new parallax layer running at its tier's factor.
-    /// </summary>
-    public static void RegisterLayer(CaveBoundary boundary, ParalaxManager component)
-    {
-        CaveDepthTier tier = boundary.Tier;
-        if (tier == null || component == null)
-            return;
-
-        var serialized = new SerializedObject(component);
-        SerializedProperty layers = serialized.FindProperty("layers");
-        if (layers == null)
-            return;
-
-        int index = layers.arraySize;
-        layers.InsertArrayElementAtIndex(index);
-
-        SerializedProperty element = layers.GetArrayElementAtIndex(index);
-        element.FindPropertyRelative("layerRoot").objectReferenceValue = boundary.RockParent;
-        element.FindPropertyRelative("baseParallaxFactor").floatValue = tier.parallaxFactor;
-        element.FindPropertyRelative("variance").floatValue = tier.parallaxVariance;
-        element.FindPropertyRelative("recurseIntoChildren").boolValue = false;
-        element.FindPropertyRelative("includeInactiveChildren").boolValue = false;
-        element.FindPropertyRelative("seedSalt").intValue = 0;
-
-        serialized.ApplyModifiedProperties();
-    }
-
-    /// <summary>Pulls the existing layer's factor and variance back in line with the tier.</summary>
-    public static void ApplyTierToLayer(CaveBoundary boundary, CaveParallaxStatus status)
-    {
-        CaveDepthTier tier = boundary.Tier;
-        if (tier == null || !status.hasLayer || status.component == null)
-            return;
-
-        var serialized = new SerializedObject(status.component);
-        SerializedProperty element = serialized.FindProperty("layers").GetArrayElementAtIndex(status.layerIndex);
-        element.FindPropertyRelative("baseParallaxFactor").floatValue = tier.parallaxFactor;
-        element.FindPropertyRelative("variance").floatValue = tier.parallaxVariance;
-        serialized.ApplyModifiedProperties();
-    }
-
-    /// <summary>Turns on subtree walking so rocks nested below the layer root actually move.</summary>
-    public static void EnableRecurse(CaveParallaxStatus status)
-    {
-        if (!status.hasLayer || status.component == null)
-            return;
-
-        var serialized = new SerializedObject(status.component);
-        SerializedProperty element = serialized.FindProperty("layers").GetArrayElementAtIndex(status.layerIndex);
-        element.FindPropertyRelative("recurseIntoChildren").boolValue = true;
-        serialized.ApplyModifiedProperties();
-    }
-
-    /// <summary>The parallax component a new layer should be added to: the one already doing the work.</summary>
-    public static ParalaxManager FindBestParallaxHost()
-    {
-        ParalaxManager[] components = Object.FindObjectsByType<ParalaxManager>(FindObjectsSortMode.None);
-        ParalaxManager best = null;
-        int bestCount = -1;
-
-        foreach (ParalaxManager component in components)
-        {
-            var serialized = new SerializedObject(component);
-            SerializedProperty layers = serialized.FindProperty("layers");
-            int count = layers != null && layers.isArray ? layers.arraySize : 0;
-            if (count > bestCount)
-            {
-                bestCount = count;
-                best = component;
-            }
-        }
-
-        return best;
     }
 }
