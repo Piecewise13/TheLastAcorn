@@ -58,10 +58,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaFalloff: 0.61
-    - _BlackHeight: 93.8
+    - _BlackHeight: 139.4
     - _ColorFalloff: 3.34
     - _EnableExternalAlpha: 0
-    - _FadeEnd: -40.3
+    - _FadeEnd: -32.2
     - _IsLit: 1
     - _NoiseIntensity: 1.94
     - _Scale: 0.02

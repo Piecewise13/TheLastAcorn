@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a80e3d0f2571249d89465ab933fb060f, type: 3}
+  m_Name: SpringCliffRocks
+  m_EditorClassIdentifier: Assembly-CSharp::CaveRockLibrary
+  minScale: 1.4
+  maxScale: 1.6
+  rockSets:
+  - name: CliffRocks
+    rocks:
+    - prefab: {fileID: 6135799672177456971, guid: d4bbb85165dbd4869aee64438ef1ac08, type: 3}
+      weight: 1
+    - prefab: {fileID: 9014806502103741870, guid: 5ac8e5e511341456083efb0c9f3c924e, type: 3}
+      weight: 1
+    - prefab: {fileID: 5119099778280880084, guid: 3f3415835b19a470993c8ad76173a25c, type: 3}
+      weight: 1
+    - prefab: {fileID: 5060284505202554535, guid: 619c5335bcbf9449097d172190e9eb89, type: 3}
+      weight: 1
+  depthTiers:
+  - name: Cliff
+    materialOverride: {fileID: 0}
