@@ -1,8 +1,9 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
 using MoreMountains.Feedbacks;
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class OverlayCameraController : SceneService<OverlayCameraController>
 {
@@ -15,18 +16,40 @@ public class OverlayCameraController : SceneService<OverlayCameraController>
     private Camera overlayCamera;
     private bool isOverlayEnabled;
 
-    // Instance, not static: each scene has its own overlay controller, so a shared cache would let
-    // one scene's controller hand back another scene's (destroyed) player.
-    private PlayerMoveManager playerMovement = null!;
-    
     public bool IsOverlayEnabled => isOverlayEnabled;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        Camera.onPreCull += HandleCameraPreCull;
+        RenderPipelineManager.beginCameraRendering += HandleBeginCameraRendering;
+    }
+
+    protected override void OnDisable()
+    {
+        RenderPipelineManager.beginCameraRendering -= HandleBeginCameraRendering;
+        Camera.onPreCull -= HandleCameraPreCull;
+        base.OnDisable();
+    }
 
     void Start()
     {
         var rig = CameraRig.For(gameObject.scene);
         foregroundCamera = rig.Foreground;
         overlayCamera = rig.Overlay;
-        UpdateOverlayState();
+
+        overlayCamera.enabled = false;
+        foregroundCamera.enabled = true;
+    }
+
+    private void LateUpdate()
+    {
+        MatchForegroundCamera();
+
+        if (isOverlayEnabled)
+        {
+            CenterWhiteBackgroundOnCamera();
+        }
     }
 
     private void OnDestroy()
@@ -36,70 +59,82 @@ public class OverlayCameraController : SceneService<OverlayCameraController>
             whiteFadeEnter.RestoreInitialValues();
         }
         isOverlayEnabled = false;
-        UpdateOverlayState();
     }
 
     public async UniTask RequestPlayerOverlay()
     {
-        playerMovement = ResolvePlayer();
-        whiteBackground.position = playerMovement.transform.position;
+        MatchForegroundCamera();
+        CenterWhiteBackgroundOnCamera();
         isOverlayEnabled = true;
-        UpdateOverlayState();
+        overlayCamera.enabled = isOverlayEnabled;
         await whiteFadeEnter.PlayFeedbacksAsync(CancellationToken.None);
-    }
-
-    public void ForcePlayerOverlay()
-    {
-        playerMovement = ResolvePlayer();
-        whiteBackground.position = playerMovement.transform.position;
-        
-        
-        whiteFadeEnter.PlayFeedbacks();
-        whiteFadeEnter.SkipToTheEnd();
-        isOverlayEnabled = true;
-        UpdateOverlayState();
+        foregroundCamera.enabled = !isOverlayEnabled;
     }
 
     public async UniTask ReleasePlayerOverlay()
     {
         foregroundCamera.enabled = true;
-        whiteFadeExit.PlayFeedbacks();
-        while (whiteFadeExit.IsPlaying)
-        {
-            await UniTask.Yield(PlayerLoopTiming.Update);
-        }
+        MatchForegroundCamera();
+        await whiteFadeExit.PlayFeedbacksAsync(CancellationToken.None);
         
         isOverlayEnabled = false;
-        UpdateOverlayState();
     }
 
-    private void UpdateOverlayState()
+    public void ForcePlayerOverlay()
     {
-        if (overlayCamera != null)
-        {
-            overlayCamera.enabled = isOverlayEnabled;
-        }
+        MatchForegroundCamera();
+        CenterWhiteBackgroundOnCamera();
+        whiteFadeEnter.PlayFeedbacks();
+        whiteFadeEnter.SkipToTheEnd();
+        isOverlayEnabled = true;
+        overlayCamera.enabled = true;
+    }
 
-        if (foregroundCamera != null)
-        {
-            foregroundCamera.enabled = !isOverlayEnabled;
-        }
+    private void HandleCameraPreCull(Camera renderingCamera)
+    {
+        MatchBeforeOverlayRender(renderingCamera);
+    }
+
+    private void HandleBeginCameraRendering(ScriptableRenderContext context, Camera renderingCamera)
+    {
+        MatchBeforeOverlayRender(renderingCamera);
+    }
+
+    private void MatchBeforeOverlayRender(Camera renderingCamera)
+    {
+        if (!isOverlayEnabled || renderingCamera != overlayCamera) return;
+
+        MatchForegroundCamera();
+        CenterWhiteBackgroundOnCamera();
+    }
+
+    private void MatchForegroundCamera()
+    {
+        if (foregroundCamera == null || overlayCamera == null) return;
+
+        Transform foregroundTransform = foregroundCamera.transform;
+        Transform overlayTransform = overlayCamera.transform;
+        overlayTransform.SetPositionAndRotation(foregroundTransform.position, foregroundTransform.rotation);
+    }
+
+    // The quad is a child of the overlay camera so it fills the view as the camera moves.
+    // Writing world position onto the player baked a local offset from wherever the camera
+    // happened to be that frame, which threw the quad off-screen once Cinemachine caught up.
+    private void CenterWhiteBackgroundOnCamera()
+    {
+        Vector3 local = whiteBackground.localPosition;
+        whiteBackground.localPosition = new Vector3(0f, 0f, local.z);
     }
     
-    [CanBeNull]
-    private PlayerMoveManager ResolvePlayer()
+    [Button("Debug: Request Overlay")]
+    private void DebugRequestOverlay()
     {
-        if (PlayerStateManager.Instance == null)
-        {
-            Debug.LogError("[Overlay Camera] couldn't get player reference");
-            return null;
-        }
+        RequestPlayerOverlay().Forget();
+    }
 
-        if (playerMovement != null)
-        {
-            return playerMovement;
-        }
-        
-        return PlayerStateManager.Instance.playerGameObject.GetComponent<PlayerMoveManager>();
+    [Button("Debug: Release Overlay")]
+    private void DebugReleaseOverlay()
+    {
+        ReleasePlayerOverlay().Forget();
     }
 }

@@ -38,7 +38,7 @@ public class CameraZoneManager : MonoBehaviour
     // set, so each area frames only its own rooms.
     private readonly List<CameraZone> zones = new();
 
-    /// <summary>This area's camera bounds shape, read by <see cref="CameraGhost"/>.</summary>
+    /// <summary>This area's camera bounds shape, read by <see cref="CameraDirector"/>.</summary>
     public PolygonCollider2D Confiner => confiner;
 
     public float TargetAspect => targetAspect;

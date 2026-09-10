@@ -52,6 +52,17 @@ public class ViewManager : PersistentSingleton<ViewManager>
         
     }
 
+    public async UniTask PopViewAsync(CancellationToken token = default)
+    {
+        if (viewStack.Count == 0) return;
+
+        await viewStack.Pop().Hide(token);
+        if (viewStack.Count > 0)
+        {
+            viewStack.Peek().Show(CancellationToken.None).Forget();
+        }
+    }
+
     public async UniTask ClearViews()
     {
         while (viewStack.Count > 0)

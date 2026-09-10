@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7306162964129660244}
-  - component: {fileID: 1361467531501259743}
   m_Layer: 0
   m_Name: CameraTarget
   m_TagString: Untagged
@@ -32,20 +31,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1912574779704771456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1361467531501259743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892084829330860090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57b66699c618f4240a3a3363c30b24bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CameraGhost
-  playerOverride: {fileID: 0}
-  confinerOverride: {fileID: 0}
 --- !u!1 &1382940140905890623
 GameObject:
   m_ObjectHideFlags: 0
@@ -72,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 1382940140905890623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.4967, y: -4.6667, z: 40}
+  m_LocalPosition: {x: 0, y: 0, z: 40}
   m_LocalScale: {x: 128.16399, y: 120.14031, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -104,7 +89,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,7 +110,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
@@ -246,7 +231,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16512
+    m_Bits: 49280
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -621,8 +606,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ghost: {fileID: 1361467531501259743}
-  ghostPrefab: {fileID: 0}
+  trackingTarget: {fileID: 7306162964129660244}
   backgroundBaseFieldOfView: 80
   backgroundFieldOfViewMultiplier: 0.3
 --- !u!1 &6800534439227176602
@@ -1163,8 +1147,7 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 1
-  m_Cameras:
-  - {fileID: 8110890993948520670}
+  m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -1340,7 +1323,7 @@ MonoBehaviour:
   ForceTimescaleMode: 0
   ForcedTimescaleMode: 1
   DurationMultiplier: 1
-  TimescaleMultiplier: 1
+  TimescaleMultiplier: 0.8
   RandomizeDuration: 0
   RandomDurationMultiplier: {x: 0.5, y: 1.5}
   DisplayFullDurationDetails: 0
@@ -1639,7 +1622,7 @@ MonoBehaviour:
         Owner: {fileID: 8789433673752130447}
         DebugActive: 0
         ZoomMode: 0
-        ZoomFieldOfView: 30
+        ZoomFieldOfView: 10
         ZoomTransitionDuration: 0.05
         ZoomDuration: 0.1
         RelativeFieldOfView: 0

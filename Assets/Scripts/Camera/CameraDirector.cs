@@ -1,24 +1,21 @@
 using System.Collections.Generic;
+using Player;
 using Unity.Cinemachine;
 using Unity.Cinemachine.TargetTracking;
 using UnityEngine;
 
 /// <summary>
-/// The single owner of where the camera sits and how far it is zoomed. Everything that wants to
-/// move or resize the camera requests a <see cref="CameraClaim"/> and holds it; the highest-priority
-/// active claim wins, and releasing falls back to whatever sits underneath. An empty stack is the
-/// default bounded follow, so "nothing is controlling the camera" needs no special handling.
-///
-/// This exists because four systems used to set the tracking target and zoom independently, which
-/// let a player input steal the camera in the middle of a scripted beat and made it impossible for
-/// one cave room to hand off to the next.
-///
-/// Runs after <see cref="CameraGhost"/>, which writes the bounded follow target in LateUpdate.
+/// Owns camera position and zoom through prioritized claims. The vcam tracks one
+/// director-driven target; claims move it directly, while default follow clamps the player to the
+/// active camera area.
 /// </summary>
 [ExecuteAlways]
 [DefaultExecutionOrder(100)]
 public class CameraDirector : SceneService<CameraDirector>
 {
+    private const string DefaultTrackingTargetName = "CameraTarget";
+    private const float CameraTrackingDebugInterval = 0.25f;
+
     [Header("Defaults")]
     [Tooltip("Orthographic half-height used when no claim specifies a zoom.")]
     [SerializeField] private float defaultOrthographicSize = 10f;
@@ -27,14 +24,9 @@ public class CameraDirector : SceneService<CameraDirector>
     [SerializeField] private float defaultTransitionDuration = 0.6f;
     [SerializeField] private AnimationCurve defaultTransitionCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-    [Header("Follow target")]
-    [Tooltip("The ghost the camera follows and the director moves. This component is its sole owner. " +
-             "Left empty, a CameraGhost authored elsewhere in the scene is used.")]
-    [SerializeField] private CameraGhost ghost;
-
-    [Tooltip("Spawned at the player only when no ghost is authored anywhere. " +
-             "Left manager-less it clamps to the active zone.")]
-    [SerializeField] private CameraGhost ghostPrefab;
+    [Header("Tracking target")]
+    [Tooltip("Transform the Cinemachine camera follows. CameraDirector is the only runtime writer.")]
+    [SerializeField] private Transform trackingTarget;
 
     [Header("Background camera")]
     [Tooltip("Perspective FOV of the background camera at the reference orthographic size.")]
@@ -49,16 +41,11 @@ public class CameraDirector : SceneService<CameraDirector>
     private CinemachineCamera vcam;
     private CinemachineFollow follow;
 
-    /// <summary>
-    /// The transform the virtual camera tracks: the scene's authored ghost (or a spawned fallback).
-    /// The ghost follows the player when nothing claims the camera; the director overwrites its
-    /// position while a claim is active.
-    /// </summary>
+    /// <summary>The transform the virtual camera tracks. CameraDirector is its runtime owner.</summary>
     private Transform driven;
 
-    // The position the director actually wrote last frame. The ghost's own LateUpdate runs first and
-    // stomps its transform back onto the player, so we cannot read the camera's real position off
-    // `driven` — this remembers it so a blend starts from where the camera truly was, not the stomp.
+    // The position the director actually wrote last frame. Blends start from here rather than from a
+    // target that may have been moved by editor tooling or scene authoring.
     private Vector3 lastAppliedPosition;
 
     // A reframe point handed in by SwitchArea, consumed the next time the active area changes. Null
@@ -86,6 +73,7 @@ public class CameraDirector : SceneService<CameraDirector>
     private AnimationCurve zoomBlendCurve;
     private CameraBlendMode zoomBlendMode;
     private float zoomBlendRate;
+    private float nextCameraTrackingDebugLogTime;
 
     public float DefaultOrthographicSize => defaultOrthographicSize;
 
@@ -123,20 +111,18 @@ public class CameraDirector : SceneService<CameraDirector>
             defaultPositionDamping = follow.TrackerSettings.PositionDamping;
         }
 
-        // The camera tracks the ghost authored in the scene — the thing already following the player —
-        // rather than a target we spawn on top of it. The director drives this transform while a claim
-        // is active and leaves the ghost's own clamped follow alone otherwise.
-        ghost = ResolveOrSpawnGhost();
-        if (ghost == null)
+        driven = ResolveTrackingTarget();
+        if (driven == null)
         {
-            Debug.LogError($"[{nameof(CameraDirector)}] No {nameof(CameraGhost)} authored and no {nameof(ghostPrefab)} to spawn. The camera will not follow.", this);
+            Debug.LogError($"[{nameof(CameraDirector)}] No tracking target assigned. Add a child named " +
+                           $"'{DefaultTrackingTargetName}' or assign {nameof(trackingTarget)}.", this);
             enabled = false;
             return;
         }
 
-        driven = ghost.transform;
-        positionSource = driven;
-        lastAppliedPosition = driven.position;
+        positionSource = null;
+        lastAppliedPosition = ResolveDefaultPosition();
+        driven.position = lastAppliedPosition;
         vcam.Target.TrackingTarget = driven;
 
         appliedSize = vcam.Lens.OrthographicSize;
@@ -161,6 +147,13 @@ public class CameraDirector : SceneService<CameraDirector>
         var claim = new CameraClaim(this, priority, nextSequence++);
         claims.Add(claim);
         return claim;
+    }
+
+    public CameraClaim HoldCurrentZoom(CameraPriority priority)
+    {
+        return Request(priority)
+            .WithOrthographicSize(appliedSize)
+            .WithInstantBlend();
     }
 
     internal void Release(CameraClaim claim)
@@ -212,8 +205,7 @@ public class CameraDirector : SceneService<CameraDirector>
     private void LateUpdate()
     {
 #if UNITY_EDITOR
-        // In edit mode there is no claim pipeline; just point the vcam at the ghost so moving it in the
-        // scene previews the shot. Cinemachine drives the game view from the target in edit mode.
+        // In edit mode there is no claim pipeline; just keep the vcam pointed at the authored target.
         if (!Application.isPlaying)
         {
             EditorPreviewFollow();
@@ -235,12 +227,12 @@ public class CameraDirector : SceneService<CameraDirector>
         if (editorRig == null) editorRig = FindAnyObjectByType<CameraRig>();
 
         CinemachineCamera cam = editorRig != null ? editorRig.Vcam : null;
-        CameraGhost previewGhost = FindAnyObjectByType<CameraGhost>();
-        if (cam == null || previewGhost == null) return;
+        Transform previewTarget = ResolveTrackingTarget();
+        if (cam == null || previewTarget == null) return;
 
-        if (cam.Target.TrackingTarget != previewGhost.transform)
+        if (cam.Target.TrackingTarget != previewTarget)
         {
-            cam.Target.TrackingTarget = previewGhost.transform;
+            cam.Target.TrackingTarget = previewTarget;
         }
     }
 #endif
@@ -248,21 +240,18 @@ public class CameraDirector : SceneService<CameraDirector>
     private void UpdatePosition()
     {
         CameraClaim claim = TopClaim(requireTarget: true);
-        Transform desiredSource = claim != null ? claim.Target : BoundedTarget();
-        if (desiredSource == null) return;
+        Transform desiredSource = claim != null ? claim.Target : null;
 
         if (desiredSource != positionSource)
         {
             BeginPositionBlend(claim, desiredSource);
         }
 
-        Vector3 desired = desiredSource.position;
+        Vector3 desired = claim != null ? claim.Target.position : ResolveDefaultPosition();
         desired.z = driven.position.z;
 
-        // Steady state with no claim: the ghost's own LateUpdate already parked it on the player this
-        // frame, so `desired` is that position and writing it back is a no-op — Cinemachine damping
-        // does the smoothing. A blend interpolates from where the camera actually was (lastApplied,
-        // not the ghost's stomped transform) toward the live destination.
+        // With no claim, the tracking target follows the player clamped to the active area and
+        // Cinemachine damping supplies the movement. Claims bypass the confiner.
         Vector3 next;
         if (positionBlending)
         {
@@ -299,6 +288,30 @@ public class CameraDirector : SceneService<CameraDirector>
         // Cinemachine's own damping has to stand down while the director owns the position,
         // otherwise the authored ease curve is smeared by a second layer of smoothing.
         SuppressDamping(claim != null || positionBlending);
+        LogCameraTrackingDebug(claim, desired, next);
+    }
+
+    private void LogCameraTrackingDebug(CameraClaim claim, Vector3 desired, Vector3 applied)
+    {
+        if (PlayerStateManager.Instance == null || PlayerStateManager.Instance.CurrentState != PlayerState.Glide) return;
+        if (Time.time < nextCameraTrackingDebugLogTime) return;
+
+        nextCameraTrackingDebugLogTime = Time.time + CameraTrackingDebugInterval;
+
+        Transform player = ResolvePlayerTransform();
+        Vector3 playerPosition = player != null ? player.position : Vector3.zero;
+        string claimInfo = claim != null
+            ? $"{claim.Priority}:{(claim.Target != null ? claim.Target.name : "null")}"
+            : "DefaultFollow";
+        string areaName = CameraZoneManager.Active != null ? CameraZoneManager.Active.name : "none";
+        bool hasConfiner = CameraZoneManager.Active != null && CameraZoneManager.Active.Confiner != null;
+        float targetToPlayerX = player != null ? applied.x - playerPosition.x : 0f;
+
+        Debug.Log($"[CameraTrackDebug] t={Time.time:F2} state={PlayerStateManager.Instance.CurrentState} " +
+                  $"claim={claimInfo} trackingTarget={(driven != null ? driven.name : "null")} " +
+                  $"targetPos={applied} desired={desired} playerPos={playerPosition} " +
+                  $"targetMinusPlayerX={targetToPlayerX:F3} activeArea={areaName} hasConfiner={hasConfiner} " +
+                  $"blending={positionBlending} dampingSuppressed={dampingSuppressed}", this);
     }
 
     private void BeginPositionBlend(CameraClaim claim, Transform desiredSource)
@@ -435,21 +448,33 @@ public class CameraDirector : SceneService<CameraDirector>
 
         pendingReframe = reframeAt;
         CameraZoneManager.SetActive(manager);
+
+        // SetActive is a no-op when the area is already active, so ActiveChanged never fires and the
+        // reframe is stranded — a teleport within the current area would then let Cinemachine lerp to
+        // the player instead of snapping. Consume it here in that case so the switch is always instant.
+        if (pendingReframe.HasValue)
+        {
+            pendingReframe = null;
+            ReanchorTo(reframeAt);
+        }
     }
 
-    // Re-anchors the camera when the active area changes: makes the bounded target current against the
-    // new confiner (so a snap does not read the stale position), then parks on whatever zone now holds
-    // the reframe point, or on the bounded follow if the point is in a gap.
+    // Re-anchors the camera when the active area changes, then parks on whatever zone now holds the
+    // reframe point, or on bounded player follow if the point is in a gap.
     private void OnActiveAreaChanged(CameraZoneManager area)
     {
         if (rig == null || vcam == null) return; // event fired before Start; first-frame framing is Start's job
 
         Vector2 point = pendingReframe ?? ResolvePlayerPosition();
         pendingReframe = null;
+        ReanchorTo(point);
+    }
 
-        // Pull the new area's ghost onto the player and clamp it now, so the snap below reads its
-        // current position rather than wherever it happened to sit.
-        ActiveGhost()?.SnapToTarget();
+    // Snaps the camera onto a freshly teleported point with no travel, using a zone frame if one
+    // contains the point and bounded player follow otherwise.
+    private void ReanchorTo(Vector2 point)
+    {
+        if (rig == null || vcam == null) return;
 
         CameraZone zone = CameraZoneManager.ResolveAt(point);
         if (zone != null)
@@ -462,38 +487,46 @@ public class CameraDirector : SceneService<CameraDirector>
         }
     }
 
-    // Resolves the one ghost the camera follows: the reference authored on this director first, then
-    // any CameraGhost placed in the scene. If none is authored, spawns the prefab at the player — left
-    // manager-less, so CameraGhost clamps it to whatever zone is active.
-    private CameraGhost ResolveOrSpawnGhost()
+    private Transform ResolveTrackingTarget()
     {
-        if (ghost != null) return ghost;
+        if (trackingTarget != null) return trackingTarget;
 
-        CameraGhost found = FindAnyObjectByType<CameraGhost>();
-        if (found != null) return found;
-
-        if (ghostPrefab == null) return null;
-
-        CameraGhost spawned = Instantiate(ghostPrefab, ResolvePlayerPosition(), Quaternion.identity);
-        spawned.name = ghostPrefab.name;
-        return spawned;
+        return transform.Find(DefaultTrackingTargetName);
     }
 
-    // The camera's follow target is the single ghost resolved at Start; there is no per-area target
-    // to swap, so the bounded source is always that ghost.
-    private Transform BoundedTarget() => driven;
+    private Vector3 ResolveDefaultPosition()
+    {
+        Transform player = ResolvePlayerTransform();
+        Vector3 position = player != null ? player.position : driven.position;
+        PolygonCollider2D confiner = CameraZoneManager.Active != null ? CameraZoneManager.Active.Confiner : null;
+        if (confiner != null)
+        {
+            Vector2 clamped = confiner.ClosestPoint(position);
+            position = new Vector3(clamped.x, clamped.y, position.z);
+        }
 
-    private CameraGhost ActiveGhost() => ghost;
+        position.z = driven.position.z;
+        return position;
+    }
 
     private static Vector2 ResolvePlayerPosition()
     {
-        if (PlayerStateManager.Instance != null && PlayerStateManager.Instance.playerGameObject != null)
-        {
-            return PlayerStateManager.Instance.playerGameObject.transform.position;
-        }
+        Transform player = ResolvePlayerTransform();
+        if (player != null) return player.position;
 
         GameObject tagged = GameObject.FindGameObjectWithTag("Player");
         return tagged != null ? (Vector2)tagged.transform.position : Vector2.zero;
+    }
+
+    private static Transform ResolvePlayerTransform()
+    {
+        if (PlayerStateManager.Instance != null && PlayerStateManager.Instance.playerGameObject != null)
+        {
+            return PlayerStateManager.Instance.playerGameObject.transform;
+        }
+
+        GameObject tagged = GameObject.FindGameObjectWithTag("Player");
+        return tagged != null ? tagged.transform : null;
     }
 
     /// <summary>
@@ -507,19 +540,20 @@ public class CameraDirector : SceneService<CameraDirector>
 
         positionBlending = false;
         CameraClaim positionClaim = TopClaim(requireTarget: true);
-        Transform source = positionClaim != null ? positionClaim.Target : BoundedTarget();
-        if (source != null)
-        {
-            Vector3 position = source.position;
-            position.z = driven.position.z;
-            driven.position = position;
-            lastAppliedPosition = position;
-            positionSource = source; // so the next LateUpdate doesn't blend away from the snap
-        }
+        Transform source = positionClaim != null ? positionClaim.Target : null;
+        Vector3 position = source != null ? source.position : ResolveDefaultPosition();
+        position.z = driven.position.z;
+        driven.position = position;
+        lastAppliedPosition = position;
+        positionSource = source; // so the next LateUpdate doesn't blend away from the snap
 
         CameraClaim claim = TopClaim(requireTarget: false);
         zoomSource = claim;
         zoomInitialised = true;
-        ApplySize(claim?.OrthographicSize ?? defaultOrthographicSize);
+        float targetSize = claim?.OrthographicSize ?? defaultOrthographicSize;
+        if (!Mathf.Approximately(targetSize, appliedSize))
+        {
+            ApplySize(targetSize);
+        }
     }
 }

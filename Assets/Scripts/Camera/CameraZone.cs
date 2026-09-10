@@ -9,8 +9,7 @@ using UnityEngine;
 /// as a series of framed rooms rather than a scrolling side-view.
 ///
 /// A zone is deliberately just an anchor plus a size. Because the framing is static it needs no
-/// bounding polygon, so <see cref="CameraGhost"/> and its confining shape stay out of the way while
-/// a zone is active and keep doing their job for the overworld.
+/// bounding polygon; the director only uses area bounds for default player follow.
 ///
 /// Overlapping zones need no arbitration rules: a zone's claim is held for as long as the player is
 /// inside it, so entering room B while still in room A puts B on top, and walking back into A

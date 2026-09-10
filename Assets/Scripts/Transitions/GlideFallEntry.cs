@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 
 /// <summary>
 /// The destination half of the glide-unlock beat. Placed in the cave the player falls into, this
@@ -52,7 +53,7 @@ public class GlideFallEntry : MonoBehaviour
 
         if (PlayerStateManager.Instance != null)
         {
-            PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         }
 
         if (CameraRig.Current != null)

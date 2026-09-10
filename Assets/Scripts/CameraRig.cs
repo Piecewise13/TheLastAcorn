@@ -45,7 +45,7 @@ public class CameraRig : SceneService<CameraRig>
     public void ResetTrackingTarget()
     {
         // The director owns the follow target now, so a reset just drops the cinematic claim and lets
-        // the director fall back to its ghost. With no director there is nothing to reset through.
+        // the director fall back to its default player follow. With no director there is nothing to reset through.
         cinematicClaim?.Release();
         cinematicClaim = null;
     }
