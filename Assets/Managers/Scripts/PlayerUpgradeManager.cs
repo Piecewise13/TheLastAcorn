@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
+namespace Player
+{
 /// <summary>
 /// Owns the player's stat upgrades (strength, instinct, endurance)
 /// as well as acorn collection and segment progress that drives when upgrades are offered.
@@ -413,4 +415,5 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         Save();
         ApplyToPlayer();
     }
+}
 }

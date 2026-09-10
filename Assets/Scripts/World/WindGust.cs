@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 
 public class WindGust : MonoBehaviour
 {
@@ -27,7 +28,7 @@ public class WindGust : MonoBehaviour
             return;
         }
 
-        float gustForce = playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Glide ? glideGustForce : idleGustForce;
+        float gustForce = playerMoveManager.GetPlayerState() == PlayerState.Glide ? glideGustForce : idleGustForce;
 
         //playerRb.AddForce(transform.right * gustForce, ForceMode2D.Force);
         playerRb.linearVelocity = playerRb.linearVelocity + (Vector2)transform.right * gustForce * Time.fixedDeltaTime;

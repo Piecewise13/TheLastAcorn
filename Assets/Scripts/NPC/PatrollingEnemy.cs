@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]

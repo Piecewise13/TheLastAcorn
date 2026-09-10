@@ -1,4 +1,5 @@
 using UnityEngine;
+using Player;
 
 [RequireComponent(typeof(AudioSource))]
 public class SquirrelMovementAudio : MonoBehaviour
@@ -60,7 +61,7 @@ public class SquirrelMovementAudio : MonoBehaviour
     [SerializeField] private bool enablePitchBend = true;
 
     private AudioSource src;
-    private PlayerStateManager.PlayerState lastState = (PlayerStateManager.PlayerState)(-1);
+    private PlayerState lastState = (PlayerState)(-1);
 
     void Awake()
     {
@@ -88,7 +89,7 @@ public class SquirrelMovementAudio : MonoBehaviour
 
         if (!src.isPlaying) return;
 
-        if (state == PlayerStateManager.PlayerState.Climb || state == PlayerStateManager.PlayerState.STUNNED)
+        if (state == PlayerState.Climb || state == PlayerState.STUNNED)
         {
             var s = GetSettings(state);
             src.volume = s.volumeRange.y;
@@ -97,7 +98,7 @@ public class SquirrelMovementAudio : MonoBehaviour
         }
 
         var set   = GetSettings(state);
-        float vel = state == PlayerStateManager.PlayerState.Fall ? Mathf.Abs(rb.linearVelocity.y)
+        float vel = state == PlayerState.Fall ? Mathf.Abs(rb.linearVelocity.y)
                                               : Mathf.Abs(rb.linearVelocity.x);
 
         float vol = Remap(vel, set.speedRange, set.volumeRange);
@@ -112,13 +113,13 @@ public class SquirrelMovementAudio : MonoBehaviour
         if (jumpPlayer) jumpPlayer.Play();
     }
 
-    StateAudio GetSettings(PlayerStateManager.PlayerState s) => s switch
+    StateAudio GetSettings(PlayerState s) => s switch
     {
-        PlayerStateManager.PlayerState.Grounded => grounded,
-        PlayerStateManager.PlayerState.Climb    => climb,
-        PlayerStateManager.PlayerState.Glide    => glide,
-        PlayerStateManager.PlayerState.Fall     => fall,
-        PlayerStateManager.PlayerState.STUNNED  => stunned,
+        PlayerState.Grounded => grounded,
+        PlayerState.Climb    => climb,
+        PlayerState.Glide    => glide,
+        PlayerState.Fall     => fall,
+        PlayerState.STUNNED  => stunned,
         _                    => default
     };
 

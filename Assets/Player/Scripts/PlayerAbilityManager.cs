@@ -4,6 +4,8 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
+namespace Player
+{
 /// <summary>
 /// Tracks which gameplay abilities (Zoom, Glide, Leap) have been unlocked and
 /// owns the cinematic unlock sequence. Segment/acorn counting has moved to
@@ -93,17 +95,12 @@ public class PlayerAbilityManager : PersistentSingleton<PlayerAbilityManager>
     }
 
     /// <summary>Marks the current pending ability as unlocked and fires the event.</summary>
-    public async UniTask UnlockAbility(Abilities ability)
+    public void UnlockAbility(Abilities ability)
     {
         if (!HasPendingUnlock()) return;
         
         abilityUnlocked[(int)ability] = true;
-
-        await ViewManager.Instance.ClearViews();
-
-        CameraRig.Current.ResetTrackingTarget();
-        OverlayCameraController.Current.ReleasePlayerOverlay();
-
+        
         OnAbilityUnlocked?.Invoke(ability);
         SaveAbilities();
     }
@@ -139,4 +136,5 @@ public class PlayerAbilityManager : PersistentSingleton<PlayerAbilityManager>
 
     [Button("Debug: Unlock Leap")]
     private void DebugUnlockLeap() => DebugUnlockAbility(Abilities.Leap);
+}
 }

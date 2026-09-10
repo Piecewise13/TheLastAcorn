@@ -22,5 +22,10 @@ public class DebugEditorMenu : Editor
         {
             myComponent.ResetPlayerPostition();
         }
+
+        if (GUILayout.Button("Respawn Player At Scene Start"))
+        {
+            myComponent.RespawnPlayerAtSceneStart();
+        }
     }
 }

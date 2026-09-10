@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Player
+{
 /// <summary>
 /// The player's own camera behaviour: the held zoom-out, the glide speed zoom, and the unlock
 /// cinematic's zoom.
@@ -246,4 +248,5 @@ public class PlayerCameraManager : MonoBehaviour
     }
 #endif
 
+}
 }

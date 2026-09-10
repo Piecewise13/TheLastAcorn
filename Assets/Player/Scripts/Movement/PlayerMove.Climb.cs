@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Player
+{
 public partial class PlayerMoveManager : MonoBehaviour
 {
     
@@ -82,13 +84,13 @@ public partial class PlayerMoveManager : MonoBehaviour
         print("attach input: " + context.phase);
 
         // Prevent attaching if stunned
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED)
         {
             return;
         }
 
         // Stop climbing if already climbing and button released
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Climb && context.canceled)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb && context.canceled)
         {
             StopClimb();
             return;
@@ -282,7 +284,25 @@ public partial class PlayerMoveManager : MonoBehaviour
 
 
     /// <summary>
-    /// Starts climbing by updating state and disabling collider.
+    /// Matches the collider's platform exclusion to the current state, every physics step.
+    /// Climb is latched by state rather than by StartClimb/StopClimb because the states that
+    /// interrupt a climb — stun, lock, owl, vine — never reach StopClimb.
+    /// </summary>
+    private void SyncClimbCollisionExclusion()
+    {
+        int excluded = PlayerStateManager.Instance.CurrentState == PlayerState.Climb
+            ? noCollisionClimbLayer.value
+            : 0;
+
+        if (playerCollider.excludeLayers.value != excluded)
+        {
+            playerCollider.excludeLayers = excluded;
+        }
+    }
+
+    /// <summary>
+    /// Starts climbing by updating state and pinning the body in place.
+    /// Platform pass-through follows from the state, see SyncClimbCollisionExclusion.
     /// </summary>
     private void StartClimb()
     {
@@ -292,9 +312,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
 
 
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Climb);
-
-        playerCollider.excludeLayers = noCollisionClimbLayer;
+        PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
 
         rb.gravityScale = 0;
         rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
@@ -310,12 +328,10 @@ public partial class PlayerMoveManager : MonoBehaviour
     {
         animator.SetBool("isClimbing", false);
 
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Climb)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb)
         {
-            PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         }
-
-        playerCollider.excludeLayers = 0;
 
         //Moss reset
         mossSlipAmount = 0;
@@ -368,4 +384,5 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     }
 
+}
 }

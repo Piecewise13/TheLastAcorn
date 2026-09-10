@@ -1,4 +1,5 @@
 using System;
+using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -381,7 +382,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
 
         print(rayHit.collider);
 
-        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded 
+        if (playerMoveManager.GetPlayerState() == PlayerState.Grounded 
         && rayHit.collider == null)
         {
             StartChase();

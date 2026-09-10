@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+namespace Player
+{
 public class PlayerLifeManager : MonoBehaviour
 {
 
@@ -126,7 +128,7 @@ public class PlayerLifeManager : MonoBehaviour
     void Update()
     {
 
-        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
+        if (playerMoveManager.GetPlayerState() == PlayerState.Grounded)
         {
             lastGroundLocation = transform.position; // Update last ground location when grounded
         }
@@ -228,4 +230,5 @@ public class PlayerLifeManager : MonoBehaviour
         // Reload the scene to respawn acorns
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+}
 }

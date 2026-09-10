@@ -1,4 +1,5 @@
 using System;
+using Player;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -102,7 +103,7 @@ public class Gate : MonoBehaviour
             return;
         }
         
-        if (playerMoveManager.GetPlayerState() == PlayerStateManager.PlayerState.Grounded)
+        if (playerMoveManager.GetPlayerState() == PlayerState.Grounded)
         {
            print("Player grounded, resetting gate charges." + ResetCharges.GetInvocationList().Length);
             numChargeCollected = 0;
@@ -158,7 +159,7 @@ public class Gate : MonoBehaviour
             Destroy(gateCharge.gameObject);
         }
 
-        await PlayerAbilityManager.Instance.UnlockAbility(PlayerAbilityManager.Abilities.Glide);
+        PlayerAbilityManager.Instance.UnlockAbility(PlayerAbilityManager.Abilities.Glide);
         GateOpened?.Invoke();
     }
 

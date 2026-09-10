@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Player
+{
 public partial class PlayerMoveManager : MonoBehaviour
 {
       
@@ -23,6 +25,12 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float flightMultiper = 2f;
 
     private bool glideButtonReleasedSinceClimb = true;
+
+    private const float GlideDebugInterval = 0.25f;
+
+    private float nextGlideDebugLogTime;
+    private float lastGlideDebugDirection;
+    private float lastGlideDebugVelocitySign;
 
 
     // Update is called once per frame
@@ -48,18 +56,18 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         if (context.canceled)
         {
-            if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Glide)
+            if (PlayerStateManager.Instance.CurrentState == PlayerState.Glide)
             {
 
                 animator.SetBool("isGliding", false);
-                PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+                PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
             }
             return;
         }
 
         // Only allow gliding if falling and not stunned
-        if (PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Fall
-            || PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED)
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Fall
+            || PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED)
         {
             return;
         }
@@ -68,7 +76,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         initialGlideSpeed = defaultGlideSpeed;
 
         // Enter glide state and update animation
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Glide);
+        PlayerStateManager.Instance.ChangeState(PlayerState.Glide);
         animator.SetBool("isGliding", true);
     }
 
@@ -80,6 +88,8 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Only apply glide if falling downwards
         if (rb.linearVelocity.y < 0 || inGust)
         {
+            Vector2 velocityBefore = rb.linearVelocity;
+
             // Calculate glide speed based on downward velocity
             //float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));
 
@@ -87,7 +97,8 @@ public partial class PlayerMoveManager : MonoBehaviour
             //glideSpeedMultiplier += Time.deltaTime / flightMultiper;
 
             // Determine direction based on graphic rotation
-            float direction = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
+            float graphicY = graphic.transform.eulerAngles.y;
+            float direction = graphicY == 0 ? 1f : -1f;
 
             float glideSpeedCap = inGust ? maxGlideSpeedInGust : maxGlideSpeed;
 
@@ -96,12 +107,13 @@ public partial class PlayerMoveManager : MonoBehaviour
 
             // rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper), 0f, glideSpeedCap) * direction, rb.linearVelocity.y * 0.90f);
             rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
+            LogGlideDebug(velocityBefore, rb.linearVelocity, graphicY, direction);
             //            print(rb.linearVelocity.x);
         }
         else
         {
             // Exit glide state if not falling
-            PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
             animator.SetBool("isGliding", false);
             animator.SetBool("isFalling", true);
         }
@@ -111,6 +123,25 @@ public partial class PlayerMoveManager : MonoBehaviour
     void ResetGlide()
     {
 
+    }
+
+    private void LogGlideDebug(Vector2 velocityBefore, Vector2 velocityAfter, float graphicY, float direction)
+    {
+        float velocitySign = Mathf.Sign(velocityAfter.x);
+        bool directionChanged = lastGlideDebugDirection != 0f && !Mathf.Approximately(lastGlideDebugDirection, direction);
+        bool velocitySignChanged = lastGlideDebugVelocitySign != 0f && !Mathf.Approximately(lastGlideDebugVelocitySign, velocitySign);
+        bool shouldLog = Time.time >= nextGlideDebugLogTime || directionChanged || velocitySignChanged;
+        if (!shouldLog) return;
+
+        nextGlideDebugLogTime = Time.time + GlideDebugInterval;
+        lastGlideDebugDirection = direction;
+        lastGlideDebugVelocitySign = velocitySign;
+
+        Vector3 graphicsLocal = graphic != null ? graphic.transform.localPosition : Vector3.zero;
+        Debug.Log($"[GlideDebug] t={Time.time:F2} state={PlayerStateManager.Instance.CurrentState} " +
+                  $"playerPos={transform.position} graphicsLocal={graphicsLocal} graphicY={graphicY:F3} " +
+                  $"dir={direction:F0} dirFlip={directionChanged} velSignFlip={velocitySignChanged} " +
+                  $"velBefore={velocityBefore} velAfter={velocityAfter} inGust={inGust}", this);
     }
 
     /// <summary>
@@ -124,4 +155,5 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     #endregion
 
+}
 }

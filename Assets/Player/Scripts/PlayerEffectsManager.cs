@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Player
+{
 public class PlayerEffectsManager : MonoBehaviour
 {
 
@@ -106,4 +108,5 @@ public class PlayerEffectsManager : MonoBehaviour
             gamepad.SetMotorSpeeds(0, 0);
         }
     }
+}
 }

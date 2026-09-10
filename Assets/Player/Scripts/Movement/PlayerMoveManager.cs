@@ -4,6 +4,8 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Player
+{
 public partial class PlayerMoveManager : MonoBehaviour
 {
     private PlayerLifeManager lifeManager;
@@ -172,7 +174,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         jumpAction.Enable();
 
         //TODO: Switch to locked state when glide transition
-        PlayerStateManager.Instance.OnStateChanged += LockPlayer();
+        PlayerStateManager.Instance.OnLockChange += CheckPlayerLocked;
     }
 
     /// <summary>
@@ -195,11 +197,11 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
     
 
-    void HandleStateChanged(PlayerStateManager.PlayerState from, PlayerStateManager.PlayerState to)
+    void HandleStateChanged(PlayerState from, PlayerState to)
     {
-        animator.SetBool("isGliding",  to == PlayerStateManager.PlayerState.Glide);
-        animator.SetBool("isFalling",  to == PlayerStateManager.PlayerState.Fall);
-        animator.SetBool("isClimbing", to == PlayerStateManager.PlayerState.Climb);
+        animator.SetBool("isGliding",  to == PlayerState.Glide);
+        animator.SetBool("isFalling",  to == PlayerState.Fall);
+        animator.SetBool("isClimbing", to == PlayerState.Climb);
         animator.SetBool("isRunning",  false); // will be overridden by movement each frame
     }
 
@@ -208,10 +210,24 @@ public partial class PlayerMoveManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        // Prevent movement if stunned
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED
-        || PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.RidingOwl
-        || PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.VineSwinging)
+        // Climb is the only state that passes through platforms. Deriving that from the state each
+        // step means a climb cut short by a stun, lock or ride cannot leave it latched on.
+        SyncClimbCollisionExclusion();
+
+        // Locked can be entered via ChangeState (which never fires OnLockChange), so the private
+        // LockPlayer that zeros gravity may never run. Enforce a fully inert body here instead of
+        // trusting that path, otherwise Unity's physics keeps pulling the player down while locked.
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Locked)
+        {
+            rb.gravityScale = 0f;
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
+
+        // These states own the body entirely; running FallingLogic would fight their own gravity.
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED
+        || PlayerStateManager.Instance.CurrentState == PlayerState.RidingOwl
+        || PlayerStateManager.Instance.CurrentState == PlayerState.VineSwinging)
         {
             return;
         }
@@ -219,7 +235,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         SideMovementCameraZoom();
 
         // Handle climbing logic
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Climb)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb)
         {
             Climb();
             return;
@@ -233,7 +249,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
 
         // Handle gliding logic
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Glide)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Glide)
         {
             Glide();
             return;
@@ -247,7 +263,7 @@ public partial class PlayerMoveManager : MonoBehaviour
             return;
         }
 
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Grounded)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Grounded)
         {
             // Reset horizontal movement and update animation
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
@@ -264,7 +280,7 @@ public partial class PlayerMoveManager : MonoBehaviour
     {
 
         // Adjust gravity scale based on player state
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Grounded)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Grounded)
         {
             rb.gravityScale = 1.5f;
             jumpHeldDuration = 0f;
@@ -297,7 +313,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
 
 
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Glide)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Glide)
         {
             jumpHeldDuration = 0f;
             rb.gravityScale = inGust ? 0.0f : 2.8f;
@@ -320,24 +336,24 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
     private void SideMovement()
     {
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Climb)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb)
             return;
 
         Vector2 moveInput = moveAction.ReadValue<Vector2>();
-        float moveSpeed = (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Fall) ? airMoveSpeed : groundMoveSpeed;
+        float moveSpeed = (PlayerStateManager.Instance.CurrentState == PlayerState.Fall) ? airMoveSpeed : groundMoveSpeed;
 
         // Handle running animation
-        animator.SetBool("isRunning", moveInput.x != 0 && PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Grounded);
+        animator.SetBool("isRunning", moveInput.x != 0 && PlayerStateManager.Instance.CurrentState == PlayerState.Grounded);
 
         // Apply horizontal velocity
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Fall && ShouldApplyAirControl(moveInput.x, rb.linearVelocity.x))
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Fall && ShouldApplyAirControl(moveInput.x, rb.linearVelocity.x))
         {
             rb.linearVelocity = new Vector2(
                 rb.linearVelocity.x + moveInput.x * airMoveSpeed * Time.deltaTime,
                 rb.linearVelocity.y
             );
         }
-        else if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Fall)
+        else if (PlayerStateManager.Instance.CurrentState == PlayerState.Fall)
         {
             if (Mathf.Abs(moveInput.x * airMoveSpeed) > Mathf.Abs(rb.linearVelocity.x))
             {
@@ -361,7 +377,7 @@ public partial class PlayerMoveManager : MonoBehaviour
     private void SideMovementCameraZoom()
     {
 
-        if (PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Glide && PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Fall)
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Glide && PlayerStateManager.Instance.CurrentState != PlayerState.Fall)
         {
             playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
             return;
@@ -397,28 +413,28 @@ public partial class PlayerMoveManager : MonoBehaviour
     private void Jump(InputAction.CallbackContext context)
     {
 
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED)
         {
             return;
         }
 
         //If we want to detach from the owl when jumping, we can uncomment this section
 
-        // if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.RidingOwl)
+        // if (PlayerStateManager.Instance.CurrentState == PlayerState.RidingOwl)
         // {
         //     DetachFromOwl();
         //     return;
         // }
         
         // Handle tree leap when climbing
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Climb)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb)
         {
             LeapFromTree();
             return;
         }
 
         // Only allow jumping if grounded and not stunned
-        if (PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Grounded)
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Grounded)
         {
             return;
         }
@@ -432,7 +448,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         animator.SetTrigger("Jump");
 
         // Set state to falling and update animation
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+        PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
 
         jumpBufferTimer = jumpBufferTime;
     }
@@ -457,9 +473,9 @@ public partial class PlayerMoveManager : MonoBehaviour
         bool isGrounded = col != null;
 
         // If grounded, update state and animations
-        if (isGrounded && PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.Grounded)
+        if (isGrounded && PlayerStateManager.Instance.CurrentState != PlayerState.Grounded)
         {
-            if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED)
+            if (PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED)
             {
                 stunnedEffect.SetActive(false);
             }
@@ -474,13 +490,13 @@ public partial class PlayerMoveManager : MonoBehaviour
             }
 
 
-            PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Grounded);
+            PlayerStateManager.Instance.ChangeState(PlayerState.Grounded);
 
         }
         // If not grounded, set state to falling
-        else if (!isGrounded && PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.Grounded)
+        else if (!isGrounded && PlayerStateManager.Instance.CurrentState == PlayerState.Grounded)
         {
-            PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         }
     }
 
@@ -517,14 +533,14 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     public void StunPlayer()
     {
-        if (PlayerStateManager.Instance.CurrentState == PlayerStateManager.PlayerState.STUNNED)
+        if (PlayerStateManager.Instance.CurrentState == PlayerState.STUNNED)
         {
             return;
         }
 
         DisableMove();
 
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.STUNNED);
+        PlayerStateManager.Instance.ChangeState(PlayerState.STUNNED);
 
         effectsManager.StartStunEffect();
     }
@@ -532,7 +548,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     public void StopStun()
     {
-        if (PlayerStateManager.Instance.CurrentState != PlayerStateManager.PlayerState.STUNNED)
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.STUNNED)
         {
             return;
         }
@@ -541,7 +557,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         EnableMove();
 
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+        PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
 
         effectsManager.EndStunEffect();
 
@@ -550,14 +566,43 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     }
 
-
-    public void LockPlayer()
+    private void CheckPlayerLocked(bool isLocked)
     {
-        rb.gravityScale = 0f;
+        
+        if (isLocked)
+        {
+            LockPlayer();
+            return;
+        }
+        
+        UnlockPlayer();
     }
 
-    public void UnlockPlayer()
+    private void LockPlayer()
     {
+        DisableMove();
+        rb.gravityScale = 0f;
+        // Kill leftover momentum (e.g. the glide-unlock fall entry seeds downward velocity),
+        // otherwise the body keeps drifting even with gravity off.
+        rb.linearVelocity = Vector2.zero;
+        ForceGroundedPose();
+    }
+
+    // Locking sets CurrentState = Locked directly, so OnStateChanged never fires and the animator
+    // keeps whatever pose it held before the lock (gliding, climbing, falling...). Force the grounded
+    // pose so a locked player always reads as grounded regardless of what it was doing.
+    private void ForceGroundedPose()
+    {
+        animator.SetBool("isGliding", false);
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isClimbing", false);
+        animator.SetBool("isClimbMoving", false);
+        animator.SetBool("isRunning", false);
+    }
+
+    private void UnlockPlayer()
+    {
+        EnableMove();
         rb.gravityScale = 1f;
     }
     
@@ -595,11 +640,21 @@ public partial class PlayerMoveManager : MonoBehaviour
         playerMovementMap.Enable();
     }
 
+    private void OnDestroy()
+    {
+        // PlayerStateManager outlives the player, so drop our handlers or they leak.
+        if (PlayerStateManager.Instance != null)
+        {
+            PlayerStateManager.Instance.OnLockChange -= CheckPlayerLocked;
+            PlayerStateManager.Instance.OnStateChanged -= HandleStateChanged;
+        }
+    }
+
     #region Owl Riding
 
     public void AttachToOwl()
     {
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.RidingOwl) ;
+        PlayerStateManager.Instance.ChangeState(PlayerState.RidingOwl) ;
         rb.gravityScale = 0f;
         animator.SetBool("isClimbMoving", false);
 
@@ -619,7 +674,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         }
 
         playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+        PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         rb.gravityScale = 1f;
         animator.SetBool("isClimbMoving", false);
 
@@ -653,7 +708,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         DisableMove();
         rb.gravityScale = 0f;
         playerCollider.enabled = false;
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.VineSwinging);
+        PlayerStateManager.Instance.ChangeState(PlayerState.VineSwinging);
         //animator.SetBool("isVineSwinging", true);
     }
 
@@ -662,7 +717,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         EnableMove();
         rb.gravityScale = 1f;
         playerCollider.enabled = true;
-        PlayerStateManager.Instance.ChangeState(PlayerStateManager.PlayerState.Fall);
+        PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         //animator.SetBool("isVineSwinging", false);
     }
 
@@ -673,11 +728,12 @@ public partial class PlayerMoveManager : MonoBehaviour
     /// Gets the current player state.
     /// </summary>
     /// <returns>The current PlayerState.</returns>
-    public PlayerStateManager.PlayerState GetPlayerState()
+    public PlayerState GetPlayerState()
     {
         return PlayerStateManager.Instance.CurrentState;
     }
 
+}
 }
 
 

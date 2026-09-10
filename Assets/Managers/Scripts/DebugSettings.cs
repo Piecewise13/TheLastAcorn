@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.Serialization;
+using Player;
 
 
 [System.Serializable]
@@ -84,5 +85,21 @@ public class DebugSettings : PersistentSingleton<DebugSettings>
     {
         if (playerTransform != null)
             playerTransform.position = playerStartingPosition;
+    }
+
+    public void RespawnPlayerAtSceneStart()
+    {
+        if (playerTransform == null)
+        {
+            PlayerMoveManager move = FindAnyObjectByType<PlayerMoveManager>();
+            if (move == null) return;
+            playerTransform = move.transform.root;
+        }
+
+        CheckpointManager checkpointManager = CheckpointManager.For(playerTransform.gameObject.scene);
+        if (checkpointManager == null || !checkpointManager.HasStartPoint) return;
+
+        checkpointManager.SpawnAtStart(playerTransform.gameObject);
+        playerStartingPosition = playerTransform.position;
     }
 }

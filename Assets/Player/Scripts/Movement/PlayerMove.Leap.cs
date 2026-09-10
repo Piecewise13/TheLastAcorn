@@ -1,5 +1,7 @@
 using UnityEngine;
 
+namespace Player
+{
 public partial class PlayerMoveManager: MonoBehaviour
 {
 
@@ -54,4 +56,5 @@ public partial class PlayerMoveManager: MonoBehaviour
         
         Debug.Log($"Leaped from tree! Horizontal velocity: {horizontalLeapVelocity:F1}, Climb speed was: {currentClimbSpeed:F1}");
     }
+}
 }
