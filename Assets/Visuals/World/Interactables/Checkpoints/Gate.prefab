@@ -12685,7 +12685,6 @@ GameObject:
   - component: {fileID: 3065746914292932985}
   - component: {fileID: 7341312000421659437}
   - component: {fileID: 4925312304939517374}
-  - component: {fileID: 6340685377074019125}
   m_Layer: 8
   m_Name: Gate
   m_TagString: Statue
@@ -12872,26 +12871,6 @@ MonoBehaviour:
   gateOpenDuration: 2
   activateFeedback: {fileID: 7373753331148568685}
   startActivated: 0
---- !u!114 &6340685377074019125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7608516494688604138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 983ee4371a8eb4ef693113d5ce1882e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CaveGlideUnlockSequence
-  wallZone: {fileID: 0}
-  wall: {fileID: 0}
-  playerMove: {fileID: 0}
-  gate: {fileID: 4925312304939517374}
-  runOnGlideUnlock: 1
-  delayBeforeReveal: 0.5
-  holdAfterReveal: 0.5
-  cameraDirector: {fileID: 0}
 --- !u!1 &7943118241065002356
 GameObject:
   m_ObjectHideFlags: 0

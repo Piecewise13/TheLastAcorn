@@ -414,7 +414,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -6154,6 +6154,58 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &5391216196079980278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5004948173890536063}
+  - component: {fileID: 502404160031003260}
+  m_Layer: 7
+  m_Name: ScentTrailManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5004948173890536063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5391216196079980278}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9149958767366715690}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &502404160031003260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5391216196079980278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cb5ffdc50d114d58b3e792860eddcf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScentTrailManager
+  trailPrefab: {fileID: 3888345534434165177, guid: da9b48fbf4ec84c78bbd4f48389d3f29, type: 3}
+  graphicsOrigin: {fileID: 7442338127621984480}
+  rangeMultiplier: 1.5
+  fallbackDetectionRange: 15
+  acornMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  trailContainer: {fileID: 0}
 --- !u!1 &6707566019504523871
 GameObject:
   m_ObjectHideFlags: 0
@@ -6183,7 +6235,8 @@ Transform:
   m_LocalPosition: {x: -0.20199585, y: 0.55199814, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5004948173890536063}
   m_Father: {fileID: 6548402314755964825}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &57304623480549288
@@ -6206,7 +6259,7 @@ MonoBehaviour:
   cameraState: 1
   zoomInSFX: {fileID: 1316628860150957882}
   zoomOutSFX: {fileID: 3005658991925814336}
-  zoomView: {fileID: 0}
+  zoomView: {fileID: 3784460192342504824, guid: 7f03816dbfae0470ebe0de3bf91906f4, type: 3}
 --- !u!1 &7433634335548380104
 GameObject:
   m_ObjectHideFlags: 0
