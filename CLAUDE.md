@@ -7,7 +7,6 @@ do not restate their contents here, edit the rule file instead.
 ## Always-on rules
 
 @.cursor/rules/obsidian-vault.mdc
-@.cursor/rules/graphify.mdc
 @.cursor/rules/unitask-over-coroutines.mdc
 
 ## Reading these
