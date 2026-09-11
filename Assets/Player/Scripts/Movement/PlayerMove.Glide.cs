@@ -17,6 +17,14 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float maxGlideSpeed = 35f;
     [SerializeField] private float maxGlideSpeedInGust = 50f;
 
+    /// <summary>
+    /// Fraction of downward speed kept each frame while gliding outside a gust. Closer to 1 means
+    /// the glide loses height more slowly. Used by <see cref="Glide"/> and set by the upgrade
+    /// system via <see cref="SetGlideYDecline"/>.
+    /// </summary>
+    [Range(0f, 1f)]
+    [SerializeField] private float glideYDecline = 0.9f;
+
     [SerializeField] private float glideSuperSpeedMin;
 
 
@@ -89,26 +97,17 @@ public partial class PlayerMoveManager : MonoBehaviour
         if (rb.linearVelocity.y < 0 || inGust)
         {
             Vector2 velocityBefore = rb.linearVelocity;
-
-            // Calculate glide speed based on downward velocity
-            //float glideX = Mathf.Max(initialGlideSpeed, Mathf.Abs(rb.linearVelocity.y));
-
-            // Increase glide speed multiplier over time
-            //glideSpeedMultiplier += Time.deltaTime / flightMultiper;
-
+            
             // Determine direction based on graphic rotation
             float graphicY = graphic.transform.eulerAngles.y;
             float direction = graphicY == 0 ? 1f : -1f;
 
             float glideSpeedCap = inGust ? maxGlideSpeedInGust : maxGlideSpeed;
 
-            float yDecline = inGust ? 0.99f : 0.9f;
+            float yDecline = inGust ? 0.99f : glideYDecline;
 
-
-            // rb.linearVelocity = new Vector2(Mathf.Clamp(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper), 0f, glideSpeedCap) * direction, rb.linearVelocity.y * 0.90f);
             rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
             LogGlideDebug(velocityBefore, rb.linearVelocity, graphicY, direction);
-            //            print(rb.linearVelocity.x);
         }
         else
         {
@@ -151,6 +150,30 @@ public partial class PlayerMoveManager : MonoBehaviour
     public void SetMaxGlideSpeed(float value)
     {
         maxGlideSpeed = value;
+    }
+
+    /// <summary>
+    /// The top horizontal glide speed at the player's current upgrade level. The camera's velocity
+    /// zoom normalizes against this rather than an absolute ceiling, so its ramp keeps the same
+    /// shape at every level and only the size it lands on changes.
+    /// </summary>
+    public float MaxGlideSpeed => maxGlideSpeed;
+
+    /// <summary>
+    /// Horizontal speed, ignoring sign and ignoring descent. This is the quantity the glide caps
+    /// (see <see cref="Glide"/>), so it is also what the camera's velocity zoom reads — magnitude
+    /// would zoom out hard on a vertical drop where the player is barely travelling.
+    /// </summary>
+    public float HorizontalSpeed => rb != null ? Mathf.Abs(rb.linearVelocity.x) : 0f;
+
+    /// <summary>
+    /// Sets the fraction of downward speed kept each frame while gliding outside a gust. Higher is
+    /// a flatter, longer glide. Used by the upgrade system; the in-gust decline is authored and
+    /// left alone.
+    /// </summary>
+    public void SetGlideYDecline(float value)
+    {
+        glideYDecline = Mathf.Clamp01(value);
     }
 
     #endregion

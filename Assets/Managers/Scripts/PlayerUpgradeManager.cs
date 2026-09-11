@@ -14,9 +14,12 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 {
     public enum UpgradeStat
     {
-        Strength = 0,
-        Instinct = 1,
-        Endurance = 2,
+        /// <summary>Climb duration and climb speed.</summary>
+        Climbing = 0,
+        /// <summary>How far the camera zooms out.</summary>
+        Vision = 1,
+        /// <summary>Top glide speed and how slowly the glide loses height.</summary>
+        Gliding = 2,
     }
 
     public enum UpgradeEffectTarget
@@ -25,12 +28,14 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         ClimbSpeed,
         MaxGlideSpeed,
         ZoomOutAmount,
+        GlideYDecline,
+        MaxVelocityZoom,
+        MinimumZoom,
     }
 
     [Serializable]
     struct ValueProgression
     {
-        [Min(0)] public int maxLevel;
         public float minValue;
         public float maxValue;
         [Tooltip("Remaps normalized upgrade progress before interpolating from minValue to maxValue. Empty curves are treated as linear.")]
@@ -53,12 +58,21 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 
     // ── Stat upgrade data ────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Levels every stat takes to reach its maxValue. Shared and fixed rather than authored per
+    /// effect, so all three stats progress at the same rate and one number retunes the whole
+    /// upgrade curve.
+    /// </summary>
+    private const int MAXUPGRADELEVEL = 7;
+
+    public static int MaxUpgradeLevel => MAXUPGRADELEVEL;
+
     [SerializeField]
     private UpgradeProgression[] upgradeProgressions = new UpgradeProgression[]
     {
         new UpgradeProgression
         {
-            stat = UpgradeStat.Strength,
+            stat = UpgradeStat.Climbing,
             effects = new[]
             {
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxClimbTime },
@@ -67,7 +81,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         },
         new UpgradeProgression
         {
-            stat = UpgradeStat.Instinct,
+            stat = UpgradeStat.Vision,
             effects = new[]
             {
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.ZoomOutAmount },
@@ -75,10 +89,13 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         },
         new UpgradeProgression
         {
-            stat = UpgradeStat.Endurance,
+            stat = UpgradeStat.Gliding,
             effects = new[]
             {
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxGlideSpeed },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.GlideYDecline },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxVelocityZoom },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.MinimumZoom },
             }
         },
     };
@@ -232,18 +249,28 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     // ── Stat queries ──────────────────────────────────────────────────────────
 
     /// <summary>Current upgrade level for a stat (0 = base, no upgrades applied).</summary>
-    public int GetLevel(UpgradeStat stat) => statLevels[(int)stat];
+    public int GetLevel(UpgradeStat stat)
+    {
+        // Read through the debug override rather than copying it into statLevels, so the real saved
+        // progress is never touched and switching the override off restores it exactly.
+        if (DebugSettings.Instance != null && DebugSettings.Instance.OverrideUpgradeLevels)
+            return Mathf.Clamp(DebugSettings.Instance.GetUpgradeLevel(stat), 0, GetMaxLevel(stat));
 
-    /// <summary>Highest reachable level for a stat.</summary>
+        return statLevels[(int)stat];
+    }
+
+    /// <summary>
+    /// Highest reachable level for a stat. Shared across every stat; the per-stat lookup remains so
+    /// a stat with nothing configured still reports 0 and is never offered as an upgrade.
+    /// </summary>
     public int GetMaxLevel(UpgradeStat stat)
     {
-        if (!TryGetUpgradeProgression(stat, out var upgradeProgression) || upgradeProgression.effects == null)
+        if (!TryGetUpgradeProgression(stat, out var upgradeProgression)
+            || upgradeProgression.effects == null
+            || upgradeProgression.effects.Length == 0)
             return 0;
 
-        int maxLevel = 0;
-        for (int i = 0; i < upgradeProgression.effects.Length; i++)
-            maxLevel = Mathf.Max(maxLevel, upgradeProgression.effects[i].progression.maxLevel);
-        return maxLevel;
+        return MAXUPGRADELEVEL;
     }
 
     /// <summary>True when a stat has reached its final configured level.</summary>
@@ -320,8 +347,6 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
             for (int j = 0; j < upgradeProgression.effects.Length; j++)
             {
                 var effect = upgradeProgression.effects[j];
-                if (effect.progression.maxLevel <= 0) continue;
-
                 float value = EvaluateProgression(effect.progression, level);
                 ApplyEffect(effect.target, value);
             }
@@ -332,14 +357,12 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 
     private bool TryGetPrimaryProgression(UpgradeStat stat, out ValueProgression progression)
     {
-        if (TryGetUpgradeProgression(stat, out var upgradeProgression) && upgradeProgression.effects != null)
+        if (TryGetUpgradeProgression(stat, out var upgradeProgression)
+            && upgradeProgression.effects != null
+            && upgradeProgression.effects.Length > 0)
         {
-            for (int i = 0; i < upgradeProgression.effects.Length; i++)
-            {
-                progression = upgradeProgression.effects[i].progression;
-                if (progression.maxLevel > 0)
-                    return true;
-            }
+            progression = upgradeProgression.effects[0].progression;
+            return true;
         }
 
         progression = default;
@@ -380,17 +403,24 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
             case UpgradeEffectTarget.MaxGlideSpeed:
                 if (playerMoveManager != null) playerMoveManager.SetMaxGlideSpeed(value);
                 break;
+            case UpgradeEffectTarget.GlideYDecline:
+                if (playerMoveManager != null) playerMoveManager.SetGlideYDecline(value);
+                break;
             case UpgradeEffectTarget.ZoomOutAmount:
                 if (playerCamera != null) playerCamera.SetZoomOutAmount(value);
+                break;
+            case UpgradeEffectTarget.MaxVelocityZoom:
+                if (playerCamera != null) playerCamera.SetMaxVelocityZoom(value);
+                break;
+            case UpgradeEffectTarget.MinimumZoom:
+                if (playerCamera != null) playerCamera.SetMinimumZoom(value);
                 break;
         }
     }
 
     private static float EvaluateProgression(ValueProgression progression, int level)
     {
-        if (progression.maxLevel <= 0) return progression.minValue;
-
-        float progress = Mathf.Clamp01((float)level / progression.maxLevel);
+        float progress = Mathf.Clamp01((float)level / MAXUPGRADELEVEL);
         if (progression.interpolationCurve != null && progression.interpolationCurve.length > 0)
             progress = Mathf.Clamp01(progression.interpolationCurve.Evaluate(progress));
 
