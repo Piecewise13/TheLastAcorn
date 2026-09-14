@@ -22,10 +22,7 @@ public class Spike : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            var root = other.transform.root;
-
-            PlayerLifeManager lifeManager = root.GetComponent<PlayerLifeManager>();
-            lifeManager.DamagePlayer(transform.up * damageLaunch);
+            PlayerLifeManager.Instance?.DamagePlayer(transform.up * damageLaunch);
 
         }
     }

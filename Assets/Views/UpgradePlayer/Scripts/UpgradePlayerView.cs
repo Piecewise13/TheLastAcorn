@@ -8,12 +8,12 @@ public class UpgradePlayerView : ViewBase
     [SerializeField] private UpgradeOptionContainer[] optionsContainers = null!;
 
     // Ability required to reveal each container, mapped by index.
-    // Strength is always available; Instinct and Endurance require their matching abilities.
+    // Climbing is always available; Vision and Gliding require their matching abilities.
     private static readonly PlayerAbilityManager.Abilities?[] RequiredAbility =
     {
-        null,                                  // Strength
-        PlayerAbilityManager.Abilities.Zoom,   // Instinct
-        PlayerAbilityManager.Abilities.Glide,  // Endurance
+        null,                                  // Climbing
+        PlayerAbilityManager.Abilities.Zoom,   // Vision
+        PlayerAbilityManager.Abilities.Glide,  // Gliding
     };
 
     public override async UniTask Setup()

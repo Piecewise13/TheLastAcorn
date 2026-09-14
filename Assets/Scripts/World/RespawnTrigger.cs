@@ -7,9 +7,8 @@ public class RespawnTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        var player = other.transform.root;
+        if (!other.transform.root.CompareTag("Player")) return;
 
-        PlayerLifeManager playerLifeManager = player.GetComponent<PlayerLifeManager>();
-        playerLifeManager.DamagePlayerAndRelocate(respawnPoint.position);
+        PlayerLifeManager.Instance?.DamagePlayerAndRelocate(respawnPoint.position);
     }
 }

@@ -19,18 +19,32 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     /// <summary>
     /// Fraction of downward speed kept each frame while gliding outside a gust. Closer to 1 means
-    /// the glide loses height more slowly. Used by <see cref="Glide"/> and set by the upgrade
-    /// system via <see cref="SetGlideYDecline"/>.
+    /// the glide loses height more slowly. Used by <see cref="Glide"/>.
     /// </summary>
     [Range(0f, 1f)]
     [SerializeField] private float glideYDecline = 0.9f;
 
     [SerializeField] private float glideSuperSpeedMin;
 
-
     private bool inGust = false;
 
-    [SerializeField] private float flightMultiper = 2f;
+    /// <summary>
+    /// Migration rate toward the glide target velocity at full speed. Used by <see cref="Glide"/> and
+    /// set by the upgrade system via <see cref="SetEnergyShiftSpeed"/>.
+    /// </summary>
+    [SerializeField] private float energyShiftSpeed = 2f;
+
+    /// <summary>
+    /// Migration rate toward the glide target velocity at a standstill. The rate is lerped between
+    /// this and <see cref="energyShiftSpeed"/> by how fast the player is already travelling, so a
+    /// fast entry snaps onto the glide line and a slow one eases onto it.
+    /// </summary>
+    [SerializeField] private float glideMigrationMinRate = 0.6f;
+
+/// <summary>
+/// the angle (0 at down, 90 to the side) that the player will move toward when gliding.
+/// </summary>
+    [SerializeField] private float glideDirectionAngle = 70f;
 
     private bool glideButtonReleasedSinceClimb = true;
 
@@ -40,14 +54,12 @@ public partial class PlayerMoveManager : MonoBehaviour
     private float lastGlideDebugDirection;
     private float lastGlideDebugVelocitySign;
 
-
     // Update is called once per frame
     void Update()
     {
         
     }
-
-
+    
     #region Glide Region
 
     /// <summary>
@@ -96,18 +108,22 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Only apply glide if falling downwards
         if (rb.linearVelocity.y < 0 || inGust)
         {
-            Vector2 velocityBefore = rb.linearVelocity;
-            
-            // Determine direction based on graphic rotation
-            float graphicY = graphic.transform.eulerAngles.y;
-            float direction = graphicY == 0 ? 1f : -1f;
+            // Angle is measured from straight down, so 0 dives and 90 is level.
+            // Graphic faces right at 0 degrees and left at 180, so mirror the target's X onto whichever way the player is facing.
+            float facingDirection = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
+            var targetDirection = new Vector2(Mathf.Sin(glideDirectionAngle * Mathf.Deg2Rad) * facingDirection,
+                -Mathf.Cos(glideDirectionAngle * Mathf.Deg2Rad));
 
-            float glideSpeedCap = inGust ? maxGlideSpeedInGust : maxGlideSpeed;
+            float maxSpeed = inGust ? maxGlideSpeedInGust : maxGlideSpeed;
+            Vector2 targetVelocity = targetDirection * maxSpeed;
 
-            float yDecline = inGust ? 0.99f : glideYDecline;
+            // Exponential approach: never overshoots, and stays frame-rate independent. The rate
+            // scales with current speed, so momentum carried into the glide buys a faster migration.
+            float speedFraction = Mathf.Clamp01(rb.linearVelocity.magnitude / maxSpeed);
+            float migrationRate = Mathf.Lerp(glideMigrationMinRate, energyShiftSpeed, speedFraction);
+            float migrationStep = 1f - Mathf.Exp(-migrationRate * Time.fixedDeltaTime);
 
-            rb.linearVelocity = new Vector2(Mathf.Lerp(Mathf.Abs(rb.linearVelocity.x), glideSpeedCap, Time.deltaTime * flightMultiper) * direction, rb.linearVelocity.y * yDecline);
-            LogGlideDebug(velocityBefore, rb.linearVelocity, graphicY, direction);
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, targetVelocity, migrationStep);
         }
         else
         {
@@ -167,13 +183,11 @@ public partial class PlayerMoveManager : MonoBehaviour
     public float HorizontalSpeed => rb != null ? Mathf.Abs(rb.linearVelocity.x) : 0f;
 
     /// <summary>
-    /// Sets the fraction of downward speed kept each frame while gliding outside a gust. Higher is
-    /// a flatter, longer glide. Used by the upgrade system; the in-gust decline is authored and
-    /// left alone.
+    /// Sets how fast velocity migrates onto the glide target velocity at full speed. Used by the upgrade system.
     /// </summary>
-    public void SetGlideYDecline(float value)
+    public void SetEnergyShiftSpeed(float value)
     {
-        glideYDecline = Mathf.Clamp01(value);
+        energyShiftSpeed = value;
     }
 
     #endregion

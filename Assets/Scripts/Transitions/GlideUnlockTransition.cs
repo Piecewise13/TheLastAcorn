@@ -24,18 +24,28 @@ public class GlideUnlockTransition : MonoBehaviour
 {
     [Header("Trigger")]
     [Tooltip("When true, this runs automatically the moment the Glide ability is unlocked.")]
-    [SerializeField] private bool runOnGlideUnlock = true;
+    [SerializeField]
+    private bool runOnGlideUnlock = true;
 
     [Header("Camera")]
     [Tooltip("Orthographic size to zoom in to on the player before the white. Leave <= 0 to skip.")]
-    [SerializeField] private float zoomInOrthoSize = 3f;
+    [SerializeField]
+    private float zoomInOrthoSize = 3f;
 
     [Header("Text Views")]
     [Tooltip("View prefab shown on the white in the SOURCE scene (\"Glide unlock\").")]
-    [SerializeField] private ViewBase unlockTextView;
+    [SerializeField]
+    private ViewBase unlockTextView;
 
     [SerializeField] private Transform teleportPosition = null!;
     [SerializeField] private CameraZoneManager puzzleZone = null!;
+
+    [Header("Debug")]
+    [Tooltip("When true, the player is dropped straight onto the teleport point as the scene starts, " +
+             "with Glide already unlocked. Skips the unlock cinematic entirely — for iterating on the " +
+             "glide section without playing up to it.")]
+    [SerializeField]
+    private bool spawnAtTeleportPoint;
 
 
     private bool hasRun;
@@ -56,6 +66,36 @@ public class GlideUnlockTransition : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (!spawnAtTeleportPoint) return;
+
+        SpawnAtTeleportPoint(destroyCancellationToken).Forget();
+    }
+
+    /// <summary>
+    /// Scene-start counterpart to <see cref="DebugTeleportDirectlyToFall"/>: the player and the
+    /// camera director come online over the scene's first frames, so wait for them rather than
+    /// racing them, then drop the player in.
+    /// </summary>
+    private async UniTaskVoid SpawnAtTeleportPoint(CancellationToken token)
+    {
+        if (teleportPosition == null)
+        {
+            Debug.LogWarning("[GlideUnlockTransition] spawnAtTeleportPoint is on but no teleport position is assigned.",
+                this);
+            return;
+        }
+
+        await UniTask.WaitUntil(
+            () => PlayerStateManager.Instance != null
+                  && PlayerStateManager.Instance.playerGameObject != null
+                  && CameraDirector.Current != null,
+            cancellationToken: token);
+
+        DebugTeleportDirectlyToFall();
+    }
+
     private void HandleAbilityUnlocked(PlayerAbilityManager.Abilities ability)
     {
         if (ability == PlayerAbilityManager.Abilities.Glide)
@@ -65,6 +105,12 @@ public class GlideUnlockTransition : MonoBehaviour
     }
 
     [Button("Begin Glide Unlock Transition (Debug)")]
+    public void BypassPuzzle()
+    {
+        PlayerAbilityManager.Instance.UnlockAbility(PlayerAbilityManager.Abilities.Glide);
+        Begin();
+    }
+
     public void Begin()
     {
         if (hasRun) return;
@@ -83,7 +129,11 @@ public class GlideUnlockTransition : MonoBehaviour
     public void DebugTeleportDirectlyToFall()
     {
         PlayerMoveManager player = ResolvePlayer();
-        if (player == null || teleportPosition == null) return;
+        if (player == null || teleportPosition == null)
+        {
+            Debug.LogWarning($"[GlideUnlockTransition] Teleport aborted: player={player}, teleportPosition={teleportPosition}.", this);
+            return;
+        }
 
         hasRun = true;
         if (PlayerAbilityManager.Instance != null
@@ -96,16 +146,17 @@ public class GlideUnlockTransition : MonoBehaviour
         player.transform.position = teleportPosition.position;
         CameraDirector.Current?.SwitchArea(puzzleZone, teleportPosition.position);
 
+        // Land on an unlocked, falling player whatever state the scene left us in. ChangeState is a
+        // no-op while Locked, so the unlock has to come first; after it the second call is harmless.
         if (PlayerStateManager.Instance.CurrentState == PlayerState.Locked)
         {
             PlayerStateManager.Instance.UnlockPlayer();
         }
-        else
-        {
-            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
-        }
 
+        PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         player.EnableMove();
+
+        Debug.Log($"[GlideUnlockTransition] Teleported player to {teleportPosition.position}, state={PlayerStateManager.Instance.CurrentState}.", this);
     }
 
     private async UniTask Run(CancellationToken token)

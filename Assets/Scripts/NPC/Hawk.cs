@@ -66,14 +66,12 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
     [SerializeField] private float diveAttackSpeed;
     private Vector3 diveTarget;
     private GameObject player;
-    private PlayerLifeManager playerLifeManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     new void Start()
     {
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player").transform.root.gameObject;
-        playerLifeManager = player.GetComponent<PlayerLifeManager>();
     }
 
     // Update is called once per frame
@@ -315,7 +313,7 @@ public class Hawk : ResetOnDeathObject, IProximityAlert
         if (hit != null)
         {
             // handle player hit (apply damage or notify manager). Using SendMessage so there's no compile-time dependency on a specific method name.
-            playerLifeManager.DamagePlayer();
+            PlayerLifeManager.Instance?.DamagePlayer();
             return;
         }
     }

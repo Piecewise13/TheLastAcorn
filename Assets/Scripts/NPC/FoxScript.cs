@@ -25,7 +25,6 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
 
     private GameObject player;
     private PlayerMoveManager playerMoveManager;
-    private PlayerLifeManager playerLifeManager;
 
     private bool isGrounded = false;
 
@@ -95,7 +94,6 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
         base.Start();
         player = GameObject.FindGameObjectWithTag("Player").transform.root.gameObject;
         playerMoveManager = player.GetComponent<PlayerMoveManager>();
-        playerLifeManager = player.GetComponent<PlayerLifeManager>();
 
         moveTarget = player;
 
@@ -430,7 +428,7 @@ public class FoxScript : ResetOnDeathObject, IProximityAlert
         currentState = FoxState.Attack;
         animator.SetTrigger("attack");
         lastAttackTime = Time.time; 
-        playerLifeManager.DamagePlayer();
+        PlayerLifeManager.Instance?.DamagePlayer();
     }
 
     public void PlayerInProximity(GameObject player)

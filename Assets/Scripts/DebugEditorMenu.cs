@@ -6,8 +6,13 @@ public class DebugEditorMenu : Editor
 {
     public override void OnInspectorGUI()
     {
-        // Draw the default inspector fields first (optional)
-        DrawDefaultInspector();
+        bool productionMode = DebugSettings.ProductionMode;
+
+        using (new EditorGUI.DisabledScope(productionMode))
+        {
+            // Draw the default inspector fields first (optional)
+            DrawDefaultInspector();
+        }
 
         DebugSettings myComponent = (DebugSettings)target;
 
@@ -27,5 +32,20 @@ public class DebugEditorMenu : Editor
         {
             myComponent.RespawnPlayerAtSceneStart();
         }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Master Switch", EditorStyles.boldLabel);
+
+        EditorGUI.BeginChangeCheck();
+        bool toggled = EditorGUILayout.ToggleLeft(
+            new GUIContent(
+                "Production Mode",
+                "Forces every debug option above off, no matter how it is serialized. Saved to PlayerPrefs, so it survives play sessions, editor restarts and builds."),
+            productionMode);
+        if (EditorGUI.EndChangeCheck())
+            DebugSettings.ProductionMode = toggled;
+
+        if (toggled)
+            EditorGUILayout.HelpBox("Production mode is ON - all debug options above are ignored.", MessageType.Warning);
     }
 }

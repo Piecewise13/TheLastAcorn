@@ -145,13 +145,18 @@ public class Owl : MonoBehaviour, IProximityAlert
             initialDistanceToPoint = Vector2.Distance(flightOrigin, flightPathPoints[currentFlightPointIndex].position);
             initalFlightDirection = transform.up;
 
-            playerCamera.StartForceZoom(cameraZoomAmount, PlayerCameraManager.CameraState.GlideZoom);
+            playerCamera.ApplyZoom(cameraZoomAmount, PlayerCameraManager.ZoomEffect.OwlRide);
         }
     }
 
     void EndAttach()
     {
         isReturningToStart = true;
+
+        // Released here rather than left for the player to overwrite. The owl owns this claim, and
+        // on its own effect slot nothing else will drop it — the velocity zoom used to take the
+        // shared slot back by resizing it, which only worked because they were the same claim.
+        playerCamera.ReleaseZoom(PlayerCameraManager.ZoomEffect.OwlRide);
         playerMovement.DetachFromOwl();
         currentFlightPointIndex = flightPathPoints.Count - 2; // Start returning to the last point
         //currentState = OwlState.Idle;

@@ -17,6 +17,9 @@ public class BatScript : MonoBehaviour, IProximityAlert
 
     [SerializeField] private float minAngle, maxAngle; // Range for the target angle
 
+    [Tooltip("How long the player is stunned when the bat hits them")]
+    [SerializeField] private float stunTime = 0.75f;
+
     [Tooltip("Minimum and maximum delay before the bat starts moving after the player enters proximity")]
     [SerializeField] private float launchDelayMin, launchDelayMax;
     private float launchDelay;
@@ -88,10 +91,11 @@ public class BatScript : MonoBehaviour, IProximityAlert
         {
             // dont want to attach the bat to the player
             // only want to stun the player
-            PlayerLifeManager playerLifeManager = collision.transform.root.GetComponent<PlayerLifeManager>();
-            if (playerLifeManager != null)
+            // Stun only, no damage, so this goes to the move manager rather than PlayerLifeManager.
+            var playerMoveManager = collision.transform.root.GetComponent<PlayerMoveManager>();
+            if (playerMoveManager != null)
             {
-                playerLifeManager.StunPlayer(); // Apply damage or stun effect
+                playerMoveManager.StunPlayer(stunTime);
             }
         }
     }

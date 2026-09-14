@@ -58,7 +58,6 @@ public class PatrollingEnemy : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         snakeAttack?.Play();
-        PlayerLifeManager playerLifeManager = other.transform.root.GetComponent<PlayerLifeManager>();
-        playerLifeManager.DamagePlayer(Vector2.up * damageLaunchForce);
+        PlayerLifeManager.Instance?.DamagePlayer(Vector2.up * damageLaunchForce);
     }
 }

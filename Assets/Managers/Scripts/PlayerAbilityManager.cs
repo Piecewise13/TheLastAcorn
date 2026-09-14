@@ -80,10 +80,15 @@ public class PlayerAbilityManager : PersistentSingleton<PlayerAbilityManager>
         playerMoveManager = player.GetComponent<PlayerMoveManager>();
     }
 
-    /// <summary>True when there is at least one ability still waiting to be unlocked.</summary>
-    public bool HasPendingUnlock() => currentStepIndex < unlockSteps.Length;
+    // Read live rather than cached at Awake: DebugSettings is spawned from GameManager's prefab
+    // list, so its Awake may run after this one, and the toggle can be flipped mid-play.
+    private static bool DebugUnlockAll =>
+        DebugSettings.Instance != null && DebugSettings.Instance.UnlockAllAbilities;
 
-    public bool IsAbilityUnlocked(Abilities ability) => abilityUnlocked[(int)ability];
+    /// <summary>True when there is at least one ability still waiting to be unlocked.</summary>
+    public bool HasPendingUnlock() => !DebugUnlockAll && currentStepIndex < unlockSteps.Length;
+
+    public bool IsAbilityUnlocked(Abilities ability) => DebugUnlockAll || abilityUnlocked[(int)ability];
 
     /// <summary>Shows the cinematic unlock animation. Call before UnlockAbility.</summary>
     public async UniTask StartUnlockAbility()

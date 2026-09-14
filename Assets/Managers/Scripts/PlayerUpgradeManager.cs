@@ -28,7 +28,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         ClimbSpeed,
         MaxGlideSpeed,
         ZoomOutAmount,
-        GlideYDecline,
+        EnergyShiftSpeed,
         MaxVelocityZoom,
         MinimumZoom,
     }
@@ -93,7 +93,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
             effects = new[]
             {
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxGlideSpeed },
-                new UpgradeEffectProgression { target = UpgradeEffectTarget.GlideYDecline },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.EnergyShiftSpeed },
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.MaxVelocityZoom },
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.MinimumZoom },
             }
@@ -403,8 +403,8 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
             case UpgradeEffectTarget.MaxGlideSpeed:
                 if (playerMoveManager != null) playerMoveManager.SetMaxGlideSpeed(value);
                 break;
-            case UpgradeEffectTarget.GlideYDecline:
-                if (playerMoveManager != null) playerMoveManager.SetGlideYDecline(value);
+            case UpgradeEffectTarget.EnergyShiftSpeed:
+                if (playerMoveManager != null) playerMoveManager.SetEnergyShiftSpeed(value);
                 break;
             case UpgradeEffectTarget.ZoomOutAmount:
                 if (playerCamera != null) playerCamera.SetZoomOutAmount(value);

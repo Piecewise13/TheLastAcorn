@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// Owns camera position and zoom through prioritized claims. The vcam tracks one
 /// director-driven target; claims move it directly, while default follow clamps the player to the
-/// active camera area.
+/// nearest camera area.
 /// </summary>
 [ExecuteAlways]
 [DefaultExecutionOrder(100)]
@@ -34,6 +34,11 @@ public class CameraDirector : SceneService<CameraDirector>
     [Tooltip("How much the background FOV scales with zoom. 0 keeps it fixed.")]
     [SerializeField] private float backgroundFieldOfViewMultiplier = 0.3f;
 
+    [Tooltip("Orthographic size at which the background sits at its base FOV. 0 falls back to the " +
+             "default size, which pins the two together so retuning the default framing leaves the " +
+             "background where it was. Set this to the size the base FOV was authored against.")]
+    [SerializeField] private float backgroundReferenceOrthographicSize;
+
     private readonly List<CameraClaim> claims = new();
     private long nextSequence;
 
@@ -51,6 +56,10 @@ public class CameraDirector : SceneService<CameraDirector>
     // A reframe point handed in by SwitchArea, consumed the next time the active area changes. Null
     // means "reframe on the player" — the usual case, since the player has just been teleported.
     private Vector2? pendingReframe;
+
+    // Set at the end of Start. Areas register in their own OnEnable, so ActiveChanged can fire before
+    // the director is ready; until this is true the first-frame framing is Start's job alone.
+    private bool started;
 
     private Vector3 defaultPositionDamping;
     private bool dampingSuppressed;
@@ -120,6 +129,12 @@ public class CameraDirector : SceneService<CameraDirector>
             return;
         }
 
+        // Pick the area the player actually spawned in before anything reads a confiner. activeByDefault
+        // decides the area at load, which is right for a level played from its start and wrong the
+        // moment the player is authored into a later section — the camera would then clamp to a
+        // confiner nowhere near them.
+        AdoptSpawnArea();
+
         positionSource = null;
         lastAppliedPosition = ResolveDefaultPosition();
         driven.position = lastAppliedPosition;
@@ -136,6 +151,34 @@ public class CameraDirector : SceneService<CameraDirector>
         zoomBlendDuration = defaultTransitionDuration;
         zoomBlendCurve = defaultTransitionCurve;
         zoomBlendFrom = appliedSize;
+
+        started = true;
+
+        // Frame the spawn on the first frame the player sees, zone included. Starting play already
+        // overlapping a zone trigger does not fire OnTriggerEnter2D, so nothing else would.
+        ReanchorTo(ResolvePlayerPosition());
+    }
+
+    /// <summary>
+    /// Makes the area containing the player the active one. A player outside every confiner leaves
+    /// whatever loaded as active alone — better a far-off frame than none at all, and the warning
+    /// says which case it is.
+    /// </summary>
+    private void AdoptSpawnArea()
+    {
+        Vector2 spawn = ResolvePlayerPosition();
+        CameraZoneManager area = CameraZoneManager.ResolveArea(spawn);
+
+        if (area == null)
+        {
+            Debug.LogWarning($"[{nameof(CameraDirector)}] Player spawn {spawn} is outside every " +
+                             $"{nameof(CameraZoneManager)} confiner; the camera will clamp to " +
+                             $"'{(CameraZoneManager.Active != null ? CameraZoneManager.Active.name : "none")}'. " +
+                             "Extend that area's confiner to cover the spawn.", this);
+            return;
+        }
+
+        CameraZoneManager.SetActive(area);
     }
 
     /// <summary>
@@ -370,7 +413,12 @@ public class CameraDirector : SceneService<CameraDirector>
                 break;
 
             case CameraBlendMode.Exponential:
-                next = Mathf.Lerp(appliedSize, desired, ExponentialStep(zoomBlendRate));
+                // Read from the live claim rather than the snapshot taken when it became the zoom
+                // source. A claim that retunes its own rate — the velocity zoom eases out slowly
+                // but comes back in fast — would otherwise be stuck on whichever rate it held when
+                // it first took over.
+                float liveRate = claim != null && claim.Rate > 0f ? claim.Rate : zoomBlendRate;
+                next = Mathf.Lerp(appliedSize, desired, ExponentialStep(liveRate));
                 if (Mathf.Abs(next - desired) < 0.01f) next = desired;
                 break;
 
@@ -400,9 +448,16 @@ public class CameraDirector : SceneService<CameraDirector>
             rig.Overlay.orthographicSize = size;
         }
 
-        if (rig.Background != null && defaultOrthographicSize > 0f)
+        // Kept separate from defaultOrthographicSize on purpose. While the two were the same value
+        // the resting camera always landed on ratio 1, so the background sat at its base FOV no
+        // matter what the default was — retuning the default framing could not move it.
+        float reference = backgroundReferenceOrthographicSize > 0f
+            ? backgroundReferenceOrthographicSize
+            : defaultOrthographicSize;
+
+        if (rig.Background != null && reference > 0f)
         {
-            float ratio = size / defaultOrthographicSize;
+            float ratio = size / reference;
             float scale = 1f + (ratio - 1f) * backgroundFieldOfViewMultiplier;
             rig.Background.fieldOfView = backgroundBaseFieldOfView * scale;
         }
@@ -463,7 +518,7 @@ public class CameraDirector : SceneService<CameraDirector>
     // reframe point, or on bounded player follow if the point is in a gap.
     private void OnActiveAreaChanged(CameraZoneManager area)
     {
-        if (rig == null || vcam == null) return; // event fired before Start; first-frame framing is Start's job
+        if (!started || rig == null || vcam == null) return; // event fired before Start; first-frame framing is Start's job
 
         Vector2 point = pendingReframe ?? ResolvePlayerPosition();
         pendingReframe = null;
@@ -498,15 +553,12 @@ public class CameraDirector : SceneService<CameraDirector>
     {
         Transform player = ResolvePlayerTransform();
         Vector3 position = player != null ? player.position : driven.position;
-        PolygonCollider2D confiner = CameraZoneManager.Active != null ? CameraZoneManager.Active.Confiner : null;
-        if (confiner != null)
-        {
-            Vector2 clamped = confiner.ClosestPoint(position);
-            position = new Vector3(clamped.x, clamped.y, position.z);
-        }
 
-        position.z = driven.position.z;
-        return position;
+        // Clamped across every loaded area rather than just the active one. Follow's only job is to
+        // get as close to the player as the level's bounds allow, so whichever confiner can get
+        // closest is the one that decides.
+        Vector2 clamped = CameraZoneManager.ClampToNearestConfiner(position);
+        return new Vector3(clamped.x, clamped.y, driven.position.z);
     }
 
     private static Vector2 ResolvePlayerPosition()

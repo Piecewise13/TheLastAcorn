@@ -15,17 +15,17 @@ MonoBehaviour:
   tiers:
   - name: BlueLayer1
     zJitter: 0.3
-    minParallaxFactor: -0.4
     maxParallaxFactor: -0.2
+    minParallaxFactor: -0.4
   - name: BlueLayer2
     zJitter: 0.3
-    minParallaxFactor: -0.2
     maxParallaxFactor: -0.1
+    minParallaxFactor: -0.2
   - name: BehindLayer1
     zJitter: 0.3
+    maxParallaxFactor: 0.05
     minParallaxFactor: 0.02
-    maxParallaxFactor: 0.07
   - name: BehindLayer2
     zJitter: 0.3
+    maxParallaxFactor: 0.15
     minParallaxFactor: 0.1
-    maxParallaxFactor: 0.2

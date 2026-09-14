@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +20,16 @@ public class PlayerEffectsManager : MonoBehaviour
     [SerializeField] private Color climbFatigueColor;
     [SerializeField] private float maxShakeIntensity = 0.2f;
     private Vector3 graphicOriginalLocalPos;
+
+    [Header("Damage")]
+    [SerializeField] private AudioPlayer hurtSfx;
+
+    [Tooltip("Seconds per fade step of the immunity flicker.")]
+    [SerializeField] private float immunityFlashStep = 0.2f;
+
+    [SerializeField] private float immunityFlashMinAlpha = 0.25f;
+
+    private CancellationTokenSource immunityFlashCts;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,6 +67,67 @@ public class PlayerEffectsManager : MonoBehaviour
         animator.SetBool("isClimbMoving", false);
 
 
+    }
+
+    /// <summary>
+    /// The player-body half of taking a hit: hurt animation, knockback impulse and the hurt sound.
+    /// PlayerLifeManager owns whether damage happens; this owns what it looks like.
+    /// </summary>
+    public void PlayDamageFeedback(Vector2 launchDir)
+    {
+        animator.SetTrigger("Hurt");
+
+        rb.linearVelocity = Vector2.zero; // reset first so the impulse is not fighting old momentum
+        rb.AddForce(launchDir, ForceMode2D.Impulse);
+
+        hurtSfx?.Play();
+    }
+
+    /// <summary>Starts the alpha flicker that marks the post-hit immunity window.</summary>
+    public void StartImmunityFlash()
+    {
+        StopImmunityFlash();
+        immunityFlashCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+        ImmunityFlash(immunityFlashCts.Token).Forget();
+    }
+
+    /// <summary>Stops the immunity flicker and restores full opacity.</summary>
+    public void StopImmunityFlash()
+    {
+        immunityFlashCts?.Cancel();
+        immunityFlashCts?.Dispose();
+        immunityFlashCts = null;
+
+        SetGraphicAlpha(1f);
+    }
+
+    private async UniTask ImmunityFlash(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            await FadeGraphicAlpha(1f, immunityFlashMinAlpha, cancellationToken);
+            await FadeGraphicAlpha(immunityFlashMinAlpha, 1f, cancellationToken);
+        }
+    }
+
+    private async UniTask FadeGraphicAlpha(float from, float to, CancellationToken cancellationToken)
+    {
+        float elapsed = 0f;
+        while (elapsed < immunityFlashStep)
+        {
+            elapsed += Time.deltaTime;
+            SetGraphicAlpha(Mathf.Lerp(from, to, elapsed / immunityFlashStep));
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+        }
+    }
+
+    private void SetGraphicAlpha(float alpha)
+    {
+        if (graphicSprite == null) return;
+
+        Color c = graphicSprite.color;
+        c.a = alpha;
+        graphicSprite.color = c;
     }
 
         public void UpdateClimbParticles(float t)

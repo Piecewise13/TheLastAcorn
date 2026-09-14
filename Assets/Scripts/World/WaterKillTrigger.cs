@@ -24,9 +24,9 @@ public class WaterKillTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        var root = collision.transform.root;
-        var playerLifeManager = root.GetComponent<PlayerLifeManager>();
-        playerLifeManager.DamagePlayerAndRelocate(respawnPoint.position);
+        if (!collision.transform.root.CompareTag("Player")) return;
+
+        PlayerLifeManager.Instance?.DamagePlayerAndRelocate(respawnPoint.position);
     }
 
 

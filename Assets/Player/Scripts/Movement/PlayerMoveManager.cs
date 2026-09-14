@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,7 +10,9 @@ namespace Player
 {
 public partial class PlayerMoveManager : MonoBehaviour
 {
-    private PlayerLifeManager lifeManager;
+    // Lives are now a persistent, game-wide service (not a component on the player), so resolve
+    // it on demand rather than caching a reference that may not exist at Awake time.
+    private PlayerLifeManager lifeManager => PlayerLifeManager.Instance;
 
     // Ability progression is now a persistent, game-wide service (not a component on the player),
     // so resolve it on demand rather than caching a reference that may not exist at Awake time.
@@ -128,13 +132,9 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     private bool isJumpHeld = false;
 
-    [Header("Camera Zoom Settings")]
-    [SerializeField] private float maxSideMovementZoom = 40f;
-    [SerializeField] private float sideSpeedThreshold = 15f;
-    [SerializeField] private AnimationCurve sideMovementZoomCurve;
-
-
     public static event System.Action Jumped;
+
+    private CancellationTokenSource stunReleaseCts;
 
 
     /// <summary>
@@ -144,8 +144,6 @@ public partial class PlayerMoveManager : MonoBehaviour
     {
         // Initialize input action map
         playerMovementMap = new PlayerGameControls();
-
-        lifeManager = GetComponent<PlayerLifeManager>();
 
         effectsManager = GetComponent<PlayerEffectsManager>();
 
@@ -173,8 +171,6 @@ public partial class PlayerMoveManager : MonoBehaviour
         jumpAction.canceled += ctx => isJumpHeld = false;
         jumpAction.Enable();
 
-        //TODO: Switch to locked state when glide transition
-        PlayerStateManager.Instance.OnLockChange += CheckPlayerLocked;
     }
 
     /// <summary>
@@ -190,6 +186,9 @@ public partial class PlayerMoveManager : MonoBehaviour
         if (graphic != null)
             graphicOriginalLocalPos = graphic.transform.localPosition;
 
+        // Subscribed here rather than in Awake: PlayerStateManager is a component on this same
+        // GameObject, so during Awake its own Awake may not have run and Instance is still null.
+        PlayerStateManager.Instance.OnLockChange += CheckPlayerLocked;
         PlayerStateManager.Instance.OnStateChanged += HandleStateChanged;
 
         playerCamera.OnZoomStarted += DisableMove;
@@ -231,8 +230,6 @@ public partial class PlayerMoveManager : MonoBehaviour
         {
             return;
         }
-
-        SideMovementCameraZoom();
 
         // Handle climbing logic
         if (PlayerStateManager.Instance.CurrentState == PlayerState.Climb)
@@ -284,7 +281,6 @@ public partial class PlayerMoveManager : MonoBehaviour
         {
             rb.gravityScale = 1.5f;
             jumpHeldDuration = 0f;
-            playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
             return;
         }
 
@@ -372,24 +368,6 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Flip graphic if moving horizontally
         if (moveInput.x != 0)
             FlipGraphic(moveInput.x);
-    }
-
-    private void SideMovementCameraZoom()
-    {
-
-        if (PlayerStateManager.Instance.CurrentState != PlayerState.Glide && PlayerStateManager.Instance.CurrentState != PlayerState.Fall)
-        {
-            playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
-            return;
-        }
-
-        float sideMovementSpeed = rb.linearVelocity.magnitude;
-
-        if (sideMovementSpeed > sideSpeedThreshold)
-        {
-            playerCamera.StartForceZoom(Mathf.Lerp(playerCamera.GetDefaultZoom(), maxSideMovementZoom, sideMovementZoomCurve.Evaluate(sideMovementSpeed / maxGlideSpeed)), PlayerCameraManager.CameraState.GlideZoom);
-        }
-
     }
 
     private bool ShouldApplyAirControl(float inputX, float velocityX)
@@ -520,7 +498,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
                 var launchDir = collision.relativeVelocity.normalized * collisionLaunchForce;
 
-                lifeManager.DamagePlayer(launchDir);
+                lifeManager?.DamagePlayer(launchDir);
 
                 return;
             }
@@ -529,6 +507,27 @@ public partial class PlayerMoveManager : MonoBehaviour
             // transform.position = collision.GetContact(0).point;
             // StartClimb();
         }
+    }
+
+    /// <summary>Stuns the player, then releases the stun after <paramref name="duration"/> seconds.</summary>
+    public void StunPlayer(float duration)
+    {
+        // A fresh stun replaces any pending release so overlapping hits cannot end it early.
+        stunReleaseCts?.Cancel();
+        stunReleaseCts?.Dispose();
+        stunReleaseCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+
+        StunPlayer();
+        ReleaseStunAfter(duration, stunReleaseCts.Token).Forget();
+    }
+
+    private async UniTask ReleaseStunAfter(float duration, CancellationToken cancellationToken)
+    {
+        bool canceled = await UniTask.WaitForSeconds(duration, cancellationToken: cancellationToken)
+                                     .SuppressCancellationThrow();
+        if (canceled) return;
+
+        StopStun();
     }
 
     public void StunPlayer()
@@ -548,6 +547,8 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     public void StopStun()
     {
+        stunReleaseCts?.Cancel();
+
         if (PlayerStateManager.Instance.CurrentState != PlayerState.STUNNED)
         {
             return;
@@ -673,7 +674,6 @@ public partial class PlayerMoveManager : MonoBehaviour
             transform.SetParent(null, true);
         }
 
-        playerCamera.EndForceZoom(PlayerCameraManager.CameraState.GlideZoom);
         PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         rb.gravityScale = 1f;
         animator.SetBool("isClimbMoving", false);

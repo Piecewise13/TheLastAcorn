@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5472979720160888209
+--- !u!1 &7039009352670071338
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4575248085269540046}
-  - component: {fileID: 5013037889287557512}
+  - component: {fileID: 8781095711428248840}
+  - component: {fileID: 7492914284852082456}
   m_Layer: 0
-  m_Name: Debug Manager
+  m_Name: PlayerAbilityManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4575248085269540046
+--- !u!4 &8781095711428248840
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472979720160888209}
+  m_GameObject: {fileID: 7039009352670071338}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 48.87328, y: 54.50496, z: 0}
+  m_LocalPosition: {x: 397.82022, y: 18.78659, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5013037889287557512
+--- !u!114 &7492914284852082456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5472979720160888209}
+  m_GameObject: {fileID: 7039009352670071338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99f5b3fcc4fec4fecb901d84d8f2e46c, type: 3}
+  m_Script: {fileID: 11500000, guid: f82b9b7fcf5944c168b093c4207d6043, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  spawnAtSceneStartOnPlay: 0
-  disablePersistence: 1
-  showDebugLogs: 0
-  bypassTutorial: 1
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerAbilityManager
+  unlockZoomView: {fileID: 3784460192342504824, guid: 7f03816dbfae0470ebe0de3bf91906f4, type: 3}
+  unlockSteps:
+  - ability: 0
+  - ability: 1
+  - ability: 2

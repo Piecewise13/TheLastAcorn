@@ -46,8 +46,14 @@ public class GameManager : MonoBehaviour
 
     private void InstantiatePersistent()
     {
+        if (persistentManagerPrefabs == null) return;
+
         foreach (var prefab in persistentManagerPrefabs)
         {
+            // An empty slot in the list would throw out of Instantiate and abandon the rest of
+            // Awake — the remaining managers, the save-state seed and the sceneLoaded hook.
+            if (prefab == null) continue;
+
             var go = Instantiate(prefab);
             go.name = prefab.name;
             go.transform.SetParent(transform, false); // under the DontDestroyOnLoad initializer

@@ -130,6 +130,79 @@ public class CameraZoneManager : MonoBehaviour
     }
 
     /// <summary>
+    /// The point nearest <paramref name="point"/> that lies inside some loaded area's confiner, or
+    /// <paramref name="point"/> itself when it is already inside one — or when no area has a confiner.
+    ///
+    /// Default follow clamps through this rather than through <see cref="Active"/>'s confiner alone.
+    /// The active area decides which zones are live; it should not decide how close the camera is
+    /// allowed to get to the player. Clamping to one area pins the camera on that area's boundary the
+    /// moment the player stands anywhere else, which in a scene stitched from several areas is most
+    /// of the scene.
+    /// </summary>
+    public static Vector2 ClampToNearestConfiner(Vector2 point)
+    {
+        Vector2 best = point;
+        float bestSqrDistance = float.PositiveInfinity;
+
+        for (int i = 0; i < all.Count; i++)
+        {
+            PolygonCollider2D bounds = UsableConfiner(all[i]);
+            if (bounds == null) continue;
+
+            // ClosestPoint hands back the point unchanged when it is inside, so an inside hit scores
+            // zero and wins outright — no containment test needed.
+            Vector2 candidate = bounds.ClosestPoint(point);
+            float sqrDistance = (candidate - point).sqrMagnitude;
+            if (sqrDistance <= 0f) return candidate;
+
+            if (sqrDistance < bestSqrDistance)
+            {
+                bestSqrDistance = sqrDistance;
+                best = candidate;
+            }
+        }
+
+        return best;
+    }
+
+    /// <summary>
+    /// The loaded area whose confiner contains a world point, or null when the point is outside every
+    /// area's bounds. Spawn framing resolves through this rather than <see cref="activeByDefault"/>,
+    /// which only knows where the level normally starts — not where the player happens to be
+    /// authored while a later section is being iterated on.
+    /// </summary>
+    public static CameraZoneManager ResolveArea(Vector2 point)
+    {
+        // An area already holding the camera that still contains the point wins, so a spawn inside
+        // overlapping areas does not switch away from the one the level authored as its start.
+        PolygonCollider2D active = UsableConfiner(Active);
+        if (active != null && active.OverlapPoint(point)) return Active;
+
+        for (int i = 0; i < all.Count; i++)
+        {
+            PolygonCollider2D bounds = UsableConfiner(all[i]);
+            if (bounds != null && bounds.OverlapPoint(point)) return all[i];
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// An area's confiner, but only when physics will actually answer queries against it. A disabled
+    /// collider is not an error Unity reports: ClosestPoint hands the point straight back, which reads
+    /// as "already inside" and would quietly switch off clamping for the whole scene.
+    /// </summary>
+    private static PolygonCollider2D UsableConfiner(CameraZoneManager area)
+    {
+        if (area == null) return null;
+
+        PolygonCollider2D bounds = area.Confiner;
+        if (bounds == null || !bounds.enabled || !bounds.gameObject.activeInHierarchy) return null;
+
+        return bounds;
+    }
+
+    /// <summary>
     /// The active-area zone containing a world point, if any. Spawn and respawn resolve their framing
     /// this way because a teleport into an already-overlapping trigger does not re-fire OnTriggerEnter2D.
     /// </summary>

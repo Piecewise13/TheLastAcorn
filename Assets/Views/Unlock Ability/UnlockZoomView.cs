@@ -1,5 +1,4 @@
 using System;
-using Player;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using MoreMountains.Feedbacks;
@@ -19,14 +18,10 @@ public class UnlockZoomView : ViewBase
     [SerializeField] private MMF_Player inputPrompt = null!;
     [SerializeField] private MMF_Player exitFeedback = null!;
 
-    private PlayerCameraManager playerCameraManager = null;
-    
     public override async UniTask Setup()
     {
         abilityNameText.alpha= 0f;
         inputPromptGroup.alpha = 0;
-        
-        playerCameraManager = FindAnyObjectByType<PlayerCameraManager>();
 
         await OverlayCameraController.Current.RequestPlayerOverlay();
 
@@ -34,41 +29,20 @@ public class UnlockZoomView : ViewBase
 
     public override async UniTask RunAsync(CancellationToken token)
     {
-        
+
         await initalTextFeedback.PlayFeedbacksAsync(token);
-        
+
         await inputPrompt.PlayFeedbacksAsync(token);
 
-        // 2. allow + wait for the zoom input
-        await playerCameraManager.WaitForZoomInput(token);
-        
-        CameraRig.Current.ResetTrackingTarget();
         OverlayCameraController.Current.ReleasePlayerOverlay();
-        // 3. trigger exit feedbacks
+        // trigger exit feedbacks. The camera zoom is now a scripted moment driven by a
+        // scene trigger, so the view no longer waits for zoom input or performs the zoom.
         exitFeedback.PlayFeedbacksAsync(token);
-        // 4. then start the actual zoom
-        await playerCameraManager.PerformUnlockZoom(token);
     }
 
     private async UniTask ExitView()
     {
         exitFeedback.PlayFeedbacks();
         OverlayCameraController.Current.ReleasePlayerOverlay();
-    }
-
-    private async UniTask WaitForZoomAsync(CancellationToken token)
-    {
-        playerCameraManager.EnableZoom();
-        var tcs = new UniTaskCompletionSource();
-        void Handler() => tcs.TrySetResult();
-        playerCameraManager.OnZoomStarted += Handler;
-        try
-        {
-            await tcs.Task.AttachExternalCancellation(token);
-        }
-        finally
-        {
-            playerCameraManager.OnZoomStarted -= Handler;
-        }
     }
 }
