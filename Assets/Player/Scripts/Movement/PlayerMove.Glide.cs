@@ -183,6 +183,13 @@ public partial class PlayerMoveManager : MonoBehaviour
     public float HorizontalSpeed => rb != null ? Mathf.Abs(rb.linearVelocity.x) : 0f;
 
     /// <summary>
+    /// Signed velocity, both axes. <see cref="HorizontalSpeed"/> drops the sign because the zoom ramp
+    /// only cares how fast the player travels; the camera's look-ahead has to know which way, so it
+    /// reads this instead.
+    /// </summary>
+    public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
+
+    /// <summary>
     /// Sets how fast velocity migrates onto the glide target velocity at full speed. Used by the upgrade system.
     /// </summary>
     public void SetEnergyShiftSpeed(float value)

@@ -6,12 +6,12 @@ using UnityEngine;
 
 /// <summary>
 /// Owns camera position and zoom through prioritized claims. The vcam tracks one
-/// director-driven target; claims move it directly, while default follow clamps the player to the
-/// nearest camera area.
+/// director-driven target; claims move it directly, while default follow leads the player in their
+/// direction of travel (CameraDirector.LookAhead.cs) and clamps the result to the nearest camera area.
 /// </summary>
 [ExecuteAlways]
 [DefaultExecutionOrder(100)]
-public class CameraDirector : SceneService<CameraDirector>
+public partial class CameraDirector : SceneService<CameraDirector>
 {
     private const string DefaultTrackingTargetName = "CameraTarget";
     private const float CameraTrackingDebugInterval = 0.25f;
@@ -290,7 +290,20 @@ public class CameraDirector : SceneService<CameraDirector>
             BeginPositionBlend(claim, desiredSource);
         }
 
-        Vector3 desired = claim != null ? claim.Target.position : ResolveDefaultPosition();
+        Vector3 desired;
+        if (claim != null)
+        {
+            // An authored frame must not be nudged off-centre by the player's speed, so the lead is
+            // not applied here — but it is still advanced toward zero, so handing the camera back to
+            // follow does not restore a stale offset from before the claim.
+            UpdateLookAhead(active: false);
+            desired = claim.Target.position;
+        }
+        else
+        {
+            desired = ResolveDefaultPosition();
+        }
+
         desired.z = driven.position.z;
 
         // With no claim, the tracking target follows the player clamped to the active area and
@@ -353,7 +366,8 @@ public class CameraDirector : SceneService<CameraDirector>
         Debug.Log($"[CameraTrackDebug] t={Time.time:F2} state={PlayerStateManager.Instance.CurrentState} " +
                   $"claim={claimInfo} trackingTarget={(driven != null ? driven.name : "null")} " +
                   $"targetPos={applied} desired={desired} playerPos={playerPosition} " +
-                  $"targetMinusPlayerX={targetToPlayerX:F3} activeArea={areaName} hasConfiner={hasConfiner} " +
+                  $"targetMinusPlayerX={targetToPlayerX:F3} lookAhead={AppliedLookAhead} " +
+                  $"activeArea={areaName} hasConfiner={hasConfiner} " +
                   $"blending={positionBlending} dampingSuppressed={dampingSuppressed}", this);
     }
 
@@ -554,6 +568,11 @@ public class CameraDirector : SceneService<CameraDirector>
         Transform player = ResolvePlayerTransform();
         Vector3 position = player != null ? player.position : driven.position;
 
+        // Pushed ahead of the player before the clamp, so the confiner still has the last word: a
+        // lead that would reach past the edge of the level clamps back to the edge instead of
+        // framing the void.
+        position += (Vector3)UpdateLookAhead(active: player != null);
+
         // Clamped across every loaded area rather than just the active one. Follow's only job is to
         // get as close to the player as the level's bounds allow, so whichever confiner can get
         // closest is the one that decides.
@@ -591,6 +610,7 @@ public class CameraDirector : SceneService<CameraDirector>
         if (driven == null) return;
 
         positionBlending = false;
+        ResetLookAhead();
         CameraClaim positionClaim = TopClaim(requireTarget: true);
         Transform source = positionClaim != null ? positionClaim.Target : null;
         Vector3 position = source != null ? source.position : ResolveDefaultPosition();
@@ -598,6 +618,16 @@ public class CameraDirector : SceneService<CameraDirector>
         driven.position = position;
         lastAppliedPosition = position;
         positionSource = source; // so the next LateUpdate doesn't blend away from the snap
+
+        // Putting the tracking target in the right place is not enough to make a snap instant: the
+        // vcam body damps in from wherever it was last, so on spawn the player watches the camera
+        // travel to them from the authored scene position. Forcing the camera and invalidating its
+        // previous state is what makes every snap path — spawn, respawn, area switch — zero-travel.
+        if (vcam != null)
+        {
+            vcam.ForceCameraPosition(position, vcam.transform.rotation);
+            vcam.PreviousStateIsValid = false;
+        }
 
         CameraClaim claim = TopClaim(requireTarget: false);
         zoomSource = claim;
