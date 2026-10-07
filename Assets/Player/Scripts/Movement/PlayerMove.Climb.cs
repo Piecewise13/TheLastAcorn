@@ -43,6 +43,12 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float climbRechargeDelay = 1f;
 
     /// <summary>
+    /// Sideways push back onto the surface when a climb move would leave it, as a fraction of climb speed.
+    /// Keeps the climb going up instead of stalling on the edge.
+    /// </summary>
+    [SerializeField] private float climbEdgeNudge = 0.5f;
+
+    /// <summary>
     /// Current elapsed climb time.
     /// </summary>
     private float climbTime;
@@ -268,9 +274,24 @@ public partial class PlayerMoveManager : MonoBehaviour
 
             if (closest != null && minDist < 0.5f)
             {
-                // Smoothly move towards the edge of the next collider
                 Vector2 targetPos = closest.ClosestPoint(moveLocation);
-                transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+                float towardSurface = targetPos.x - moveLocation.x;
+
+                // Climb assist: the move ran off the side of the trunk. Keep the upward progress and
+                // nudge back toward the middle instead of stalling on the edge.
+                Vector2 assisted = new Vector2(
+                    transform.position.x + Mathf.Sign(towardSurface) * climbEdgeNudge * currentClimbSpeed * Time.deltaTime,
+                    moveLocation.y);
+
+                if (Mathf.Abs(towardSurface) > 0.001f && Physics2D.OverlapPoint(assisted, climbableLayer) != null)
+                {
+                    transform.position = assisted;
+                }
+                else
+                {
+                    // Smoothly move towards the edge of the next collider
+                    transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
+                }
             }
             else
             {

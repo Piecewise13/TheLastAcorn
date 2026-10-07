@@ -180,6 +180,23 @@ public partial class PlayerCameraManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Keeps the zoom input on whenever the ability is unlocked, including through the debug
+    /// unlock-all toggle. Polled rather than event-driven: the ability manager is persistent and may
+    /// come up after this player, a fresh player body spawns every scene, and the debug toggle can be
+    /// flipped mid-play. An explicit <see cref="DisableZoom"/> (end-game) still wins.
+    /// </summary>
+    private void SyncZoomUnlock()
+    {
+        if (inputState == ZoomInputState.Disabled || zoomAction.enabled) return;
+
+        PlayerAbilityManager abilities = PlayerAbilityManager.Instance;
+        if (abilities != null && abilities.IsAbilityUnlocked(PlayerAbilityManager.Abilities.Zoom))
+        {
+            zoomAction.Enable();
+        }
+    }
+
+    /// <summary>
     /// The orthographic size the camera reaches when the player zooms out.
     /// For an orthographic camera this equals the half-height of the view in world units.
     /// </summary>

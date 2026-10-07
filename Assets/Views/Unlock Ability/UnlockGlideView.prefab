@@ -116,7 +116,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 2886746745744603392}
   - component: {fileID: 724441766161720260}
   - component: {fileID: 8974149061612111020}
+  - component: {fileID: 5271243351344890495}
   m_Layer: 14
   m_Name: InputPrompts
   m_TagString: Untagged
@@ -203,6 +204,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &5271243351344890495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1752318487650401768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f74af88c9277d49f08c9237bf44b5ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialInputSwitch
+  keyboardTutorialObject: {fileID: 1699274762291000704}
+  controllerTutorialObject: {fileID: 7130208934455431114}
 --- !u!1 &2283211734121479177
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,7 +557,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: 
           EnumConditionPropertyName: 
-          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000y
         RemapZero: 0
         RemapOne: 1
         InstantAlpha: 0
@@ -738,7 +753,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -875,7 +890,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -1200,7 +1215,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: 
           EnumConditionPropertyName: 
-          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000y
         RemapZero: 1
         RemapOne: 0
         InstantAlpha: 0
@@ -1313,7 +1328,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: 
           EnumConditionPropertyName: AlphaMode
-          EnumConditions: 0001010000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0001010000000000000000000000000000000000000000000000000000000000y
         CurveRemapZero: 1
         CurveRemapOne: 0
         DestinationAlpha: 1
@@ -1642,7 +1657,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: 
           EnumConditionPropertyName: AlphaMode
-          EnumConditions: 0001010000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0001010000000000000000000000000000000000000000000000000000000000y
         CurveRemapZero: 0
         CurveRemapOne: 1
         DestinationAlpha: 1
@@ -1760,7 +1775,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: AnimateX
           EnumConditionPropertyName: 
-          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000y
         AnimateY: 1
         AnimateScaleTweenY:
           MMTweenDefinitionType: 1
@@ -1792,7 +1807,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: AnimateY
           EnumConditionPropertyName: 
-          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000y
         AnimateZ: 0
         AnimateScaleTweenZ:
           MMTweenDefinitionType: 1
@@ -1833,7 +1848,7 @@ MonoBehaviour:
           Initialized: 0
           ConditionPropertyName: AnimateZ
           EnumConditionPropertyName: 
-          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000y
         UniformScaling: 0
         AllowAdditivePlays: 0
         DetermineScaleOnPlay: 0
@@ -2055,7 +2070,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1

@@ -16,7 +16,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     {
         /// <summary>Climb duration and climb speed.</summary>
         Climbing = 0,
-        /// <summary>How far the camera zooms out.</summary>
+        /// <summary>How far the camera zooms out, how long scent trails reach, and how far away acorns can be sensed.</summary>
         Vision = 1,
         /// <summary>Top glide speed and how slowly the glide loses height.</summary>
         Gliding = 2,
@@ -31,6 +31,8 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         EnergyShiftSpeed,
         MaxVelocityZoom,
         MinimumZoom,
+        ScentTrailLength,
+        ScentDetectionRange,
     }
 
     [Serializable]
@@ -85,6 +87,8 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
             effects = new[]
             {
                 new UpgradeEffectProgression { target = UpgradeEffectTarget.ZoomOutAmount },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.ScentTrailLength },
+                new UpgradeEffectProgression { target = UpgradeEffectTarget.ScentDetectionRange },
             }
         },
         new UpgradeProgression
@@ -128,6 +132,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 
     private PlayerMoveManager playerMoveManager;
     private PlayerCameraManager playerCamera;
+    private PlayerSenses playerSenses;
 
     /// <summary>Fires after a stat upgrade is applied. Parameters: (stat, new level).</summary>
     public event Action<UpgradeStat, int> OnStatUpgraded;
@@ -170,6 +175,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
 
         playerMoveManager = player.GetComponent<PlayerMoveManager>();
         playerCamera = player.GetComponentInChildren<PlayerCameraManager>();
+        playerSenses = player.GetComponentInChildren<PlayerSenses>();
         ApplyToPlayer();
     }
 
@@ -195,6 +201,11 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         {
             int currentSegmentCost = CurrentSegmentCost;
             bool segmentComplete = segmentAcorns >= currentSegmentCost;
+
+            // Lock before the bar fills, not after: the upgrade view follows straight on and the
+            // player shouldn't be able to wander off while the bar animates.
+            if (segmentComplete && playerMoveManager != null)
+                playerMoveManager.DisableMove();
 
             await ViewManager.Instance.PushView(acornCollectionBarPrefab);
 
@@ -326,13 +337,14 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     public void ApplyToPlayer()
     {
         // Resolve from the current player body (this manager is persistent and not on the player).
-        if ((playerMoveManager == null || playerCamera == null) && PlayerStateManager.Instance != null)
+        if ((playerMoveManager == null || playerCamera == null || playerSenses == null) && PlayerStateManager.Instance != null)
         {
             GameObject player = PlayerStateManager.Instance.playerGameObject;
             if (player != null)
             {
                 if (playerMoveManager == null) playerMoveManager = player.GetComponent<PlayerMoveManager>();
                 if (playerCamera == null) playerCamera = player.GetComponentInChildren<PlayerCameraManager>();
+                if (playerSenses == null) playerSenses = player.GetComponentInChildren<PlayerSenses>();
             }
         }
 
@@ -414,6 +426,12 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
                 break;
             case UpgradeEffectTarget.MinimumZoom:
                 if (playerCamera != null) playerCamera.SetMinimumZoom(value);
+                break;
+            case UpgradeEffectTarget.ScentTrailLength:
+                if (playerSenses != null) playerSenses.SetFullTrailLength(value);
+                break;
+            case UpgradeEffectTarget.ScentDetectionRange:
+                if (playerSenses != null) playerSenses.SetDetectionRange(value);
                 break;
         }
     }

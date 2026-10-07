@@ -107,7 +107,7 @@ MonoBehaviour:
     effects:
     - target: 3
       progression:
-        minValue: 28
+        minValue: 30
         maxValue: 45
         interpolationCurve:
           serializedVersion: 2
@@ -155,6 +155,62 @@ MonoBehaviour:
             inSlope: 1
             outSlope: 0
             tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - target: 7
+      progression:
+        minValue: 50
+        maxValue: 80
+        interpolationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    - target: 8
+      progression:
+        minValue: 100
+        maxValue: 200
+        interpolationCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 34
             weightedMode: 0
             inWeight: 0
             outWeight: 0
@@ -247,6 +303,6 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-  segmentCosts: 010000000300000005000000i
+  segmentCosts: 010000000400000005000000i
   acornCollectionBarPrefab: {fileID: 6802045998327148441, guid: afbceb44cc73a4df2960ba43b876fbce, type: 3}
   upgradeViewPrefab: {fileID: 1592507538981031213, guid: 7a90e8260c4ed4627b71601e75db8272, type: 3}

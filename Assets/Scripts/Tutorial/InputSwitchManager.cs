@@ -26,21 +26,33 @@ public class InputSwitchManager : MonoBehaviour
 
     void Awake()
     {
+        // Every tutorial prompt carries one of these, so duplicates are expected. Remove only
+        // the duplicate component — destroying its GameObject would delete the prompt itself.
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
+
         playerMovementMap = new PlayerGameControls();
 
         testInputDevice = playerMovementMap.Gameplay.TestKeyboardControllerInput;
         testInputDevice.performed += SwitchControls;
         testInputDevice.Enable();
+    }
 
-        if (Instance == null)
+    private void OnDestroy()
+    {
+        if (Instance != this)
         {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
+            return;
         }
 
+        Instance = null;
+        testInputDevice.performed -= SwitchControls;
+        playerMovementMap.Dispose();
     }
 
     private void OnEnable()

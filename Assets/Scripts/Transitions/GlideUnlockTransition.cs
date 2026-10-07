@@ -3,6 +3,7 @@ using Player;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -37,6 +38,11 @@ public class GlideUnlockTransition : MonoBehaviour
     [SerializeField]
     private ViewBase unlockTextView;
 
+    [Header("Fall")]
+    [Tooltip("Downward speed the player starts the glide with when they press glide on the prompt.")]
+    [SerializeField]
+    private float glideStartDownwardSpeed = 5f;
+
     [SerializeField] private Transform teleportPosition = null!;
     [SerializeField] private CameraZoneManager puzzleZone = null!;
 
@@ -69,6 +75,10 @@ public class GlideUnlockTransition : MonoBehaviour
     private void Start()
     {
         if (!spawnAtTeleportPoint) return;
+
+        // A debug shortcut, so only for the scene you hit Play in and never in production mode.
+        // Arriving here from another level has to land at the start point.
+        if (DebugSettings.ProductionMode || !SceneEntry.IsPlayStartScene) return;
 
         SpawnAtTeleportPoint(destroyCancellationToken).Forget();
     }
@@ -162,8 +172,13 @@ public class GlideUnlockTransition : MonoBehaviour
     private async UniTask Run(CancellationToken token)
     {
         CameraClaim preservedZoom = null;
-        
+
         PlayerMoveManager player = ResolvePlayer();
+
+        // Read glide from our own copy of the controls: the player's are switched off while locked.
+        var controls = new PlayerGameControls();
+        InputAction glideInput = controls.Gameplay.Glide;
+        glideInput.Enable();
 
         try
         {
@@ -179,19 +194,29 @@ public class GlideUnlockTransition : MonoBehaviour
             player.transform.position = teleportPosition.position;
             CameraDirector.Current?.SwitchArea(puzzleZone, teleportPosition.position);
 
-            // 9. Hand control back so the player can fall and start gliding.
-            PlayerStateManager.Instance.UnlockPlayer();
+            // 9. Hold on the prompt until the player presses glide. That press is what drops them
+            //    into the fall, already gliding, so they can read the prompt for as long as they like.
+            await UniTask.WaitUntil(glideInput.WasPressedThisFrame, cancellationToken: token);
 
-            await UniTask.WaitForSeconds(0.5f);
+            PlayerStateManager.Instance.UnlockPlayer();
+            player.StartGlide(glideStartDownwardSpeed);
+            UniTask endGlide = EndGlideOnRelease(glideInput, token);
 
             await OverlayCameraController.Current.ReleasePlayerOverlay();
             await PopTextView(unlockView, token);
 
-            await WaitForGlide(token);
+            // The zoom was held until the glide began; it's begun, so let it go now rather than
+            // whenever the player lets go of the button.
+            preservedZoom?.Release();
+            preservedZoom = null;
+
+            await endGlide;
         }
         finally
         {
             preservedZoom?.Release();
+            controls.Gameplay.Disable();
+            controls.Dispose();
             Destroy(gameObject);
         }
     }
@@ -210,31 +235,17 @@ public class GlideUnlockTransition : MonoBehaviour
         await ViewManager.Instance.PopViewAsync(token);
     }
     
-    private static async UniTask WaitForGlide(CancellationToken token)
+    // The player's glide action was off when this press began, so it never sees the release and
+    // would leave them gliding with the button up. End that first glide here instead.
+    private static async UniTask EndGlideOnRelease(InputAction glideInput, CancellationToken token)
     {
-        if (PlayerStateManager.Instance == null) return;
+        await UniTask.WaitUntil(() => !glideInput.IsPressed(), cancellationToken: token);
 
-        var completion = new UniTaskCompletionSource();
-
-        void OnChanged(PlayerState from, PlayerState to)
+        if (PlayerStateManager.Instance != null && PlayerStateManager.Instance.CurrentState == PlayerState.Glide)
         {
-            if (to == PlayerState.Glide)
-            {
-                completion.TrySetResult();
-            }
-        }
-
-        PlayerStateManager.Instance.OnStateChanged += OnChanged;
-        try
-        {
-            await completion.Task.AttachExternalCancellation(token);
-        }
-        finally
-        {
-            PlayerStateManager.Instance.OnStateChanged -= OnChanged;
+            PlayerStateManager.Instance.ChangeState(PlayerState.Fall);
         }
     }
-    
 
     private static PlayerMoveManager ResolvePlayer()
     {

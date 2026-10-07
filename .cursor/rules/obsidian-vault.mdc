@@ -18,7 +18,8 @@ The repo is the source of truth for code. Never duplicate code into the vault â€
    notes get written. This is MANDATORY before writing or editing any vault note.
 2. Read `The Last Acorn/Decision Log.md` for prior decisions, so you do not re-litigate
    settled questions or contradict an earlier call.
-3. Read `The Last Acorn/Milestone 1 - Prologue.md` for current scope.
+3. Read `The Last Acorn/Milestones/Milestones.md` and the active milestone note it lists, for
+   current scope.
 
 ## At the end of a session where decisions were made or work was completed
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1731214702058369750}
   - component: {fileID: -2997635244158545838}
   - component: {fileID: -900065581367970197}
+  - component: {fileID: 621564595465042977}
   m_Layer: 11
   m_Name: Syca Branch 2
   m_TagString: Untagged
@@ -64,7 +65,7 @@ PolygonCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
@@ -80,17 +81,17 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -1.0776306, y: 0.50865835}
-      - {x: -3.0992029, y: 0.8951189}
+      - {x: -3.109041, y: 0.81641406}
       - {x: -2.0694115, y: 0.5082527}
-      - {x: 0.3839375, y: -0.3229736}
-      - {x: 1.6858915, y: -0.36470515}
-      - {x: 2.9344153, y: -0.85220945}
-      - {x: 2.9681816, y: 0.13870102}
-      - {x: 0.31791618, y: 0.121297695}
+      - {x: 0.39182198, y: -0.11798}
+      - {x: 0.97526646, y: -0.14951806}
+      - {x: 2.9206698, y: -0.34928614}
+      - {x: 2.9485054, y: 0.010804392}
+      - {x: 0.33759302, y: 0.0524297}
   m_UseDelaunayMesh: 0
 --- !u!212 &-900065581367970197
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,3 +148,23 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
+--- !u!251 &621564595465042977
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4757799661506575173}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: -10.41
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 154.4
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1

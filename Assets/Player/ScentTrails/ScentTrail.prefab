@@ -47,7 +47,7 @@ VisualEffect:
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_AllowInstancing: 1
-  m_ResourceVersion: 1
+  m_ReleaseInstanceOnDisable: 0
   m_PropertySheet:
     m_Float:
       m_Array: []
@@ -120,8 +120,8 @@ VFXRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2061957421
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
 --- !u!1 &5361014473034881450
@@ -172,3 +172,7 @@ MonoBehaviour:
   visualEffect: {fileID: 6465293439761699755}
   playerProperty: Player
   acornProperty: Acorn
+  strengthProperty: Strength
+  reachProperty: Reach
+  glowProperty: Glow
+  transitionSeconds: 0.7

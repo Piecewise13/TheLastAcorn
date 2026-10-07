@@ -284,10 +284,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 9149958767366715690, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1160412846}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
 --- !u!4 &187479592 stripped
@@ -492,6 +489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b744d83a59145709e2077c5dd4f204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraZoneManager
+  activeByDefault: 0
   confiner: {fileID: 0}
   targetAspect: 1.7777778
 --- !u!4 &324285577
@@ -796,15 +794,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.Light2D
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 4
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 2675990390612951382
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1.01
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000i
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -819,6 +821,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -836,6 +841,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2675990390612951382
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 4
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: -2
 --- !u!4 &505353769
 Transform:
   m_ObjectHideFlags: 0
@@ -1218,7 +1236,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &672392637
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1275,6 +1293,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1001 &684926300
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1411,11 +1430,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6e68dee6515042f4859ebc7a664bc00, type: 3}
---- !u!4 &809544604 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7442338127621984480, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-  m_PrefabInstance: {fileID: 187479591}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &824195676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1709,15 +1723,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.Light2D
-  m_ComponentVersion: 2
+  m_ComponentVersion: 4
   m_LightType: 3
   m_BlendStyleIndex: 0
+  m_Light2DProvider:
+    rid: -2
+  m_SelectionSources:
+    rid: 2675990390612951383
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 0, b: 0.8612037, a: 1}
   m_Intensity: 4.23
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000i
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -1732,6 +1750,9 @@ MonoBehaviour:
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
@@ -1749,6 +1770,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2675990390612951383
+      type: {class: Light2DProviderSources, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data:
+        m_SelectedHashCode: 3
+        m_SelectedSource:
+          rid: -2
+        m_Provider2DCache:
+          rid: -2
 --- !u!4 &936090404
 Transform:
   m_ObjectHideFlags: 0
@@ -1764,11 +1798,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &960100717 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9149958767366715690, guid: 776ca9193b6bfee449affcf6f13ce540, type: 3}
-  m_PrefabInstance: {fileID: 187479591}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &963230149 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5912701083925857214, guid: 77dfe795965f54cd68ea22a36bc588fa, type: 3}
@@ -1842,7 +1871,7 @@ GameObject:
   m_IsActive: 1
 --- !u!212 &1027428093
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1899,6 +1928,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!4 &1027428094
 Transform:
   m_ObjectHideFlags: 0
@@ -2175,58 +2205,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5912701083925857214, guid: 77dfe795965f54cd68ea22a36bc588fa, type: 3}
   m_PrefabInstance: {fileID: 645741602}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1160412845
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1160412846}
-  - component: {fileID: 1160412847}
-  m_Layer: 7
-  m_Name: ScentTrailManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1160412846
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160412845}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 960100717}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1160412847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160412845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cb5ffdc50d114d58b3e792860eddcf1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScentTrailManager
-  trailPrefab: {fileID: 3888345534434165177, guid: da9b48fbf4ec84c78bbd4f48389d3f29, type: 3}
-  graphicsOrigin: {fileID: 809544604}
-  rangeMultiplier: 1.5
-  fallbackDetectionRange: 15
-  acornMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  trailContainer: {fileID: 0}
 --- !u!1 &1171282812
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,7 +2239,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1171282814
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2318,6 +2296,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!114 &1174328735 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8986714715488107876, guid: 6235d0dbbf2d74fea84b181b40eb05b6, type: 3}
@@ -2430,7 +2409,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1205684265
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2487,6 +2466,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1001 &1209366651
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3088,8 +3068,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveBoundary
   library: {fileID: 11400000, guid: 77cc1411da3e84317bcf8fad5b626661, type: 2}
-  rockSetIndex: 0
-  depthTierIndex: 0
   points:
   - {x: -21.108215, y: 42.676956}
   - {x: -16.819214, y: -10.567848}
@@ -3100,13 +3078,15 @@ MonoBehaviour:
   overlapJitter: 0.08
   normalOffset: 0.03
   normalOffsetJitter: 3.45
+  placementMode: 0
+  fillSpacing: 2
+  fillJitter: 0.7
   alignToNormal: 1
   rotationJitter: 10.3
   mirrorVariety: 1
   sortingOrder: 3
+  offsetDepthSorting: 0
   seed: 3
-  parallaxProfile: {fileID: 0}
-  parallaxTierIndex: 0
   verticalInfluence: 1
   autoRegenerate: 1
   generated:
@@ -3115,36 +3095,47 @@ MonoBehaviour:
     localRotation: {x: -0, y: -0, z: -0.6971288, w: -0.71694595}
     localScale: {x: 1.5395162, y: 1.5395162, z: 1.5395162}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1012902071}
     localPosition: {x: -18.539825, y: 23.420357, z: 0}
     localRotation: {x: -0, y: -0, z: -0.7201422, w: -0.69382656}
     localScale: {x: 1.5894462, y: 1.5894462, z: 1.5894462}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1792695239}
     localPosition: {x: -15.316681, y: 6.3209076, z: 0}
     localRotation: {x: -0, y: -0, z: -0.7822074, w: -0.6230181}
     localScale: {x: -1.4060556, y: 1.4060556, z: 1.4060556}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1782874240}
     localPosition: {x: -14.941254, y: -9.80777, z: 0}
     localRotation: {x: -0, y: -0, z: -0.74510944, w: -0.6669423}
     localScale: {x: -1.4952413, y: 1.4952413, z: 1.4952413}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 504811865}
     localPosition: {x: -11.027679, y: -29.591549, z: 0}
     localRotation: {x: -0, y: -0, z: -0.81024694, w: -0.58608866}
     localScale: {x: -1.4911666, y: 1.4911666, z: 1.4911666}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 180063510}
     localPosition: {x: 2.2364807, y: -40.69851, z: 0}
     localRotation: {x: -0, y: -0, z: -0.98890567, w: -0.14854486}
     localScale: {x: 1.4487095, y: 1.4487095, z: 1.4487095}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1738334295}
     localPosition: {x: 17.179901, y: -45.287594, z: 0}
     localRotation: {x: -0, y: -0, z: -0.9991284, w: -0.041742872}
     localScale: {x: 1.4851002, y: 1.4851002, z: 1.4851002}
     sortingOrder: 3
+    parallaxFactor: 0
+  rockSetIndex: 0
+  depthTierIndex: 0
+  parallaxProfile: {fileID: 0}
+  parallaxTierIndex: 0
 --- !u!1 &1459976937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3566,7 +3557,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1698508737
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3623,6 +3614,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!4 &1713579708 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5543299607234046875, guid: 3d4c1e96773ca4fdf98e9c6a2f13dcce, type: 3}
@@ -3735,7 +3727,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!212 &1776160460
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3792,6 +3784,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!1 &1782874240 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1822476490046509350, guid: 3d4c1e96773ca4fdf98e9c6a2f13dcce, type: 3}
@@ -4442,8 +4435,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveBoundary
   library: {fileID: 11400000, guid: 77cc1411da3e84317bcf8fad5b626661, type: 2}
-  rockSetIndex: 0
-  depthTierIndex: 0
   points:
   - {x: 0.65844727, y: 63.819717}
   - {x: -4.011963, y: -17.787926}
@@ -4453,13 +4444,15 @@ MonoBehaviour:
   overlapJitter: 0.08
   normalOffset: 0.03
   normalOffsetJitter: 3.45
+  placementMode: 0
+  fillSpacing: 2
+  fillJitter: 0.7
   alignToNormal: 1
   rotationJitter: 18
   mirrorVariety: 1
   sortingOrder: 3
+  offsetDepthSorting: 0
   seed: 3
-  parallaxProfile: {fileID: 0}
-  parallaxTierIndex: 0
   verticalInfluence: 1
   autoRegenerate: 1
   generated:
@@ -4468,41 +4461,53 @@ MonoBehaviour:
     localRotation: {x: -0, y: -0, z: -0.78870773, w: 0.6147683}
     localScale: {x: 1.5395162, y: 1.5395162, z: 1.5395162}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 136396181}
     localPosition: {x: -1.4623413, y: 44.508705, z: 0}
     localRotation: {x: -0, y: -0, z: -0.7523976, w: 0.65870935}
     localScale: {x: 1.5894462, y: 1.5894462, z: 1.5894462}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1894789707}
     localPosition: {x: -4.2877197, y: 27.339058, z: 0}
     localRotation: {x: -0, y: -0, z: -0.6342854, w: 0.77309906}
     localScale: {x: -1.4060556, y: 1.4060556, z: 1.4060556}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1041273081}
     localPosition: {x: -4.2886963, y: 11.206001, z: 0}
     localRotation: {x: -0, y: -0, z: -0.7086431, w: 0.7055672}
     localScale: {x: -1.4952413, y: 1.4952413, z: 1.4952413}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 840925886}
     localPosition: {x: -3.408142, y: -9.37014, z: 0}
     localRotation: {x: -0, y: -0, z: -0.71693176, w: 0.6971433}
     localScale: {x: -1.4911666, y: 1.4911666, z: 1.4911666}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 728397944}
     localPosition: {x: -3.2242432, y: -29.680796, z: 0}
     localRotation: {x: -0, y: -0, z: -0.7781163, w: 0.62812024}
     localScale: {x: 1.4487095, y: 1.4487095, z: 1.4487095}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1689600875}
     localPosition: {x: 0.15948486, y: -44.942368, z: 0}
     localRotation: {x: -0, y: -0, z: -0.6473284, w: 0.76221126}
     localScale: {x: 1.4851002, y: 1.4851002, z: 1.4851002}
     sortingOrder: 3
+    parallaxFactor: 0
   - instance: {fileID: 1962872723}
     localPosition: {x: -1.2792358, y: -62.88129, z: 0}
     localRotation: {x: -0, y: -0, z: -0.6993602, w: 0.7147694}
     localScale: {x: -1.5225887, y: 1.5225887, z: 1.5225887}
     sortingOrder: 3
+    parallaxFactor: 0
+  rockSetIndex: 0
+  depthTierIndex: 0
+  parallaxProfile: {fileID: 0}
+  parallaxTierIndex: 0
 --- !u!4 &2052169657 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 406451512412736855, guid: 1a3f86ad79a6646f3be391a2625aef1a, type: 3}

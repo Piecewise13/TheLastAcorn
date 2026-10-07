@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7643530404094601196}
   - component: {fileID: 8621808567866066825}
   - component: {fileID: 2396992189288324081}
+  - component: {fileID: 2249439455856062797}
   m_Layer: 11
   m_Name: Syca Branch 3
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8621808567866066825
 SpriteRenderer:
-  serializedVersion: 2
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,6 +93,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!60 &2396992189288324081
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -123,7 +125,7 @@ PolygonCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
@@ -138,13 +140,32 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 3.1740963, y: 0.3909388}
-      - {x: 3.22, y: -0.35999998}
-      - {x: 3.128191, y: -1.0050352}
+    - - {x: 3.1606638, y: 0.20288295}
+      - {x: 3.1729424, y: 0.07528636}
+      - {x: 3.1517198, y: -0.29714656}
       - {x: 0.417377, y: 0.25583464}
       - {x: -2.786688, y: 1.0943716}
-      - {x: -3.6322436, y: 1.5789734}
-      - {x: -2.2923155, y: 1.2414674}
-      - {x: -0.9060463, y: 1.1318997}
-      - {x: 1.2028819, y: 0.7364763}
+      - {x: -3.6456761, y: 1.4312152}
+      - {x: -2.2117205, y: 1.1340065}
+      - {x: -0.78515214, y: 0.9304114}
+      - {x: 1.149152, y: 0.4946888}
   m_UseDelaunayMesh: 0
+--- !u!251 &2249439455856062797
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167813250120403840}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: -10.6
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 163.4
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1

@@ -63,6 +63,7 @@ public partial class PlayerCameraManager
 
     private void Update()
     {
+        SyncZoomUnlock();
         UpdateVelocityZoom();
     }
 

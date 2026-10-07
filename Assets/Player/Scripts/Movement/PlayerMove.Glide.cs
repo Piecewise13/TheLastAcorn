@@ -101,6 +101,24 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Starts a glide without a glide button press reaching this player, for sequences that hand
+    /// control back mid-air on that press (the glide unlock). Glide only holds while descending,
+    /// so a player at a standstill is pushed down at <paramref name="downwardSpeed"/> first. Does
+    /// nothing unless the player is falling.
+    /// </summary>
+    public void StartGlide(float downwardSpeed)
+    {
+        if (PlayerStateManager.Instance.CurrentState != PlayerState.Fall) return;
+
+        if (rb.linearVelocity.y >= 0f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -Mathf.Abs(downwardSpeed));
+        }
+
+        GlideInput(new InputAction.CallbackContext());
+    }
+
+    /// <summary>
     /// Handles gliding movement and transitions out of glide state if not falling.
     /// </summary>
     private void Glide()
