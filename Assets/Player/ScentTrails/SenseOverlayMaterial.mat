@@ -54,7 +54,7 @@ Material:
     - _Darken: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveOpacity: 0.05
+    - _WaveOpacity: 0.025
     m_Colors:
     - _WaveColor: {r: 0.5729352, g: 0.9716981, b: 0.6321414, a: 1}
   m_BuildTextureStacks: []

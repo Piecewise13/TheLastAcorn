@@ -135,7 +135,7 @@ public class ScentTrail : MonoBehaviour
 
         if (!instant)
         {
-            length.BlendTo(worldUnits, transitionSeconds);
+            BlendLengthTo(worldUnits);
             return;
         }
 
@@ -144,6 +144,41 @@ public class ScentTrail : MonoBehaviour
         {
             visualEffect.Reinit();
         }
+    }
+
+    // The trail never shows past the player, so the blend is timed by the stretch the player can
+    // actually see change. Timed by the full length instead, a nearby acorn's trail covers its
+    // short visible stretch in a fraction of the blend and shoots out, while a far one takes the
+    // whole time.
+    private void BlendLengthTo(float worldUnits)
+    {
+        // Re-asking for the same length must not restart the blend (RefreshTrails asks every pass).
+        if (length.IsHeadingTo(worldUnits)) return;
+
+        if (acornTransform == null)
+        {
+            length.BlendTo(worldUnits, transitionSeconds);
+            return;
+        }
+
+        float distance = Vector3.Distance(acornTransform.position, followPoint);
+        float visibleFrom = Mathf.Min(length.Current, distance);
+        float visibleTo = Mathf.Min(worldUnits, distance);
+
+        // Start from what's on screen, so shrinking doesn't first spend time retracting the
+        // unseen part past the player.
+        length.Snap(visibleFrom);
+
+        float visibleChange = Mathf.Abs(visibleTo - visibleFrom);
+        if (transitionSeconds <= 0f || visibleChange <= 0.01f)
+        {
+            // Nothing visible changes (already reaching the player): blend the hidden part at the
+            // usual pace, so it's there if the player backs away.
+            length.BlendTo(worldUnits, transitionSeconds);
+            return;
+        }
+
+        length.BlendAtRate(worldUnits, visibleChange / transitionSeconds);
     }
 
     /// <summary>Multiplies the trail colour. 1 = authored colour; above 1 is brighter than white.</summary>
@@ -261,6 +296,16 @@ public class ScentTrail : MonoBehaviour
 
             target = value;
             unitsPerSecond = seconds > 0f ? Mathf.Abs(target - Current) / seconds : float.PositiveInfinity;
+        }
+
+        /// <summary>True if <paramref name="value"/> is already the target.</summary>
+        public bool IsHeadingTo(float value) => Mathf.Approximately(value, target);
+
+        /// <summary>Moves to <paramref name="value"/> at a set speed rather than over a set time.</summary>
+        public void BlendAtRate(float value, float rate)
+        {
+            target = value;
+            unitsPerSecond = rate;
         }
 
         public void Tick(float deltaTime)

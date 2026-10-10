@@ -26,6 +26,15 @@ public class AcornCollectionBar : ViewBase
     [SerializeField] private MMF_Player exitFeedback;
     [SerializeField] private FloatController sliderFloatController;
 
+    [Header("Segment Complete Energy")]
+    [Tooltip("Image laid over the slider fill. Turns gold, then drains toward the right as the energy leaves. Not driven by the Slider.")]
+    [SerializeField] private Image goldFill;
+    [SerializeField] private Color goldColor = new Color(1f, 0.78f, 0.25f, 1f);
+    [SerializeField] private float goldShiftDuration = 0.35f;
+    [Tooltip("Pause on the full gold bar before the energy leaves.")]
+    [SerializeField] private float holdBeforeLaunch = 0.15f;
+    [SerializeField] private UpgradeEnergyOrb energyOrbPrefab;
+
 
 
     public static bool AllCollected { get; private set; }
@@ -78,11 +87,99 @@ public class AcornCollectionBar : ViewBase
 
     }
 
+    /// <summary>
+    /// Full bar turns gold, then pours out of its right end as an orb that flies to the player.
+    /// Awaited by the caller, so the upgrade view only opens once the energy has arrived.
+    /// </summary>
     private async UniTask AnimateSegmentComplete(CancellationToken token)
+    {
+        if (goldFill == null || energyOrbPrefab == null)
+        {
+            await PlaySegmentCompleteFeedback(token);
+            return;
+        }
+
+        await UniTask.WhenAll(ShiftFillToGold(token), PlaySegmentCompleteFeedback(token));
+        await UniTask.WaitForSeconds(holdBeforeLaunch, cancellationToken: token);
+        await LaunchEnergy(token);
+    }
+
+    private async UniTask PlaySegmentCompleteFeedback(CancellationToken token)
     {
         if (segmentCompleteFeedback == null) return;
 
         await segmentCompleteFeedback.PlayFeedbacksAsync(token);
+    }
+
+    private async UniTask ShiftFillToGold(CancellationToken token)
+    {
+        Image sliderFill = progressSlider.fillRect.GetComponent<Image>();
+        Color startColor = sliderFill != null ? sliderFill.color : goldFill.color;
+
+        // Stretched over the whole container here rather than trusting the prefab, since a copy of the
+        // slider's Fill carries the zeroed anchors the Slider normally overwrites at runtime.
+        RectTransform goldRect = goldFill.rectTransform;
+        goldRect.anchorMin = Vector2.zero;
+        goldRect.anchorMax = Vector2.one;
+        goldRect.offsetMin = Vector2.zero;
+        goldRect.offsetMax = Vector2.zero;
+        goldFill.color = startColor;
+        goldFill.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < goldShiftDuration)
+        {
+            goldFill.color = Color.Lerp(startColor, goldColor, elapsed / goldShiftDuration);
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+        }
+
+        goldFill.color = goldColor;
+        if (sliderFill != null) sliderFill.enabled = false;
+    }
+
+    private async UniTask LaunchEnergy(CancellationToken token)
+    {
+        Camera cam = CameraRig.Current.Foreground;
+        Transform player = PlayerStateManager.Instance.playerGameObject.transform;
+
+        UpgradeEnergyOrb orb = Instantiate(energyOrbPrefab, BarExitWorldPoint(cam, player.position.z), Quaternion.identity);
+
+        // The orb runs on its own token: the bar is destroyed as soon as the upgrade view opens, and
+        // the orb still has to finish fading. Draining over the trail's lifetime makes the trail's tail
+        // leave the bar edge just as the bar empties, so bar and trail read as one stream.
+        await UniTask.WhenAll(
+            DrainGoldFill(orb.TrailTime, token),
+            orb.FlyTo(player, orb.destroyCancellationToken));
+    }
+
+    private async UniTask DrainGoldFill(float duration, CancellationToken token)
+    {
+        RectTransform goldRect = goldFill.rectTransform;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            goldRect.anchorMin = new Vector2(elapsed / duration, goldRect.anchorMin.y);
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+        }
+
+        goldFill.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// World point at the vertical centre of the gold fill's right edge, on the player's depth plane.
+    /// The bar canvas is Screen Space Overlay, so its world corners are already in screen pixels.
+    /// </summary>
+    private Vector3 BarExitWorldPoint(Camera cam, float depthZ)
+    {
+        var corners = new Vector3[4];
+        goldFill.rectTransform.GetWorldCorners(corners);
+
+        Vector3 screenPoint = (corners[2] + corners[3]) * 0.5f;
+        screenPoint.z = Mathf.Abs(depthZ - cam.transform.position.z);
+        return cam.ScreenToWorldPoint(screenPoint);
     }
 
     private async UniTask AnimateReveal(CancellationToken token)

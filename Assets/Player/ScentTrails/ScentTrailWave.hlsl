@@ -10,6 +10,7 @@
 //
 // settings.x  amplitude:  how far the wave swings sideways, in world units.
 // settings.y  wavelength: world units per wave, so the wave keeps its shape when the distance changes.
+//                         Trails shorter than MIN_WAVES waves shrink the whole wave to fit.
 // settings.z  waveSpeed:  waves per second travelling toward the player.
 // settings.w  taper:      world units over which the wave eases in at the acorn and out at the player.
 void ScentTrailWave(inout VFXAttributes attributes, in float3 acorn, in float3 player, in float time,
@@ -31,6 +32,17 @@ void ScentTrailWave(inout VFXAttributes attributes, in float3 acorn, in float3 p
         attributes.position = onLine;
         return;
     }
+
+    // A trail shorter than a couple of waves can't fit the full-size wave: a 10-unit wave over a
+    // 3-unit trail is a flat bow, and easing in over 3 units at each end flattens what's left. So
+    // under MIN_WAVES waves' worth of distance, shrink the whole wave (length, swing and easing
+    // together) to fit. Scaling all three by the same amount keeps the wiggle the same shape,
+    // just smaller, instead of straightening out.
+    const float MIN_WAVES = 8;
+    float fit = saturate(dist / (wavelength * MIN_WAVES));
+    wavelength *= fit;
+    amplitude *= fit;
+    taper *= fit;
 
     float3 dir = toPlayer / dist;
     float3 side = float3(-dir.y, dir.x, 0.0);   // perpendicular in the 2D plane
