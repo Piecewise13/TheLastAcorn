@@ -1,0 +1,59 @@
+---
+description: One feature per commit, scoped messages, scene files committed separately
+alwaysApply: true
+---
+
+# Git commits: one feature per commit
+
+The history is used to show how each feature started and how it grew. A commit
+that bundles several features cannot be checked out to show any one of them, so
+**every commit holds exactly one feature, fix, or scene change.**
+
+## When to propose a commit
+
+At the end of each feature that works in Play mode, before starting the next
+one, propose a commit. Do not wait for a milestone. Do not commit without the
+user's yes, and never push unless asked.
+
+If uncommitted changes already span several features, split them into one
+commit per feature. Never fold them into one "milestone" commit.
+
+## The proposal
+
+Show this and wait:
+
+1. The commit message
+2. The exact files to stage, grouped by commit if there is more than one
+3. Any files left out, and why
+
+## Message format
+
+`type(scope): what the player or developer can now do`
+
+- **type:** `feat`, `fix`, `refactor`, `scene`, `art`, `chore`
+- **scope:** the system, lowercase. Reuse an existing scope before inventing one:
+  `scent`, `senses`, `tutorial`, `camera`, `movement`, `upgrades`, `orbs`,
+  `checkpoint`, `transitions`, `world`, `ui`, or a scene name for `scene`
+  commits (`scene(level1): ...`)
+- Imperative, under 72 characters, no trailing period
+
+```
+feat(scent): add wave distortion to scent trail shader
+fix(camera): stop lead offset snapping on respawn
+scene(level2): place upgrade orbs along the cave path
+```
+
+## Staging
+
+- Stage by explicit path: `git add <file> <file>`. Never `git add .` or `git add -A`.
+- A script, its `.meta`, and the prefab/material/shader it introduced go in the
+  same commit.
+- **Scene files (`.unity`)** cannot be split by hunk safely. Commit a scene with
+  the feature that required it only if no other feature touched it; otherwise
+  give it its own `scene(<name>):` commit after the feature commits.
+- Never commit `.DS_Store`, `Library/`, `Temp/`, `Logs/`, or `UserSettings/`.
+
+## Tags
+
+When a feature reaches a state worth showing (first playable, visual pass,
+final), suggest a lightweight tag named `<feature>-v<n>`, e.g. `scent-trails-v1`.

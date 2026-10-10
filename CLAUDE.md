@@ -8,6 +8,7 @@ do not restate their contents here, edit the rule file instead.
 
 @.cursor/rules/obsidian-vault.mdc
 @.cursor/rules/unitask-over-coroutines.mdc
+@.cursor/rules/git-commits.mdc
 
 ## Reading these
 
