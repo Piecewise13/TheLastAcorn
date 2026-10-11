@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bda4c2b0932f43d3b37ed09089e4168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeEnergyOrb
-  trail: {fileID: 0}
+  trail: {fileID: 4103565751545791969}
   sparkles: {fileID: 0}
   flightDuration: 3
   travelCurve:
