@@ -31,8 +31,9 @@ public class UpgradeEnergyOrb : MonoBehaviour
     public float TrailTime => trail != null ? trail.time : 0f;
 
     /// <summary>
-    /// Spirals in onto the target, then waits for the trail to fade and destroys itself. The spiral is
-    /// centred on the target's live position, so the orb keeps finding the player if they move.
+    /// Spirals in onto the target and completes on impact, so the player's glow can start right then.
+    /// The trail keeps fading out after that and the orb destroys itself. The spiral is centred on the
+    /// target's live position, so the orb keeps finding the player if they move.
     /// </summary>
     public async UniTask FlyTo(Transform target, CancellationToken token)
     {
@@ -58,6 +59,11 @@ public class UpgradeEnergyOrb : MonoBehaviour
         if (trail != null) trail.emitting = false;
         if (sparkles != null) sparkles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
+        FadeOutAndDestroy(destroyCancellationToken).Forget();
+    }
+
+    private async UniTask FadeOutAndDestroy(CancellationToken token)
+    {
         await UniTask.WaitForSeconds(TrailTime, cancellationToken: token);
         Destroy(gameObject);
     }

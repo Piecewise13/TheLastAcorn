@@ -31,6 +31,9 @@ public class PlayerEffectsManager : MonoBehaviour
 
     private CancellationTokenSource immunityFlashCts;
 
+    /// <summary>The squirrel's visible sprite, for effects that attach to or copy it.</summary>
+    public SpriteRenderer GraphicSprite => graphicSprite;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
