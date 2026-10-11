@@ -56,6 +56,9 @@ public sealed class CameraClaim : IDisposable
     /// <summary>Where the camera should sit. Null leaves the position to whatever is underneath.</summary>
     public Transform Target { get; private set; }
 
+    /// <summary>World-space offset added to <see cref="Target"/>, for framing a target off-centre.</summary>
+    public Vector3 Offset { get; private set; }
+
     /// <summary>Orthographic half-height. Null leaves the zoom to whatever is underneath.</summary>
     public float? OrthographicSize { get; private set; }
 
@@ -73,6 +76,12 @@ public sealed class CameraClaim : IDisposable
     public CameraClaim WithTarget(Transform target)
     {
         Target = target;
+        return this;
+    }
+
+    public CameraClaim WithOffset(Vector3 offset)
+    {
+        Offset = offset;
         return this;
     }
 
@@ -105,6 +114,8 @@ public sealed class CameraClaim : IDisposable
 
     /// <summary>Retargets a held claim. Safe to call every frame.</summary>
     public void SetTarget(Transform target) => Target = target;
+
+    public void SetOffset(Vector3 offset) => Offset = offset;
 
     /// <summary>Resizes a held claim. Safe to call every frame.</summary>
     public void SetOrthographicSize(float size) => OrthographicSize = size;

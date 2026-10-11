@@ -297,7 +297,7 @@ public partial class CameraDirector : SceneService<CameraDirector>
             // not applied here — but it is still advanced toward zero, so handing the camera back to
             // follow does not restore a stale offset from before the claim.
             UpdateLookAhead(active: false);
-            desired = claim.Target.position;
+            desired = claim.Target.position + claim.Offset;
         }
         else
         {
@@ -613,7 +613,7 @@ public partial class CameraDirector : SceneService<CameraDirector>
         ResetLookAhead();
         CameraClaim positionClaim = TopClaim(requireTarget: true);
         Transform source = positionClaim != null ? positionClaim.Target : null;
-        Vector3 position = source != null ? source.position : ResolveDefaultPosition();
+        Vector3 position = source != null ? source.position + positionClaim.Offset : ResolveDefaultPosition();
         position.z = driven.position.z;
         driven.position = position;
         lastAppliedPosition = position;
