@@ -37,8 +37,6 @@ public class UpgradePlayerView : ViewBase
                 container.SetupAsHidden();
             }
         }
-        
-        await OverlayCameraController.Current.RequestPlayerOverlay();
     }
 
     public override async UniTask RunAsync(CancellationToken token = default)

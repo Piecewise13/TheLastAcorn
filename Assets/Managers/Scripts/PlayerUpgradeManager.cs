@@ -114,7 +114,17 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     [SerializeField] private int[] segmentCosts = { 5 };
 
     [SerializeField] private AcornCollectionBar acornCollectionBarPrefab = null!;
-    [SerializeField] private UpgradePlayerView upgradeViewPrefab = null!;
+    [Tooltip("Gold glow attached to the squirrel when the upgrade energy lands, kept until a stat is chosen.")]
+    [SerializeField] private PlayerUpgradeGlow upgradeGlowPrefab = null!;
+
+    [Tooltip("Lines that grow out of the glow toward each upgrade's icon.")]
+    [SerializeField] private UpgradeLineBurst lineBurstPrefab = null!;
+    [Tooltip("Where the squirrel sits in the frame during the upgrade, as a fraction of screen height from the bottom.")]
+    [Range(0f, 0.5f)] [SerializeField] private float upgradeFrameHeight = 1f / 3f;
+
+    private PlayerUpgradeGlow activeGlow;
+    private UpgradeLineBurst activeBurst;
+    private CameraClaim upgradeFrameClaim;
 
     private int segmentAcorns;
     private int segmentIndex;
@@ -131,6 +141,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     // ── Player component refs ─────────────────────────────────────────────────
 
     private PlayerMoveManager playerMoveManager;
+    private PlayerEffectsManager playerEffects;
     private PlayerCameraManager playerCamera;
     private PlayerSenses playerSenses;
 
@@ -174,6 +185,7 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         if (Instance != this || player == null) return;
 
         playerMoveManager = player.GetComponent<PlayerMoveManager>();
+        playerEffects = player.GetComponent<PlayerEffectsManager>();
         playerCamera = player.GetComponentInChildren<PlayerCameraManager>();
         playerSenses = player.GetComponentInChildren<PlayerSenses>();
         ApplyToPlayer();
@@ -230,23 +242,132 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     public async UniTask StartUpgradeSelection()
     {
         playerMoveManager.DisableMove();
-        CameraRig.Current.SetTrackingTarget(playerMoveManager.transform);
+        ClaimUpgradeFrame();
         ViewManager.Instance.ClearViewsInstant();
-        await ViewManager.Instance.PushView(upgradeViewPrefab);
+
+        // The energy orb has just landed: the squirrel lights up as the world dims a little around it,
+        // then the upgrade lines grow out of the glow.
+        await UniTask.WhenAll(
+            OverlayCameraController.Current.RequestPlayerDim(),
+            BeginGlow());
+        await GrowLines();
+
+        UpgradeStat? chosen = null;
+        if (activeBurst != null && activeBurst.HasChoice)
+            chosen = await activeBurst.Choose(activeBurst.destroyCancellationToken);
+        else
+            Debug.LogWarning($"[{nameof(PlayerUpgradeManager)}] No upgrade could be offered (none assigned, or every stat locked or maxed).", this);
+
+        await FinishUpgrade(chosen);
     }
 
+    /// <summary>Applies a chosen stat and ends the upgrade. Kept for the old UpgradePlayerView until it is deleted.</summary>
     public async UniTask CompleteUpgradeSelection(UpgradeStat stat)
     {
         if (!CanAfford(stat)) return;
 
-        ApplyUpgrade(stat);
+        await FinishUpgrade(stat);
+    }
+
+    private async UniTask FinishUpgrade(UpgradeStat? stat)
+    {
+        if (stat.HasValue && CanAfford(stat.Value))
+            ApplyUpgrade(stat.Value);
 
         await ViewManager.Instance.ClearViews();
-        CameraRig.Current.ResetTrackingTarget();
-        OverlayCameraController.Current.ReleasePlayerOverlay();
+        await UniTask.WhenAll(
+            EndLines(),
+            EndGlow(),
+            OverlayCameraController.Current.ReleasePlayerDim());
+        ReleaseUpgradeFrame();
 
         if (playerMoveManager != null)
             playerMoveManager.EnableMove();
+    }
+
+    /// <summary>
+    /// True when a stat should be offered in the upgrade choice: not maxed, and its ability is unlocked
+    /// (Vision needs Zoom, Gliding needs Glide). Stats that are not offered get a broken line.
+    /// </summary>
+    public bool IsStatOffered(UpgradeStat stat)
+    {
+        if (IsMaxed(stat)) return false;
+
+        PlayerAbilityManager.Abilities? required = stat switch
+        {
+            UpgradeStat.Vision => PlayerAbilityManager.Abilities.Zoom,
+            UpgradeStat.Gliding => PlayerAbilityManager.Abilities.Glide,
+            _ => null,
+        };
+
+        return required == null || PlayerAbilityManager.Instance.IsAbilityUnlocked(required.Value);
+    }
+
+    // Frames the camera above the squirrel so it sits low in the shot, leaving the upper frame for the
+    // upgrade lines and icons. The zoom is held too, so the fan sized from it stays on screen.
+    private void ClaimUpgradeFrame()
+    {
+        CameraDirector director = CameraDirector.For(playerMoveManager.gameObject.scene);
+        if (director == null)
+        {
+            CameraRig.Current.SetTrackingTarget(playerMoveManager.transform);
+            return;
+        }
+
+        float size = CameraRig.Current.Foreground.orthographicSize;
+        float lift = (0.5f - upgradeFrameHeight) * 2f * size;
+
+        upgradeFrameClaim = director.Request(CameraPriority.Cinematic)
+            .WithTarget(playerMoveManager.transform)
+            .WithOffset(Vector3.up * lift)
+            .WithOrthographicSize(size);
+    }
+
+    private void ReleaseUpgradeFrame()
+    {
+        if (upgradeFrameClaim == null)
+        {
+            CameraRig.Current.ResetTrackingTarget();
+            return;
+        }
+
+        upgradeFrameClaim.Release();
+        upgradeFrameClaim = null;
+    }
+
+    private async UniTask BeginGlow()
+    {
+        if (upgradeGlowPrefab == null || playerEffects == null || playerEffects.GraphicSprite == null) return;
+
+        activeGlow = Instantiate(upgradeGlowPrefab);
+        await activeGlow.Begin(playerEffects.GraphicSprite, activeGlow.destroyCancellationToken);
+    }
+
+    private async UniTask EndGlow()
+    {
+        if (activeGlow == null) return;
+
+        PlayerUpgradeGlow glow = activeGlow;
+        activeGlow = null;
+        await glow.End(glow.destroyCancellationToken);
+    }
+
+    private async UniTask GrowLines()
+    {
+        if (lineBurstPrefab == null || playerEffects == null || playerEffects.GraphicSprite == null) return;
+
+        float size = upgradeFrameClaim?.OrthographicSize ?? CameraRig.Current.Foreground.orthographicSize;
+        activeBurst = Instantiate(lineBurstPrefab);
+        await activeBurst.Grow(playerEffects.GraphicSprite, size, IsStatOffered, activeBurst.destroyCancellationToken);
+    }
+
+    private async UniTask EndLines()
+    {
+        if (activeBurst == null) return;
+
+        UpgradeLineBurst burst = activeBurst;
+        activeBurst = null;
+        await burst.End(burst.destroyCancellationToken);
     }
 
     // ── Upgrade affordability / application ───────────────────────────────────
