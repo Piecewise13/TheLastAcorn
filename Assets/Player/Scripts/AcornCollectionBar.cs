@@ -99,7 +99,10 @@ public class AcornCollectionBar : ViewBase
             return;
         }
 
-        await UniTask.WhenAll(ShiftFillToGold(token), PlaySegmentCompleteFeedback(token));
+        // The full bar rests first (the feedback is a pause), so the player sees the segment complete before
+        // anything else happens. Only then does it turn gold.
+        await PlaySegmentCompleteFeedback(token);
+        await ShiftFillToGold(token);
         await UniTask.WaitForSeconds(holdBeforeLaunch, cancellationToken: token);
         await LaunchEnergy(token);
     }
