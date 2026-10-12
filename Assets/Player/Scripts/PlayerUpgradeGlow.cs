@@ -101,7 +101,7 @@ public class PlayerUpgradeGlow : MonoBehaviour
             float t = elapsed / fadeOutDuration;
             haloScale = Mathf.Lerp(startScale, 0.6f, t);
             halo.color = Color.Lerp(haloColor, Clear(haloColor), t);
-            haloCore.color = Color.Lerp(Bright(haloColor, haloIntensity), Clear(Bright(haloColor, haloIntensity)), t);
+            HdrSprite.SetColor(haloCore, Color.Lerp(Bright(haloColor, haloIntensity), Clear(Bright(haloColor, haloIntensity)), t));
             backing.color = Color.Lerp(backingColor, Clear(backingColor), t);
             elapsed += Time.deltaTime;
             await UniTask.Yield(PlayerLoopTiming.Update, token);
@@ -128,9 +128,9 @@ public class PlayerUpgradeGlow : MonoBehaviour
 
         breathing = false;
         halo.color = haloColor;
-        haloCore.color = Bright(haloColor, haloIntensity);
+        HdrSprite.SetColor(haloCore, Bright(haloColor, haloIntensity));
         backing.color = backingColor;
-        flash.color = Clear(flashColor);
+        HdrSprite.SetColor(flash, Clear(flashColor));
         haloScale = 0f;
 
         bool replaced = await UniTask.WhenAll(Swell(impactCts.Token), Flash(impactCts.Token))
@@ -203,12 +203,12 @@ public class PlayerUpgradeGlow : MonoBehaviour
             float t = elapsed / flashDuration;
             float strength = t < 0.2f ? t / 0.2f : 1f - (t - 0.2f) / 0.8f;
             Color peak = Bright(flashColor, flashIntensity);
-            flash.color = Color.Lerp(Clear(peak), peak, strength);
+            HdrSprite.SetColor(flash, Color.Lerp(Clear(peak), peak, strength));
             elapsed += Time.deltaTime;
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
 
-        flash.color = Clear(flashColor);
+        HdrSprite.SetColor(flash, Clear(flashColor));
     }
 
     private static Vector3 WorldToLocalScale(SpriteRenderer renderer, float worldDiameter)

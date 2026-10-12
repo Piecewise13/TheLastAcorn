@@ -237,8 +237,8 @@ MonoBehaviour:
   flash: {fileID: 6545428417253055850}
   backing: {fileID: 5318494292469139073}
   haloColor: {r: 1, g: 1, b: 1, a: 1}
-  haloIntensity: 1.5
-  coreSize: 0.545
+  haloIntensity: 1.2
+  coreSize: 0.212
   haloSize: 12
   swellDuration: 0.94
   swellCurve:
