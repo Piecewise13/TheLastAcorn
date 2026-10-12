@@ -6,7 +6,7 @@ using UnityEngine;
 
 /// <summary>
 /// One gold line growing out of the squirrel's glow toward where an upgrade's icon will sit. A locked
-/// or maxed stat gets a broken line instead: it stops short, flickers, and settles dim.
+/// or maxed stat gets a wisp instead: it grows the same way, but grey, faint, and fading out before its end.
 /// Drawn in the burst's local space, so it follows the squirrel.
 /// </summary>
 [RequireComponent(typeof(LineRenderer))]
@@ -61,11 +61,13 @@ public class UpgradeLine : MonoBehaviour
         new Keyframe(1f, 1f, 0f, 0f));
 
     [Header("Locked")]
-    [Tooltip("How far a locked line gets before it breaks off, as a fraction of its full length.")]
-    [Range(0f, 1f)] [SerializeField] private float brokenLength = 0.4f;
-    [SerializeField] private int flickerCount = 3;
-    [SerializeField] private float flickerInterval = 0.07f;
-    [SerializeField] private Color lockedColor = new Color(0.55f, 0.5f, 0.42f, 0.35f);
+    [Tooltip("How far a locked line reaches, as a fraction of a full line's length.")]
+    [Range(0f, 1f)] [SerializeField] private float brokenLength = 0.75f;
+    [Tooltip("Where along a locked line it has faded to fully transparent, as a fraction of its own length. " +
+             "Below 1, it vanishes before it ends, so a locked stat reads as a wisp rather than a line.")]
+    [Range(0.1f, 1f)] [SerializeField] private float lockedFadeEnd = 0.85f;
+    [Tooltip("A locked line's colour. Not HDR, and kept faint so it reads as a hint rather than a choice.")]
+    [SerializeField] private Color lockedColor = new Color(0.55f, 0.5f, 0.42f, 0.2f);
 
     private MaterialPropertyBlock block;
     private Vector3 end;
@@ -74,6 +76,8 @@ public class UpgradeLine : MonoBehaviour
     private float presence = 1f;
     private float wigglePhase;
     private Vector2 appliedWidth = new Vector2(-1f, -1f);
+    private Transform icon;
+    private float iconEdge;
     private Vector2 driftSeed;
     private Vector3 drift;
 
@@ -89,6 +93,17 @@ public class UpgradeLine : MonoBehaviour
     {
         reach = 1f - Mathf.Clamp01(progress);
         Redraw();
+    }
+
+    /// <summary>
+    /// Ends the drawn line at the edge of the icon riding its tip rather than at the icon's centre.
+    /// <paramref name="edgeFraction"/> is the icon's radius as a fraction of its scale. Read every frame, so the
+    /// line follows the icon as it pops in, highlights and shrinks while reeled.
+    /// </summary>
+    public void AttachIcon(Transform iconTransform, float edgeFraction)
+    {
+        icon = iconTransform;
+        iconEdge = edgeFraction;
     }
 
     /// <summary>Scales the line's opacity, so it can step back while another line is reeled in.</summary>
@@ -113,10 +128,15 @@ public class UpgradeLine : MonoBehaviour
         line.sortingLayerID = drawWith.sortingLayerID;
         line.sortingOrder = drawWith.sortingOrder + sortingOffset;
         line.useWorldSpace = false;
+        // Hidden inside any icon's circle mask, so a line never shows through the frosted disc.
+        line.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+        line.colorGradient = AlphaAlongLine(locked ? lockedFadeEnd : 1f);
 
         block ??= new MaterialPropertyBlock();
-        SetSoftEdge(LinearBrightness(Bright(color, intensity)));
-        SetColor(Bright(color, intensity));
+        // A locked line is grey from the start; its colour isn't HDR, so the feather needs no dimming.
+        Color shown = locked ? lockedColor : Bright(color, intensity);
+        SetSoftEdge(LinearBrightness(shown));
+        SetColor(shown);
         SetReach(0f);
     }
 
@@ -133,8 +153,6 @@ public class UpgradeLine : MonoBehaviour
         }
 
         SetReach(target);
-
-        if (IsLocked) await BreakOff(token);
     }
 
     /// <summary>Fades the line out. Temporary until the chosen/unchosen dissipate exists.</summary>
@@ -151,22 +169,6 @@ public class UpgradeLine : MonoBehaviour
         }
 
         SetColor(Clear(start));
-    }
-
-    private async UniTask BreakOff(CancellationToken token)
-    {
-        Color lit = Bright(color, intensity);
-        for (int i = 0; i < flickerCount; i++)
-        {
-            SetColor(Clear(lit));
-            await UniTask.WaitForSeconds(flickerInterval, cancellationToken: token);
-            SetColor(lit);
-            await UniTask.WaitForSeconds(flickerInterval, cancellationToken: token);
-        }
-
-        // The locked colour isn't HDR, so the feather needs no dimming once the line settles.
-        SetSoftEdge(LinearBrightness(lockedColor));
-        SetColor(lockedColor);
     }
 
     private void LateUpdate()
@@ -193,8 +195,12 @@ public class UpgradeLine : MonoBehaviour
             Mathf.PerlinNoise(0f, driftSeed.y + t) * 2f - 1f,
             0f) * (driftAmount * end.magnitude);
 
+        // The tip (and the icon on it) sits at the full reach; the visible line stops short of it by the icon's
+        // current radius, so it meets the circle's rim.
+        float gap = icon != null ? Mathf.Abs(icon.lossyScale.x) * iconEdge / Mathf.Max(end.magnitude, 0.0001f) : 0f;
+        float drawn = Mathf.Max(0f, reach - gap);
         for (int i = 0; i < pointCount; i++)
-            line.SetPosition(i, PointAt(reach * i / (pointCount - 1f)));
+            line.SetPosition(i, PointAt(drawn * i / (pointCount - 1f)));
 
         tip.localPosition = PointAt(reach);
     }
@@ -291,6 +297,18 @@ public class UpgradeLine : MonoBehaviour
         texture.Apply(false, true);
         SoftEdgeTextures[key] = texture;
         return texture;
+    }
+
+    // Opacity along the line, on top of its colour. 1 keeps it solid end to end; below 1 it holds solid near
+    // the glow, then fades to nothing at that fraction of its length.
+    private static Gradient AlphaAlongLine(float fadeEnd)
+    {
+        var gradient = new Gradient();
+        GradientAlphaKey[] alpha = fadeEnd >= 1f
+            ? new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) }
+            : new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, fadeEnd * 0.25f), new GradientAlphaKey(0f, fadeEnd) };
+        gradient.SetKeys(new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) }, alpha);
+        return gradient;
     }
 
     private static float Smooth(float t) => t * t * (3f - 2f * t);

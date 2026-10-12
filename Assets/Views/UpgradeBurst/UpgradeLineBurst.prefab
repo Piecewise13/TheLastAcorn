@@ -48,16 +48,24 @@ MonoBehaviour:
   iconPrefab: {fileID: 4716941847210990666, guid: f8dc14d74461c4fd29ca90cad2ad299f, type: 3}
   slots:
   - stat: 0
-    angle: 50
+    angle: 60
+    symbol: {fileID: 21300000, guid: a3aa9e00452ac46d798881aa02c84ea0, type: 3}
   - stat: 1
     angle: 0
+    symbol: {fileID: 0}
   - stat: 2
-    angle: -50
-  angleJitter: 10.54
-  lengthFraction: 0.66
+    angle: -60
+    symbol: {fileID: 0}
+  angleJitter: 5
+  lengthFraction: 0.9
   lengthJitter: 0.139
   stagger: 0.12
   sortingOffset: -3
-  iconSizeFraction: 0.12
+  iconDiameter: 7
   iconSortingOffset: 2
+  reelDuration: 1
+  snapBackDuration: 0.35
+  commitThreshold: 0.85
+  pullInDuration: 0.2
+  othersPresence: 0.4
   fadeOutDuration: 0.3

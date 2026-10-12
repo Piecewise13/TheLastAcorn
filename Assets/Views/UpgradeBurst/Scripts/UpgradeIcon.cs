@@ -6,19 +6,25 @@ using UnityEngine;
 
 /// <summary>
 /// The circle at the end of an upgrade line: a dark disc with a glowing gold ring, the stat's symbol, and
-/// its name. Rides the line's tip, so it drifts with it. A locked or maxed stat's icon is dim and grey.
+/// its name. Rides the line's tip, so it drifts with it. Only stats that can be picked get one; a locked
+/// stat's line ends in nothing.
 /// </summary>
 public class UpgradeIcon : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer disc;
     [SerializeField] private SpriteRenderer ring;
-    [Tooltip("The stat's symbol. Left empty until the icon art exists.")]
+    [Tooltip("The stat's art. Drawn large and cropped to the circle by the mask; empty for a plain circle.")]
     [SerializeField] private SpriteRenderer symbol;
+    [Tooltip("Circle that crops the art. Its sprite sits just inside the ring, so the ring hides the crop edge.")]
+    [SerializeField] private SpriteMask mask;
+    [Tooltip("Size of the art relative to the circle. Above 1 fills the circle and lets the edges crop away.")]
+    [SerializeField] private float symbolScale = 1.3f;
     [SerializeField] private TMP_Text label;
 
     [Header("Look")]
-    [Tooltip("Covers the end of the line, so keep it mostly opaque.")]
-    [SerializeField] private Color discColor = new Color(0.06f, 0.05f, 0.09f, 0.9f);
+    [Tooltip("Tint of the frosted-glass disc. Keep it light and part see-through: the frost texture " +
+             "(Art/UpgradeIconDisc.png) supplies the grain, top-left light and rim, and the world shows faintly behind it.")]
+    [SerializeField] private Color discColor = new Color(0.78f, 0.84f, 0.94f, 0.45f);
     [SerializeField] private Color ringColor = new Color(1f, 0.82f, 0.35f, 1f);
 
     [Header("Ring Glow")]
@@ -30,11 +36,6 @@ public class UpgradeIcon : MonoBehaviour
     [Min(0f)] [SerializeField] private float selectedRingIntensity = 12f;
     [SerializeField] private Color labelColor = new Color(1f, 0.9f, 0.7f, 1f);
 
-    [Header("Locked")]
-    [SerializeField] private Color lockedRingColor = new Color(0.55f, 0.5f, 0.42f, 0.5f);
-    [SerializeField] private Color lockedDiscColor = new Color(0.06f, 0.05f, 0.09f, 0.6f);
-    [SerializeField] private Color lockedLabelColor = new Color(0.6f, 0.57f, 0.52f, 0.6f);
-
     [Header("Appear")]
     [SerializeField] private float popDuration = 0.35f;
     [Tooltip("Icon size over the pop, as a multiple of its final size.")]
@@ -42,6 +43,13 @@ public class UpgradeIcon : MonoBehaviour
         new Keyframe(0f, 0f),
         new Keyframe(0.65f, 1.15f),
         new Keyframe(1f, 1f));
+
+    [Header("Symbol Glow")]
+    [Tooltip("HDR multiplier on the art while idle. 1 shows it as drawn.")]
+    [Min(0f)] [SerializeField] private float idleSymbolIntensity = 1f;
+    [Tooltip("HDR multiplier on the art when highlighted, so it blooms with the ring. Bloom starts around 6 in " +
+             "Level1; higher values glow more but whiten the gold lines, since the camera has no tonemapping.")]
+    [Min(0f)] [SerializeField] private float highlightSymbolIntensity = 6f;
 
     [Header("Reel In")]
     [Tooltip("Icon size once reeled all the way into the squirrel, as a multiple of its normal size.")]
@@ -53,9 +61,9 @@ public class UpgradeIcon : MonoBehaviour
 
     [Header("Highlight")]
     [Tooltip("Size of the highlighted icon, as a multiple of its normal size.")]
-    [SerializeField] private float highlightScale = 1.2f;
+    [SerializeField] private float highlightScale = 1.25f;
     [Tooltip("How quickly the highlight eases in and out. Higher is snappier.")]
-    [SerializeField] private float highlightSpeed = 12f;
+    [SerializeField] private float highlightSpeed = 7f;
 
     private float diameter;
     private float pop;       // size from the appear animation, as a multiple of diameter
@@ -68,24 +76,45 @@ public class UpgradeIcon : MonoBehaviour
     private Color ringTarget;
     private Color labelTarget;
 
+    /// <summary>
+    /// Radius of the ring's outer edge as a fraction of the icon's scale. The ring texture
+    /// (Art/UpgradeIconRing.png) is drawn out to 98% of its width, and the sprite is one unit across.
+    /// </summary>
+    public const float EdgeRadius = 0.49f;
+
     public PlayerUpgradeManager.UpgradeStat Stat { get; private set; }
-    public bool IsLocked { get; private set; }
 
     /// <summary>
     /// Sizes and colours the icon. <paramref name="sortingOrder"/> is the disc's order; the ring, symbol and
     /// label stack above it.
     /// </summary>
-    public void Setup(PlayerUpgradeManager.UpgradeStat stat, bool locked, SpriteRenderer drawWith, int sortingOrder, float worldDiameter)
+    public void Setup(PlayerUpgradeManager.UpgradeStat stat, Sprite symbolSprite, SpriteRenderer drawWith, int sortingOrder, float worldDiameter)
     {
         Stat = stat;
-        IsLocked = locked;
         diameter = worldDiameter;
 
         // On the squirrel's layer so the overlay camera draws it above the dim.
+        // Back to front: frosted disc, art (cropped), ring framing the crop, label.
         SetLayer(gameObject, drawWith.gameObject.layer);
         SetSorting(disc, drawWith.sortingLayerID, sortingOrder);
-        SetSorting(ring, drawWith.sortingLayerID, sortingOrder + 1);
-        SetSorting(symbol, drawWith.sortingLayerID, sortingOrder + 2);
+        SetSorting(symbol, drawWith.sortingLayerID, sortingOrder + 1);
+        SetSorting(ring, drawWith.sortingLayerID, sortingOrder + 2);
+        if (symbol != null)
+        {
+            symbol.sprite = symbolSprite;
+            symbol.transform.localScale = Vector3.one * symbolScale;
+            symbol.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        }
+
+        // Limit the mask to this icon's art, so it can't crop anything else on the same sorting layer.
+        if (mask != null)
+        {
+            mask.isCustomRangeActive = true;
+            mask.frontSortingLayerID = drawWith.sortingLayerID;
+            mask.backSortingLayerID = drawWith.sortingLayerID;
+            mask.frontSortingOrder = sortingOrder + 1;
+            mask.backSortingOrder = sortingOrder;
+        }
         if (label != null)
         {
             Renderer labelRenderer = label.GetComponent<Renderer>();
@@ -94,9 +123,9 @@ public class UpgradeIcon : MonoBehaviour
             label.text = stat.ToString();
         }
 
-        discTarget = locked ? lockedDiscColor : discColor;
-        ringTarget = locked ? lockedRingColor : ringColor;
-        labelTarget = locked ? lockedLabelColor : labelColor;
+        discTarget = discColor;
+        ringTarget = ringColor;
+        labelTarget = labelColor;
 
         transform.localPosition = Vector3.zero;
         pop = 0f;
@@ -104,8 +133,17 @@ public class UpgradeIcon : MonoBehaviour
         Apply();
     }
 
-    /// <summary>Marks this icon as the one the player's selection is on. Locked icons ignore it.</summary>
-    public void SetHighlighted(bool value) => highlighted = value && !IsLocked;
+    /// <summary>
+    /// Stretches this icon's circle mask down to <paramref name="sortingOrder"/>, so renderers set to draw
+    /// outside masks there (the upgrade lines) are cut away inside the circle.
+    /// </summary>
+    public void MaskDownTo(int sortingOrder)
+    {
+        if (mask != null) mask.backSortingOrder = Mathf.Min(mask.backSortingOrder, sortingOrder - 1);
+    }
+
+    /// <summary>Marks this icon as the one the player's selection is on.</summary>
+    public void SetHighlighted(bool value) => highlighted = value;
 
     /// <summary>How far the icon has been reeled in, 0 at the tip to 1 at the squirrel. Drives the ring's glow.</summary>
     public void SetReel(float progress) => reel = Mathf.Clamp01(progress);
@@ -159,10 +197,8 @@ public class UpgradeIcon : MonoBehaviour
                                (diameter * pop * Mathf.Lerp(1f, highlightScale, eased) * Mathf.Lerp(1f, reeledScale, reeled));
 
         // Idle is the dimmest; the highlight lifts it; reeling in carries it up to the brightest as the icon
-        // nears the squirrel. Locked rings stay their flat grey.
-        float intensity = IsLocked
-            ? 1f
-            : Mathf.Lerp(Mathf.Lerp(idleRingIntensity, highlightRingIntensity, eased), selectedRingIntensity, Smooth(reel));
+        // nears the squirrel.
+        float intensity = Mathf.Lerp(Mathf.Lerp(idleRingIntensity, highlightRingIntensity, eased), selectedRingIntensity, Smooth(reel));
 
         // As it's reeled in, the details drop away and the dark disc fills with the ring's glow, so the circle
         // arrives at the squirrel as a small, solid ball of energy.
@@ -171,9 +207,10 @@ public class UpgradeIcon : MonoBehaviour
         float energized = Smooth(Mathf.Clamp01((reel - energizeStart) / (1f - energizeStart)));
 
         float shown = fade * presence;
-        disc.color = Faded(Color.Lerp(discTarget, glow, energized), shown);
-        ring.color = Faded(glow, shown);
-        if (symbol != null) symbol.color = Faded(IsLocked ? lockedLabelColor : Color.white, shown * details);
+        HdrSprite.SetColor(disc, Faded(Color.Lerp(discTarget, glow, energized), shown));
+        HdrSprite.SetColor(ring, Faded(glow, shown));
+        float symbolGlow = Mathf.Lerp(idleSymbolIntensity, highlightSymbolIntensity, eased);
+        if (symbol != null) HdrSprite.SetColor(symbol, Faded(Bright(Color.white, symbolGlow), shown * details));
         if (label != null) label.color = Faded(labelTarget, shown * details);
     }
 

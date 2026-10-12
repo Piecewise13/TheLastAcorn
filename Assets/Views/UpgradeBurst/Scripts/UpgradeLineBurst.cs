@@ -21,6 +21,8 @@ public class UpgradeLineBurst : MonoBehaviour
         public PlayerUpgradeManager.UpgradeStat stat;
         [Tooltip("Degrees from straight up. Positive leans left, negative leans right.")]
         public float angle;
+        [Tooltip("Drawn inside this stat's icon. Leave empty for a plain circle.")]
+        public Sprite symbol;
     }
 
     [SerializeField] private UpgradeLine linePrefab;
@@ -46,8 +48,8 @@ public class UpgradeLineBurst : MonoBehaviour
     [SerializeField] private int sortingOffset = -3;
 
     [Header("Icons")]
-    [Tooltip("Icon diameter as a fraction of the camera's orthographic size.")]
-    [SerializeField] private float iconSizeFraction = 0.12f;
+    [Tooltip("Icon diameter in world units.")]
+    [Min(0f)] [SerializeField] private float iconDiameter = 1.5f;
     [Tooltip("Sorting order of the icon's disc relative to the squirrel. Its ring, symbol and label stack above it.")]
     [SerializeField] private int iconSortingOffset = 2;
 
@@ -74,16 +76,15 @@ public class UpgradeLineBurst : MonoBehaviour
     public IReadOnlyList<UpgradeIcon> Icons => icons;
 
     /// <summary>True when at least one icon can be picked.</summary>
-    public bool HasChoice => icons.Any(icon => !icon.IsLocked);
+    public bool HasChoice => icons.Count > 0;
 
-    /// <summary>Grows one line per slot. Stats that are not offered get a broken line.</summary>
+    /// <summary>Grows one line per slot. Stats that are not offered get a shorter line that fades out with no icon.</summary>
     public async UniTask Grow(SpriteRenderer graphic, float orthographicSize, Func<PlayerUpgradeManager.UpgradeStat, bool> isOffered, CancellationToken token)
     {
         target = graphic;
         gameObject.layer = graphic.gameObject.layer;
         FollowTarget();
 
-        float iconDiameter = orthographicSize * iconSizeFraction;
         var growing = new List<UniTask>(slots.Length);
         for (int i = 0; i < slots.Length; i++)
         {
@@ -96,7 +97,7 @@ public class UpgradeLineBurst : MonoBehaviour
             line.Setup(slot.stat, end, !isOffered(slot.stat), graphic, sortingOffset);
             lines.Add(line);
 
-            growing.Add(GrowAfter(line, stagger * i, iconDiameter, token));
+            growing.Add(GrowAfter(line, slot.symbol, stagger * i, token));
         }
 
         await UniTask.WhenAll(growing);
@@ -110,7 +111,7 @@ public class UpgradeLineBurst : MonoBehaviour
     /// </summary>
     public async UniTask<PlayerUpgradeManager.UpgradeStat> Choose(CancellationToken token)
     {
-        List<UpgradeIcon> choices = icons.Where(icon => !icon.IsLocked)
+        List<UpgradeIcon> choices = icons
             .OrderBy(icon => icon.transform.position.x)
             .ToList();
 
@@ -175,16 +176,15 @@ public class UpgradeLineBurst : MonoBehaviour
     // as the reel deepens.
     private void ShowReel(UpgradeIcon reeled, float progress)
     {
+        UpgradeLine reeledLine = lineOf[reeled];
         reeled.SetReel(progress);
-        lineOf[reeled].SetReel(progress);
+        reeledLine.SetReel(progress);
 
         float others = Mathf.Lerp(1f, othersPresence, Mathf.Clamp01(progress / commitThreshold));
         foreach (UpgradeIcon icon in icons)
-        {
-            if (icon == reeled) continue;
-            icon.SetPresence(others);
-            lineOf[icon].SetPresence(others);
-        }
+            if (icon != reeled) icon.SetPresence(others);
+        foreach (UpgradeLine line in lines)
+            if (line != reeledLine) line.SetPresence(others);
     }
 
     private static InputAction Button(params string[] bindings)
@@ -216,16 +216,19 @@ public class UpgradeLineBurst : MonoBehaviour
         if (target != null) transform.position = target.bounds.center;
     }
 
-    private async UniTask GrowAfter(UpgradeLine line, float delay, float iconDiameter, CancellationToken token)
+    private async UniTask GrowAfter(UpgradeLine line, Sprite symbol, float delay, CancellationToken token)
     {
         if (delay > 0f) await UniTask.WaitForSeconds(delay, cancellationToken: token);
         await line.Grow(token);
 
-        if (iconPrefab == null) return;
+        // A locked stat's line is only a wisp that fades out; it gets no icon.
+        if (iconPrefab == null || line.IsLocked) return;
 
         // Parented to the tip so the icon drifts with it.
         UpgradeIcon icon = Instantiate(iconPrefab, line.Tip);
-        icon.Setup(line.Stat, line.IsLocked, target, target.sortingOrder + iconSortingOffset, iconDiameter);
+        icon.Setup(line.Stat, symbol, target, target.sortingOrder + iconSortingOffset, iconDiameter);
+        line.AttachIcon(icon.transform, UpgradeIcon.EdgeRadius);
+        icon.MaskDownTo(target.sortingOrder + sortingOffset);
         icons.Add(icon);
         lineOf[icon] = line;
         await icon.Appear(token);

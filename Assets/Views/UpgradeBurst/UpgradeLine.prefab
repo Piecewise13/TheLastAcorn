@@ -168,15 +168,15 @@ MonoBehaviour:
   color: {r: 1, g: 0.82, b: 0.35, a: 0.80784315}
   intensity: 2
   pointCount: 24
-  rootWidth: 1.9
-  tipWidth: 0.25
-  rootSoftness: 1
-  tipSoftness: 0.194
-  wiggleAmount: 0.0024
-  wiggleWaves: 1.5
-  wiggleSpeed: 0.14
+  rootWidth: 2
+  tipWidth: 1.5
+  rootSoftness: 0.3
+  tipSoftness: 0.8
+  wiggleAmount: 0.0068
+  wiggleWaves: 3.91
+  wiggleSpeed: 0.56
   driftAmount: 0.0915
-  driftSpeed: 0.1
+  driftSpeed: 0.19
   growDuration: 0.6
   growCurve:
     serializedVersion: 2
@@ -202,10 +202,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  brokenLength: 0.4
-  flickerCount: 3
-  flickerInterval: 0.07
-  lockedColor: {r: 0.55, g: 0.5, b: 0.42, a: 0.35}
+  brokenLength: 1
+  lockedFadeEnd: 0.971
+  lockedColor: {r: 0.55, g: 0.5, b: 0.42, a: 0.7058824}
 --- !u!1 &7562122191588006616
 GameObject:
   m_ObjectHideFlags: 0
