@@ -264,6 +264,7 @@ MonoBehaviour:
   fastClimbSpeed: 20
   recoverSpeed: 0.7
   climbRechargeDelay: 0.5
+  climbEdgeNudge: 1
   isAttachedToMoss: 0
   mossSlipSpeed: 15
   mossDetachTime: 2
