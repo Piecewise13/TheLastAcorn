@@ -199,12 +199,16 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         climbEndTime = Time.time;
 
-        // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
-        // easing off near the edge being steered toward.
-        float steer = Mathf.Tan(maxClimbAngle * Mathf.Deg2Rad) * moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
+        // Calculate intended move location: along the middle of the trunk, or the plain soft edge climb
+        // while the guide cannot read the surface.
+        if (!useClimbGuide || !TryGuideClimb(moveInput, out Vector2 moveLocation))
+        {
+            // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
+            // easing off near the edge being steered toward.
+            float steer = Mathf.Tan(maxClimbAngle * Mathf.Deg2Rad) * moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
 
-        // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
+            moveLocation = transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
+        }
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -381,6 +385,10 @@ public partial class PlayerMoveManager : MonoBehaviour
         attachVelocity = rb.linearVelocity.magnitude;
 
         currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
+
+        // A new climb starts heading straight up and picks its arm afresh.
+        climbHeadingAngle = 0f;
+        climbGuideTargetX = float.NaN;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
