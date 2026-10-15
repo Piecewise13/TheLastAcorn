@@ -34,6 +34,13 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float maxClimbTime;
     
     [SerializeField] private float baselineClimbSpeed, fastClimbSpeed;
+
+    /// <summary>
+    /// Climb direction with the stick all the way left or right, in degrees from straight up.
+    /// Upward speed stays the same, so steeper angles move faster sideways.
+    /// </summary>
+    [Range(0f, 85f)]
+    [SerializeField] private float maxClimbAngle = 60f;
     private float currentMaxClimbSpeed;
     private float currentClimbSpeed;
 
@@ -192,8 +199,9 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         climbEndTime = Time.time;
 
-        // Sideways input eases off near the edge being steered toward.
-        float steer = moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
+        // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
+        // easing off near the edge being steered toward.
+        float steer = Mathf.Tan(maxClimbAngle * Mathf.Deg2Rad) * moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
 
         // Calculate intended move location
         Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
