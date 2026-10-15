@@ -49,6 +49,16 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float climbEdgeNudge = 0.5f;
 
     /// <summary>
+    /// How far inside the collider's bounds the soft edge stops sideways movement, in world units.
+    /// </summary>
+    [SerializeField] private float climbEdgeMargin = 0.05f;
+
+    /// <summary>
+    /// Width of the soft edge zone inside the margin, in world units. Sideways input eases from full to none across it.
+    /// </summary>
+    [SerializeField] private float climbEdgeZone = 0.5f;
+
+    /// <summary>
     /// Current elapsed climb time.
     /// </summary>
     private float climbTime;
@@ -182,8 +192,11 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         climbEndTime = Time.time;
 
+        // Sideways input eases off near the edge being steered toward.
+        float steer = moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
+
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (moveInput.x * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
+        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -303,6 +316,35 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// Soft edge assist: how much of the sideways input to keep, 1 in the middle of the trunk easing to 0 at the
+    /// margin from the edge being steered toward. Stays 1 when something climbable continues past that edge, so
+    /// moving onto a branch is not slowed, and while not yet on the surface, so the approach after attaching is not.
+    /// </summary>
+    private float SoftEdgeFactor(Collider2D[] overlapping, float inputX)
+    {
+        if (Mathf.Abs(inputX) < 0.001f) return 1f;
+
+        Vector2 position = transform.position;
+        Collider2D surface = null;
+        foreach (var col in overlapping)
+        {
+            if (col.OverlapPoint(position))
+            {
+                surface = col;
+                break;
+            }
+        }
+        if (surface == null) return 1f;
+
+        float direction = Mathf.Sign(inputX);
+        float edgeX = direction > 0f ? surface.bounds.max.x : surface.bounds.min.x;
+        if (Physics2D.OverlapPoint(new Vector2(edgeX + direction * climbEdgeMargin, position.y), climbableLayer) != null) return 1f;
+
+        float distance = Mathf.Abs(edgeX - position.x) - climbEdgeMargin;
+        return Mathf.SmoothStep(0f, 1f, distance / Mathf.Max(climbEdgeZone, 0.001f));
+    }
 
     /// <summary>
     /// Matches the collider's platform exclusion to the current state, every physics step.
