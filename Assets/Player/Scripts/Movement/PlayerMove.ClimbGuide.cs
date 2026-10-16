@@ -12,6 +12,20 @@ public partial class PlayerMoveManager : MonoBehaviour
     /// </summary>
     [SerializeField] private bool useClimbGuide = true;
 
+    /// <summary>Where the guide reads the trunk from.</summary>
+    private enum ClimbGuideSource
+    {
+        /// <summary>Cut the trunk's colliders along horizontal lines.</summary>
+        Slices,
+        /// <summary>Follow the hand-editable centreline splines on each tree piece (ClimbPath).</summary>
+        Splines,
+    }
+
+    /// <summary>
+    /// Where the guide reads the middle and direction of the trunk from. Switchable in Play mode to compare.
+    /// </summary>
+    [SerializeField] private ClimbGuideSource climbGuideSource = ClimbGuideSource.Splines;
+
     /// <summary>
     /// How far ahead the guide looks for the middle of the trunk, in seconds of climbing at the current speed.
     /// </summary>
@@ -93,8 +107,8 @@ public partial class PlayerMoveManager : MonoBehaviour
     /// <summary>
     /// Plans this step's climb move along the heading. The heading keeps its direction, eases toward the trunk's
     /// direction on its own (lagging on bends, lining up on straights), and turns with the stick or keys. The closer
-    /// it lines up with the trunk, the faster the climb. Returns false when the player is not on a sliceable
-    /// surface yet, leaving the soft edge climb to handle the step.
+    /// it lines up with the trunk, the faster the climb. Returns false when the guide cannot read the surface here,
+    /// leaving the soft edge climb to handle the step.
     /// </summary>
     private bool TryGuideClimb(Vector2 moveInput, out Vector2 moveLocation)
     {
@@ -102,20 +116,15 @@ public partial class PlayerMoveManager : MonoBehaviour
         moveLocation = position;
 
         float lookahead = Mathf.Max(currentClimbSpeed * climbGuideLookahead, climbGuideMinLookahead);
-        GatherGuideColliders(position, lookahead);
 
-        ClimbSlices.Slice(guideColliders, position.y, hereSpans, climbSliceMergeGap);
-        if (!TryFindSpan(hereSpans, position.x, out ClimbSpan here) || !here.Contains(position.x)) return false;
-        Vector2 hereCenter = new Vector2(here.Center, position.y);
+        // The trunk here, and its direction: from its middle here toward its middle a little way ahead, on the
+        // arm the heading points at. Only the direction, so being off-centre is left for the player to correct.
+        bool sampled = climbGuideSource == ClimbGuideSource.Splines
+            ? TrySampleSplineGuide(position, lookahead, ClimbHeading, out ClimbSpan here, out Vector2 trunk)
+            : TrySampleSliceGuide(position, lookahead, ClimbHeading, out here, out trunk);
+        if (!sampled) return false;
 
-        // The trunk's direction: from its middle here to its middle a little way ahead, on the arm the
-        // heading points at. Only the direction, so being off-centre is left for the player to correct.
-        Vector2 trunk = Vector2.up;
-        ClimbSlices.Slice(guideColliders, position.y + lookahead, aheadSpans, climbSliceMergeGap);
-        if (TryPickArm(position, hereCenter, position.y + lookahead, ClimbHeading, out Vector2 aheadCenter))
-            trunk = (aheadCenter - hereCenter).normalized;
-        else
-            climbGuideTargetX = float.NaN;
+        bool onTrunk = here.Contains(position.x);
 
         SteerClimbHeading(moveInput.x, trunk);
         Vector2 direction = ClimbHeading;
@@ -135,15 +144,57 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         moveLocation = position + direction * (currentClimbSpeed * alignSpeed * centerSpeed * Time.deltaTime);
 
-        // Keep the move inside the trunk at its new height, so a fast step cannot skip past the soft edge.
-        ClimbSlices.Slice(guideColliders, moveLocation.y, nextSpans, climbSliceMergeGap);
-        if (TryFindSpan(nextSpans, moveLocation.x, out ClimbSpan next))
-            moveLocation.x = next.Clamp(moveLocation.x, climbEdgeMargin);
+        // Keep the move inside the trunk at its new height, so a fast step cannot skip past the soft edge. From
+        // outside it (just grabbed on, or a spline narrower than the art), ease in at climb speed instead of snapping.
+        bool hasNext = climbGuideSource == ClimbGuideSource.Splines
+            ? TrySplineSpanAt(moveLocation, out ClimbSpan next)
+            : TrySliceSpanAt(moveLocation, out next);
+        if (hasNext)
+        {
+            float inside = next.Clamp(moveLocation.x, climbEdgeMargin);
+            moveLocation.x = onTrunk ? inside : Mathf.MoveTowards(moveLocation.x, inside, currentClimbSpeed * Time.deltaTime);
+        }
 
         if (drawClimbGuide)
-            DrawClimbGuide(position, here, position.y + lookahead, trunk, ClimbHeading);
+            DrawClimbGuide(position, here, trunk, ClimbHeading);
 
         return true;
+    }
+
+    /// <summary>
+    /// Slice source: the span of trunk the player is in, and the direction toward the middle of the arm ahead.
+    /// False when the player is not inside a slice yet.
+    /// </summary>
+    private bool TrySampleSliceGuide(Vector2 position, float lookahead, Vector2 heading, out ClimbSpan here, out Vector2 trunk)
+    {
+        trunk = Vector2.up;
+        GatherGuideColliders(position, lookahead);
+
+        ClimbSlices.Slice(guideColliders, position.y, hereSpans, climbSliceMergeGap);
+        if (!TryFindSpan(hereSpans, position.x, out here) || !here.Contains(position.x)) return false;
+        Vector2 hereCenter = new Vector2(here.Center, position.y);
+
+        float aheadY = position.y + lookahead;
+        ClimbSlices.Slice(guideColliders, aheadY, aheadSpans, climbSliceMergeGap);
+        if (TryPickArm(position, hereCenter, aheadY, heading, out Vector2 aheadCenter))
+            trunk = (aheadCenter - hereCenter).normalized;
+        else
+            climbGuideTargetX = float.NaN;
+
+        if (drawClimbGuide)
+        {
+            foreach (var span in aheadSpans)
+                Debug.DrawLine(new Vector2(span.left, aheadY), new Vector2(span.right, aheadY), Color.cyan, Time.fixedDeltaTime);
+        }
+
+        return true;
+    }
+
+    /// <summary>Slice source: the span of trunk at a point's height, nearest the point.</summary>
+    private bool TrySliceSpanAt(Vector2 point, out ClimbSpan span)
+    {
+        ClimbSlices.Slice(guideColliders, point.y, nextSpans, climbSliceMergeGap);
+        return TryFindSpan(nextSpans, point.x, out span);
     }
 
     /// <summary>
@@ -251,13 +302,14 @@ public partial class PlayerMoveManager : MonoBehaviour
             filter, guideColliders);
     }
 
-    /// <summary>Yellow: the span here. Cyan: the spans ahead. Green: the trunk's direction. White: the heading.</summary>
-    private void DrawClimbGuide(Vector2 position, ClimbSpan here, float aheadY, Vector2 trunk, Vector2 heading)
+    /// <summary>
+    /// Yellow: the trunk here. Green: the trunk's direction. White: the heading. Each source adds its own cyan
+    /// marks for what it looked at ahead.
+    /// </summary>
+    private void DrawClimbGuide(Vector2 position, ClimbSpan here, Vector2 trunk, Vector2 heading)
     {
         float duration = Time.fixedDeltaTime;
         Debug.DrawLine(new Vector2(here.left, position.y), new Vector2(here.right, position.y), Color.yellow, duration);
-        foreach (var span in aheadSpans)
-            Debug.DrawLine(new Vector2(span.left, aheadY), new Vector2(span.right, aheadY), Color.cyan, duration);
         DrawGuideArrow(position, trunk, Color.green, duration);
         DrawGuideArrow(position, heading, Color.white, duration);
     }

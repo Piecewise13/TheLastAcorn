@@ -188,7 +188,8 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Find all climbable colliders currently overlapping
         Collider2D[] overlappingColliders = Physics2D.OverlapCircleAll(transform.position, 0.5f, climbableLayer);
 
-        if (overlappingColliders.Length == 0)
+        // A strand the spline guide is climbing keeps the climb going across holes between pieces' colliders.
+        if (overlappingColliders.Length == 0 && !IsHeldByClimbStrand())
         {
             StopClimb();
             return;
@@ -201,7 +202,9 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         // Calculate intended move location: along the middle of the trunk, or the plain soft edge climb
         // while the guide cannot read the surface.
-        if (!useClimbGuide || !TryGuideClimb(moveInput, out Vector2 moveLocation))
+        Vector2 moveLocation = transform.position;
+        bool guided = useClimbGuide && TryGuideClimb(moveInput, out moveLocation);
+        if (!guided)
         {
             // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
             // easing off near the edge being steered toward.
@@ -277,7 +280,9 @@ public partial class PlayerMoveManager : MonoBehaviour
         }
 
 
-        if (insideAny)
+        // A guided move already stays on the trunk it read, so it is taken even where the colliders of two
+        // pieces leave a hole at their seam.
+        if (insideAny || guided)
         {
             transform.position = moveLocation;
         }
@@ -389,6 +394,8 @@ public partial class PlayerMoveManager : MonoBehaviour
         // A new climb starts heading straight up and picks its arm afresh.
         climbHeadingAngle = 0f;
         climbGuideTargetX = float.NaN;
+        climbStrand = default;
+        climbTargetStrand = default;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
