@@ -65,6 +65,7 @@ public partial class PlayerMoveManager : MonoBehaviour
     {
         Vector2 position = transform.position;
         SteerClimbHeading(input);
+        TiltGraphic(climbHeadingAngle);
         Vector2 direction = ClimbHeading;
         float speed = currentClimbSpeed;
 
@@ -112,6 +113,20 @@ public partial class PlayerMoveManager : MonoBehaviour
     {
         climbHeadingAngle -= input * climbHeadingTurnSpeed * Time.deltaTime;
         climbHeadingAngle = Mathf.Clamp(climbHeadingAngle, -maxClimbAngle, maxClimbAngle);
+    }
+
+    /// <summary>
+    /// Tilts the squirrel's sprite to face along the climb direction, in degrees from straight up (positive is to
+    /// the left). Facing left is a 180° turn about Y, which mirrors a tilt about Z, so the tilt is mirrored back to
+    /// keep the sprite in line with the climb direction.
+    /// </summary>
+    private void TiltGraphic(float angle)
+    {
+        if (graphic == null) return;
+
+        Vector3 rotation = graphic.transform.eulerAngles;
+        rotation.z = IsGraphicFacingRight ? angle : -angle;
+        graphic.transform.eulerAngles = rotation;
     }
 
     /// <summary>The strand the player is deepest inside, if any is within reach.</summary>

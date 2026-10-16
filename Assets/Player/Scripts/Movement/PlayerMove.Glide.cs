@@ -128,7 +128,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         {
             // Angle is measured from straight down, so 0 dives and 90 is level.
             // Graphic faces right at 0 degrees and left at 180, so mirror the target's X onto whichever way the player is facing.
-            float facingDirection = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
+            float facingDirection = IsGraphicFacingRight ? 1f : -1f;
             var targetDirection = new Vector2(Mathf.Sin(glideDirectionAngle * Mathf.Deg2Rad) * facingDirection,
                 -Mathf.Cos(glideDirectionAngle * Mathf.Deg2Rad));
 

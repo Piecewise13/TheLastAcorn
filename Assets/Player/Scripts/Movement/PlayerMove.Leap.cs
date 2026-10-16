@@ -27,7 +27,7 @@ public partial class PlayerMoveManager: MonoBehaviour
         else
         {
             // If no input, leap away from tree based on current facing direction
-            leapDirection = graphic.transform.eulerAngles.y == 0 ? 1f : -1f;
+            leapDirection = IsGraphicFacingRight ? 1f : -1f;
         }
         
         // Calculate horizontal leap velocity based on current climb speed
