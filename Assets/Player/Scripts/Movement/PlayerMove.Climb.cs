@@ -36,8 +36,7 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float baselineClimbSpeed, fastClimbSpeed;
 
     /// <summary>
-    /// Climb direction with the stick all the way left or right, in degrees from straight up.
-    /// Upward speed stays the same, so steeper angles move faster sideways.
+    /// Furthest the climb direction can turn from straight up, in degrees.
     /// </summary>
     [Range(0f, 85f)]
     [SerializeField] private float maxClimbAngle = 60f;
@@ -50,13 +49,7 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float climbRechargeDelay = 1f;
 
     /// <summary>
-    /// Sideways push back onto the surface when a climb move would leave it, as a fraction of climb speed.
-    /// Keeps the climb going up instead of stalling on the edge.
-    /// </summary>
-    [SerializeField] private float climbEdgeNudge = 0.5f;
-
-    /// <summary>
-    /// How far inside the collider's bounds the soft edge stops sideways movement, in world units.
+    /// How far inside the spline's width the soft edge stops sideways movement, in world units.
     /// </summary>
     [SerializeField] private float climbEdgeMargin = 0.05f;
 
@@ -188,8 +181,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Find all climbable colliders currently overlapping
         Collider2D[] overlappingColliders = Physics2D.OverlapCircleAll(transform.position, 0.5f, climbableLayer);
 
-        // A strand the spline guide is climbing keeps the climb going across holes between pieces' colliders.
-        if (overlappingColliders.Length == 0 && !IsHeldByClimbStrand())
+        if (overlappingColliders.Length == 0)
         {
             StopClimb();
             return;
@@ -200,18 +192,8 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         climbEndTime = Time.time;
 
-        // Calculate intended move location: along the middle of the trunk, or the plain soft edge climb
-        // while the guide cannot read the surface.
-        Vector2 moveLocation = transform.position;
-        bool guided = useClimbGuide && TryGuideClimb(moveInput, out moveLocation);
-        if (!guided)
-        {
-            // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
-            // easing off near the edge being steered toward.
-            float steer = Mathf.Tan(maxClimbAngle * Mathf.Deg2Rad) * moveInput.x * SoftEdgeFactor(overlappingColliders, moveInput.x);
-
-            moveLocation = transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
-        }
+        // Calculate intended move location along the climb direction the player steers
+        Vector2 moveLocation = PlanClimbMove(moveInput.x);
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -280,9 +262,7 @@ public partial class PlayerMoveManager : MonoBehaviour
         }
 
 
-        // A guided move already stays on the trunk it read, so it is taken even where the colliders of two
-        // pieces leave a hole at their seam.
-        if (insideAny || guided)
+        if (insideAny)
         {
             transform.position = moveLocation;
         }
@@ -304,24 +284,9 @@ public partial class PlayerMoveManager : MonoBehaviour
 
             if (closest != null && minDist < 0.5f)
             {
+                // Smoothly move towards the edge of the next collider
                 Vector2 targetPos = closest.ClosestPoint(moveLocation);
-                float towardSurface = targetPos.x - moveLocation.x;
-
-                // Climb assist: the move ran off the side of the trunk. Keep the upward progress and
-                // nudge back toward the middle instead of stalling on the edge.
-                Vector2 assisted = new Vector2(
-                    transform.position.x + Mathf.Sign(towardSurface) * climbEdgeNudge * currentClimbSpeed * Time.deltaTime,
-                    moveLocation.y);
-
-                if (Mathf.Abs(towardSurface) > 0.001f && Physics2D.OverlapPoint(assisted, climbableLayer) != null)
-                {
-                    transform.position = assisted;
-                }
-                else
-                {
-                    // Smoothly move towards the edge of the next collider
-                    transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
-                }
+                transform.position = Vector2.Lerp(transform.position, targetPos, 0.2f);
             }
             else
             {
@@ -333,35 +298,6 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
 
 
-
-    /// <summary>
-    /// Soft edge assist: how much of the sideways input to keep, 1 in the middle of the trunk easing to 0 at the
-    /// margin from the edge being steered toward. Stays 1 when something climbable continues past that edge, so
-    /// moving onto a branch is not slowed, and while not yet on the surface, so the approach after attaching is not.
-    /// </summary>
-    private float SoftEdgeFactor(Collider2D[] overlapping, float inputX)
-    {
-        if (Mathf.Abs(inputX) < 0.001f) return 1f;
-
-        Vector2 position = transform.position;
-        Collider2D surface = null;
-        foreach (var col in overlapping)
-        {
-            if (col.OverlapPoint(position))
-            {
-                surface = col;
-                break;
-            }
-        }
-        if (surface == null) return 1f;
-
-        float direction = Mathf.Sign(inputX);
-        float edgeX = direction > 0f ? surface.bounds.max.x : surface.bounds.min.x;
-        if (Physics2D.OverlapPoint(new Vector2(edgeX + direction * climbEdgeMargin, position.y), climbableLayer) != null) return 1f;
-
-        float distance = Mathf.Abs(edgeX - position.x) - climbEdgeMargin;
-        return Mathf.SmoothStep(0f, 1f, distance / Mathf.Max(climbEdgeZone, 0.001f));
-    }
 
     /// <summary>
     /// Matches the collider's platform exclusion to the current state, every physics step.
@@ -391,11 +327,8 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
 
-        // A new climb starts heading straight up and picks its arm afresh.
+        // A new climb starts heading straight up.
         climbHeadingAngle = 0f;
-        climbGuideTargetX = float.NaN;
-        climbStrand = default;
-        climbTargetStrand = default;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
