@@ -12,22 +12,6 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float climbHeadingTurnSpeed = 120f;
 
     /// <summary>
-    /// Angle between the climb direction and the spline, in degrees, within which the climb keeps full speed.
-    /// </summary>
-    [SerializeField] private float climbFullSpeedAngle = 20f;
-
-    /// <summary>
-    /// Angle between the climb direction and the spline, in degrees, at which the climb is slowest.
-    /// </summary>
-    [SerializeField] private float climbSlowestAngle = 90f;
-
-    /// <summary>
-    /// Climb speed at climbSlowestAngle and beyond, as a fraction of full speed.
-    /// </summary>
-    [Range(0f, 1f)]
-    [SerializeField] private float climbSlowestSpeed = 0.5f;
-
-    /// <summary>
     /// How far outside a strand's width the player can be and still count as on it, in world units.
     /// </summary>
     [SerializeField] private float climbStrandReach = 0.5f;
@@ -58,8 +42,7 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     /// <summary>
     /// Plans this step's climb move. The player steers the climb direction; it holds its angle with no input.
-    /// The spline under the player only sets the speed (full within climbFullSpeedAngle of it, slowing the more
-    /// the climb runs across it) and the soft edge at its sides.
+    /// The spline under the player only sets the soft edge at its sides.
     /// </summary>
     private Vector2 PlanClimbMove(float input)
     {
@@ -78,10 +61,6 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         Vector2 tangent = strand.path.TangentAt(strand.strand, t);
         ClimbSpan here = HorizontalSpan(center, tangent, strand.path.WidthAt(strand.strand, t) * 0.5f, position.y);
-
-        // The further the climb runs across the spline, the slower it goes.
-        float angle = Vector2.Angle(direction, tangent);
-        speed *= Mathf.Lerp(1f, climbSlowestSpeed, Mathf.InverseLerp(climbFullSpeedAngle, climbSlowestAngle, angle));
 
         // Soft edge: sideways movement eases off near the side of the spline being moved toward.
         float wall = direction.x > 0f ? here.right - position.x : position.x - here.left;
