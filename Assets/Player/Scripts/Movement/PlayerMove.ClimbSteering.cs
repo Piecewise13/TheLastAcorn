@@ -7,9 +7,15 @@ public partial class PlayerMoveManager : MonoBehaviour
 {
     [Header("Climb Steering")]
     /// <summary>
-    /// How fast the climb direction turns at full left or right input, in degrees per second.
+    /// The climb direction along a turn: the curve's time runs 0 to 1 as left or right is held over
+    /// climbDirectionChangeTime, and its value maps 0 to 1 onto straight up to maxClimbAngle, mirrored for each side.
     /// </summary>
-    [SerializeField] private float climbHeadingTurnSpeed = 120f;
+    [SerializeField] private AnimationCurve climbDirectionChangeCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
+    /// <summary>
+    /// Seconds of holding left or right to go from straight up to maxClimbAngle along climbDirectionChangeCurve.
+    /// </summary>
+    [SerializeField] private float climbDirectionChangeTime = 0.3f;
 
     /// <summary>
     /// How far outside a strand's width the player can be and still count as on it, in world units.
@@ -39,6 +45,12 @@ public partial class PlayerMoveManager : MonoBehaviour
     private float climbHeadingAngle;
 
     private Vector2 ClimbHeading => Quaternion.Euler(0f, 0f, climbHeadingAngle) * Vector2.up;
+
+    /// <summary>
+    /// Where the climb sits along climbDirectionChangeCurve: 0 is straight up, 1 is the curve's end to the left and
+    /// -1 to the right.
+    /// </summary>
+    private float climbTurnAmount;
 
     /// <summary>
     /// Plans this step's climb move. The player steers the climb direction; it holds its angle with no input.
@@ -84,14 +96,18 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Turns the climb direction for this step at a constant rate while input is held: full rate for a key or
-    /// full stick, proportionally slower for a partial stick, stopping as soon as input is released.
-    /// Kept within maxClimbAngle of straight up.
+    /// Sets the climb direction for this step from climbDirectionChangeCurve. Holding right moves along the curve
+    /// toward full right over climbDirectionChangeTime, holding left moves back through straight up toward full left,
+    /// a partial stick moves more slowly, and letting go holds the direction where it is.
     /// </summary>
     private void SteerClimbHeading(float input)
     {
-        climbHeadingAngle -= input * climbHeadingTurnSpeed * Time.deltaTime;
-        climbHeadingAngle = Mathf.Clamp(climbHeadingAngle, -maxClimbAngle, maxClimbAngle);
+        float step = input * Time.deltaTime / Mathf.Max(climbDirectionChangeTime, 0.0001f);
+        climbTurnAmount = Mathf.Clamp(climbTurnAmount - step, -1f, 1f);
+
+        // Mirror the curve for each side: its value is the fraction of maxClimbAngle away from straight up.
+        float away = climbTurnAmount == 0f ? 0f : climbDirectionChangeCurve.Evaluate(Mathf.Abs(climbTurnAmount));
+        climbHeadingAngle = Mathf.Clamp(Mathf.Sign(climbTurnAmount) * away * maxClimbAngle, -maxClimbAngle, maxClimbAngle);
     }
 
     /// <summary>

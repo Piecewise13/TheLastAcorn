@@ -327,8 +327,9 @@ public partial class PlayerMoveManager : MonoBehaviour
 
         currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
 
-        // A new climb starts heading straight up.
+        // A new climb starts heading straight up, at the start of the turn curve.
         climbHeadingAngle = 0f;
+        climbTurnAmount = 0f;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
