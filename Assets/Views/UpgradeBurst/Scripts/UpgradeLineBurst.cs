@@ -4,16 +4,22 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// The fan of upgrade lines that grows out of the squirrel's glow, one per stat. Each stat has a fixed
-/// slot with a little jitter, so players learn where each upgrade lives. Follows the squirrel's visible
-/// centre while it is alive.
+/// The upgrade view: a fan of lines that grows out of the squirrel's glow, one per stat, each ending in that
+/// upgrade's icon, and the choice between them. Each stat has a fixed slot with a little jitter, so players
+/// learn where each upgrade lives. Follows the squirrel's visible centre while it is shown.
+/// <para>
+/// Pushed by <see cref="PlayerUpgradeManager"/> once the glow has landed. It hands the chosen stat back through
+/// <see cref="PlayerUpgradeManager.CompleteUpgradeSelection"/>, which clears the view stack and so hides this.
+/// The glow, dim and camera framing belong to the player and camera, so they stay with the manager.
+/// </para>
 /// </summary>
-public class UpgradeLineBurst : MonoBehaviour
+public class UpgradeLineBurst : ViewBase
 {
     [Serializable]
     private struct Slot
@@ -23,6 +29,8 @@ public class UpgradeLineBurst : MonoBehaviour
         public float angle;
         [Tooltip("Drawn inside this stat's icon. Leave empty for a plain circle.")]
         public Sprite symbol;
+        [Tooltip("Recap shown under \"<Stat> upgraded\" once this stat is chosen: what just got better.")]
+        public string recap;
     }
 
     [SerializeField] private UpgradeLine linePrefab;
@@ -30,9 +38,9 @@ public class UpgradeLineBurst : MonoBehaviour
     [SerializeField] private UpgradeIcon iconPrefab;
     [SerializeField] private Slot[] slots =
     {
-        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Climbing, angle = 50f },
-        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Vision, angle = 0f },
-        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Gliding, angle = -50f },
+        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Climbing, angle = 50f, recap = "Climbing speed, climbing duration increased" },
+        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Vision, angle = 0f, recap = "View distance, scent trail length, scent range increased" },
+        new Slot { stat = PlayerUpgradeManager.UpgradeStat.Gliding, angle = -50f, recap = "Glide speed, glide control increased" },
     };
 
     [Header("Layout")]
@@ -65,23 +73,89 @@ public class UpgradeLineBurst : MonoBehaviour
     [Tooltip("Opacity of the other lines and icons while one is reeled in.")]
     [Range(0f, 1f)] [SerializeField] private float othersPresence = 0.4f;
 
+    [Header("Prompt")]
+    [Tooltip("Shown at the bottom of the screen while the player is choosing.")]
+    [SerializeField] private TMP_Text prompt;
+    [SerializeField] private string gamepadPrompt = "Hold A to select";
+    [SerializeField] private string keyboardPrompt = "Hold Space to select";
+    [Tooltip("Gap between the prompt and the bottom of the screen, as a fraction of the camera's orthographic size.")]
+    [SerializeField] private float promptMargin = 0.12f;
+    [SerializeField] private float promptFade = 0.3f;
+
+    [Header("Recap")]
+    [Tooltip("Shown once the chosen upgrade reaches the squirrel: \"<Stat> upgraded\", then the slot's recap line.")]
+    [SerializeField] private Transform recap;
+    [SerializeField] private TMP_Text recapTitle;
+    [SerializeField] private TMP_Text recapDetail;
+    [Tooltip("Height of the recap above the squirrel, as a fraction of the camera's orthographic size.")]
+    [SerializeField] private float recapHeight = 0.35f;
+    [Tooltip("Size of the recap, as a fraction of the camera's orthographic size, so it reads the same at any zoom.")]
+    [SerializeField] private float recapScale = 0.1f;
+    [SerializeField] private float recapFadeIn = 0.4f;
+    [Tooltip("Seconds the recap line waits after the title starts.")]
+    [SerializeField] private float recapDetailDelay = 0.2f;
+    [Tooltip("Seconds the recap stays up before the upgrade ends.")]
+    [SerializeField] private float recapHold = 2f;
+    [Tooltip("How far each line rises as it fades in, in the recap's own scaled units.")]
+    [SerializeField] private float recapRise = 0.5f;
+    [Tooltip("Sorting order of the recap text relative to the squirrel, above the icons.")]
+    [SerializeField] private int recapSortingOffset = 10;
+
     [SerializeField] private float fadeOutDuration = 0.3f;
 
     private readonly List<UpgradeLine> lines = new List<UpgradeLine>();
     private readonly List<UpgradeIcon> icons = new List<UpgradeIcon>();
     private readonly Dictionary<UpgradeIcon, UpgradeLine> lineOf = new Dictionary<UpgradeIcon, UpgradeLine>();
     private SpriteRenderer target;
+    private float frameSize;
+    private bool fanFaded;
+    private float promptShown;  // 0..1, eased toward promptTarget
+    private float promptTarget;
 
     public IReadOnlyList<UpgradeLine> Lines => lines;
     public IReadOnlyList<UpgradeIcon> Icons => icons;
 
-    /// <summary>True when at least one icon can be picked.</summary>
-    public bool HasChoice => icons.Count > 0;
+    /// <summary>Grows the fan, waits for the player's choice, and hands it to the upgrade manager.</summary>
+    public override async UniTask RunAsync(CancellationToken token = default)
+    {
+        PlayerUpgradeManager manager = PlayerUpgradeManager.Instance;
+        SpriteRenderer graphic = manager.PlayerGraphic;
+        if (graphic == null)
+        {
+            Debug.LogWarning($"[{nameof(UpgradeLineBurst)}] No player graphic to grow from; ending the upgrade.", this);
+            await manager.CompleteUpgradeSelection(null);
+            return;
+        }
+
+        // Runs on the view's own token: the view stack shows views with CancellationToken.None, and this
+        // should stop with the view, not outlive it.
+        await Grow(graphic, manager.UpgradeFrameSize, manager.IsStatOffered, destroyCancellationToken);
+
+        if (icons.Count == 0)
+        {
+            Debug.LogWarning($"[{nameof(UpgradeLineBurst)}] Every stat is locked or maxed; nothing to choose.", this);
+            await manager.CompleteUpgradeSelection(null);
+            return;
+        }
+
+        PlayerUpgradeManager.UpgradeStat chosen = await Choose(destroyCancellationToken);
+        await PlayRecap(chosen, destroyCancellationToken);
+        await manager.CompleteUpgradeSelection(chosen);
+    }
+
+    /// <summary>Fades every line, icon and the recap out, then destroys the view.</summary>
+    public override async UniTask Hide(CancellationToken token = default)
+    {
+        promptTarget = 0f;
+        await UniTask.WhenAll(FadeOutFan(destroyCancellationToken), FadeOutRecap(destroyCancellationToken));
+        Destroy(gameObject);
+    }
 
     /// <summary>Grows one line per slot. Stats that are not offered get a shorter line that fades out with no icon.</summary>
-    public async UniTask Grow(SpriteRenderer graphic, float orthographicSize, Func<PlayerUpgradeManager.UpgradeStat, bool> isOffered, CancellationToken token)
+    private async UniTask Grow(SpriteRenderer graphic, float orthographicSize, Func<PlayerUpgradeManager.UpgradeStat, bool> isOffered, CancellationToken token)
     {
         target = graphic;
+        frameSize = orthographicSize;
         gameObject.layer = graphic.gameObject.layer;
         FollowTarget();
 
@@ -105,11 +179,11 @@ public class UpgradeLineBurst : MonoBehaviour
 
     /// <summary>
     /// Lets the player pick an icon. Left/right moves the highlight across the icons that can be picked, in
-    /// screen order. Holding down reels the highlighted icon along its line toward the squirrel; letting go
+    /// screen order. Holding Jump reels the highlighted icon along its line toward the squirrel; letting go
     /// early springs it back out, and once it passes <see cref="commitThreshold"/> it is pulled the rest of the
-    /// way in and picked. Keyboard and gamepad only. Only call when <see cref="HasChoice"/> is true.
+    /// way in and picked. Keyboard and gamepad only. Only call when there is at least one icon.
     /// </summary>
-    public async UniTask<PlayerUpgradeManager.UpgradeStat> Choose(CancellationToken token)
+    private async UniTask<PlayerUpgradeManager.UpgradeStat> Choose(CancellationToken token)
     {
         List<UpgradeIcon> choices = icons
             .OrderBy(icon => icon.transform.position.x)
@@ -128,10 +202,12 @@ public class UpgradeLineBurst : MonoBehaviour
         // has the whole Gameplay map switched off.
         using var previous = Button("<Keyboard>/leftArrow", "<Keyboard>/a", "<Gamepad>/dpad/left", "<Gamepad>/leftStick/left");
         using var next = Button("<Keyboard>/rightArrow", "<Keyboard>/d", "<Gamepad>/dpad/right", "<Gamepad>/leftStick/right");
-        using var reelIn = Button("<Keyboard>/downArrow", "<Keyboard>/s", "<Gamepad>/dpad/down", "<Gamepad>/leftStick/down");
+        // Selecting is the Jump button (Space / gamepad South), matching PlayerGameControls' Jump bindings.
+        using var reelIn = Button("<Keyboard>/space", "<Gamepad>/buttonSouth");
 
         float progress = 0f;
         choices[index].SetHighlighted(true);
+        ShowPrompt(LastUsedDevice());
 
         while (progress < commitThreshold)
         {
@@ -141,7 +217,11 @@ public class UpgradeLineBurst : MonoBehaviour
             // The highlight can only move while nothing is being reeled.
             if (progress <= 0f)
             {
-                int step = (next.WasPressedThisFrame() ? 1 : 0) - (previous.WasPressedThisFrame() ? 1 : 0);
+                // Keep the prompt on the device the player is actually using.
+            InputDevice used = UsedThisFrame(previous) ?? UsedThisFrame(next) ?? UsedThisFrame(reelIn);
+            if (used != null) ShowPrompt(used);
+
+            int step = (next.WasPressedThisFrame() ? 1 : 0) - (previous.WasPressedThisFrame() ? 1 : 0);
                 if (step != 0)
                 {
                     choices[index].SetHighlighted(false);
@@ -157,7 +237,8 @@ public class UpgradeLineBurst : MonoBehaviour
             ShowReel(choices[index], progress);
         }
 
-        // Past the threshold: finish the pull on its own, whether or not down is still held.
+        // Past the threshold: finish the pull on its own, whether or not Jump is still held.
+        promptTarget = 0f;
         UpgradeIcon chosen = choices[index];
         float from = progress;
         float elapsed = 0f;
@@ -196,9 +277,12 @@ public class UpgradeLineBurst : MonoBehaviour
         return action;
     }
 
-    /// <summary>Fades every line out and destroys the burst.</summary>
-    public async UniTask End(CancellationToken token)
+    // Once only: each line and icon fades from its full colour, so a second fade would flash it back on first.
+    private async UniTask FadeOutFan(CancellationToken token)
     {
+        if (fanFaded) return;
+        fanFaded = true;
+
         var fading = new List<UniTask>(lines.Count + icons.Count);
         foreach (UpgradeLine line in lines)
             fading.Add(line.FadeOut(fadeOutDuration, token));
@@ -206,10 +290,135 @@ public class UpgradeLineBurst : MonoBehaviour
             fading.Add(icon.FadeOut(fadeOutDuration, token));
 
         await UniTask.WhenAll(fading);
-        Destroy(gameObject);
     }
 
-    private void LateUpdate() => FollowTarget();
+    // The chosen upgrade has reached the squirrel: the rest of the fan fades away while "<Stat> upgraded" and the
+    // slot's recap line rise in above it, then hold.
+    private async UniTask PlayRecap(PlayerUpgradeManager.UpgradeStat stat, CancellationToken token)
+    {
+        UniTask fan = FadeOutFan(token);
+        if (recap == null)
+        {
+            await fan;
+            return;
+        }
+
+        Slot slot = slots.FirstOrDefault(s => s.stat == stat);
+        recap.localPosition = Vector3.up * (frameSize * recapHeight);
+        recap.localScale = Vector3.one * (frameSize * recapScale);
+        recap.gameObject.layer = target.gameObject.layer;
+        PrepareRecapText(recapTitle, $"{stat} upgraded");
+        PrepareRecapText(recapDetail, slot.recap);
+        recap.gameObject.SetActive(true);
+
+        await UniTask.WhenAll(fan, RevealRecapText(recapTitle, 0f, token), RevealRecapText(recapDetail, recapDetailDelay, token));
+        await UniTask.WaitForSeconds(recapHold, cancellationToken: token);
+    }
+
+    private void ShowPrompt(InputDevice device)
+    {
+        if (prompt == null) return;
+
+        string content = device is Gamepad ? gamepadPrompt : keyboardPrompt;
+        if (prompt.text != content || !prompt.gameObject.activeSelf)
+        {
+            PrepareRecapText(prompt, content);
+            prompt.alpha = promptShown;
+            prompt.gameObject.SetActive(true);
+        }
+
+        promptTarget = 1f;
+    }
+
+    private static InputDevice UsedThisFrame(InputAction action) =>
+        action.WasPressedThisFrame() && action.activeControl != null ? action.activeControl.device : null;
+
+    // Before the player has pressed anything here, guess from whichever of keyboard or gamepad was touched last.
+    private static InputDevice LastUsedDevice()
+    {
+        Gamepad pad = Gamepad.current;
+        Keyboard keys = Keyboard.current;
+        if (pad == null) return keys;
+        if (keys == null) return pad;
+        return pad.lastUpdateTime >= keys.lastUpdateTime ? pad : keys;
+    }
+
+    // The prompt rides the bottom of the screen rather than the squirrel, so it is placed from the camera.
+    private void PlacePrompt()
+    {
+        if (prompt == null || !prompt.gameObject.activeSelf) return;
+
+        promptShown = Mathf.MoveTowards(promptShown, promptTarget, Time.deltaTime / Mathf.Max(promptFade, 0.0001f));
+        prompt.alpha = promptShown;
+
+        Camera cam = CameraRig.Current != null ? CameraRig.Current.Foreground : null;
+        if (cam == null) return;
+
+        float size = cam.orthographicSize;
+        Vector3 bottom = cam.transform.position + Vector3.down * (size * (1f - promptMargin));
+        prompt.transform.position = new Vector3(bottom.x, bottom.y, transform.position.z);
+        prompt.transform.localScale = Vector3.one * (frameSize * recapScale);
+    }
+
+    private void PrepareRecapText(TMP_Text text, string content)
+    {
+        if (text == null) return;
+
+        text.text = content;
+        text.alpha = 0f;
+        // On the squirrel's layer so the overlay camera draws it above the dim, and in front of the icons.
+        text.gameObject.layer = target.gameObject.layer;
+        Renderer textRenderer = text.GetComponent<Renderer>();
+        textRenderer.sortingLayerID = target.sortingLayerID;
+        textRenderer.sortingOrder = target.sortingOrder + recapSortingOffset;
+    }
+
+    private async UniTask RevealRecapText(TMP_Text text, float delay, CancellationToken token)
+    {
+        if (text == null || string.IsNullOrEmpty(text.text)) return;
+        if (delay > 0f) await UniTask.WaitForSeconds(delay, cancellationToken: token);
+
+        Vector3 rest = text.transform.localPosition;
+        Vector3 start = rest - Vector3.up * recapRise;
+        float elapsed = 0f;
+        while (elapsed < recapFadeIn)
+        {
+            float t = elapsed / recapFadeIn;
+            float eased = 1f - (1f - t) * (1f - t);
+            text.transform.localPosition = Vector3.LerpUnclamped(start, rest, eased);
+            text.alpha = eased;
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+        }
+
+        text.transform.localPosition = rest;
+        text.alpha = 1f;
+    }
+
+    private async UniTask FadeOutRecap(CancellationToken token)
+    {
+        if (recap == null || !recap.gameObject.activeSelf) return;
+
+        float title = recapTitle != null ? recapTitle.alpha : 0f;
+        float detail = recapDetail != null ? recapDetail.alpha : 0f;
+        float elapsed = 0f;
+        while (elapsed < fadeOutDuration)
+        {
+            float keep = 1f - elapsed / fadeOutDuration;
+            if (recapTitle != null) recapTitle.alpha = title * keep;
+            if (recapDetail != null) recapDetail.alpha = detail * keep;
+            elapsed += Time.deltaTime;
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
+        }
+
+        recap.gameObject.SetActive(false);
+    }
+
+    private void LateUpdate()
+    {
+        FollowTarget();
+        PlacePrompt();
+    }
 
     private void FollowTarget()
     {

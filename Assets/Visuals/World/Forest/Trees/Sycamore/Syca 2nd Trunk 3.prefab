@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 856380666165137846}
   - component: {fileID: 1675591227928371339}
   - component: {fileID: 133240032363423798}
+  - component: {fileID: 3887542638013479511}
+  - component: {fileID: 1785782755561653093}
   m_Layer: 6
   m_Name: Syca 2nd Trunk 3
   m_TagString: Untagged
@@ -35,6 +37,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1675591227928371339
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53,6 +56,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,9 +79,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -8887625676636644918, guid: 41e542d9d02104713967e6ca9cec33b1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -86,8 +93,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!60 &133240032363423798
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -249,3 +256,183 @@ PolygonCollider2D:
       - {x: 1.3, y: -8.61}
       - {x: 1.36, y: -8.389999}
   m_UseDelaunayMesh: 1
+--- !u!114 &3887542638013479511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175728888881366940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: 0.1366663
+        y: -8.390003
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.4433584
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.4433584
+      Rotation:
+        value:
+          x: -0.7055041
+          y: 0.047581423
+          z: 0.04155363
+          w: 0.70588475
+    - Position:
+        x: 0.17453575
+        y: -3.956581
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -1.4522511
+      TangentOut:
+        x: 0
+        y: 0
+        z: 1.407115
+      Rotation:
+        value:
+          x: -0.6257074
+          y: -0.32937863
+          z: -0.29931262
+          w: 0.640634
+    - Position:
+        x: -0.2554636
+        y: 0.18342209
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -1.2008586
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.91716427
+      Rotation:
+        value:
+          x: -0.63490653
+          y: -0.31127757
+          z: -0.26700807
+          w: 0.65475696
+    - Position:
+        x: -0.33741188
+        y: 2.6099968
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.76861656
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.7106404
+      Rotation:
+        value:
+          x: -0.595373
+          y: 0.38148534
+          z: 0.30849215
+          w: 0.63626456
+    - Position:
+        x: 0.2172718
+        y: 4.609997
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.8037926
+      TangentOut:
+        x: 0
+        y: 0
+        z: 1.1206859
+      Rotation:
+        value:
+          x: -0.4949015
+          y: 0.505047
+          z: 0.39618635
+          w: 0.58569306
+    - Position:
+        x: 0.74457073
+        y: 8.609997
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.4034606
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.4034606
+      Rotation:
+        value:
+          x: -0.4661829
+          y: 0.53167045
+          z: 0.4661829
+          w: 0.53167045
+    m_MetaData:
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
+--- !u!114 &1785782755561653093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175728888881366940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ffa21dab4b64abc830c0cfd1333a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClimbPath
+  strandWidths:
+  - knotWidths:
+    - 2.4465997
+    - 2.75147
+    - 3.088555
+    - 2.8289554
+    - 3.137156
+    - 2.4147713

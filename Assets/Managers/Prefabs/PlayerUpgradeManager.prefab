@@ -49,8 +49,8 @@ MonoBehaviour:
     effects:
     - target: 0
       progression:
-        minValue: 1.8
-        maxValue: 3
+        minValue: 2.5
+        maxValue: 5
         interpolationCurve:
           serializedVersion: 2
           m_Curve:
@@ -303,8 +303,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-  segmentCosts: 010000000400000005000000i
+  segmentCosts: 030000000400000005000000i
   acornCollectionBarPrefab: {fileID: 6802045998327148441, guid: afbceb44cc73a4df2960ba43b876fbce, type: 3}
   upgradeGlowPrefab: {fileID: 1754335576060372168, guid: 38d14f499e26e4a1fa6f50434b586c1a, type: 3}
-  lineBurstPrefab: {fileID: 5191774632952858682, guid: 96eb5a7619d874a4bb53d0b1f440ce20, type: 3}
+  upgradeViewPrefab: {fileID: 5191774632952858682, guid: 96eb5a7619d874a4bb53d0b1f440ce20, type: 3}
   upgradeFrameHeight: 0.33333334

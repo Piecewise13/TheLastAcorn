@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Player
 {
@@ -117,13 +118,13 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
     [Tooltip("Gold glow attached to the squirrel when the upgrade energy lands, kept until a stat is chosen.")]
     [SerializeField] private PlayerUpgradeGlow upgradeGlowPrefab = null!;
 
-    [Tooltip("Lines that grow out of the glow toward each upgrade's icon.")]
-    [SerializeField] private UpgradeLineBurst lineBurstPrefab = null!;
+    [Tooltip("The upgrade view: lines that grow out of the glow into the upgrade icons, and the choice between them.")]
+    [FormerlySerializedAs("lineBurstPrefab")]
+    [SerializeField] private UpgradeLineBurst upgradeViewPrefab = null!;
     [Tooltip("Where the squirrel sits in the frame during the upgrade, as a fraction of screen height from the bottom.")]
     [Range(0f, 0.5f)] [SerializeField] private float upgradeFrameHeight = 1f / 3f;
 
     private PlayerUpgradeGlow activeGlow;
-    private UpgradeLineBurst activeBurst;
     private CameraClaim upgradeFrameClaim;
 
     private int segmentAcorns;
@@ -245,38 +246,27 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         ClaimUpgradeFrame();
         ViewManager.Instance.ClearViewsInstant();
 
-        // The energy orb has just landed: the squirrel lights up as the world dims a little around it,
-        // then the upgrade lines grow out of the glow.
+        // The energy orb has just landed: the squirrel lights up as the world dims a little around it. Then
+        // the upgrade view grows its lines out of the glow and waits for the choice; it calls back into
+        // CompleteUpgradeSelection, so this returns once the upgrade is over.
         await UniTask.WhenAll(
             OverlayCameraController.Current.RequestPlayerDim(),
             BeginGlow());
-        await GrowLines();
 
-        UpgradeStat? chosen = null;
-        if (activeBurst != null && activeBurst.HasChoice)
-            chosen = await activeBurst.Choose(activeBurst.destroyCancellationToken);
-        else
-            Debug.LogWarning($"[{nameof(PlayerUpgradeManager)}] No upgrade could be offered (none assigned, or every stat locked or maxed).", this);
-
-        await FinishUpgrade(chosen);
+        await ViewManager.Instance.PushView(upgradeViewPrefab);
     }
 
-    /// <summary>Applies a chosen stat and ends the upgrade. Kept for the old UpgradePlayerView until it is deleted.</summary>
-    public async UniTask CompleteUpgradeSelection(UpgradeStat stat)
-    {
-        if (!CanAfford(stat)) return;
-
-        await FinishUpgrade(stat);
-    }
-
-    private async UniTask FinishUpgrade(UpgradeStat? stat)
+    /// <summary>
+    /// Applies the chosen stat, if any, and ends the upgrade: the view fades out with the glow and dim, then the
+    /// camera and the player are released. Pass null when nothing could be offered.
+    /// </summary>
+    public async UniTask CompleteUpgradeSelection(UpgradeStat? stat)
     {
         if (stat.HasValue && CanAfford(stat.Value))
             ApplyUpgrade(stat.Value);
 
-        await ViewManager.Instance.ClearViews();
         await UniTask.WhenAll(
-            EndLines(),
+            ViewManager.Instance.ClearViews(),
             EndGlow(),
             OverlayCameraController.Current.ReleasePlayerDim());
         ReleaseUpgradeFrame();
@@ -284,6 +274,12 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         if (playerMoveManager != null)
             playerMoveManager.EnableMove();
     }
+
+    /// <summary>The squirrel's visible sprite, which the upgrade view grows its lines from.</summary>
+    public SpriteRenderer PlayerGraphic => playerEffects != null ? playerEffects.GraphicSprite : null;
+
+    /// <summary>The camera size held for the upgrade, which the upgrade view sizes its lines from.</summary>
+    public float UpgradeFrameSize => upgradeFrameClaim?.OrthographicSize ?? CameraRig.Current.Foreground.orthographicSize;
 
     /// <summary>
     /// True when a stat should be offered in the upgrade choice: not maxed, and its ability is unlocked
@@ -350,24 +346,6 @@ public class PlayerUpgradeManager : PersistentSingleton<PlayerUpgradeManager>
         PlayerUpgradeGlow glow = activeGlow;
         activeGlow = null;
         await glow.End(glow.destroyCancellationToken);
-    }
-
-    private async UniTask GrowLines()
-    {
-        if (lineBurstPrefab == null || playerEffects == null || playerEffects.GraphicSprite == null) return;
-
-        float size = upgradeFrameClaim?.OrthographicSize ?? CameraRig.Current.Foreground.orthographicSize;
-        activeBurst = Instantiate(lineBurstPrefab);
-        await activeBurst.Grow(playerEffects.GraphicSprite, size, IsStatOffered, activeBurst.destroyCancellationToken);
-    }
-
-    private async UniTask EndLines()
-    {
-        if (activeBurst == null) return;
-
-        UpgradeLineBurst burst = activeBurst;
-        activeBurst = null;
-        await burst.End(burst.destroyCancellationToken);
     }
 
     // ── Upgrade affordability / application ───────────────────────────────────

@@ -202,6 +202,10 @@ public partial class PlayerMoveManager : MonoBehaviour
         animator.SetBool("isFalling",  to == PlayerState.Fall);
         animator.SetBool("isClimbing", to == PlayerState.Climb);
         animator.SetBool("isRunning",  false); // will be overridden by movement each frame
+
+        // Every way out of a climb lands here, including stun, lock, owl and vine, which skip StopClimb.
+        if (from == PlayerState.Climb)
+            TiltGraphic(0f);
     }
 
     /// <summary>
@@ -375,6 +379,12 @@ public partial class PlayerMoveManager : MonoBehaviour
         // Only apply air control if input direction is opposite to current velocity
         return (inputX > 0) ^ (velocityX > 0);
     }
+
+    /// <summary>
+    /// True when the graphic faces right. Facing left is a 180° turn about Y; read with a tolerance because a
+    /// climb tilt about Z can leave the Y angle a hair off 0 or 180.
+    /// </summary>
+    private bool IsGraphicFacingRight => Mathf.Abs(Mathf.DeltaAngle(graphic.transform.eulerAngles.y, 0f)) < 90f;
 
     private void FlipGraphic(float inputX)
     {

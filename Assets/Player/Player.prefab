@@ -264,6 +264,7 @@ MonoBehaviour:
   fastClimbSpeed: 20
   recoverSpeed: 0.7
   climbRechargeDelay: 0.5
+  climbEdgeNudge: 1
   isAttachedToMoss: 0
   mossSlipSpeed: 15
   mossDetachTime: 2
@@ -3660,8 +3661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerSenses
   graphicsOrigin: {fileID: 7442338127621984480}
-  rangeMultiplier: 1.5
-  fallbackDetectionRange: 15
+  detectionRange: 40
   fullTrailLength: 25
   passiveLengthFraction: 0.25
   refreshInterval: 0.25
@@ -3677,8 +3677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044fdbb24eeef4ca7a2f3d271b44168a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.SenseVisuals
-  sensedGlow: 6
-  fadeSeconds: 0.35
+  sensedGlow: 3
+  fadeSeconds: 0.8
 --- !u!1 &6707566019504523871
 GameObject:
   m_ObjectHideFlags: 0

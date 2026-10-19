@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 9204055654207611368}
   - component: {fileID: 4117570259046394092}
   - component: {fileID: 1246569368331579612}
+  - component: {fileID: 2113117485374900612}
+  - component: {fileID: 9000849972432902370}
   m_Layer: 6
   m_Name: Syca Med Trunk
   m_TagString: Untagged
@@ -35,6 +37,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4117570259046394092
 SpriteRenderer:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53,6 +56,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -74,9 +79,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 4945492366796943955, guid: a4103d2c3ec0647339a236da5cb2e867, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -86,8 +93,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+  m_BlendShapeWeights: []
 --- !u!60 &1246569368331579612
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -290,3 +297,120 @@ PolygonCollider2D:
       - {x: -2.95, y: -7.41}
       - {x: -2.99, y: -7.45}
   m_UseDelaunayMesh: 1
+--- !u!114 &2113117485374900612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7128449707796770411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: -0.2381177
+        y: -12.59
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.90094364
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.90094364
+      Rotation:
+        value:
+          x: -0.54561126
+          y: 0.44978705
+          z: 0.42435104
+          w: 0.5656202
+    - Position:
+        x: 0.17411757
+        y: -3.5900002
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -3.4758847
+      TangentOut:
+        x: 0
+        y: 0
+        z: 4.7753215
+      Rotation:
+        value:
+          x: -0.512218
+          y: 0.48747587
+          z: 0.4693634
+          w: 0.5288648
+    - Position:
+        x: 0.579
+        y: 13.41
+        z: 0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -1.7004821
+      TangentOut:
+        x: 0
+        y: 0
+        z: 1.7004821
+      Rotation:
+        value:
+          x: -0.49401167
+          y: 0.50591743
+          z: 0.49401167
+          w: 0.50591743
+    m_MetaData:
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
+--- !u!114 &9000849972432902370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7128449707796770411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8ffa21dab4b64abc830c0cfd1333a35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClimbPath
+  strandWidths:
+  - knotWidths:
+    - 5.332457
+    - 5.0032005
+    - 4.8136444

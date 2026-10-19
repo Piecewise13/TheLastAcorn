@@ -34,6 +34,32 @@ public partial class PlayerMoveManager : MonoBehaviour
     [SerializeField] private float maxClimbTime;
     
     [SerializeField] private float baselineClimbSpeed, fastClimbSpeed;
+
+    /// <summary>How the climb moves and steers.</summary>
+    private enum ClimbMethod
+    {
+        /// <summary>
+        /// The original climb: always up, with the stick adding sideways speed up to maxClimbAngle, easing off near
+        /// the collider's edge, and nudged back onto the trunk at climbEdgeNudge when a move leaves it.
+        /// </summary>
+        SoftEdge,
+        /// <summary>
+        /// Steer the climb direction along climbDirectionChangeCurve; it holds its angle with no input. Soft edge
+        /// against the spline's width, and the sprite leans into the climb.
+        /// </summary>
+        SplineSteering,
+    }
+
+    /// <summary>
+    /// Which climb to use. Switchable in Play mode to compare.
+    /// </summary>
+    [SerializeField] private ClimbMethod climbMethod = ClimbMethod.SplineSteering;
+
+    /// <summary>
+    /// Furthest the climb can lean from straight up, in degrees. With Soft Edge this is the full-stick angle.
+    /// </summary>
+    [Range(0f, 85f)]
+    [SerializeField] private float maxClimbAngle = 60f;
     private float currentMaxClimbSpeed;
     private float currentClimbSpeed;
 
@@ -44,9 +70,20 @@ public partial class PlayerMoveManager : MonoBehaviour
 
     /// <summary>
     /// Sideways push back onto the surface when a climb move would leave it, as a fraction of climb speed.
-    /// Keeps the climb going up instead of stalling on the edge.
+    /// Soft Edge only. Keeps the climb going up instead of stalling on the edge.
     /// </summary>
     [SerializeField] private float climbEdgeNudge = 0.5f;
+
+    /// <summary>
+    /// How far inside the trunk's edge the soft edge stops sideways movement, in world units: the spline's width
+    /// with Spline Steering, the collider's bounds with Soft Edge.
+    /// </summary>
+    [SerializeField] private float climbEdgeMargin = 0.05f;
+
+    /// <summary>
+    /// Width of the soft edge zone inside the margin, in world units. Sideways input eases from full to none across it.
+    /// </summary>
+    [SerializeField] private float climbEdgeZone = 0.5f;
 
     /// <summary>
     /// Current elapsed climb time.
@@ -183,7 +220,9 @@ public partial class PlayerMoveManager : MonoBehaviour
         climbEndTime = Time.time;
 
         // Calculate intended move location
-        Vector2 moveLocation = transform.position + (Vector3)(Vector3.right * (moveInput.x * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
+        Vector2 moveLocation = climbMethod == ClimbMethod.SplineSteering
+            ? PlanClimbMove(moveInput.x)
+            : PlanSoftEdgeClimbMove(moveInput.x, overlappingColliders);
         Debug.DrawLine(transform.position, moveLocation, Color.red, 0.1f);
 
         // Check if moveLocation is still inside any climbable collider
@@ -277,13 +316,14 @@ public partial class PlayerMoveManager : MonoBehaviour
                 Vector2 targetPos = closest.ClosestPoint(moveLocation);
                 float towardSurface = targetPos.x - moveLocation.x;
 
-                // Climb assist: the move ran off the side of the trunk. Keep the upward progress and
+                // Soft Edge's climb assist: the move ran off the side of the trunk. Keep the upward progress and
                 // nudge back toward the middle instead of stalling on the edge.
                 Vector2 assisted = new Vector2(
                     transform.position.x + Mathf.Sign(towardSurface) * climbEdgeNudge * currentClimbSpeed * Time.deltaTime,
                     moveLocation.y);
 
-                if (Mathf.Abs(towardSurface) > 0.001f && Physics2D.OverlapPoint(assisted, climbableLayer) != null)
+                if (climbMethod == ClimbMethod.SoftEdge && Mathf.Abs(towardSurface) > 0.001f
+                    && Physics2D.OverlapPoint(assisted, climbableLayer) != null)
                 {
                     transform.position = assisted;
                 }
@@ -303,6 +343,50 @@ public partial class PlayerMoveManager : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// Soft Edge's climb move: straight up at climb speed, with the stick adding sideways speed (full stick leans
+    /// maxClimbAngle from straight up) that eases off near the collider's edge. The sprite stays upright.
+    /// </summary>
+    private Vector2 PlanSoftEdgeClimbMove(float input, Collider2D[] overlapping)
+    {
+        TiltGraphic(0f);
+
+        // Sideways speed per unit of upward speed: full stick gives maxClimbAngle from straight up,
+        // easing off near the edge being steered toward.
+        float steer = Mathf.Tan(maxClimbAngle * Mathf.Deg2Rad) * input * SoftEdgeFactor(overlapping, input);
+
+        return transform.position + (Vector3)(Vector3.right * (steer * Time.deltaTime * currentClimbSpeed) + Vector3.up * (currentClimbSpeed * Time.deltaTime));
+    }
+
+    /// <summary>
+    /// Soft edge assist: how much of the sideways input to keep, 1 in the middle of the trunk easing to 0 at the
+    /// margin from the edge being steered toward. Stays 1 when something climbable continues past that edge, so
+    /// moving onto a branch is not slowed, and while not yet on the surface, so the approach after attaching is not.
+    /// </summary>
+    private float SoftEdgeFactor(Collider2D[] overlapping, float inputX)
+    {
+        if (Mathf.Abs(inputX) < 0.001f) return 1f;
+
+        Vector2 position = transform.position;
+        Collider2D surface = null;
+        foreach (var col in overlapping)
+        {
+            if (col.OverlapPoint(position))
+            {
+                surface = col;
+                break;
+            }
+        }
+        if (surface == null) return 1f;
+
+        float direction = Mathf.Sign(inputX);
+        float edgeX = direction > 0f ? surface.bounds.max.x : surface.bounds.min.x;
+        if (Physics2D.OverlapPoint(new Vector2(edgeX + direction * climbEdgeMargin, position.y), climbableLayer) != null) return 1f;
+
+        float distance = Mathf.Abs(edgeX - position.x) - climbEdgeMargin;
+        return Mathf.SmoothStep(0f, 1f, distance / Mathf.Max(climbEdgeZone, 0.001f));
+    }
 
     /// <summary>
     /// Matches the collider's platform exclusion to the current state, every physics step.
@@ -331,6 +415,10 @@ public partial class PlayerMoveManager : MonoBehaviour
         attachVelocity = rb.linearVelocity.magnitude;
 
         currentMaxClimbSpeed = (attachVelocity >= glideSuperSpeedMin) ? fastClimbSpeed : baselineClimbSpeed;
+
+        // A new climb starts heading straight up, at the start of the turn curve.
+        climbHeadingAngle = 0f;
+        climbTurnAmount = 0f;
 
 
         PlayerStateManager.Instance.ChangeState(PlayerState.Climb);
